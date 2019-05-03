@@ -1,0 +1,24 @@
+stages:
+    - codeAnalysis
+    - test
+    - build
+    - deploy
+    - notify
+
+checkSonarqube:
+    stage: codeAnalysis
+    script:
+        - cd "C:\Users\NTQ\Documents\pnx\"
+        - sonar-scanner
+    allow_failure: false
+
+build:
+    stage: build
+    script:
+        - cd "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin"
+        - .\MSBuild.exe "C:\Users\NTQ\Documents\pnx\Pronexus.DisclosureDocumentCheck\Pronexus.DisclosureDocumentCheck.sln" /p:Configuration=Release
+
+deploy_iis:
+    stage: deploy
+    script:
+        - ECHO Build exe manually
