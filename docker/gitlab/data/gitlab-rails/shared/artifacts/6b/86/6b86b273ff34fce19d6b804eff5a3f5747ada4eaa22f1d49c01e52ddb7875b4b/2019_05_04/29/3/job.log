@@ -1,0 +1,11 @@
+[0KRunning with gitlab-runner 11.10.1 (1f513601)
+[0;m[0K  on Test ww4q1Wxe
+[0;msection_start:1556960768:prepare_executor[0K[0KUsing Docker executor with image ci_sonarscanner:3.3 ...
+[0;m[0KUsing locally found image version due to if-not-present pull policy
+[0;m[0KUsing docker image sha256:cdf4f3fbc3d409410255639e4e2fa19decb01dbcba8ca1d408d189817aa62fc6 for ci_sonarscanner:3.3 ...
+[0;msection_end:1556960768:prepare_executor[0Ksection_start:1556960768:prepare_script[0KRunning on runner-ww4q1Wxe-project-1-concurrent-0 via 7d514be7bad4...
+section_end:1556960770:prepare_script[0Ksection_start:1556960770:get_sources[0KReinitialized existing Git repository in /builds/root/demo-project/.git/
+[32;1mFetching changes...[0;m
+fatal: unable to access 'http://gitlab-ci-token:[MASKED]@gitlab/root/demo-project.git/': Could not resolve host: gitlab
+section_end:1556960772:get_sources[0Ksection_start:1556960772:upload_artifacts_on_failure[0Ksection_end:1556960773:upload_artifacts_on_failure[0K[31;1mERROR: Job failed: exit code 1
+[0;m

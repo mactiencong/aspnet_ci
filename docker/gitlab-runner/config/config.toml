@@ -1,0 +1,26 @@
+concurrent = 1
+check_interval = 0
+
+[session_server]
+  session_timeout = 1800
+
+[[runners]]
+  name = "Test"
+  url = "http://gitlab:80/"
+  token = "ww4q1WxeVDK7PsoYMinH"
+  executor = "docker"
+  [runners.custom_build_dir]
+  [runners.docker]
+    tls_verify = false
+    image = "alpine"
+    disable_entrypoint_overwrite = false
+    oom_kill_disable = false
+    disable_cache = false
+    volumes = ["/cache"]
+    shm_size = 0
+    pull_policy = "if-not-present"
+    privileged=true
+    network_mode="docker_aspnet"
+  [runners.cache]
+    [runners.cache.s3]
+    [runners.cache.gcs]

@@ -1,0 +1,23 @@
+2019-05-04_07:44:51.03331 starting new unicorn master
+2019-05-04_07:45:16.65182 master failed to start, check stderr log for details
+2019-05-04_07:45:17.65591 failed to start a new unicorn master
+2019-05-04_07:45:17.67190 starting new unicorn master
+2019-05-04_07:45:40.67647 master failed to start, check stderr log for details
+2019-05-04_07:45:41.68015 failed to start a new unicorn master
+2019-05-04_07:45:41.69271 starting new unicorn master
+2019-05-04_07:46:05.96326 master failed to start, check stderr log for details
+2019-05-04_07:46:06.96782 failed to start a new unicorn master
+2019-05-04_07:46:06.99534 starting new unicorn master
+2019-05-04_07:46:29.21763 master failed to start, check stderr log for details
+2019-05-04_07:46:30.22140 failed to start a new unicorn master
+2019-05-04_07:46:30.23812 starting new unicorn master
+2019-05-04_07:46:52.38157 master failed to start, check stderr log for details
+2019-05-04_07:46:53.39380 failed to start a new unicorn master
+2019-05-04_07:46:53.44513 starting new unicorn master
+2019-05-04_07:47:15.65575 master failed to start, check stderr log for details
+2019-05-04_07:47:16.66574 failed to start a new unicorn master
+2019-05-04_07:47:16.68358 starting new unicorn master
+2019-05-04_07:47:38.91673 master failed to start, check stderr log for details
+2019-05-04_07:47:39.92483 failed to start a new unicorn master
+2019-05-04_07:47:39.97653 starting new unicorn master
+2019-05-04_07:47:43.97438 Received TERM from runit, sending to process group (-PID)

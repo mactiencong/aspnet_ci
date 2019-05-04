@@ -1,0 +1,16 @@
+[0KRunning with gitlab-runner 11.10.1 (1f513601)
+[0;m[0K  on Test ww4q1Wxe
+[0;msection_start:1556962716:prepare_executor[0K[0KUsing Docker executor with image alpine ...
+[0;m[0KUsing locally found image version due to if-not-present pull policy
+[0;m[0KUsing docker image sha256:cdf98d1859c1beb33ec70507249d34bacf888d59c24df3204057f9a6c758dddb for alpine ...
+[0;msection_end:1556962716:prepare_executor[0Ksection_start:1556962716:prepare_script[0KRunning on runner-ww4q1Wxe-project-1-concurrent-0 via 7d514be7bad4...
+section_end:1556962718:prepare_script[0Ksection_start:1556962718:get_sources[0KReinitialized existing Git repository in /builds/root/demo-project/.git/
+[32;1mFetching changes...[0;m
+[32;1mChecking out 524cb235 as master...[0;m
+Removing .scannerwork/
+
+[32;1mSkipping Git submodules setup[0;m
+section_end:1556962723:get_sources[0Ksection_start:1556962723:restore_cache[0Ksection_end:1556962725:restore_cache[0Ksection_start:1556962725:download_artifacts[0Ksection_end:1556962728:download_artifacts[0Ksection_start:1556962728:build_script[0K[32;1m$ echo "Build"[0;m
+Build
+section_end:1556962730:build_script[0Ksection_start:1556962730:after_script[0Ksection_end:1556962732:after_script[0Ksection_start:1556962732:archive_cache[0Ksection_end:1556962735:archive_cache[0Ksection_start:1556962735:upload_artifacts_on_success[0Ksection_end:1556962737:upload_artifacts_on_success[0K[32;1mJob succeeded
+[0;m

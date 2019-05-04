@@ -1,0 +1,100 @@
+2019-05-04_07:48:12.84243 LOG:  database system was shut down at 2019-05-04 07:47:41 GMT
+2019-05-04_07:48:12.92761 LOG:  MultiXact member wraparound protections are now enabled
+2019-05-04_07:48:12.93047 LOG:  database system is ready to accept connections
+2019-05-04_07:48:12.93150 LOG:  autovacuum launcher started
+2019-05-04_07:53:11.49681 ERROR:  duplicate key value violates unique constraint "index_gpg_signatures_on_commit_sha"
+2019-05-04_07:53:11.49689 DETAIL:  Key (commit_sha)=(\xe8266cef0b67d12451b5751f8c782068fde85b49) already exists.
+2019-05-04_07:53:11.49690 STATEMENT:  INSERT INTO "gpg_signatures" ("created_at", "updated_at", "project_id", "commit_sha", "gpg_key_primary_keyid", "verification_status") VALUES ('2019-05-04 07:53:11.469065', '2019-05-04 07:53:11.469065', 1, '\xe8266cef0b67d12451b5751f8c782068fde85b49', '\x4aee18f83afdeb23', 5) RETURNING "id"
+2019-05-04_07:53:11.61591 ERROR:  duplicate key value violates unique constraint "index_gpg_signatures_on_commit_sha"
+2019-05-04_07:53:11.61592 DETAIL:  Key (commit_sha)=(\x234e843b9eef54f95534466a9159aeea647118fb) already exists.
+2019-05-04_07:53:11.61592 STATEMENT:  INSERT INTO "gpg_signatures" ("created_at", "updated_at", "project_id", "commit_sha", "gpg_key_primary_keyid", "verification_status") VALUES ('2019-05-04 07:53:11.615160', '2019-05-04 07:53:11.615160', 1, '\x234e843b9eef54f95534466a9159aeea647118fb', '\x4aee18f83afdeb23', 5) RETURNING "id"
+2019-05-04_07:53:11.74218 ERROR:  duplicate key value violates unique constraint "index_gpg_signatures_on_commit_sha"
+2019-05-04_07:53:11.74219 DETAIL:  Key (commit_sha)=(\x4e054d64e9c6f47402eeff2a77b475218e72529b) already exists.
+2019-05-04_07:53:11.74220 STATEMENT:  INSERT INTO "gpg_signatures" ("created_at", "updated_at", "project_id", "commit_sha", "gpg_key_primary_keyid", "verification_status") VALUES ('2019-05-04 07:53:11.741351', '2019-05-04 07:53:11.741351', 1, '\x4e054d64e9c6f47402eeff2a77b475218e72529b', '\x4aee18f83afdeb23', 5) RETURNING "id"
+2019-05-04_07:53:12.14351 ERROR:  duplicate key value violates unique constraint "index_gpg_signatures_on_commit_sha"
+2019-05-04_07:53:12.14353 DETAIL:  Key (commit_sha)=(\xe58a65ad66e58ee16407c395e34885b98ed17291) already exists.
+2019-05-04_07:53:12.14353 STATEMENT:  INSERT INTO "gpg_signatures" ("created_at", "updated_at", "project_id", "commit_sha", "gpg_key_primary_keyid", "verification_status") VALUES ('2019-05-04 07:53:12.142822', '2019-05-04 07:53:12.142822', 1, '\xe58a65ad66e58ee16407c395e34885b98ed17291', '\x4aee18f83afdeb23', 5) RETURNING "id"
+2019-05-04_07:53:12.25809 ERROR:  duplicate key value violates unique constraint "index_gpg_signatures_on_commit_sha"
+2019-05-04_07:53:12.25810 DETAIL:  Key (commit_sha)=(\x0109bff75c85c67b062a4e6ccc42444fdf5fe4a5) already exists.
+2019-05-04_07:53:12.25810 STATEMENT:  INSERT INTO "gpg_signatures" ("created_at", "updated_at", "project_id", "commit_sha", "gpg_key_primary_keyid", "verification_status") VALUES ('2019-05-04 07:53:12.257485', '2019-05-04 07:53:12.257485', 1, '\x0109bff75c85c67b062a4e6ccc42444fdf5fe4a5', '\x4aee18f83afdeb23', 5) RETURNING "id"
+2019-05-04_07:53:12.41817 ERROR:  duplicate key value violates unique constraint "index_gpg_signatures_on_commit_sha"
+2019-05-04_07:53:12.41819 DETAIL:  Key (commit_sha)=(\xcefb4ce67713909350d8aedfd88ff18e93710c76) already exists.
+2019-05-04_07:53:12.41819 STATEMENT:  INSERT INTO "gpg_signatures" ("created_at", "updated_at", "project_id", "commit_sha", "gpg_key_primary_keyid", "verification_status") VALUES ('2019-05-04 07:53:12.417433', '2019-05-04 07:53:12.417433', 1, '\xcefb4ce67713909350d8aedfd88ff18e93710c76', '\x4aee18f83afdeb23', 5) RETURNING "id"
+2019-05-04_07:53:12.58921 ERROR:  duplicate key value violates unique constraint "index_gpg_signatures_on_commit_sha"
+2019-05-04_07:53:12.58923 DETAIL:  Key (commit_sha)=(\xdb0e07c10bf0acc974a033304289b68892c57032) already exists.
+2019-05-04_07:53:12.58923 STATEMENT:  INSERT INTO "gpg_signatures" ("created_at", "updated_at", "project_id", "commit_sha", "gpg_key_primary_keyid", "verification_status") VALUES ('2019-05-04 07:53:12.588547', '2019-05-04 07:53:12.588547', 1, '\xdb0e07c10bf0acc974a033304289b68892c57032', '\x4aee18f83afdeb23', 5) RETURNING "id"
+2019-05-04_07:53:12.72062 ERROR:  duplicate key value violates unique constraint "index_gpg_signatures_on_commit_sha"
+2019-05-04_07:53:12.72064 DETAIL:  Key (commit_sha)=(\x653201e744f45077a5bbe0756f7db7f3d91a3698) already exists.
+2019-05-04_07:53:12.72064 STATEMENT:  INSERT INTO "gpg_signatures" ("created_at", "updated_at", "project_id", "commit_sha", "gpg_key_primary_keyid", "verification_status") VALUES ('2019-05-04 07:53:12.719945', '2019-05-04 07:53:12.719945', 1, '\x653201e744f45077a5bbe0756f7db7f3d91a3698', '\x4aee18f83afdeb23', 5) RETURNING "id"
+2019-05-04_07:53:12.90046 ERROR:  duplicate key value violates unique constraint "index_gpg_signatures_on_commit_sha"
+2019-05-04_07:53:12.90048 DETAIL:  Key (commit_sha)=(\x63b60d4d732916383859c3c2e712d10fd581fc0f) already exists.
+2019-05-04_07:53:12.90049 STATEMENT:  INSERT INTO "gpg_signatures" ("created_at", "updated_at", "project_id", "commit_sha", "gpg_key_primary_keyid", "verification_status") VALUES ('2019-05-04 07:53:12.899670', '2019-05-04 07:53:12.899670', 1, '\x63b60d4d732916383859c3c2e712d10fd581fc0f', '\x4aee18f83afdeb23', 5) RETURNING "id"
+2019-05-04_07:53:13.09692 ERROR:  duplicate key value violates unique constraint "index_gpg_signatures_on_commit_sha"
+2019-05-04_07:53:13.09693 DETAIL:  Key (commit_sha)=(\x878e6b4e23a6667f460644b936aa13ad51054060) already exists.
+2019-05-04_07:53:13.09694 STATEMENT:  INSERT INTO "gpg_signatures" ("created_at", "updated_at", "project_id", "commit_sha", "gpg_key_primary_keyid", "verification_status") VALUES ('2019-05-04 07:53:13.096024', '2019-05-04 07:53:13.096024', 1, '\x878e6b4e23a6667f460644b936aa13ad51054060', '\x4aee18f83afdeb23', 5) RETURNING "id"
+2019-05-04_07:53:13.43276 ERROR:  duplicate key value violates unique constraint "index_gpg_signatures_on_commit_sha"
+2019-05-04_07:53:13.43277 DETAIL:  Key (commit_sha)=(\x5cc590952fe3a1b7c914f51af872a3fc6f82e94f) already exists.
+2019-05-04_07:53:13.43278 STATEMENT:  INSERT INTO "gpg_signatures" ("created_at", "updated_at", "project_id", "commit_sha", "gpg_key_primary_keyid", "verification_status") VALUES ('2019-05-04 07:53:13.431754', '2019-05-04 07:53:13.431754', 1, '\x5cc590952fe3a1b7c914f51af872a3fc6f82e94f', '\x4aee18f83afdeb23', 5) RETURNING "id"
+2019-05-04_07:53:13.62236 ERROR:  duplicate key value violates unique constraint "index_gpg_signatures_on_commit_sha"
+2019-05-04_07:53:13.62238 DETAIL:  Key (commit_sha)=(\x1bec62b496b85e0a522a0faf0bf44bf754f88370) already exists.
+2019-05-04_07:53:13.62238 STATEMENT:  INSERT INTO "gpg_signatures" ("created_at", "updated_at", "project_id", "commit_sha", "gpg_key_primary_keyid", "verification_status") VALUES ('2019-05-04 07:53:13.621527', '2019-05-04 07:53:13.621527', 1, '\x1bec62b496b85e0a522a0faf0bf44bf754f88370', '\x4aee18f83afdeb23', 5) RETURNING "id"
+2019-05-04_07:53:14.08569 ERROR:  duplicate key value violates unique constraint "index_gpg_signatures_on_commit_sha"
+2019-05-04_07:53:14.08570 DETAIL:  Key (commit_sha)=(\x8295bc3be6fd8d9c4b4fdd65e987fba2ab276321) already exists.
+2019-05-04_07:53:14.08571 STATEMENT:  INSERT INTO "gpg_signatures" ("created_at", "updated_at", "project_id", "commit_sha", "gpg_key_primary_keyid", "verification_status") VALUES ('2019-05-04 07:53:14.084632', '2019-05-04 07:53:14.084632', 1, '\x8295bc3be6fd8d9c4b4fdd65e987fba2ab276321', '\x4aee18f83afdeb23', 5) RETURNING "id"
+2019-05-04_07:53:14.36352 ERROR:  duplicate key value violates unique constraint "index_gpg_signatures_on_commit_sha"
+2019-05-04_07:53:14.36354 DETAIL:  Key (commit_sha)=(\x3f7c2f1041a9b18c3911fb68f844f03df887c43e) already exists.
+2019-05-04_07:53:14.36355 STATEMENT:  INSERT INTO "gpg_signatures" ("created_at", "updated_at", "project_id", "commit_sha", "gpg_key_primary_keyid", "verification_status") VALUES ('2019-05-04 07:53:14.362774', '2019-05-04 07:53:14.362774', 1, '\x3f7c2f1041a9b18c3911fb68f844f03df887c43e', '\x4aee18f83afdeb23', 5) RETURNING "id"
+2019-05-04_07:53:14.62553 ERROR:  duplicate key value violates unique constraint "index_gpg_signatures_on_commit_sha"
+2019-05-04_07:53:14.62555 DETAIL:  Key (commit_sha)=(\x445e1a8e7e8d32f73cbb01a6326747adf777b7d0) already exists.
+2019-05-04_07:53:14.62555 STATEMENT:  INSERT INTO "gpg_signatures" ("created_at", "updated_at", "project_id", "commit_sha", "gpg_key_primary_keyid", "verification_status") VALUES ('2019-05-04 07:53:14.624541', '2019-05-04 07:53:14.624541', 1, '\x445e1a8e7e8d32f73cbb01a6326747adf777b7d0', '\x4aee18f83afdeb23', 5) RETURNING "id"
+2019-05-04_07:53:14.91093 ERROR:  duplicate key value violates unique constraint "index_gpg_signatures_on_commit_sha"
+2019-05-04_07:53:14.91095 DETAIL:  Key (commit_sha)=(\x84fb7ec7bead90b09bfae7ac7242f3384d0059cf) already exists.
+2019-05-04_07:53:14.91096 STATEMENT:  INSERT INTO "gpg_signatures" ("created_at", "updated_at", "project_id", "commit_sha", "gpg_key_primary_keyid", "verification_status") VALUES ('2019-05-04 07:53:14.910247', '2019-05-04 07:53:14.910247', 1, '\x84fb7ec7bead90b09bfae7ac7242f3384d0059cf', '\x4aee18f83afdeb23', 5) RETURNING "id"
+2019-05-04_07:53:15.10967 ERROR:  duplicate key value violates unique constraint "index_gpg_signatures_on_commit_sha"
+2019-05-04_07:53:15.10969 DETAIL:  Key (commit_sha)=(\x78f627477bcd17a26f606a443a65b16fe3d9cd53) already exists.
+2019-05-04_07:53:15.10969 STATEMENT:  INSERT INTO "gpg_signatures" ("created_at", "updated_at", "project_id", "commit_sha", "gpg_key_primary_keyid", "verification_status") VALUES ('2019-05-04 07:53:15.108960', '2019-05-04 07:53:15.108960', 1, '\x78f627477bcd17a26f606a443a65b16fe3d9cd53', '\x4aee18f83afdeb23', 5) RETURNING "id"
+2019-05-04_07:53:15.25787 ERROR:  duplicate key value violates unique constraint "index_gpg_signatures_on_commit_sha"
+2019-05-04_07:53:15.25790 DETAIL:  Key (commit_sha)=(\x6b7cfdfb814ccf44193078b7cf74a2fd009469b5) already exists.
+2019-05-04_07:53:15.25791 STATEMENT:  INSERT INTO "gpg_signatures" ("created_at", "updated_at", "project_id", "commit_sha", "gpg_key_primary_keyid", "verification_status") VALUES ('2019-05-04 07:53:15.257102', '2019-05-04 07:53:15.257102', 1, '\x6b7cfdfb814ccf44193078b7cf74a2fd009469b5', '\x4aee18f83afdeb23', 5) RETURNING "id"
+2019-05-04_07:53:15.44526 ERROR:  duplicate key value violates unique constraint "index_gpg_signatures_on_commit_sha"
+2019-05-04_07:53:15.44527 DETAIL:  Key (commit_sha)=(\x52d69d2635453eaed85d6324a8805ea97523b757) already exists.
+2019-05-04_07:53:15.44528 STATEMENT:  INSERT INTO "gpg_signatures" ("created_at", "updated_at", "project_id", "commit_sha", "gpg_key_primary_keyid", "verification_status") VALUES ('2019-05-04 07:53:15.444480', '2019-05-04 07:53:15.444480', 1, '\x52d69d2635453eaed85d6324a8805ea97523b757', '\x4aee18f83afdeb23', 5) RETURNING "id"
+2019-05-04_07:53:15.63169 ERROR:  duplicate key value violates unique constraint "index_gpg_signatures_on_commit_sha"
+2019-05-04_07:53:15.63171 DETAIL:  Key (commit_sha)=(\x6926a1e977b880c7205ca6514383c3cd8aca0b86) already exists.
+2019-05-04_07:53:15.63171 STATEMENT:  INSERT INTO "gpg_signatures" ("created_at", "updated_at", "project_id", "commit_sha", "gpg_key_primary_keyid", "verification_status") VALUES ('2019-05-04 07:53:15.630679', '2019-05-04 07:53:15.630679', 1, '\x6926a1e977b880c7205ca6514383c3cd8aca0b86', '\x4aee18f83afdeb23', 5) RETURNING "id"
+2019-05-04_09:05:09.93854 received TERM from runit, sending INT instead to force quit connections
+2019-05-04_09:05:09.94097 LOG:  received fast shutdown request
+2019-05-04_09:05:09.94106 LOG:  aborting any active transactions
+2019-05-04_09:05:09.94885 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.94887 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.94887 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.94888 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.94889 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.94889 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.94890 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.94891 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.94891 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.94891 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.94892 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.94892 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.94892 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.94893 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.94893 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.94893 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.94894 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.94895 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.95054 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.95056 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.95143 LOG:  autovacuum launcher shutting down
+2019-05-04_09:05:09.95144 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.95145 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.95145 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.95269 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.95271 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.95441 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.95443 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.95443 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.95444 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.95444 FATAL:  terminating connection due to administrator command
+2019-05-04_09:05:09.95540 LOG:  shutting down
+2019-05-04_09:05:10.06160 LOG:  database system is shut down

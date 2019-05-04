@@ -1,0 +1,51 @@
+2019-05-04_09:06:15.79079 level=info ts=2019-05-04T09:06:15.790687014Z caller=main.go:243 msg="Starting Prometheus" version="(version=2.6.1, branch=master, revision=)"
+2019-05-04_09:06:15.79092 level=info ts=2019-05-04T09:06:15.790776045Z caller=main.go:244 build_context="(go=go1.11.5, user=GitLab-Omnibus, date=)"
+2019-05-04_09:06:15.79093 level=info ts=2019-05-04T09:06:15.790813727Z caller=main.go:245 host_details="(Linux 3.10.0-957.12.1.el7.x86_64 #1 SMP Mon Apr 29 14:59:59 UTC 2019 x86_64 66afa8002c68 (none))"
+2019-05-04_09:06:15.79095 level=info ts=2019-05-04T09:06:15.790891796Z caller=main.go:246 fd_limits="(soft=50000, hard=50000)"
+2019-05-04_09:06:15.79097 level=info ts=2019-05-04T09:06:15.790935898Z caller=main.go:247 vm_limits="(soft=unlimited, hard=unlimited)"
+2019-05-04_09:06:15.79191 level=info ts=2019-05-04T09:06:15.791846769Z caller=web.go:429 component=web msg="Start listening for connections" address=localhost:9090
+2019-05-04_09:06:15.79205 level=info ts=2019-05-04T09:06:15.791759407Z caller=main.go:561 msg="Starting TSDB ..."
+2019-05-04_09:06:16.27256 level=info ts=2019-05-04T09:06:16.272521088Z caller=main.go:571 msg="TSDB started"
+2019-05-04_09:06:16.27259 level=info ts=2019-05-04T09:06:16.272567617Z caller=main.go:631 msg="Loading configuration file" filename=/var/opt/gitlab/prometheus/prometheus.yml
+2019-05-04_09:06:16.30308 level=error ts=2019-05-04T09:06:16.303003784Z caller=manager.go:330 component="discovery manager scrape" msg="Cannot create service discovery" err="open /var/run/secrets/kubernetes.io/serviceaccount/token: no such file or directory" type=*kubernetes.SDConfig
+2019-05-04_09:06:16.30309 level=error ts=2019-05-04T09:06:16.303064395Z caller=manager.go:330 component="discovery manager scrape" msg="Cannot create service discovery" err="open /var/run/secrets/kubernetes.io/serviceaccount/token: no such file or directory" type=*kubernetes.SDConfig
+2019-05-04_09:06:16.30311 level=error ts=2019-05-04T09:06:16.303095982Z caller=manager.go:330 component="discovery manager scrape" msg="Cannot create service discovery" err="open /var/run/secrets/kubernetes.io/serviceaccount/token: no such file or directory" type=*kubernetes.SDConfig
+2019-05-04_09:06:16.30940 level=info ts=2019-05-04T09:06:16.309371416Z caller=main.go:657 msg="Completed loading of configuration file" filename=/var/opt/gitlab/prometheus/prometheus.yml
+2019-05-04_09:06:16.30943 level=info ts=2019-05-04T09:06:16.309400558Z caller=main.go:530 msg="Server is ready to receive web requests."
+2019-05-04_09:06:20.79394 level=error ts=2019-05-04T09:06:20.793787191Z caller=notifier.go:481 component=notifier alertmanager=http://localhost:9093/api/v1/alerts count=0 msg="Error sending alert" err="Post http://localhost:9093/api/v1/alerts: dial tcp 127.0.0.1:9093: connect: connection refused"
+2019-05-04_09:06:21.31069 level=error ts=2019-05-04T09:06:21.310502969Z caller=scrape.go:147 component="scrape manager" scrape_pool=kubernetes-nodes msg="Error creating HTTP client" err="unable to use specified CA cert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt: open /var/run/secrets/kubernetes.io/serviceaccount/ca.crt: no such file or directory"
+2019-05-04_09:06:21.31097 level=error ts=2019-05-04T09:06:21.310727696Z caller=scrape.go:147 component="scrape manager" scrape_pool=kubernetes-pods msg="Error creating HTTP client" err="unable to use specified CA cert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt: open /var/run/secrets/kubernetes.io/serviceaccount/ca.crt: no such file or directory"
+2019-05-04_09:06:21.31119 level=error ts=2019-05-04T09:06:21.311074575Z caller=scrape.go:147 component="scrape manager" scrape_pool=kubernetes-cadvisor msg="Error creating HTTP client" err="unable to use specified CA cert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt: open /var/run/secrets/kubernetes.io/serviceaccount/ca.crt: no such file or directory"
+2019-05-04_09:06:36.58676 level=warn ts=2019-05-04T09:06:36.586584572Z caller=main.go:405 msg="Received SIGTERM, exiting gracefully..."
+2019-05-04_09:06:36.58678 level=info ts=2019-05-04T09:06:36.586639525Z caller=main.go:430 msg="Stopping scrape discovery manager..."
+2019-05-04_09:06:36.58679 level=info ts=2019-05-04T09:06:36.586671583Z caller=main.go:444 msg="Stopping notify discovery manager..."
+2019-05-04_09:06:36.58679 level=info ts=2019-05-04T09:06:36.586687564Z caller=main.go:466 msg="Stopping scrape manager..."
+2019-05-04_09:06:36.58679 level=info ts=2019-05-04T09:06:36.586707966Z caller=main.go:426 msg="Scrape discovery manager stopped"
+2019-05-04_09:06:36.58680 level=info ts=2019-05-04T09:06:36.586726359Z caller=main.go:440 msg="Notify discovery manager stopped"
+2019-05-04_09:06:36.58711 level=info ts=2019-05-04T09:06:36.587074195Z caller=manager.go:664 component="rule manager" msg="Stopping rule manager..."
+2019-05-04_09:06:36.58713 level=info ts=2019-05-04T09:06:36.587108209Z caller=manager.go:670 component="rule manager" msg="Rule manager stopped"
+2019-05-04_09:06:36.58731 level=info ts=2019-05-04T09:06:36.587264623Z caller=main.go:460 msg="Scrape manager stopped"
+2019-05-04_09:06:36.61722 level=info ts=2019-05-04T09:06:36.616914263Z caller=notifier.go:521 component=notifier msg="Stopping notification manager..."
+2019-05-04_09:06:36.61724 level=info ts=2019-05-04T09:06:36.616951247Z caller=main.go:615 msg="Notifier manager stopped"
+2019-05-04_09:06:36.61724 level=info ts=2019-05-04T09:06:36.617090571Z caller=main.go:627 msg="See you next time!"
+2019-05-04_09:06:36.69091 level=info ts=2019-05-04T09:06:36.690430602Z caller=main.go:243 msg="Starting Prometheus" version="(version=2.6.1, branch=master, revision=)"
+2019-05-04_09:06:36.69093 level=info ts=2019-05-04T09:06:36.690514181Z caller=main.go:244 build_context="(go=go1.11.5, user=GitLab-Omnibus, date=)"
+2019-05-04_09:06:36.69094 level=info ts=2019-05-04T09:06:36.690543994Z caller=main.go:245 host_details="(Linux 3.10.0-957.12.1.el7.x86_64 #1 SMP Mon Apr 29 14:59:59 UTC 2019 x86_64 66afa8002c68 (none))"
+2019-05-04_09:06:36.69094 level=info ts=2019-05-04T09:06:36.690575769Z caller=main.go:246 fd_limits="(soft=50000, hard=50000)"
+2019-05-04_09:06:36.69095 level=info ts=2019-05-04T09:06:36.690601324Z caller=main.go:247 vm_limits="(soft=unlimited, hard=unlimited)"
+2019-05-04_09:06:36.69150 level=info ts=2019-05-04T09:06:36.691365667Z caller=main.go:561 msg="Starting TSDB ..."
+2019-05-04_09:06:36.69153 level=info ts=2019-05-04T09:06:36.691471982Z caller=web.go:429 component=web msg="Start listening for connections" address=localhost:9090
+2019-05-04_09:06:37.40677 level=info ts=2019-05-04T09:06:37.406723593Z caller=main.go:571 msg="TSDB started"
+2019-05-04_09:06:37.40680 level=info ts=2019-05-04T09:06:37.406780369Z caller=main.go:631 msg="Loading configuration file" filename=/var/opt/gitlab/prometheus/prometheus.yml
+2019-05-04_09:06:37.40883 level=error ts=2019-05-04T09:06:37.408777055Z caller=manager.go:330 component="discovery manager scrape" msg="Cannot create service discovery" err="open /var/run/secrets/kubernetes.io/serviceaccount/token: no such file or directory" type=*kubernetes.SDConfig
+2019-05-04_09:06:37.40886 level=error ts=2019-05-04T09:06:37.408840836Z caller=manager.go:330 component="discovery manager scrape" msg="Cannot create service discovery" err="open /var/run/secrets/kubernetes.io/serviceaccount/token: no such file or directory" type=*kubernetes.SDConfig
+2019-05-04_09:06:37.40894 level=error ts=2019-05-04T09:06:37.408917868Z caller=manager.go:330 component="discovery manager scrape" msg="Cannot create service discovery" err="open /var/run/secrets/kubernetes.io/serviceaccount/token: no such file or directory" type=*kubernetes.SDConfig
+2019-05-04_09:06:37.41234 level=info ts=2019-05-04T09:06:37.412299139Z caller=main.go:657 msg="Completed loading of configuration file" filename=/var/opt/gitlab/prometheus/prometheus.yml
+2019-05-04_09:06:37.41236 level=info ts=2019-05-04T09:06:37.412342977Z caller=main.go:530 msg="Server is ready to receive web requests."
+2019-05-04_09:06:42.41341 level=error ts=2019-05-04T09:06:42.413227102Z caller=scrape.go:147 component="scrape manager" scrape_pool=kubernetes-cadvisor msg="Error creating HTTP client" err="unable to use specified CA cert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt: open /var/run/secrets/kubernetes.io/serviceaccount/ca.crt: no such file or directory"
+2019-05-04_09:06:42.41368 level=error ts=2019-05-04T09:06:42.413572525Z caller=scrape.go:147 component="scrape manager" scrape_pool=kubernetes-pods msg="Error creating HTTP client" err="unable to use specified CA cert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt: open /var/run/secrets/kubernetes.io/serviceaccount/ca.crt: no such file or directory"
+2019-05-04_09:06:42.41394 level=error ts=2019-05-04T09:06:42.413834154Z caller=scrape.go:147 component="scrape manager" scrape_pool=kubernetes-nodes msg="Error creating HTTP client" err="unable to use specified CA cert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt: open /var/run/secrets/kubernetes.io/serviceaccount/ca.crt: no such file or directory"
+2019-05-04_10:45:30.93156 level=info ts=2019-05-04T10:45:30.90048515Z caller=compact.go:416 component=tsdb msg="write block" mint=1556955930333 maxt=1556956800000 ulid=01DA175TNJ4N5R3KTXDSCT6D57
+2019-05-04_10:45:31.02095 level=info ts=2019-05-04T10:45:31.020899595Z caller=head.go:520 component=tsdb msg="head GC completed" duration=8.761983ms
+2019-05-04_11:00:00.66579 level=info ts=2019-05-04T11:00:00.665595463Z caller=compact.go:416 component=tsdb msg="write block" mint=1556956800000 maxt=1556964000000 ulid=01DA180C7PKN7D3XB5RJZAG16Z
+2019-05-04_11:00:00.76734 level=info ts=2019-05-04T11:00:00.76726805Z caller=head.go:520 component=tsdb msg="head GC completed" duration=14.168095ms

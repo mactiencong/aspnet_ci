@@ -1,0 +1,68 @@
+[0KRunning with gitlab-runner 11.10.1 (1f513601)
+[0;m[0K  on Test ww4q1Wxe
+[0;msection_start:1556961661:prepare_executor[0K[0KUsing Docker executor with image ci_sonarscanner:3.3 ...
+[0;m[0KUsing locally found image version due to if-not-present pull policy
+[0;m[0KUsing docker image sha256:cdf4f3fbc3d409410255639e4e2fa19decb01dbcba8ca1d408d189817aa62fc6 for ci_sonarscanner:3.3 ...
+[0;msection_end:1556961661:prepare_executor[0Ksection_start:1556961661:prepare_script[0KRunning on runner-ww4q1Wxe-project-1-concurrent-0 via 7d514be7bad4...
+section_end:1556961663:prepare_script[0Ksection_start:1556961663:get_sources[0KReinitialized existing Git repository in /builds/root/demo-project/.git/
+[32;1mFetching changes...[0;m
+From http://gitlab/root/demo-project
+   c54d631..030e05b  master     -> origin/master
+[32;1mChecking out 030e05b0 as master...[0;m
+Removing web-base/src/main/java/jp/rhp/web/base/.scannerwork/
+
+[32;1mSkipping Git submodules setup[0;m
+section_end:1556961665:get_sources[0Ksection_start:1556961665:restore_cache[0Ksection_end:1556961667:restore_cache[0Ksection_start:1556961667:download_artifacts[0Ksection_end:1556961668:download_artifacts[0Ksection_start:1556961668:build_script[0K[32;1m$ sonar-scanner[0;m
+INFO: Scanner configuration file: /root/sonar-scanner-3.3.0.1492-linux/conf/sonar-scanner.properties
+INFO: Project root configuration file: /builds/root/demo-project/sonar-project.properties
+INFO: SonarQube Scanner 3.3.0.1492
+INFO: Java 1.8.0_201 Oracle Corporation (64-bit)
+INFO: Linux 3.10.0-957.12.1.el7.x86_64 amd64
+INFO: User cache: /root/.sonar/cache
+INFO: SonarQube server 7.7.0
+INFO: Default locale: "en_US", source code encoding: "UTF-8"
+INFO: Load global settings
+INFO: Load global settings (done) | time=62ms
+INFO: Server id: 9CB61ADC-AWqBzDYBETUdoo8_15WP
+INFO: User cache: /root/.sonar/cache
+INFO: Load/download plugins
+INFO: Load plugins index
+INFO: Load plugins index (done) | time=31ms
+INFO: Load/download plugins (done) | time=760ms
+INFO: Process project properties
+INFO: Execute project builders
+INFO: Execute project builders (done) | time=5ms
+INFO: Project key: demo-project
+INFO: Base dir: /builds/root/demo-project/web-base/src/main/java/jp/rhp/web/base
+INFO: Working dir: /builds/root/demo-project/web-base/src/main/java/jp/rhp/web/base/.scannerwork
+INFO: Load project settings for component key: 'demo-project'
+INFO: Load project repositories
+INFO: Load project repositories (done) | time=4ms
+INFO: Load quality profiles
+INFO: Load quality profiles (done) | time=25ms
+INFO: Load active rules
+INFO: Load active rules (done) | time=526ms
+INFO: Indexing files...
+INFO: Project configuration:
+INFO: 11 files indexed
+INFO: 0 files ignored because of scm ignore settings
+INFO: Quality profile for java: Sonar way
+INFO: ------------- Run sensors on module demo-project
+INFO: Load metrics repository
+INFO: Load metrics repository (done) | time=22ms
+INFO: Sensor JavaSquidSensor [java]
+INFO: Configured Java source version (sonar.java.source): none
+INFO: JavaClasspath initialization
+ERROR: Invalid value for sonar.java.binaries
+INFO: ------------------------------------------------------------------------
+INFO: EXECUTION FAILURE
+INFO: ------------------------------------------------------------------------
+INFO: Total time: 4.779s
+INFO: Final Memory: 24M/239M
+INFO: ------------------------------------------------------------------------
+ERROR: Error during SonarQube Scanner execution
+ERROR: No files nor directories matching 'build/lib/'
+ERROR: 
+ERROR: Re-run SonarQube Scanner using the -X switch to enable full debug logging.
+section_end:1556961675:build_script[0Ksection_start:1556961675:after_script[0Ksection_end:1556961677:after_script[0Ksection_start:1556961677:upload_artifacts_on_failure[0Ksection_end:1556961680:upload_artifacts_on_failure[0K[31;1mERROR: Job failed: exit code 1
+[0;m

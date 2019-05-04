@@ -1,0 +1,17 @@
+{
+	"ulid": "01DA175TNJ4N5R3KTXDSCT6D57",
+	"minTime": 1556955930333,
+	"maxTime": 1556956800000,
+	"stats": {
+		"numSamples": 439052,
+		"numSeries": 12061,
+		"numChunks": 12061
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01DA175TNJ4N5R3KTXDSCT6D57"
+		]
+	},
+	"version": 1
+}

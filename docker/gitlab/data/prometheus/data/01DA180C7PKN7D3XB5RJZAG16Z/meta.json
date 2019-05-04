@@ -1,0 +1,17 @@
+{
+	"ulid": "01DA180C7PKN7D3XB5RJZAG16Z",
+	"minTime": 1556956800000,
+	"maxTime": 1556964000000,
+	"stats": {
+		"numSamples": 5138302,
+		"numSeries": 14420,
+		"numChunks": 36676
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01DA180C7PKN7D3XB5RJZAG16Z"
+		]
+	},
+	"version": 1
+}

@@ -1,0 +1,28 @@
+2019-05-04_07:45:03.11750 time="2019-05-04T07:45:03Z" level=info msg=Starting version="gitlab-workhorse v8.5.2-20190501.110444"
+2019-05-04_07:45:03.11770 time="2019-05-04T07:45:03Z" level=fatal msg="Can not load config file" configFile=config.toml error="open config.toml: no such file or directory"
+2019-05-04_07:45:04.15938 time="2019-05-04T07:45:04Z" level=info msg=Starting version="gitlab-workhorse v8.5.2-20190501.110444"
+2019-05-04_07:45:04.15944 time="2019-05-04T07:45:04Z" level=info msg="keywatcher: starting process loop"
+2019-05-04_07:45:04.15944 time="2019-05-04T07:45:04Z" level=info msg="redis: dialing" address=/var/opt/gitlab/redis/redis.socket network=unix
+2019-05-04_07:45:42.86011 time="2019-05-04T07:45:42Z" level=error msg=error correlation_id=dlxz6U3gMY9 error="badgateway: failed after 0s: dial unix /var/opt/gitlab/gitlab-rails/sockets/gitlab.socket: connect: no such file or directory" method=GET uri=/help
+2019-05-04_07:45:42.86042 localhost:8080 127.0.0.1:0 - - [2019/05/04:07:45:42 +0000] "GET /help HTTP/1.1" 502 2940 "" "curl/7.59.0-DEV" 0.002
+2019-05-04_07:45:44.66660 time="2019-05-04T07:45:44Z" level=error msg=error correlation_id=hD6niHmy6ba error="badgateway: failed after 0s: dial unix /var/opt/gitlab/gitlab-rails/sockets/gitlab.socket: connect: no such file or directory" method=GET uri=/-/metrics
+2019-05-04_07:45:44.66662 127.0.0.1:8080 127.0.0.1:0 - - [2019/05/04:07:45:44 +0000] "GET /-/metrics HTTP/1.1" 502 2940 "" "Prometheus/2.6.1" 0.001
+2019-05-04_07:45:53.06542 time="2019-05-04T07:45:53Z" level=info msg=Starting version="gitlab-workhorse v8.5.2-20190501.110444"
+2019-05-04_07:45:53.06683 time="2019-05-04T07:45:53Z" level=info msg="keywatcher: starting process loop"
+2019-05-04_07:45:53.06695 time="2019-05-04T07:45:53Z" level=info msg="redis: dialing" address=/var/opt/gitlab/redis/redis.socket network=unix
+2019-05-04_07:45:59.66654 time="2019-05-04T07:45:59Z" level=error msg=error correlation_id=PHGF4XQS1t3 error="badgateway: failed after 0s: dial unix /var/opt/gitlab/gitlab-rails/sockets/gitlab.socket: connect: no such file or directory" method=GET uri=/-/metrics
+2019-05-04_07:45:59.66669 127.0.0.1:8080 127.0.0.1:0 - - [2019/05/04:07:45:59 +0000] "GET /-/metrics HTTP/1.1" 502 2940 "" "Prometheus/2.6.1" 0.001
+2019-05-04_07:46:14.66617 time="2019-05-04T07:46:14Z" level=error msg=error correlation_id=cGsbLyet9i9 error="badgateway: failed after 0s: dial unix /var/opt/gitlab/gitlab-rails/sockets/gitlab.socket: connect: no such file or directory" method=GET uri=/-/metrics
+2019-05-04_07:46:14.66627 127.0.0.1:8080 127.0.0.1:0 - - [2019/05/04:07:46:14 +0000] "GET /-/metrics HTTP/1.1" 502 2940 "" "Prometheus/2.6.1" 0.001
+2019-05-04_07:46:29.66880 time="2019-05-04T07:46:29Z" level=error msg=error correlation_id=SnVS4a0IbW5 error="badgateway: failed after 0s: dial unix /var/opt/gitlab/gitlab-rails/sockets/gitlab.socket: connect: no such file or directory" method=GET uri=/-/metrics
+2019-05-04_07:46:29.66920 127.0.0.1:8080 127.0.0.1:0 - - [2019/05/04:07:46:29 +0000] "GET /-/metrics HTTP/1.1" 502 2940 "" "Prometheus/2.6.1" 0.002
+2019-05-04_07:46:43.05016 time="2019-05-04T07:46:43Z" level=error msg=error correlation_id=9SjNZgBXXa1 error="badgateway: failed after 0s: dial unix /var/opt/gitlab/gitlab-rails/sockets/gitlab.socket: connect: no such file or directory" method=GET uri=/help
+2019-05-04_07:46:43.05017 localhost:8080 127.0.0.1:0 - - [2019/05/04:07:46:43 +0000] "GET /help HTTP/1.1" 502 2940 "" "curl/7.59.0-DEV" 0.001
+2019-05-04_07:46:44.66617 time="2019-05-04T07:46:44Z" level=error msg=error correlation_id=hCQ0r5JIsy3 error="badgateway: failed after 0s: dial unix /var/opt/gitlab/gitlab-rails/sockets/gitlab.socket: connect: no such file or directory" method=GET uri=/-/metrics
+2019-05-04_07:46:44.66626 127.0.0.1:8080 127.0.0.1:0 - - [2019/05/04:07:46:44 +0000] "GET /-/metrics HTTP/1.1" 502 2940 "" "Prometheus/2.6.1" 0.001
+2019-05-04_07:46:59.66628 time="2019-05-04T07:46:59Z" level=error msg=error correlation_id=tC4rMgPrUU7 error="badgateway: failed after 0s: dial unix /var/opt/gitlab/gitlab-rails/sockets/gitlab.socket: connect: no such file or directory" method=GET uri=/-/metrics
+2019-05-04_07:46:59.66631 127.0.0.1:8080 127.0.0.1:0 - - [2019/05/04:07:46:59 +0000] "GET /-/metrics HTTP/1.1" 502 2940 "" "Prometheus/2.6.1" 0.001
+2019-05-04_07:47:14.66864 time="2019-05-04T07:47:14Z" level=error msg=error correlation_id=VQPlSxh5J25 error="badgateway: failed after 0s: dial unix /var/opt/gitlab/gitlab-rails/sockets/gitlab.socket: connect: no such file or directory" method=GET uri=/-/metrics
+2019-05-04_07:47:14.66903 127.0.0.1:8080 127.0.0.1:0 - - [2019/05/04:07:47:14 +0000] "GET /-/metrics HTTP/1.1" 502 2940 "" "Prometheus/2.6.1" 0.002
+2019-05-04_07:47:29.66612 time="2019-05-04T07:47:29Z" level=error msg=error correlation_id=B15OazWppD7 error="badgateway: failed after 0s: dial unix /var/opt/gitlab/gitlab-rails/sockets/gitlab.socket: connect: no such file or directory" method=GET uri=/-/metrics
+2019-05-04_07:47:29.66622 127.0.0.1:8080 127.0.0.1:0 - - [2019/05/04:07:47:29 +0000] "GET /-/metrics HTTP/1.1" 502 2940 "" "Prometheus/2.6.1" 0.001

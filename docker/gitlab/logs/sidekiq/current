@@ -1,0 +1,1070 @@
+2019-05-04_09:05:50.88086 2019-05-04T09:05:50.880Z 789 TID-ourdqjppd INFO: Booting Sidekiq 5.2.5 with redis options {:path=>"/var/opt/gitlab/redis/redis.socket", :namespace=>"resque:gitlab", :id=>"Sidekiq-server-PID-789", :url=>nil}
+2019-05-04_09:05:50.95232 2019-05-04T09:05:50.952Z 789 TID-ourdqjppd INFO: Cron Jobs - add job with name: stuck_ci_jobs_worker
+2019-05-04_09:05:50.95323 2019-05-04T09:05:50.953Z 789 TID-ourdqjppd INFO: Cron Jobs - add job with name: expire_build_artifacts_worker
+2019-05-04_09:05:50.95410 2019-05-04T09:05:50.954Z 789 TID-ourdqjppd INFO: Cron Jobs - add job with name: pipeline_schedule_worker
+2019-05-04_09:05:50.95500 2019-05-04T09:05:50.954Z 789 TID-ourdqjppd INFO: Cron Jobs - add job with name: repository_check_worker
+2019-05-04_09:05:50.95600 2019-05-04T09:05:50.955Z 789 TID-ourdqjppd INFO: Cron Jobs - add job with name: admin_email_worker
+2019-05-04_09:05:50.95687 2019-05-04T09:05:50.956Z 789 TID-ourdqjppd INFO: Cron Jobs - add job with name: repository_archive_cache_worker
+2019-05-04_09:05:50.95779 2019-05-04T09:05:50.957Z 789 TID-ourdqjppd INFO: Cron Jobs - add job with name: ci_archive_traces_cron_worker
+2019-05-04_09:05:50.95874 2019-05-04T09:05:50.958Z 789 TID-ourdqjppd INFO: Cron Jobs - add job with name: pages_domain_verification_cron_worker
+2019-05-04_09:05:50.95968 2019-05-04T09:05:50.959Z 789 TID-ourdqjppd INFO: Cron Jobs - add job with name: schedule_migrate_external_diffs_worker
+2019-05-04_09:05:50.96062 2019-05-04T09:05:50.960Z 789 TID-ourdqjppd INFO: Cron Jobs - add job with name: import_export_project_cleanup_worker
+2019-05-04_09:05:50.96167 2019-05-04T09:05:50.961Z 789 TID-ourdqjppd INFO: Cron Jobs - add job with name: requests_profiles_worker
+2019-05-04_09:05:50.97354 2019-05-04T09:05:50.973Z 789 TID-ourdqjppd INFO: Cron Jobs - add job with name: remove_expired_members_worker
+2019-05-04_09:05:50.97441 2019-05-04T09:05:50.974Z 789 TID-ourdqjppd INFO: Cron Jobs - add job with name: remove_expired_group_links_worker
+2019-05-04_09:05:50.97527 2019-05-04T09:05:50.975Z 789 TID-ourdqjppd INFO: Cron Jobs - add job with name: prune_old_events_worker
+2019-05-04_09:05:50.97613 2019-05-04T09:05:50.976Z 789 TID-ourdqjppd INFO: Cron Jobs - add job with name: trending_projects_worker
+2019-05-04_09:05:50.97701 2019-05-04T09:05:50.976Z 789 TID-ourdqjppd INFO: Cron Jobs - add job with name: remove_unreferenced_lfs_objects_worker
+2019-05-04_09:05:50.97790 2019-05-04T09:05:50.977Z 789 TID-ourdqjppd INFO: Cron Jobs - add job with name: stuck_import_jobs_worker
+2019-05-04_09:05:50.97887 2019-05-04T09:05:50.978Z 789 TID-ourdqjppd INFO: Cron Jobs - add job with name: gitlab_usage_ping_worker
+2019-05-04_09:05:50.97978 2019-05-04T09:05:50.979Z 789 TID-ourdqjppd INFO: Cron Jobs - add job with name: stuck_merge_jobs_worker
+2019-05-04_09:05:50.98066 2019-05-04T09:05:50.980Z 789 TID-ourdqjppd INFO: Cron Jobs - add job with name: issue_due_scheduler_worker
+2019-05-04_09:05:50.98149 2019-05-04T09:05:50.981Z 789 TID-ourdqjppd INFO: Cron Jobs - add job with name: prune_web_hook_logs_worker
+2019-05-04_09:06:00.05360 2019-05-04T09:06:00.053Z 789 TID-ourdqjppd INFO: Running in ruby 2.5.3p105 (2018-10-18 revision 65156) [x86_64-linux]
+2019-05-04_09:06:00.05364 2019-05-04T09:06:00.053Z 789 TID-ourdqjppd INFO: See LICENSE and the LGPL-3.0 for licensing details.
+2019-05-04_09:06:00.05364 2019-05-04T09:06:00.053Z 789 TID-ourdqjppd INFO: Upgrade to Sidekiq Pro for more features and support: http://sidekiq.org
+2019-05-04_09:06:00.05414 2019-05-04T09:06:00.054Z 789 TID-ourdqjppd WARN: Sidekiq 6.0 will require Redis 4.0+, you are using Redis v3.2.12
+2019-05-04_09:06:00.05459 2019-05-04T09:06:00.054Z 789 TID-ourdqjppd INFO: Starting processing, hit Ctrl-C to stop
+2019-05-04_09:06:00.05814 2019-05-04T09:06:00.058Z 789 TID-ourdqjppd INFO: Listening on queues ["authorized_projects", "auto_devops", "auto_devops:auto_devops_disable", "background_migration", "chat_notification", "container_repository", "container_repository:cleanup_container_repository", "container_repository:delete_container_repository", "create_gpg_signature", "create_note_diff_file", "cronjob", "cronjob:admin_email", "cronjob:ci_archive_traces_cron", "cronjob:expire_build_artifacts", "cronjob:gitlab_usage_ping", "cronjob:import_export_project_cleanup", "cronjob:issue_due_scheduler", "cronjob:pages_domain_verification_cron", "cronjob:pipeline_schedule", "cronjob:prune_old_events", "cronjob:prune_web_hook_logs", "cronjob:remove_expired_group_links", "cronjob:remove_expired_members", "cronjob:remove_unreferenced_lfs_objects", "cronjob:repository_archive_cache", "cronjob:repository_check_dispatch", "cronjob:requests_profiles", "cronjob:schedule_migrate_external_diffs", "cronjob:stuck_ci_jobs", "cronjob:stuck_import_jobs", "cronjob:stuck_merge_jobs", "cronjob:trending_projects", "default", "delete_diff_files", "delete_merged_branches", "delete_stored_files", "delete_user", "deployment", "deployment:deployments_success", "detect_repository_languages", "email_receiver", "emails_on_push", "expire_build_instance_artifacts", "gcp_cluster", "gcp_cluster:cluster_configure", "gcp_cluster:cluster_install_app", "gcp_cluster:cluster_patch_app", "gcp_cluster:cluster_project_configure", "gcp_cluster:cluster_provision", "gcp_cluster:cluster_upgrade_app", "gcp_cluster:cluster_wait_for_app_installation", "gcp_cluster:cluster_wait_for_ingress_ip_address", "gcp_cluster:wait_for_cluster_creation", "git_garbage_collect", "github_import_advance_stage", "github_importer", "github_importer:github_import_import_diff_note", "github_importer:github_import_import_issue", "github_importer:github_import_import_lfs_object", "github_importer:github_import_import_note", "github_importer:github_import_import_pull_request", "github_importer:github_import_refresh_import_jid", "github_importer:github_import_stage_finish_import", "github_importer:github_import_stage_import_base_data", "github_importer:github_import_stage_import_issues_and_diff_notes", "github_importer:github_import_stage_import_lfs_objects", "github_importer:github_import_stage_import_notes", "github_importer:github_import_stage_import_pull_requests", "github_importer:github_import_stage_import_repository", "gitlab_shell", "group_destroy", "hashed_storage", "hashed_storage:hashed_storage_migrator", "hashed_storage:hashed_storage_project_migrate", "hashed_storage:hashed_storage_project_rollback", "hashed_storage:hashed_storage_rollbacker", "import_issues_csv", "invalid_gpg_signature_update", "irker", "mail_scheduler", "mail_scheduler:mail_scheduler_issue_due", "mail_scheduler:mail_scheduler_notification_service", "mailers", "merge", "migrate_external_diffs", "namespaceless_project_destroy", "new_issue", "new_merge_request", "new_note", "object_pool", "object_pool:object_pool_create", "object_pool:object_pool_destroy", "object_pool:object_pool_join", "object_pool:object_pool_schedule_join", "object_storage", "object_storage:object_storage_background_move", "object_storage:object_storage_migrate_uploads", "object_storage_upload", "pages", "pages_domain_verification", "pipeline_background", "pipeline_background:archive_trace", "pipeline_background:ci_build_trace_chunk_flush", "pipeline_cache", "pipeline_cache:expire_job_cache", "pipeline_cache:expire_pipeline_cache", "pipeline_creation", "pipeline_creation:create_pipeline", "pipeline_creation:run_pipeline_schedule", "pipeline_default", "pipeline_default:build_coverage", "pipeline_default:build_trace_sections", "pipeline_default:pipeline_metrics", "pipeline_default:pipeline_notification", "pipeline_hooks", "pipeline_hooks:build_hooks", "pipeline_hooks:pipeline_hooks", "pipeline_processing", "pipeline_processing:build_finished", "pipeline_processing:build_queue", "pipeline_processing:build_success", "pipeline_processing:ci_build_prepare", "pipeline_processing:ci_build_schedule", "pipeline_processing:pipeline_process", "pipeline_processing:pipeline_success", "pipeline_processing:pipeline_update", "pipeline_processing:stage_update", "pipeline_processing:update_head_pipeline_for_merge_request", "plugin", "post_receive", "process_commit", "project_cache", "project_daily_statistics", "project_destroy", "project_export", "project_migrate_hashed_storage", "project_rollback_hashed_storage", "project_service", "propagate_service_template", "reactive_caching", "rebase", "remote_mirror_notification", "repository_check", "repository_check:repository_check_batch", "repository_check:repository_check_clear", "repository_check:repository_check_single_repository", "repository_cleanup", "repository_fork", "repository_import", "repository_remove_remote", "repository_update_remote_mirror", "system_hook_push", "todos_destroyer", "todos_destroyer:todos_destroyer_confidential_issue", "todos_destroyer:todos_destroyer_entity_leave", "todos_destroyer:todos_destroyer_group_private", "todos_destroyer:todos_destroyer_private_features", "todos_destroyer:todos_destroyer_project_private", "update_merge_requests", "upload_checksum", "web_hook"]
+2019-05-04_09:06:06.89126 2019-05-04T09:06:06.891Z 789 TID-ouran6rp1 BuildHooksWorker JID-ef64beb5fb5f55d13ea2542d INFO: start
+2019-05-04_09:06:06.91601 2019-05-04T09:06:06.915Z 789 TID-ouran66fl PipelineUpdateWorker JID-bb234459191fbc625f13701f INFO: start
+2019-05-04_09:06:06.91642 2019-05-04T09:06:06.916Z 789 TID-ouran672t StageUpdateWorker JID-6083d820bb71514201f5cfe4 INFO: start
+2019-05-04_09:06:06.91755 2019-05-04T09:06:06.917Z 789 TID-ouran685p ExpireJobCacheWorker JID-4d00b8c628ba2bcdb90dc309 INFO: start
+2019-05-04_09:06:06.94108 2019-05-04T09:06:06.941Z 789 TID-ouran6k9p PipelineUpdateWorker JID-103e49287ee086d9c0fbd95a INFO: start
+2019-05-04_09:06:06.94169 2019-05-04T09:06:06.941Z 789 TID-ouran6gbp StageUpdateWorker JID-d0815b93fd50ac9db65f0d05 INFO: start
+2019-05-04_09:06:06.94228 2019-05-04T09:06:06.942Z 789 TID-ouran6jx5 ExpireJobCacheWorker JID-14ced5fef2c4839e1b115124 INFO: start
+2019-05-04_09:06:06.96812 2019-05-04T09:06:06.968Z 789 TID-ouran6kp5 StageUpdateWorker JID-92e60eabf2897302de1f9785 INFO: start
+2019-05-04_09:06:06.96929 2019-05-04T09:06:06.968Z 789 TID-ouran6itp PipelineUpdateWorker JID-26f518f06b099bf755dd9d91 INFO: start
+2019-05-04_09:06:06.97117 2019-05-04T09:06:06.968Z 789 TID-ouran6l69 ExpireJobCacheWorker JID-0336f1a896e71bd84bfb6f85 INFO: start
+2019-05-04_09:06:07.01640 2019-05-04T09:06:07.016Z 789 TID-ouran6tpx PipelineUpdateWorker JID-6190aa5ba45529163dda089b INFO: start
+2019-05-04_09:06:07.02745 2019-05-04T09:06:07.027Z 789 TID-ouran6twd StageUpdateWorker JID-41567c6d238c621075439ca5 INFO: start
+2019-05-04_09:06:07.03373 2019-05-04T09:06:07.025Z 789 TID-ouran6s59 BuildQueueWorker JID-a15e7ae164732a64da1cde2a INFO: start
+2019-05-04_09:06:07.03781 2019-05-04T09:06:07.016Z 789 TID-ouran6sex ExpireJobCacheWorker JID-bb425f01c851eac0e242f852 INFO: start
+2019-05-04_09:06:07.22438 2019-05-04T09:06:07.224Z 789 TID-ouran6kp5 StageUpdateWorker JID-92e60eabf2897302de1f9785 INFO: done: 0.256 sec
+2019-05-04_09:06:07.25606 2019-05-04T09:06:07.255Z 789 TID-ouran672t StageUpdateWorker JID-6083d820bb71514201f5cfe4 INFO: done: 0.34 sec
+2019-05-04_09:06:07.29397 2019-05-04T09:06:07.267Z 789 TID-ouran6vcl PipelineHooksWorker JID-cc98d2038ec5bb3410863a4f INFO: start
+2019-05-04_09:06:07.29635 2019-05-04T09:06:07.268Z 789 TID-ouran6wwh ExpirePipelineCacheWorker JID-249c800fcb4e714dd05819a5 INFO: start
+2019-05-04_09:06:07.30333 2019-05-04T09:06:07.295Z 789 TID-ouran6gbp StageUpdateWorker JID-d0815b93fd50ac9db65f0d05 INFO: done: 0.354 sec
+2019-05-04_09:06:07.30401 2019-05-04T09:06:07.303Z 789 TID-ouran6k9p PipelineUpdateWorker JID-103e49287ee086d9c0fbd95a INFO: done: 0.363 sec
+2019-05-04_09:06:07.35989 2019-05-04T09:06:07.359Z 789 TID-ouran6l69 ExpireJobCacheWorker JID-0336f1a896e71bd84bfb6f85 INFO: done: 0.391 sec
+2019-05-04_09:06:07.36774 2019-05-04T09:06:07.367Z 789 TID-ouran6sex ExpireJobCacheWorker JID-bb425f01c851eac0e242f852 INFO: done: 0.351 sec
+2019-05-04_09:06:07.36913 2019-05-04T09:06:07.369Z 789 TID-ouran6twd StageUpdateWorker JID-41567c6d238c621075439ca5 INFO: done: 0.342 sec
+2019-05-04_09:06:07.36997 2019-05-04T09:06:07.369Z 789 TID-ouran685p ExpireJobCacheWorker JID-4d00b8c628ba2bcdb90dc309 INFO: done: 0.452 sec
+2019-05-04_09:06:07.38554 2019-05-04T09:06:07.384Z 789 TID-ouran6jx5 ExpireJobCacheWorker JID-14ced5fef2c4839e1b115124 INFO: done: 0.443 sec
+2019-05-04_09:06:07.49198 2019-05-04T09:06:07.491Z 789 TID-ouran6wwh ExpirePipelineCacheWorker JID-249c800fcb4e714dd05819a5 INFO: done: 0.224 sec
+2019-05-04_09:06:07.51760 2019-05-04T09:06:07.517Z 789 TID-ouran6rp1 BuildHooksWorker JID-ef64beb5fb5f55d13ea2542d INFO: done: 0.626 sec
+2019-05-04_09:06:07.68354 2019-05-04T09:06:07.683Z 789 TID-ouran6s59 BuildQueueWorker JID-a15e7ae164732a64da1cde2a INFO: done: 0.657 sec
+2019-05-04_09:06:07.75232 2019-05-04T09:06:07.752Z 789 TID-ouran6vcl PipelineHooksWorker JID-cc98d2038ec5bb3410863a4f INFO: done: 0.484 sec
+2019-05-04_09:06:07.92750 2019-05-04T09:06:07.927Z 789 TID-ouran68ht PipelineUpdateWorker JID-59d7d2ffb0b32989f989537a INFO: start
+2019-05-04_09:06:07.93950 2019-05-04T09:06:07.927Z 789 TID-ouran6w75 StageUpdateWorker JID-dab817c88614045731aac327 INFO: start
+2019-05-04_09:06:07.94014 2019-05-04T09:06:07.931Z 789 TID-ouran6fl1 BuildHooksWorker JID-7595663fb609c0e8b5f827d4 INFO: start
+2019-05-04_09:06:07.94015 2019-05-04T09:06:07.936Z 789 TID-ouran66d9 ExpireJobCacheWorker JID-070efa694a7fd196c2f081f3 INFO: start
+2019-05-04_09:06:08.06931 2019-05-04T09:06:08.069Z 789 TID-ouran66d9 ExpireJobCacheWorker JID-070efa694a7fd196c2f081f3 INFO: done: 0.132 sec
+2019-05-04_09:06:08.30038 2019-05-04T09:06:08.300Z 789 TID-ouran6fl1 BuildHooksWorker JID-7595663fb609c0e8b5f827d4 INFO: done: 0.369 sec
+2019-05-04_09:06:09.22570 2019-05-04T09:06:09.225Z 789 TID-ouran6itp PipelineUpdateWorker JID-26f518f06b099bf755dd9d91 INFO: done: 2.257 sec
+2019-05-04_09:06:09.24416 2019-05-04T09:06:09.244Z 789 TID-ouran66fl PipelineUpdateWorker JID-bb234459191fbc625f13701f INFO: done: 2.328 sec
+2019-05-04_09:06:09.24625 2019-05-04T09:06:09.246Z 789 TID-ouran6tpx PipelineUpdateWorker JID-6190aa5ba45529163dda089b INFO: done: 2.23 sec
+2019-05-04_09:06:09.29851 2019-05-04T09:06:09.298Z 789 TID-ouran6w75 StageUpdateWorker JID-dab817c88614045731aac327 INFO: done: 1.371 sec
+2019-05-04_09:06:09.30134 2019-05-04T09:06:09.301Z 789 TID-ouran68ht PipelineUpdateWorker JID-59d7d2ffb0b32989f989537a INFO: done: 1.374 sec
+2019-05-04_09:06:13.99128 2019-05-04T09:06:13.991Z 789 TID-ouran6tpx BuildFinishedWorker JID-c10c1d71a8425b2accb15b17 INFO: start
+2019-05-04_09:06:13.99636 2019-05-04T09:06:13.996Z 789 TID-ouran685p PipelineProcessWorker JID-fa90cdf2450dd8d6c549d8c8 INFO: start
+2019-05-04_09:06:13.99710 2019-05-04T09:06:13.997Z 789 TID-ouran6s59 StageUpdateWorker JID-69467ebb1630bc45d12ed5c8 INFO: start
+2019-05-04_09:06:14.00414 2019-05-04T09:06:14.004Z 789 TID-ouran6wwh ExpireJobCacheWorker JID-ac775457c66699b6401d6bd6 INFO: start
+2019-05-04_09:06:14.05091 2019-05-04T09:06:14.050Z 789 TID-ouran6wwh ExpireJobCacheWorker JID-ac775457c66699b6401d6bd6 INFO: done: 0.046 sec
+2019-05-04_09:06:14.10048 2019-05-04T09:06:14.100Z 789 TID-ouran6s59 StageUpdateWorker JID-69467ebb1630bc45d12ed5c8 INFO: done: 0.103 sec
+2019-05-04_09:06:14.16179 2019-05-04T09:06:14.161Z 789 TID-ouran6l69 BuildHooksWorker JID-09a1d8a9d25ea55c3f68d7f6 INFO: start
+2019-05-04_09:06:14.16520 2019-05-04T09:06:14.165Z 789 TID-ouran6rp1 ArchiveTraceWorker JID-aac2ccb049e32fac810f3a87 INFO: start
+2019-05-04_09:06:14.20831 2019-05-04T09:06:14.208Z 789 TID-ouran6tpx BuildFinishedWorker JID-c10c1d71a8425b2accb15b17 INFO: done: 0.217 sec
+2019-05-04_09:06:14.21665 2019-05-04T09:06:14.216Z 789 TID-ouran6gbp PipelineProcessWorker JID-97628ef8f4928b62900f45c9 INFO: start
+2019-05-04_09:06:14.22037 2019-05-04T09:06:14.220Z 789 TID-ouran6jx5 StageUpdateWorker JID-59fcf0087b73ae55c49413cc INFO: start
+2019-05-04_09:06:14.22054 2019-05-04T09:06:14.220Z 789 TID-ouran6twd ExpireJobCacheWorker JID-242a5eedc33a729e993267eb INFO: start
+2019-05-04_09:06:14.28160 2019-05-04T09:06:14.281Z 789 TID-ouran6jx5 StageUpdateWorker JID-59fcf0087b73ae55c49413cc INFO: done: 0.062 sec
+2019-05-04_09:06:14.29001 2019-05-04T09:06:14.289Z 789 TID-ouran6twd ExpireJobCacheWorker JID-242a5eedc33a729e993267eb INFO: done: 0.069 sec
+2019-05-04_09:06:14.29984 2019-05-04T09:06:14.299Z 789 TID-ouran6l69 BuildHooksWorker JID-09a1d8a9d25ea55c3f68d7f6 INFO: done: 0.138 sec
+2019-05-04_09:06:14.32445 2019-05-04T09:06:14.324Z 789 TID-ouran6sex PipelineProcessWorker JID-f32b5a569efcc4860727b660 INFO: start
+2019-05-04_09:06:14.32642 2019-05-04T09:06:14.326Z 789 TID-ouran6kp5 StageUpdateWorker JID-d6c877b5c7eab63256280c08 INFO: start
+2019-05-04_09:06:14.32760 2019-05-04T09:06:14.327Z 789 TID-ouran6k9p ExpireJobCacheWorker JID-e4d22f7b7efdf1fefa32f339 INFO: start
+2019-05-04_09:06:14.37266 2019-05-04T09:06:14.372Z 789 TID-ouran6rp1 ArchiveTraceWorker JID-aac2ccb049e32fac810f3a87 INFO: done: 0.207 sec
+2019-05-04_09:06:14.38477 2019-05-04T09:06:14.384Z 789 TID-ouran672t PipelineProcessWorker JID-b5891d320ae3cba2f2d6306b INFO: start
+2019-05-04_09:06:14.38845 2019-05-04T09:06:14.388Z 789 TID-ouran6k9p ExpireJobCacheWorker JID-e4d22f7b7efdf1fefa32f339 INFO: done: 0.061 sec
+2019-05-04_09:06:14.39227 2019-05-04T09:06:14.392Z 789 TID-ouran6xu1 ExpireJobCacheWorker JID-0e12b3421ab8a5435e5298a9 INFO: start
+2019-05-04_09:06:14.39639 2019-05-04T09:06:14.396Z 789 TID-ouran75r1 StageUpdateWorker JID-89490e44a98e3fd1dae141cc INFO: start
+2019-05-04_09:06:14.42667 2019-05-04T09:06:14.426Z 789 TID-ouran66d9 PipelineNotificationWorker JID-8c4c75cdd664d7eaff9f1056 INFO: start
+2019-05-04_09:06:14.43464 2019-05-04T09:06:14.434Z 789 TID-ouran6kp5 StageUpdateWorker JID-d6c877b5c7eab63256280c08 INFO: done: 0.108 sec
+2019-05-04_09:06:14.45231 2019-05-04T09:06:14.452Z 789 TID-ouran6g25 PipelineHooksWorker JID-40a5e658ef67ca2e7dfa5eb7 INFO: start
+2019-05-04_09:06:14.45522 2019-05-04T09:06:14.454Z 789 TID-ouran6s8x ExpirePipelineCacheWorker JID-6332894c449003c700b74376 INFO: start
+2019-05-04_09:06:14.48363 2019-05-04T09:06:14.483Z 789 TID-ouran6xu1 ExpireJobCacheWorker JID-0e12b3421ab8a5435e5298a9 INFO: done: 0.091 sec
+2019-05-04_09:06:14.48498 2019-05-04T09:06:14.484Z 789 TID-ouran685p PipelineProcessWorker JID-fa90cdf2450dd8d6c549d8c8 INFO: done: 0.489 sec
+2019-05-04_09:06:14.48869 2019-05-04T09:06:14.483Z 789 TID-ouran6gbp PipelineProcessWorker JID-97628ef8f4928b62900f45c9 INFO: done: 0.267 sec
+2019-05-04_09:06:14.50433 2019-05-04T09:06:14.504Z 789 TID-ouran75r1 StageUpdateWorker JID-89490e44a98e3fd1dae141cc INFO: done: 0.108 sec
+2019-05-04_09:06:14.54983 2019-05-04T09:06:14.549Z 789 TID-ouran6sex PipelineProcessWorker JID-f32b5a569efcc4860727b660 INFO: done: 0.225 sec
+2019-05-04_09:06:14.55068 2019-05-04T09:06:14.550Z 789 TID-ouran672t PipelineProcessWorker JID-b5891d320ae3cba2f2d6306b INFO: done: 0.166 sec
+2019-05-04_09:06:14.57294 2019-05-04T09:06:14.572Z 789 TID-ouran6s8x ExpirePipelineCacheWorker JID-6332894c449003c700b74376 INFO: done: 0.118 sec
+2019-05-04_09:06:14.57699 2019-05-04T09:06:14.576Z 789 TID-ouran6gm5 ActionMailer::DeliveryJob JID-7e7d1ac80c47d06b0b3d6505 INFO: start
+2019-05-04_09:06:14.58605 2019-05-04T09:06:14.585Z 789 TID-ouran66d9 PipelineNotificationWorker JID-8c4c75cdd664d7eaff9f1056 INFO: done: 0.16 sec
+2019-05-04_09:06:14.67309 2019-05-04T09:06:14.673Z 789 TID-ouran6g25 PipelineHooksWorker JID-40a5e658ef67ca2e7dfa5eb7 INFO: done: 0.221 sec
+2019-05-04_09:06:14.71050 sh: 1: /usr/sbin/sendmail: not found
+2019-05-04_09:06:14.71808 2019-05-04T09:06:14.718Z 789 TID-ouran6gm5 ActionMailer::DeliveryJob JID-7e7d1ac80c47d06b0b3d6505 INFO: done: 0.141 sec
+2019-05-04_09:15:08.82844 2019-05-04T09:15:08.828Z 789 TID-ouran6gbp ScheduleMigrateExternalDiffsWorker JID-a5186081501cea2da635e24f INFO: start
+2019-05-04_09:15:08.83839 2019-05-04T09:15:08.838Z 789 TID-ouran66fl StuckImportJobsWorker JID-99eba59264975aa3bc6dbac3 INFO: start
+2019-05-04_09:15:08.84936 2019-05-04T09:15:08.849Z 789 TID-ouran68ht PagesDomainVerificationCronWorker JID-ee34ec48d620ea54db2e2075 INFO: start
+2019-05-04_09:15:08.84987 2019-05-04T09:15:08.849Z 789 TID-ouran6gbp ScheduleMigrateExternalDiffsWorker JID-a5186081501cea2da635e24f INFO: done: 0.021 sec
+2019-05-04_09:15:08.86555 2019-05-04T09:15:08.865Z 789 TID-ouran66fl StuckImportJobsWorker JID-99eba59264975aa3bc6dbac3 INFO: done: 0.027 sec
+2019-05-04_09:15:08.86624 2019-05-04T09:15:08.866Z 789 TID-ouran68ht PagesDomainVerificationCronWorker JID-ee34ec48d620ea54db2e2075 INFO: done: 0.017 sec
+2019-05-04_09:16:32.35411 2019-05-04T09:16:32.354Z 789 TID-ouran6rp1 BuildHooksWorker JID-582c3cc03916e082630ad733 INFO: start
+2019-05-04_09:16:32.37918 2019-05-04T09:16:32.379Z 789 TID-ouran6l69 PipelineUpdateWorker JID-d5263ca0952d8307695978eb INFO: start
+2019-05-04_09:16:32.38184 2019-05-04T09:16:32.381Z 789 TID-ouran6s8x StageUpdateWorker JID-4fbb532ba7fcfc82eb3db28c INFO: start
+2019-05-04_09:16:32.38249 2019-05-04T09:16:32.382Z 789 TID-ouran6k9p ExpireJobCacheWorker JID-040a250294f964554913ac9a INFO: start
+2019-05-04_09:16:32.40286 2019-05-04T09:16:32.402Z 789 TID-ouran6rp1 BuildHooksWorker JID-582c3cc03916e082630ad733 INFO: done: 0.049 sec
+2019-05-04_09:16:32.40629 2019-05-04T09:16:32.406Z 789 TID-ouran6sex PipelineUpdateWorker JID-85fc1bf16d4a95cb1f1137ec INFO: start
+2019-05-04_09:16:32.40931 2019-05-04T09:16:32.406Z 789 TID-ouran6gbp StageUpdateWorker JID-6cda3b2009869b30299886d1 INFO: start
+2019-05-04_09:16:32.40933 2019-05-04T09:16:32.407Z 789 TID-ouran6itp ExpireJobCacheWorker JID-d8f7540f7f9fe93fba08da5a INFO: start
+2019-05-04_09:16:32.41764 2019-05-04T09:16:32.417Z 789 TID-ouran66fl PipelineHooksWorker JID-281602ff83a717e29a3fd156 INFO: start
+2019-05-04_09:16:32.42115 2019-05-04T09:16:32.421Z 789 TID-ouran685p ExpirePipelineCacheWorker JID-24febe870d5b9e17d6dcee0a INFO: start
+2019-05-04_09:16:32.42819 2019-05-04T09:16:32.428Z 789 TID-ouran6s8x StageUpdateWorker JID-4fbb532ba7fcfc82eb3db28c INFO: done: 0.047 sec
+2019-05-04_09:16:32.44312 2019-05-04T09:16:32.442Z 789 TID-ouran6k9p ExpireJobCacheWorker JID-040a250294f964554913ac9a INFO: done: 0.06 sec
+2019-05-04_09:16:32.44842 2019-05-04T09:16:32.448Z 789 TID-ouran68ht StageUpdateWorker JID-7c2e2d7bc72b91cc825b2454 INFO: start
+2019-05-04_09:16:32.44882 2019-05-04T09:16:32.448Z 789 TID-ouran6w75 PipelineUpdateWorker JID-a88bd5aebd2b3853423cd2b7 INFO: start
+2019-05-04_09:16:32.45079 2019-05-04T09:16:32.449Z 789 TID-ouran6l69 PipelineUpdateWorker JID-d5263ca0952d8307695978eb INFO: done: 0.07 sec
+2019-05-04_09:16:32.45237 2019-05-04T09:16:32.449Z 789 TID-ouran6tpx ExpireJobCacheWorker JID-3a7fc0974741ef59afff4cd2 INFO: start
+2019-05-04_09:16:32.46324 2019-05-04T09:16:32.463Z 789 TID-ouran6itp ExpireJobCacheWorker JID-d8f7540f7f9fe93fba08da5a INFO: done: 0.056 sec
+2019-05-04_09:16:32.47499 2019-05-04T09:16:32.474Z 789 TID-ouran6wwh BuildQueueWorker JID-06b8d6951ef39b4a96081449 INFO: start
+2019-05-04_09:16:32.47901 2019-05-04T09:16:32.475Z 789 TID-ouran75r1 StageUpdateWorker JID-f8e3637d7631870b50097baf INFO: start
+2019-05-04_09:16:32.48097 2019-05-04T09:16:32.477Z 789 TID-ouran6twd PipelineUpdateWorker JID-9cc73f78cb9d009f1674e64c INFO: start
+2019-05-04_09:16:32.48291 2019-05-04T09:16:32.477Z 789 TID-ouran6fl1 ExpireJobCacheWorker JID-9a8dd40f9ee100ec3978c69f INFO: start
+2019-05-04_09:16:32.50656 2019-05-04T09:16:32.506Z 789 TID-ouran6gbp StageUpdateWorker JID-6cda3b2009869b30299886d1 INFO: done: 0.1 sec
+2019-05-04_09:16:32.53227 2019-05-04T09:16:32.532Z 789 TID-ouran6sex PipelineUpdateWorker JID-85fc1bf16d4a95cb1f1137ec INFO: done: 0.126 sec
+2019-05-04_09:16:32.54592 2019-05-04T09:16:32.545Z 789 TID-ouran68ht StageUpdateWorker JID-7c2e2d7bc72b91cc825b2454 INFO: done: 0.097 sec
+2019-05-04_09:16:32.54965 2019-05-04T09:16:32.549Z 789 TID-ouran6tpx ExpireJobCacheWorker JID-3a7fc0974741ef59afff4cd2 INFO: done: 0.1 sec
+2019-05-04_09:16:32.57105 2019-05-04T09:16:32.570Z 789 TID-ouran6w75 PipelineUpdateWorker JID-a88bd5aebd2b3853423cd2b7 INFO: done: 0.122 sec
+2019-05-04_09:16:32.57297 2019-05-04T09:16:32.572Z 789 TID-ouran6fl1 ExpireJobCacheWorker JID-9a8dd40f9ee100ec3978c69f INFO: done: 0.096 sec
+2019-05-04_09:16:32.58229 2019-05-04T09:16:32.581Z 789 TID-ouran6twd PipelineUpdateWorker JID-9cc73f78cb9d009f1674e64c INFO: done: 0.105 sec
+2019-05-04_09:16:32.58386 2019-05-04T09:16:32.583Z 789 TID-ouran685p ExpirePipelineCacheWorker JID-24febe870d5b9e17d6dcee0a INFO: done: 0.163 sec
+2019-05-04_09:16:32.59221 2019-05-04T09:16:32.591Z 789 TID-ouran75r1 StageUpdateWorker JID-f8e3637d7631870b50097baf INFO: done: 0.116 sec
+2019-05-04_09:16:32.59490 2019-05-04T09:16:32.594Z 789 TID-ouran6wwh BuildQueueWorker JID-06b8d6951ef39b4a96081449 INFO: done: 0.12 sec
+2019-05-04_09:16:32.68108 2019-05-04T09:16:32.681Z 789 TID-ouran66fl PipelineHooksWorker JID-281602ff83a717e29a3fd156 INFO: done: 0.263 sec
+2019-05-04_09:16:33.84691 2019-05-04T09:16:33.846Z 789 TID-ouran66d9 BuildHooksWorker JID-2e11f26344ad220132d713ac INFO: start
+2019-05-04_09:16:33.84818 2019-05-04T09:16:33.848Z 789 TID-ouran6vcl PipelineUpdateWorker JID-1920e8ab7c878738f2c5af88 INFO: start
+2019-05-04_09:16:33.85011 2019-05-04T09:16:33.850Z 789 TID-ouran6gm5 StageUpdateWorker JID-b4870ec15038a1419e62df94 INFO: start
+2019-05-04_09:16:33.86959 2019-05-04T09:16:33.868Z 789 TID-ouran6jx5 ExpireJobCacheWorker JID-4424850dc8cd7d9a596c57e2 INFO: start
+2019-05-04_09:16:33.88632 2019-05-04T09:16:33.886Z 789 TID-ouran6vcl PipelineUpdateWorker JID-1920e8ab7c878738f2c5af88 INFO: done: 0.038 sec
+2019-05-04_09:16:33.90883 2019-05-04T09:16:33.908Z 789 TID-ouran6jx5 ExpireJobCacheWorker JID-4424850dc8cd7d9a596c57e2 INFO: done: 0.04 sec
+2019-05-04_09:16:33.90973 2019-05-04T09:16:33.909Z 789 TID-ouran6gm5 StageUpdateWorker JID-b4870ec15038a1419e62df94 INFO: done: 0.06 sec
+2019-05-04_09:16:33.92921 2019-05-04T09:16:33.929Z 789 TID-ouran66d9 BuildHooksWorker JID-2e11f26344ad220132d713ac INFO: done: 0.083 sec
+2019-05-04_09:16:36.98253 2019-05-04T09:16:36.981Z 789 TID-ouran6vcl ProjectDailyStatisticsWorker JID-2eed992b62479066363f97ef INFO: start
+2019-05-04_09:16:37.02890 2019-05-04T09:16:37.028Z 789 TID-ouran6vcl ProjectDailyStatisticsWorker JID-2eed992b62479066363f97ef INFO: done: 0.047 sec
+2019-05-04_09:16:58.17973 2019-05-04T09:16:58.179Z 789 TID-ouran6s59 BuildFinishedWorker JID-90cff95bfdc35d2a1f63440e INFO: start
+2019-05-04_09:16:58.18449 2019-05-04T09:16:58.184Z 789 TID-ouran6g25 PipelineProcessWorker JID-840df2785cf32821ceca64b4 INFO: start
+2019-05-04_09:16:58.18642 2019-05-04T09:16:58.186Z 789 TID-ouran6xu1 ExpireJobCacheWorker JID-e7558496817411ed7b0dba20 INFO: start
+2019-05-04_09:16:58.18713 2019-05-04T09:16:58.186Z 789 TID-ouran672t StageUpdateWorker JID-677451d7ae235a253e53edc9 INFO: start
+2019-05-04_09:16:58.34937 2019-05-04T09:16:58.349Z 789 TID-ouran672t StageUpdateWorker JID-677451d7ae235a253e53edc9 INFO: done: 0.163 sec
+2019-05-04_09:16:58.35157 2019-05-04T09:16:58.351Z 789 TID-ouran6xu1 ExpireJobCacheWorker JID-e7558496817411ed7b0dba20 INFO: done: 0.165 sec
+2019-05-04_09:16:58.47206 2019-05-04T09:16:58.471Z 789 TID-ouran6kp5 PipelineProcessWorker JID-f5a2c4fa5e9002c069ae6898 INFO: start
+2019-05-04_09:16:58.47505 2019-05-04T09:16:58.474Z 789 TID-ouran66d9 StageUpdateWorker JID-480a6f15e4a4893e17264ff6 INFO: start
+2019-05-04_09:16:58.48931 2019-05-04T09:16:58.489Z 789 TID-ouran6jx5 ExpireJobCacheWorker JID-5058b1466de43939bd59ee9a INFO: start
+2019-05-04_09:16:58.58153 2019-05-04T09:16:58.581Z 789 TID-ouran6jx5 ExpireJobCacheWorker JID-5058b1466de43939bd59ee9a INFO: done: 0.092 sec
+2019-05-04_09:16:58.58379 2019-05-04T09:16:58.581Z 789 TID-ouran66d9 StageUpdateWorker JID-480a6f15e4a4893e17264ff6 INFO: done: 0.107 sec
+2019-05-04_09:16:58.59758 2019-05-04T09:16:58.597Z 789 TID-ouran6gm5 PipelineProcessWorker JID-60f4057aa82704085a9e65ee INFO: start
+2019-05-04_09:16:58.59923 2019-05-04T09:16:58.598Z 789 TID-ouran6w75 StageUpdateWorker JID-49b789f99ed47baf9dc15db5 INFO: start
+2019-05-04_09:16:58.60358 2019-05-04T09:16:58.603Z 789 TID-ouran6l69 ExpireJobCacheWorker JID-9c9fcc5150ba68c64beda6ad INFO: start
+2019-05-04_09:16:58.63392 2019-05-04T09:16:58.633Z 789 TID-ouran6w75 StageUpdateWorker JID-49b789f99ed47baf9dc15db5 INFO: done: 0.036 sec
+2019-05-04_09:16:58.66178 2019-05-04T09:16:58.660Z 789 TID-ouran6tpx BuildHooksWorker JID-1a13554373c7bad85034a9de INFO: start
+2019-05-04_09:16:58.67602 2019-05-04T09:16:58.675Z 789 TID-ouran6vcl ArchiveTraceWorker JID-182819857e3fad6866ee617e INFO: start
+2019-05-04_09:16:58.70910 2019-05-04T09:16:58.709Z 789 TID-ouran66fl PipelineProcessWorker JID-195c70a278b27fd63ae3a2a0 INFO: start
+2019-05-04_09:16:58.71299 2019-05-04T09:16:58.709Z 789 TID-ouran6l69 ExpireJobCacheWorker JID-9c9fcc5150ba68c64beda6ad INFO: done: 0.106 sec
+2019-05-04_09:16:58.71841 2019-05-04T09:16:58.718Z 789 TID-ouran6s59 BuildFinishedWorker JID-90cff95bfdc35d2a1f63440e INFO: done: 0.539 sec
+2019-05-04_09:16:58.71907 2019-05-04T09:16:58.719Z 789 TID-ouran6wwh StageUpdateWorker JID-9d118c08f1968c2a57a446a3 INFO: start
+2019-05-04_09:16:58.72669 2019-05-04T09:16:58.726Z 789 TID-ouran75r1 ExpireJobCacheWorker JID-bdf410664b6e92f3aab7ee3e INFO: start
+2019-05-04_09:16:58.78525 2019-05-04T09:16:58.785Z 789 TID-ouran685p PipelineNotificationWorker JID-ba0fa7f44f596be5643e365a INFO: start
+2019-05-04_09:16:58.78706 2019-05-04T09:16:58.787Z 789 TID-ouran6sex PipelineHooksWorker JID-f04925919e9566a80d7f80b6 INFO: start
+2019-05-04_09:16:58.79199 2019-05-04T09:16:58.791Z 789 TID-ouran75r1 ExpireJobCacheWorker JID-bdf410664b6e92f3aab7ee3e INFO: done: 0.065 sec
+2019-05-04_09:16:58.79335 2019-05-04T09:16:58.793Z 789 TID-ouran6rp1 ExpirePipelineCacheWorker JID-7b0c0d3b8cb39a76088060fa INFO: start
+2019-05-04_09:16:58.81153 2019-05-04T09:16:58.811Z 789 TID-ouran6wwh StageUpdateWorker JID-9d118c08f1968c2a57a446a3 INFO: done: 0.092 sec
+2019-05-04_09:16:58.81390 2019-05-04T09:16:58.813Z 789 TID-ouran6tpx BuildHooksWorker JID-1a13554373c7bad85034a9de INFO: done: 0.153 sec
+2019-05-04_09:16:58.83045 2019-05-04T09:16:58.830Z 789 TID-ouran6kp5 PipelineProcessWorker JID-f5a2c4fa5e9002c069ae6898 INFO: done: 0.359 sec
+2019-05-04_09:16:58.84985 2019-05-04T09:16:58.849Z 789 TID-ouran6g25 PipelineProcessWorker JID-840df2785cf32821ceca64b4 INFO: done: 0.666 sec
+2019-05-04_09:16:58.85927 2019-05-04T09:16:58.859Z 789 TID-ouran6fl1 ActionMailer::DeliveryJob JID-5547bf6ecdbf1c123c1a6e59 INFO: start
+2019-05-04_09:16:58.86114 2019-05-04T09:16:58.861Z 789 TID-ouran66fl PipelineProcessWorker JID-195c70a278b27fd63ae3a2a0 INFO: done: 0.152 sec
+2019-05-04_09:16:58.88085 2019-05-04T09:16:58.880Z 789 TID-ouran685p PipelineNotificationWorker JID-ba0fa7f44f596be5643e365a INFO: done: 0.096 sec
+2019-05-04_09:16:58.88546 2019-05-04T09:16:58.885Z 789 TID-ouran6gm5 PipelineProcessWorker JID-60f4057aa82704085a9e65ee INFO: done: 0.288 sec
+2019-05-04_09:16:58.90675 2019-05-04T09:16:58.906Z 789 TID-ouran6rp1 ExpirePipelineCacheWorker JID-7b0c0d3b8cb39a76088060fa INFO: done: 0.113 sec
+2019-05-04_09:16:58.92791 2019-05-04T09:16:58.927Z 789 TID-ouran6vcl ArchiveTraceWorker JID-182819857e3fad6866ee617e INFO: done: 0.252 sec
+2019-05-04_09:16:58.95553 sh: 1: /usr/sbin/sendmail: not found
+2019-05-04_09:16:58.96707 2019-05-04T09:16:58.967Z 789 TID-ouran6fl1 ActionMailer::DeliveryJob JID-5547bf6ecdbf1c123c1a6e59 INFO: done: 0.108 sec
+2019-05-04_09:16:58.96859 2019-05-04T09:16:58.968Z 789 TID-ouran6sex PipelineHooksWorker JID-f04925919e9566a80d7f80b6 INFO: done: 0.182 sec
+2019-05-04_09:17:22.32822 2019-05-04T09:17:22.328Z 789 TID-ouran6l69 Ci::ArchiveTracesCronWorker JID-0fe85ca8b1f4c50fe27f4114 INFO: start
+2019-05-04_09:17:22.35323 2019-05-04T09:17:22.353Z 789 TID-ouran6l69 Ci::ArchiveTracesCronWorker JID-0fe85ca8b1f4c50fe27f4114 INFO: done: 0.025 sec
+2019-05-04_09:19:34.15940 2019-05-04T09:19:34.159Z 789 TID-ouran68ht PipelineScheduleWorker JID-f99c94e5a235c117b365d4b4 INFO: start
+2019-05-04_09:19:34.18323 2019-05-04T09:19:34.183Z 789 TID-ouran68ht PipelineScheduleWorker JID-f99c94e5a235c117b365d4b4 INFO: done: 0.024 sec
+2019-05-04_09:19:51.38197 2019-05-04T09:19:51.381Z 789 TID-ouran6rp1 PostReceive JID-ac63533d7baca19a0a736b67 INFO: start
+2019-05-04_09:19:51.42806 2019-05-04T09:19:51.428Z 789 TID-ouran6jx5 UpdateMergeRequestsWorker JID-504dbe192fd1e1f126c7345c INFO: start
+2019-05-04_09:19:51.54276 2019-05-04T09:19:51.542Z 789 TID-ouran6jx5 UpdateMergeRequestsWorker JID-504dbe192fd1e1f126c7345c INFO: done: 0.114 sec
+2019-05-04_09:19:51.86469 2019-05-04T09:19:51.864Z 789 TID-ouran75r1 BuildHooksWorker JID-f53532497a3d52d428edb472 INFO: start
+2019-05-04_09:19:51.86624 2019-05-04T09:19:51.866Z 789 TID-ouran6gbp BuildHooksWorker JID-f9b3397977c9c85199fd0430 INFO: start
+2019-05-04_09:19:51.86781 2019-05-04T09:19:51.867Z 789 TID-ouran6s8x BuildHooksWorker JID-04fd611972a31c4199721a41 INFO: start
+2019-05-04_09:19:51.86818 2019-05-04T09:19:51.866Z 789 TID-ouran6tpx BuildHooksWorker JID-48e89c62ca8797d684259856 INFO: start
+2019-05-04_09:19:51.96808 2019-05-04T09:19:51.968Z 789 TID-ouran75r1 BuildHooksWorker JID-f53532497a3d52d428edb472 INFO: done: 0.103 sec
+2019-05-04_09:19:51.97008 2019-05-04T09:19:51.970Z 789 TID-ouran6tpx BuildHooksWorker JID-48e89c62ca8797d684259856 INFO: done: 0.104 sec
+2019-05-04_09:19:51.97176 2019-05-04T09:19:51.971Z 789 TID-ouran6gbp BuildHooksWorker JID-f9b3397977c9c85199fd0430 INFO: done: 0.106 sec
+2019-05-04_09:19:51.97369 2019-05-04T09:19:51.973Z 789 TID-ouran6fl1 BuildQueueWorker JID-e3abb70323f010b23910edef INFO: start
+2019-05-04_09:19:51.97458 2019-05-04T09:19:51.974Z 789 TID-ouran6itp StageUpdateWorker JID-33ac11fad274677e86acdaea INFO: start
+2019-05-04_09:19:51.97533 2019-05-04T09:19:51.973Z 789 TID-ouran6twd PipelineUpdateWorker JID-ff4ad8b566b497dbad1951f5 INFO: start
+2019-05-04_09:19:51.97864 2019-05-04T09:19:51.978Z 789 TID-ouran6l69 ExpireJobCacheWorker JID-fb455a7b8f790ba6dee76daa INFO: start
+2019-05-04_09:19:52.01354 2019-05-04T09:19:52.013Z 789 TID-ouran6s8x BuildHooksWorker JID-04fd611972a31c4199721a41 INFO: done: 0.146 sec
+2019-05-04_09:19:52.02553 2019-05-04T09:19:52.025Z 789 TID-ouran6wwh PipelineHooksWorker JID-f63029862c654aa3166f660f INFO: start
+2019-05-04_09:19:52.02616 2019-05-04T09:19:52.026Z 789 TID-ouran68ht ExpirePipelineCacheWorker JID-78f7f53502bde0e420f37e50 INFO: start
+2019-05-04_09:19:52.03404 2019-05-04T09:19:52.033Z 789 TID-ouran6l69 ExpireJobCacheWorker JID-fb455a7b8f790ba6dee76daa INFO: done: 0.055 sec
+2019-05-04_09:19:52.04692 2019-05-04T09:19:52.046Z 789 TID-ouran6itp StageUpdateWorker JID-33ac11fad274677e86acdaea INFO: done: 0.072 sec
+2019-05-04_09:19:52.05305 2019-05-04T09:19:52.053Z 789 TID-ouran6twd PipelineUpdateWorker JID-ff4ad8b566b497dbad1951f5 INFO: done: 0.079 sec
+2019-05-04_09:19:52.06648 2019-05-04T09:19:52.066Z 789 TID-ouran6fl1 BuildQueueWorker JID-e3abb70323f010b23910edef INFO: done: 0.093 sec
+2019-05-04_09:19:52.09715 2019-05-04T09:19:52.097Z 789 TID-ouran6g25 DetectRepositoryLanguagesWorker JID-a29c856a675c82da9befcf41 INFO: start
+2019-05-04_09:19:52.09795 2019-05-04T09:19:52.097Z 789 TID-ouran6kp5 ProjectCacheWorker JID-ab7fe53acd628a283944bb3b INFO: start
+2019-05-04_09:19:52.09921 2019-05-04T09:19:52.097Z 789 TID-ouran68ht ExpirePipelineCacheWorker JID-78f7f53502bde0e420f37e50 INFO: done: 0.071 sec
+2019-05-04_09:19:52.14993 2019-05-04T09:19:52.149Z 789 TID-ouran6wwh PipelineHooksWorker JID-f63029862c654aa3166f660f INFO: done: 0.124 sec
+2019-05-04_09:19:52.16232 2019-05-04T09:19:52.161Z 789 TID-ouran66fl CreateGpgSignatureWorker JID-034896df6fda1dba2819d074 INFO: start
+2019-05-04_09:19:52.18182 2019-05-04T09:19:52.181Z 789 TID-ouran66fl CreateGpgSignatureWorker JID-034896df6fda1dba2819d074 INFO: done: 0.02 sec
+2019-05-04_09:19:52.19166 2019-05-04T09:19:52.191Z 789 TID-ouran6rp1 PostReceive JID-ac63533d7baca19a0a736b67 INFO: done: 0.81 sec
+2019-05-04_09:19:52.20125 2019-05-04T09:19:52.200Z 789 TID-ouran6kp5 ProjectCacheWorker JID-ab7fe53acd628a283944bb3b INFO: done: 0.103 sec
+2019-05-04_09:19:52.65738 2019-05-04T09:19:52.657Z 789 TID-ouran6xu1 BuildHooksWorker JID-67e024c551d83ce624ec543b INFO: start
+2019-05-04_09:19:52.65840 2019-05-04T09:19:52.658Z 789 TID-ouran6s59 PipelineUpdateWorker JID-0b46b9ffe27079cfce5e5dcb INFO: start
+2019-05-04_09:19:52.65940 2019-05-04T09:19:52.659Z 789 TID-ouran6k9p StageUpdateWorker JID-78d09b93c5eaaa1547ef1721 INFO: start
+2019-05-04_09:19:52.66267 2019-05-04T09:19:52.662Z 789 TID-ouran6jx5 ExpireJobCacheWorker JID-a6656449054fbb87287bbf33 INFO: start
+2019-05-04_09:19:52.72317 2019-05-04T09:19:52.723Z 789 TID-ouran6gm5 PipelineHooksWorker JID-6be64ce8739190c66ad6bf80 INFO: start
+2019-05-04_09:19:52.72616 2019-05-04T09:19:52.726Z 789 TID-ouran6vcl ExpirePipelineCacheWorker JID-265ca81c0d5a388b1c6befa6 INFO: start
+2019-05-04_09:19:52.73362 2019-05-04T09:19:52.733Z 789 TID-ouran66d9 PipelineMetricsWorker JID-58953f9a3436b3a41c4d9087 INFO: start
+2019-05-04_09:19:52.74645 2019-05-04T09:19:52.746Z 789 TID-ouran6jx5 ExpireJobCacheWorker JID-a6656449054fbb87287bbf33 INFO: done: 0.083 sec
+2019-05-04_09:19:52.77957 2019-05-04T09:19:52.778Z 789 TID-ouran6s59 PipelineUpdateWorker JID-0b46b9ffe27079cfce5e5dcb INFO: done: 0.121 sec
+2019-05-04_09:19:52.78678 2019-05-04T09:19:52.786Z 789 TID-ouran6xu1 BuildHooksWorker JID-67e024c551d83ce624ec543b INFO: done: 0.129 sec
+2019-05-04_09:19:52.78893 2019-05-04T09:19:52.788Z 789 TID-ouran6k9p StageUpdateWorker JID-78d09b93c5eaaa1547ef1721 INFO: done: 0.129 sec
+2019-05-04_09:19:52.80772 2019-05-04T09:19:52.807Z 789 TID-ouran66d9 PipelineMetricsWorker JID-58953f9a3436b3a41c4d9087 INFO: done: 0.074 sec
+2019-05-04_09:19:52.81764 2019-05-04T09:19:52.817Z 789 TID-ouran6vcl ExpirePipelineCacheWorker JID-265ca81c0d5a388b1c6befa6 INFO: done: 0.091 sec
+2019-05-04_09:19:52.83859 2019-05-04T09:19:52.838Z 789 TID-ouran6gm5 PipelineHooksWorker JID-6be64ce8739190c66ad6bf80 INFO: done: 0.115 sec
+2019-05-04_09:19:54.63379 2019-05-04T09:19:54.633Z 789 TID-ouran6g25 DetectRepositoryLanguagesWorker JID-a29c856a675c82da9befcf41 INFO: done: 2.537 sec
+2019-05-04_09:19:55.85872 2019-05-04T09:19:55.858Z 789 TID-ouran6s59 ProjectDailyStatisticsWorker JID-e1add17f0aada39d830c05d4 INFO: start
+2019-05-04_09:19:55.87908 2019-05-04T09:19:55.879Z 789 TID-ouran6s59 ProjectDailyStatisticsWorker JID-e1add17f0aada39d830c05d4 INFO: done: 0.02 sec
+2019-05-04_09:20:06.00955 2019-05-04T09:20:06.009Z 789 TID-ouran66fl RepositoryCheck::DispatchWorker JID-87571e24185950a0b454e26b INFO: start
+2019-05-04_09:20:06.02123 2019-05-04T09:20:06.021Z 789 TID-ouran6l69 RepositoryCheck::BatchWorker JID-372b1aba160ef458eaa8221f INFO: start
+2019-05-04_09:20:06.04590 2019-05-04T09:20:06.045Z 789 TID-ouran6l69 RepositoryCheck::BatchWorker JID-372b1aba160ef458eaa8221f INFO: done: 0.024 sec
+2019-05-04_09:20:06.04791 2019-05-04T09:20:06.047Z 789 TID-ouran66fl RepositoryCheck::DispatchWorker JID-87571e24185950a0b454e26b INFO: done: 0.038 sec
+2019-05-04_09:20:12.59934 2019-05-04T09:20:12.599Z 789 TID-ouran6sex BuildFinishedWorker JID-ba2289df84aecea62114c5e9 INFO: start
+2019-05-04_09:20:12.61494 2019-05-04T09:20:12.614Z 789 TID-ouran6w75 PipelineProcessWorker JID-f464caa2308373e3bf4d8dbc INFO: start
+2019-05-04_09:20:12.61867 2019-05-04T09:20:12.618Z 789 TID-ouran672t ExpireJobCacheWorker JID-a92fae1e7c932c8fffc9bef8 INFO: start
+2019-05-04_09:20:12.61993 2019-05-04T09:20:12.619Z 789 TID-ouran685p StageUpdateWorker JID-3d1f87d38554f9516f5c9f6d INFO: start
+2019-05-04_09:20:12.67547 2019-05-04T09:20:12.675Z 789 TID-ouran672t ExpireJobCacheWorker JID-a92fae1e7c932c8fffc9bef8 INFO: done: 0.057 sec
+2019-05-04_09:20:12.76813 2019-05-04T09:20:12.767Z 789 TID-ouran685p StageUpdateWorker JID-3d1f87d38554f9516f5c9f6d INFO: done: 0.149 sec
+2019-05-04_09:20:12.94871 2019-05-04T09:20:12.948Z 789 TID-ouran6l69 PipelineProcessWorker JID-a07613cb707e59a6e88c1592 INFO: start
+2019-05-04_09:20:12.95051 2019-05-04T09:20:12.950Z 789 TID-ouran75r1 StageUpdateWorker JID-01609e4d1b44e0dd5d2f7d68 INFO: start
+2019-05-04_09:20:12.96312 2019-05-04T09:20:12.962Z 789 TID-ouran6kp5 ExpireJobCacheWorker JID-16aec1921b9c0b8db1d11031 INFO: start
+2019-05-04_09:20:12.96977 2019-05-04T09:20:12.969Z 789 TID-ouran66fl BuildHooksWorker JID-d09477458a9f8b52f19d8466 INFO: start
+2019-05-04_09:20:12.97341 2019-05-04T09:20:12.972Z 789 TID-ouran6rp1 ArchiveTraceWorker JID-f9af5215da7eb74a9edf5b67 INFO: start
+2019-05-04_09:20:13.01891 2019-05-04T09:20:13.017Z 789 TID-ouran6sex BuildFinishedWorker JID-ba2289df84aecea62114c5e9 INFO: done: 0.419 sec
+2019-05-04_09:20:13.03969 2019-05-04T09:20:13.039Z 789 TID-ouran6kp5 ExpireJobCacheWorker JID-16aec1921b9c0b8db1d11031 INFO: done: 0.077 sec
+2019-05-04_09:20:13.06183 2019-05-04T09:20:13.061Z 789 TID-ouran75r1 StageUpdateWorker JID-01609e4d1b44e0dd5d2f7d68 INFO: done: 0.111 sec
+2019-05-04_09:20:13.09299 2019-05-04T09:20:13.092Z 789 TID-ouran6fl1 StageUpdateWorker JID-69128ccde6c51329b17b4959 INFO: start
+2019-05-04_09:20:13.09387 2019-05-04T09:20:13.093Z 789 TID-ouran6s8x PipelineProcessWorker JID-7651be466f81c22b465d0624 INFO: start
+2019-05-04_09:20:13.10591 2019-05-04T09:20:13.105Z 789 TID-ouran6k9p ExpireJobCacheWorker JID-3cbc63233d144bec83a63110 INFO: start
+2019-05-04_09:20:13.10968 2019-05-04T09:20:13.109Z 789 TID-ouran6rp1 ArchiveTraceWorker JID-f9af5215da7eb74a9edf5b67 INFO: done: 0.137 sec
+2019-05-04_09:20:13.13430 2019-05-04T09:20:13.134Z 789 TID-ouran66fl BuildHooksWorker JID-d09477458a9f8b52f19d8466 INFO: done: 0.165 sec
+2019-05-04_09:20:13.16702 2019-05-04T09:20:13.166Z 789 TID-ouran6gbp PipelineProcessWorker JID-bfe0028639f9f44d641bce27 INFO: start
+2019-05-04_09:20:13.17025 2019-05-04T09:20:13.170Z 789 TID-ouran6k9p ExpireJobCacheWorker JID-3cbc63233d144bec83a63110 INFO: done: 0.065 sec
+2019-05-04_09:20:13.17128 2019-05-04T09:20:13.169Z 789 TID-ouran6xu1 StageUpdateWorker JID-ff0d1aabf19c1ee884db391a INFO: start
+2019-05-04_09:20:13.17203 2019-05-04T09:20:13.171Z 789 TID-ouran6twd ExpireJobCacheWorker JID-bc198623de4990d721add91b INFO: start
+2019-05-04_09:20:13.17216 2019-05-04T09:20:13.170Z 789 TID-ouran6fl1 StageUpdateWorker JID-69128ccde6c51329b17b4959 INFO: done: 0.078 sec
+2019-05-04_09:20:13.21500 2019-05-04T09:20:13.214Z 789 TID-ouran66d9 PipelineNotificationWorker JID-b6f41b5bee8d3ee3b5440d4d INFO: start
+2019-05-04_09:20:13.22702 2019-05-04T09:20:13.226Z 789 TID-ouran6jx5 PipelineHooksWorker JID-9c19bfa32f16fd6b12035c9f INFO: start
+2019-05-04_09:20:13.22977 2019-05-04T09:20:13.229Z 789 TID-ouran6itp ExpirePipelineCacheWorker JID-9e1c8afbf222e05621af7cd3 INFO: start
+2019-05-04_09:20:13.24170 2019-05-04T09:20:13.241Z 789 TID-ouran6twd ExpireJobCacheWorker JID-bc198623de4990d721add91b INFO: done: 0.07 sec
+2019-05-04_09:20:13.24853 2019-05-04T09:20:13.242Z 789 TID-ouran6w75 PipelineProcessWorker JID-f464caa2308373e3bf4d8dbc INFO: done: 0.627 sec
+2019-05-04_09:20:13.25530 2019-05-04T09:20:13.255Z 789 TID-ouran6xu1 StageUpdateWorker JID-ff0d1aabf19c1ee884db391a INFO: done: 0.085 sec
+2019-05-04_09:20:13.27809 2019-05-04T09:20:13.278Z 789 TID-ouran6l69 PipelineProcessWorker JID-a07613cb707e59a6e88c1592 INFO: done: 0.329 sec
+2019-05-04_09:20:13.28386 2019-05-04T09:20:13.283Z 789 TID-ouran6wwh ActionMailer::DeliveryJob JID-d80af2632e8d16966061fdf2 INFO: start
+2019-05-04_09:20:13.29285 2019-05-04T09:20:13.292Z 789 TID-ouran66d9 PipelineNotificationWorker JID-b6f41b5bee8d3ee3b5440d4d INFO: done: 0.078 sec
+2019-05-04_09:20:13.30823 2019-05-04T09:20:13.308Z 789 TID-ouran6s8x PipelineProcessWorker JID-7651be466f81c22b465d0624 INFO: done: 0.214 sec
+2019-05-04_09:20:13.31231 2019-05-04T09:20:13.311Z 789 TID-ouran6gbp PipelineProcessWorker JID-bfe0028639f9f44d641bce27 INFO: done: 0.145 sec
+2019-05-04_09:20:13.32512 2019-05-04T09:20:13.325Z 789 TID-ouran6itp ExpirePipelineCacheWorker JID-9e1c8afbf222e05621af7cd3 INFO: done: 0.095 sec
+2019-05-04_09:20:13.36348 2019-05-04T09:20:13.363Z 789 TID-ouran6jx5 PipelineHooksWorker JID-9c19bfa32f16fd6b12035c9f INFO: done: 0.136 sec
+2019-05-04_09:20:13.37198 sh: 1: /usr/sbin/sendmail: not found
+2019-05-04_09:20:13.37960 2019-05-04T09:20:13.379Z 789 TID-ouran6wwh ActionMailer::DeliveryJob JID-d80af2632e8d16966061fdf2 INFO: done: 0.096 sec
+2019-05-04_09:20:59.98849 2019-05-04T09:20:59.988Z 789 TID-ouran6wwh PostReceive JID-b7756d8991896145a274eebf INFO: start
+2019-05-04_09:21:00.01454 2019-05-04T09:21:00.014Z 789 TID-ouran672t UpdateMergeRequestsWorker JID-2fa966bdea60ac85b6712de8 INFO: start
+2019-05-04_09:21:00.07705 2019-05-04T09:21:00.076Z 789 TID-ouran672t UpdateMergeRequestsWorker JID-2fa966bdea60ac85b6712de8 INFO: done: 0.062 sec
+2019-05-04_09:21:00.29890 2019-05-04T09:21:00.298Z 789 TID-ouran68ht ProjectDailyStatisticsWorker JID-43a4b7ade42e56b32e24babd INFO: start
+2019-05-04_09:21:00.32308 2019-05-04T09:21:00.323Z 789 TID-ouran68ht ProjectDailyStatisticsWorker JID-43a4b7ade42e56b32e24babd INFO: done: 0.024 sec
+2019-05-04_09:21:00.33801 2019-05-04T09:21:00.337Z 789 TID-ouran75r1 BuildHooksWorker JID-0e73f2f864cea0d1bc801255 INFO: start
+2019-05-04_09:21:00.33916 2019-05-04T09:21:00.338Z 789 TID-ouran6sex BuildHooksWorker JID-644a4ad029c60f92c6fb8c7f INFO: start
+2019-05-04_09:21:00.33939 2019-05-04T09:21:00.339Z 789 TID-ouran6fl1 BuildHooksWorker JID-3912a61904eab0037aa8da0f INFO: start
+2019-05-04_09:21:00.34284 2019-05-04T09:21:00.342Z 789 TID-ouran6kp5 BuildHooksWorker JID-7072af65272afe6e6fea8490 INFO: start
+2019-05-04_09:21:00.45287 2019-05-04T09:21:00.452Z 789 TID-ouran6fl1 BuildHooksWorker JID-3912a61904eab0037aa8da0f INFO: done: 0.113 sec
+2019-05-04_09:21:00.45914 2019-05-04T09:21:00.459Z 789 TID-ouran6kp5 BuildHooksWorker JID-7072af65272afe6e6fea8490 INFO: done: 0.116 sec
+2019-05-04_09:21:00.46305 2019-05-04T09:21:00.463Z 789 TID-ouran6sex BuildHooksWorker JID-644a4ad029c60f92c6fb8c7f INFO: done: 0.125 sec
+2019-05-04_09:21:00.46674 2019-05-04T09:21:00.466Z 789 TID-ouran75r1 BuildHooksWorker JID-0e73f2f864cea0d1bc801255 INFO: done: 0.129 sec
+2019-05-04_09:21:00.47101 2019-05-04T09:21:00.470Z 789 TID-ouran6gbp BuildQueueWorker JID-33aece80897626f6b7647baf INFO: start
+2019-05-04_09:21:00.47216 2019-05-04T09:21:00.472Z 789 TID-ouran66fl PipelineUpdateWorker JID-faf260f2c680b4917943a4a3 INFO: start
+2019-05-04_09:21:00.47459 2019-05-04T09:21:00.474Z 789 TID-ouran6xu1 ExpireJobCacheWorker JID-f20b785a6d3996127615a988 INFO: start
+2019-05-04_09:21:00.47920 2019-05-04T09:21:00.474Z 789 TID-ouran6l69 StageUpdateWorker JID-66190c831f6bdd1db1200bd3 INFO: start
+2019-05-04_09:21:00.53178 2019-05-04T09:21:00.531Z 789 TID-ouran6w75 ExpirePipelineCacheWorker JID-d4e3442e3151bcf8ac1d59d3 INFO: start
+2019-05-04_09:21:00.53344 2019-05-04T09:21:00.533Z 789 TID-ouran6k9p PipelineHooksWorker JID-ea0a597a88f33ede6ad2b9a7 INFO: start
+2019-05-04_09:21:00.55448 2019-05-04T09:21:00.554Z 789 TID-ouran66fl PipelineUpdateWorker JID-faf260f2c680b4917943a4a3 INFO: done: 0.082 sec
+2019-05-04_09:21:00.55768 2019-05-04T09:21:00.557Z 789 TID-ouran6gbp BuildQueueWorker JID-33aece80897626f6b7647baf INFO: done: 0.087 sec
+2019-05-04_09:21:00.55983 2019-05-04T09:21:00.557Z 789 TID-ouran6xu1 ExpireJobCacheWorker JID-f20b785a6d3996127615a988 INFO: done: 0.083 sec
+2019-05-04_09:21:00.56733 2019-05-04T09:21:00.567Z 789 TID-ouran6l69 StageUpdateWorker JID-66190c831f6bdd1db1200bd3 INFO: done: 0.093 sec
+2019-05-04_09:21:00.58815 2019-05-04T09:21:00.588Z 789 TID-ouran6s8x DetectRepositoryLanguagesWorker JID-ba838ffda5f3dfadada2415c INFO: start
+2019-05-04_09:21:00.59130 2019-05-04T09:21:00.591Z 789 TID-ouran6rp1 ProjectCacheWorker JID-11ef7c08b240acc027d0b707 INFO: start
+2019-05-04_09:21:00.60110 2019-05-04T09:21:00.600Z 789 TID-ouran6twd CreateGpgSignatureWorker JID-59ef87a860625841e29099f9 INFO: start
+2019-05-04_09:21:00.61567 2019-05-04T09:21:00.615Z 789 TID-ouran6twd CreateGpgSignatureWorker JID-59ef87a860625841e29099f9 INFO: done: 0.015 sec
+2019-05-04_09:21:00.62609 2019-05-04T09:21:00.626Z 789 TID-ouran6w75 ExpirePipelineCacheWorker JID-d4e3442e3151bcf8ac1d59d3 INFO: done: 0.094 sec
+2019-05-04_09:21:00.63208 2019-05-04T09:21:00.632Z 789 TID-ouran6wwh PostReceive JID-b7756d8991896145a274eebf INFO: done: 0.644 sec
+2019-05-04_09:21:00.65208 2019-05-04T09:21:00.652Z 789 TID-ouran6rp1 ProjectCacheWorker JID-11ef7c08b240acc027d0b707 INFO: done: 0.061 sec
+2019-05-04_09:21:00.67005 2019-05-04T09:21:00.669Z 789 TID-ouran6k9p PipelineHooksWorker JID-ea0a597a88f33ede6ad2b9a7 INFO: done: 0.137 sec
+2019-05-04_09:21:01.17173 2019-05-04T09:21:01.171Z 789 TID-ouran685p BuildHooksWorker JID-2c59b90cb950420331d5e374 INFO: start
+2019-05-04_09:21:01.17228 2019-05-04T09:21:01.172Z 789 TID-ouran66d9 PipelineUpdateWorker JID-3d436593b3fde3507692b380 INFO: start
+2019-05-04_09:21:01.17314 2019-05-04T09:21:01.173Z 789 TID-ouran6g25 StageUpdateWorker JID-abda3949bbf6588e69b89292 INFO: start
+2019-05-04_09:21:01.17638 2019-05-04T09:21:01.176Z 789 TID-ouran6tpx ExpireJobCacheWorker JID-2d152b4ce26e05833a3d1d24 INFO: start
+2019-05-04_09:21:01.21743 2019-05-04T09:21:01.217Z 789 TID-ouran6gm5 PipelineHooksWorker JID-7b098c7d83034aefa4e932eb INFO: start
+2019-05-04_09:21:01.22952 2019-05-04T09:21:01.229Z 789 TID-ouran6jx5 ExpirePipelineCacheWorker JID-bb3a2a36e5a520927722f568 INFO: start
+2019-05-04_09:21:01.23116 2019-05-04T09:21:01.231Z 789 TID-ouran6tpx ExpireJobCacheWorker JID-2d152b4ce26e05833a3d1d24 INFO: done: 0.055 sec
+2019-05-04_09:21:01.23577 2019-05-04T09:21:01.231Z 789 TID-ouran6itp PipelineMetricsWorker JID-72ed89e0e00bfbb9c50a9b48 INFO: start
+2019-05-04_09:21:01.27554 2019-05-04T09:21:01.275Z 789 TID-ouran66d9 PipelineUpdateWorker JID-3d436593b3fde3507692b380 INFO: done: 0.103 sec
+2019-05-04_09:21:01.28495 2019-05-04T09:21:01.284Z 789 TID-ouran6itp PipelineMetricsWorker JID-72ed89e0e00bfbb9c50a9b48 INFO: done: 0.054 sec
+2019-05-04_09:21:01.28890 2019-05-04T09:21:01.288Z 789 TID-ouran685p BuildHooksWorker JID-2c59b90cb950420331d5e374 INFO: done: 0.117 sec
+2019-05-04_09:21:01.29038 2019-05-04T09:21:01.290Z 789 TID-ouran6g25 StageUpdateWorker JID-abda3949bbf6588e69b89292 INFO: done: 0.117 sec
+2019-05-04_09:21:01.31800 2019-05-04T09:21:01.317Z 789 TID-ouran6jx5 ExpirePipelineCacheWorker JID-bb3a2a36e5a520927722f568 INFO: done: 0.088 sec
+2019-05-04_09:21:01.33485 2019-05-04T09:21:01.334Z 789 TID-ouran6gm5 PipelineHooksWorker JID-7b098c7d83034aefa4e932eb INFO: done: 0.117 sec
+2019-05-04_09:21:02.94013 2019-05-04T09:21:02.940Z 789 TID-ouran6s8x DetectRepositoryLanguagesWorker JID-ba838ffda5f3dfadada2415c INFO: done: 2.352 sec
+2019-05-04_09:21:04.25891 2019-05-04T09:21:04.258Z 789 TID-ouran672t ProjectDailyStatisticsWorker JID-aca3d25ae209e5671b73b807 INFO: start
+2019-05-04_09:21:04.28753 2019-05-04T09:21:04.286Z 789 TID-ouran672t ProjectDailyStatisticsWorker JID-aca3d25ae209e5671b73b807 INFO: done: 0.028 sec
+2019-05-04_09:21:20.07919 2019-05-04T09:21:20.079Z 789 TID-ouran68ht BuildFinishedWorker JID-d29700a7e9496e7e574015e7 INFO: start
+2019-05-04_09:21:20.08305 2019-05-04T09:21:20.082Z 789 TID-ouran6gbp PipelineProcessWorker JID-072985d74e83ad7f4a8ac575 INFO: start
+2019-05-04_09:21:20.08399 2019-05-04T09:21:20.083Z 789 TID-ouran6kp5 ExpireJobCacheWorker JID-79a3d9077dbe5acabd5e9c0b INFO: start
+2019-05-04_09:21:20.08467 2019-05-04T09:21:20.084Z 789 TID-ouran75r1 StageUpdateWorker JID-cf326ffdcc261a01f56e6db4 INFO: start
+2019-05-04_09:21:20.11574 2019-05-04T09:21:20.115Z 789 TID-ouran6kp5 ExpireJobCacheWorker JID-79a3d9077dbe5acabd5e9c0b INFO: done: 0.032 sec
+2019-05-04_09:21:20.21672 2019-05-04T09:21:20.216Z 789 TID-ouran75r1 StageUpdateWorker JID-cf326ffdcc261a01f56e6db4 INFO: done: 0.132 sec
+2019-05-04_09:21:20.26652 2019-05-04T09:21:20.266Z 789 TID-ouran6s8x BuildHooksWorker JID-7e5b220fcd897bc52465c9c0 INFO: start
+2019-05-04_09:21:20.27051 2019-05-04T09:21:20.270Z 789 TID-ouran6sex ArchiveTraceWorker JID-a38e095853eff6799e69036f INFO: start
+2019-05-04_09:21:20.30848 2019-05-04T09:21:20.308Z 789 TID-ouran68ht BuildFinishedWorker JID-d29700a7e9496e7e574015e7 INFO: done: 0.229 sec
+2019-05-04_09:21:20.33678 2019-05-04T09:21:20.336Z 789 TID-ouran6s8x BuildHooksWorker JID-7e5b220fcd897bc52465c9c0 INFO: done: 0.07 sec
+2019-05-04_09:21:20.34576 2019-05-04T09:21:20.345Z 789 TID-ouran6k9p PipelineProcessWorker JID-37626580a9d616f2e5915557 INFO: start
+2019-05-04_09:21:20.34659 2019-05-04T09:21:20.346Z 789 TID-ouran6l69 StageUpdateWorker JID-185850d3730610ca19fbc90b INFO: start
+2019-05-04_09:21:20.34741 2019-05-04T09:21:20.347Z 789 TID-ouran66fl ExpireJobCacheWorker JID-346278d954a9352722b38356 INFO: start
+2019-05-04_09:21:20.39719 2019-05-04T09:21:20.397Z 789 TID-ouran66fl ExpireJobCacheWorker JID-346278d954a9352722b38356 INFO: done: 0.05 sec
+2019-05-04_09:21:20.39838 2019-05-04T09:21:20.398Z 789 TID-ouran6sex ArchiveTraceWorker JID-a38e095853eff6799e69036f INFO: done: 0.128 sec
+2019-05-04_09:21:20.41927 2019-05-04T09:21:20.419Z 789 TID-ouran6l69 StageUpdateWorker JID-185850d3730610ca19fbc90b INFO: done: 0.073 sec
+2019-05-04_09:21:20.42130 2019-05-04T09:21:20.421Z 789 TID-ouran6twd PipelineProcessWorker JID-6034547402158f16d6191876 INFO: start
+2019-05-04_09:21:20.42505 2019-05-04T09:21:20.424Z 789 TID-ouran6xu1 StageUpdateWorker JID-4c2fc250a245fd5b9820f845 INFO: start
+2019-05-04_09:21:20.42809 2019-05-04T09:21:20.427Z 789 TID-ouran6wwh ExpireJobCacheWorker JID-60c5c4ac670ce64534c07bac INFO: start
+2019-05-04_09:21:20.47014 2019-05-04T09:21:20.470Z 789 TID-ouran6wwh ExpireJobCacheWorker JID-60c5c4ac670ce64534c07bac INFO: done: 0.042 sec
+2019-05-04_09:21:20.48187 2019-05-04T09:21:20.481Z 789 TID-ouran6jx5 StageUpdateWorker JID-91de99f6361a4792bd31d2a6 INFO: start
+2019-05-04_09:21:20.48333 2019-05-04T09:21:20.482Z 789 TID-ouran6rp1 PipelineProcessWorker JID-a4c6c3e3a93bd2037c41eea0 INFO: start
+2019-05-04_09:21:20.48437 2019-05-04T09:21:20.484Z 789 TID-ouran6gm5 ExpireJobCacheWorker JID-ff2a64488aae2907a221a906 INFO: start
+2019-05-04_09:21:20.49393 2019-05-04T09:21:20.493Z 789 TID-ouran6xu1 StageUpdateWorker JID-4c2fc250a245fd5b9820f845 INFO: done: 0.069 sec
+2019-05-04_09:21:20.52557 2019-05-04T09:21:20.525Z 789 TID-ouran6w75 PipelineNotificationWorker JID-463fef0195c6b064a0231db0 INFO: start
+2019-05-04_09:21:20.52785 2019-05-04T09:21:20.527Z 789 TID-ouran6g25 PipelineHooksWorker JID-bff60bbe34a37d67e0db0534 INFO: start
+2019-05-04_09:21:20.53038 2019-05-04T09:21:20.530Z 789 TID-ouran66d9 ExpirePipelineCacheWorker JID-0566d80178dc3eb8696373ed INFO: start
+2019-05-04_09:21:20.55883 2019-05-04T09:21:20.558Z 789 TID-ouran6gbp PipelineProcessWorker JID-072985d74e83ad7f4a8ac575 INFO: done: 0.476 sec
+2019-05-04_09:21:20.56642 2019-05-04T09:21:20.566Z 789 TID-ouran6jx5 StageUpdateWorker JID-91de99f6361a4792bd31d2a6 INFO: done: 0.085 sec
+2019-05-04_09:21:20.58005 2019-05-04T09:21:20.578Z 789 TID-ouran6gm5 ExpireJobCacheWorker JID-ff2a64488aae2907a221a906 INFO: done: 0.094 sec
+2019-05-04_09:21:20.60112 2019-05-04T09:21:20.601Z 789 TID-ouran685p ActionMailer::DeliveryJob JID-799631e38189eb9d754a554d INFO: start
+2019-05-04_09:21:20.60773 2019-05-04T09:21:20.607Z 789 TID-ouran6k9p PipelineProcessWorker JID-37626580a9d616f2e5915557 INFO: done: 0.262 sec
+2019-05-04_09:21:20.62639 2019-05-04T09:21:20.626Z 789 TID-ouran6w75 PipelineNotificationWorker JID-463fef0195c6b064a0231db0 INFO: done: 0.101 sec
+2019-05-04_09:21:20.63331 2019-05-04T09:21:20.632Z 789 TID-ouran66d9 ExpirePipelineCacheWorker JID-0566d80178dc3eb8696373ed INFO: done: 0.102 sec
+2019-05-04_09:21:20.64059 2019-05-04T09:21:20.640Z 789 TID-ouran6rp1 PipelineProcessWorker JID-a4c6c3e3a93bd2037c41eea0 INFO: done: 0.158 sec
+2019-05-04_09:21:20.64155 2019-05-04T09:21:20.641Z 789 TID-ouran6twd PipelineProcessWorker JID-6034547402158f16d6191876 INFO: done: 0.22 sec
+2019-05-04_09:21:20.68169 2019-05-04T09:21:20.681Z 789 TID-ouran6g25 PipelineHooksWorker JID-bff60bbe34a37d67e0db0534 INFO: done: 0.154 sec
+2019-05-04_09:21:20.68860 sh: 1: /usr/sbin/sendmail: not found
+2019-05-04_09:21:20.69607 2019-05-04T09:21:20.695Z 789 TID-ouran685p ActionMailer::DeliveryJob JID-799631e38189eb9d754a554d INFO: done: 0.095 sec
+2019-05-04_09:25:33.95754 2019-05-04T09:25:33.957Z 789 TID-ouran6fl1 PostReceive JID-78aec0dd2a8da121a2475fef INFO: start
+2019-05-04_09:25:33.98180 2019-05-04T09:25:33.981Z 789 TID-ouran6k9p UpdateMergeRequestsWorker JID-53e17f5494f47578c4586d65 INFO: start
+2019-05-04_09:25:34.05700 2019-05-04T09:25:34.056Z 789 TID-ouran6k9p UpdateMergeRequestsWorker JID-53e17f5494f47578c4586d65 INFO: done: 0.075 sec
+2019-05-04_09:25:34.26386 2019-05-04T09:25:34.263Z 789 TID-ouran6gbp BuildHooksWorker JID-e056ac40e319ab8a9935dc4e INFO: start
+2019-05-04_09:25:34.26653 2019-05-04T09:25:34.266Z 789 TID-ouran66d9 BuildHooksWorker JID-61110748346472cfbae83e5f INFO: start
+2019-05-04_09:25:34.27068 2019-05-04T09:25:34.270Z 789 TID-ouran6tpx BuildHooksWorker JID-6e0f325d22aab48f3aa21631 INFO: start
+2019-05-04_09:25:34.27650 2019-05-04T09:25:34.276Z 789 TID-ouran6itp BuildHooksWorker JID-b669590fdcef9e576706a2ce INFO: start
+2019-05-04_09:25:34.49703 2019-05-04T09:25:34.496Z 789 TID-ouran6gbp BuildHooksWorker JID-e056ac40e319ab8a9935dc4e INFO: done: 0.233 sec
+2019-05-04_09:25:34.50451 2019-05-04T09:25:34.504Z 789 TID-ouran6tpx BuildHooksWorker JID-6e0f325d22aab48f3aa21631 INFO: done: 0.234 sec
+2019-05-04_09:25:34.52038 2019-05-04T09:25:34.520Z 789 TID-ouran6itp BuildHooksWorker JID-b669590fdcef9e576706a2ce INFO: done: 0.244 sec
+2019-05-04_09:25:34.52155 2019-05-04T09:25:34.521Z 789 TID-ouran66d9 BuildHooksWorker JID-61110748346472cfbae83e5f INFO: done: 0.255 sec
+2019-05-04_09:25:34.53114 2019-05-04T09:25:34.531Z 789 TID-ouran75r1 PipelineUpdateWorker JID-c5bf40b86ec35f7fb2f752eb INFO: start
+2019-05-04_09:25:34.53261 2019-05-04T09:25:34.531Z 789 TID-ouran6vcl BuildQueueWorker JID-d98bee154f28b763850b1fe8 INFO: start
+2019-05-04_09:25:34.53348 2019-05-04T09:25:34.533Z 789 TID-ouran66fl StageUpdateWorker JID-1827291af67241385e8b6573 INFO: start
+2019-05-04_09:25:34.57618 2019-05-04T09:25:34.576Z 789 TID-ouran6l69 ExpireJobCacheWorker JID-81833fee0efa6cef5d4551d6 INFO: start
+2019-05-04_09:25:34.60059 2019-05-04T09:25:34.600Z 789 TID-ouran6sex PipelineHooksWorker JID-2bd4502f0b7ab68feb52b827 INFO: start
+2019-05-04_09:25:34.60966 2019-05-04T09:25:34.609Z 789 TID-ouran6g25 ExpirePipelineCacheWorker JID-1f250d56d386fd07c2a58cd1 INFO: start
+2019-05-04_09:25:34.64877 2019-05-04T09:25:34.648Z 789 TID-ouran75r1 PipelineUpdateWorker JID-c5bf40b86ec35f7fb2f752eb INFO: done: 0.118 sec
+2019-05-04_09:25:34.65673 2019-05-04T09:25:34.656Z 789 TID-ouran66fl StageUpdateWorker JID-1827291af67241385e8b6573 INFO: done: 0.123 sec
+2019-05-04_09:25:34.67917 2019-05-04T09:25:34.679Z 789 TID-ouran6l69 ExpireJobCacheWorker JID-81833fee0efa6cef5d4551d6 INFO: done: 0.103 sec
+2019-05-04_09:25:34.68228 2019-05-04T09:25:34.682Z 789 TID-ouran6vcl BuildQueueWorker JID-d98bee154f28b763850b1fe8 INFO: done: 0.151 sec
+2019-05-04_09:25:34.73595 2019-05-04T09:25:34.735Z 789 TID-ouran6w75 DetectRepositoryLanguagesWorker JID-6f1616e1d50793f4686583dd INFO: start
+2019-05-04_09:25:34.73785 2019-05-04T09:25:34.737Z 789 TID-ouran6jx5 ProjectCacheWorker JID-e531136928f3f8a7d7c172ea INFO: start
+2019-05-04_09:25:34.75435 2019-05-04T09:25:34.754Z 789 TID-ouran685p CreateGpgSignatureWorker JID-2a17b4eac56dc196c002027b INFO: start
+2019-05-04_09:25:34.75767 2019-05-04T09:25:34.757Z 789 TID-ouran6g25 ExpirePipelineCacheWorker JID-1f250d56d386fd07c2a58cd1 INFO: done: 0.148 sec
+2019-05-04_09:25:34.76993 2019-05-04T09:25:34.769Z 789 TID-ouran6sex PipelineHooksWorker JID-2bd4502f0b7ab68feb52b827 INFO: done: 0.169 sec
+2019-05-04_09:25:34.77353 2019-05-04T09:25:34.773Z 789 TID-ouran6fl1 PostReceive JID-78aec0dd2a8da121a2475fef INFO: done: 0.816 sec
+2019-05-04_09:25:34.77490 2019-05-04T09:25:34.774Z 789 TID-ouran6jx5 ProjectCacheWorker JID-e531136928f3f8a7d7c172ea INFO: done: 0.037 sec
+2019-05-04_09:25:34.78303 2019-05-04T09:25:34.782Z 789 TID-ouran685p CreateGpgSignatureWorker JID-2a17b4eac56dc196c002027b INFO: done: 0.028 sec
+2019-05-04_09:25:35.48858 2019-05-04T09:25:35.488Z 789 TID-ouran6s8x BuildHooksWorker JID-9df9d1c0f9e7f02022d13eeb INFO: start
+2019-05-04_09:25:35.48905 2019-05-04T09:25:35.488Z 789 TID-ouran6kp5 PipelineUpdateWorker JID-a34c3950047d31e9c3a3a971 INFO: start
+2019-05-04_09:25:35.49167 2019-05-04T09:25:35.491Z 789 TID-ouran68ht StageUpdateWorker JID-8e351cbed6f4dbaf26d9b796 INFO: start
+2019-05-04_09:25:35.49189 2019-05-04T09:25:35.491Z 789 TID-ouran6s59 ExpireJobCacheWorker JID-d68c20a69e187f48c5e0fbe1 INFO: start
+2019-05-04_09:25:35.54558 2019-05-04T09:25:35.545Z 789 TID-ouran6s59 ExpireJobCacheWorker JID-d68c20a69e187f48c5e0fbe1 INFO: done: 0.054 sec
+2019-05-04_09:25:35.55260 2019-05-04T09:25:35.552Z 789 TID-ouran68ht StageUpdateWorker JID-8e351cbed6f4dbaf26d9b796 INFO: done: 0.061 sec
+2019-05-04_09:25:35.55795 2019-05-04T09:25:35.557Z 789 TID-ouran6xu1 ExpirePipelineCacheWorker JID-b16497d3f400e1883e5e01df INFO: start
+2019-05-04_09:25:35.55893 2019-05-04T09:25:35.558Z 789 TID-ouran6wwh PipelineHooksWorker JID-157feb7446371ea2c3559348 INFO: start
+2019-05-04_09:25:35.56206 2019-05-04T09:25:35.559Z 789 TID-ouran672t PipelineMetricsWorker JID-ce3027ccac3383beed443cab INFO: start
+2019-05-04_09:25:35.57642 2019-05-04T09:25:35.576Z 789 TID-ouran6kp5 PipelineUpdateWorker JID-a34c3950047d31e9c3a3a971 INFO: done: 0.087 sec
+2019-05-04_09:25:35.59454 2019-05-04T09:25:35.594Z 789 TID-ouran672t PipelineMetricsWorker JID-ce3027ccac3383beed443cab INFO: done: 0.035 sec
+2019-05-04_09:25:35.59521 2019-05-04T09:25:35.595Z 789 TID-ouran6s8x BuildHooksWorker JID-9df9d1c0f9e7f02022d13eeb INFO: done: 0.107 sec
+2019-05-04_09:25:35.63780 2019-05-04T09:25:35.637Z 789 TID-ouran6xu1 ExpirePipelineCacheWorker JID-b16497d3f400e1883e5e01df INFO: done: 0.08 sec
+2019-05-04_09:25:35.64967 2019-05-04T09:25:35.649Z 789 TID-ouran6wwh PipelineHooksWorker JID-157feb7446371ea2c3559348 INFO: done: 0.092 sec
+2019-05-04_09:25:37.05502 2019-05-04T09:25:37.054Z 789 TID-ouran6w75 DetectRepositoryLanguagesWorker JID-6f1616e1d50793f4686583dd INFO: done: 2.319 sec
+2019-05-04_09:25:38.51122 2019-05-04T09:25:38.510Z 789 TID-ouran6k9p ProjectDailyStatisticsWorker JID-6ca2d5c74d262169880be4c7 INFO: start
+2019-05-04_09:25:38.55462 2019-05-04T09:25:38.554Z 789 TID-ouran6k9p ProjectDailyStatisticsWorker JID-6ca2d5c74d262169880be4c7 INFO: done: 0.044 sec
+2019-05-04_09:25:53.92154 2019-05-04T09:25:53.921Z 789 TID-ouran6jx5 BuildFinishedWorker JID-71aeae6b3546dca4c246f6cd INFO: start
+2019-05-04_09:25:53.92910 2019-05-04T09:25:53.929Z 789 TID-ouran6fl1 PipelineProcessWorker JID-1ccb3ea2cf08b5a446651105 INFO: start
+2019-05-04_09:25:53.93190 2019-05-04T09:25:53.931Z 789 TID-ouran6sex ExpireJobCacheWorker JID-2dd59dff3861a820d39d6545 INFO: start
+2019-05-04_09:25:53.93217 2019-05-04T09:25:53.932Z 789 TID-ouran6tpx StageUpdateWorker JID-a526f2ab4423c9c1ebc13ac5 INFO: start
+2019-05-04_09:25:53.97099 2019-05-04T09:25:53.970Z 789 TID-ouran6sex ExpireJobCacheWorker JID-2dd59dff3861a820d39d6545 INFO: done: 0.039 sec
+2019-05-04_09:25:54.07400 2019-05-04T09:25:54.073Z 789 TID-ouran6tpx StageUpdateWorker JID-a526f2ab4423c9c1ebc13ac5 INFO: done: 0.142 sec
+2019-05-04_09:25:54.09658 2019-05-04T09:25:54.096Z 789 TID-ouran6gm5 PipelineProcessWorker JID-ee603575644fb8f47d5b319a INFO: start
+2019-05-04_09:25:54.10018 2019-05-04T09:25:54.100Z 789 TID-ouran6vcl BuildHooksWorker JID-55f44d7e8a548071cb9e5d3f INFO: start
+2019-05-04_09:25:54.10340 2019-05-04T09:25:54.100Z 789 TID-ouran6wwh StageUpdateWorker JID-62a2b09c5705d2923cf8debe INFO: start
+2019-05-04_09:25:54.10876 2019-05-04T09:25:54.103Z 789 TID-ouran6kp5 ArchiveTraceWorker JID-bae2fbb5f2ad2013757b2f07 INFO: start
+2019-05-04_09:25:54.10930 2019-05-04T09:25:54.103Z 789 TID-ouran68ht ExpireJobCacheWorker JID-57201b29dfa9163e97802a66 INFO: start
+2019-05-04_09:25:54.15019 2019-05-04T09:25:54.150Z 789 TID-ouran6jx5 BuildFinishedWorker JID-71aeae6b3546dca4c246f6cd INFO: done: 0.229 sec
+2019-05-04_09:25:54.17893 2019-05-04T09:25:54.177Z 789 TID-ouran68ht ExpireJobCacheWorker JID-57201b29dfa9163e97802a66 INFO: done: 0.074 sec
+2019-05-04_09:25:54.19082 2019-05-04T09:25:54.190Z 789 TID-ouran6s59 PipelineProcessWorker JID-3689240289b8f069a3b45d9b INFO: start
+2019-05-04_09:25:54.19195 2019-05-04T09:25:54.191Z 789 TID-ouran6s8x StageUpdateWorker JID-7126f2e4731eccabdd8fef45 INFO: start
+2019-05-04_09:25:54.19408 2019-05-04T09:25:54.194Z 789 TID-ouran6xu1 ExpireJobCacheWorker JID-c98e20e6f4e7b2e2effd7d70 INFO: start
+2019-05-04_09:25:54.19636 2019-05-04T09:25:54.195Z 789 TID-ouran6wwh StageUpdateWorker JID-62a2b09c5705d2923cf8debe INFO: done: 0.096 sec
+2019-05-04_09:25:54.23387 2019-05-04T09:25:54.233Z 789 TID-ouran6kp5 ArchiveTraceWorker JID-bae2fbb5f2ad2013757b2f07 INFO: done: 0.13 sec
+2019-05-04_09:25:54.24936 2019-05-04T09:25:54.249Z 789 TID-ouran6vcl BuildHooksWorker JID-55f44d7e8a548071cb9e5d3f INFO: done: 0.149 sec
+2019-05-04_09:25:54.25943 2019-05-04T09:25:54.259Z 789 TID-ouran672t StageUpdateWorker JID-8522ef406401e5816835eb8e INFO: start
+2019-05-04_09:25:54.26029 2019-05-04T09:25:54.259Z 789 TID-ouran6twd PipelineProcessWorker JID-20d850e460934bc7de1101d8 INFO: start
+2019-05-04_09:25:54.26093 2019-05-04T09:25:54.260Z 789 TID-ouran6xu1 ExpireJobCacheWorker JID-c98e20e6f4e7b2e2effd7d70 INFO: done: 0.067 sec
+2019-05-04_09:25:54.26148 2019-05-04T09:25:54.261Z 789 TID-ouran6k9p ExpireJobCacheWorker JID-880f2f08048c1adb6e96b84a INFO: start
+2019-05-04_09:25:54.28468 2019-05-04T09:25:54.284Z 789 TID-ouran6s8x StageUpdateWorker JID-7126f2e4731eccabdd8fef45 INFO: done: 0.093 sec
+2019-05-04_09:25:54.31501 2019-05-04T09:25:54.314Z 789 TID-ouran6rp1 PipelineNotificationWorker JID-15c7ba511429402d5b5264d4 INFO: start
+2019-05-04_09:25:54.32845 2019-05-04T09:25:54.328Z 789 TID-ouran66d9 PipelineHooksWorker JID-9fe225ef4b5d760882c299cb INFO: start
+2019-05-04_09:25:54.33269 2019-05-04T09:25:54.332Z 789 TID-ouran6k9p ExpireJobCacheWorker JID-880f2f08048c1adb6e96b84a INFO: done: 0.071 sec
+2019-05-04_09:25:54.34064 2019-05-04T09:25:54.334Z 789 TID-ouran6gbp ExpirePipelineCacheWorker JID-ccf9a74ae32cab44cacd447c INFO: start
+2019-05-04_09:25:54.34098 2019-05-04T09:25:54.339Z 789 TID-ouran672t StageUpdateWorker JID-8522ef406401e5816835eb8e INFO: done: 0.08 sec
+2019-05-04_09:25:54.36826 2019-05-04T09:25:54.368Z 789 TID-ouran6fl1 PipelineProcessWorker JID-1ccb3ea2cf08b5a446651105 INFO: done: 0.439 sec
+2019-05-04_09:25:54.37513 2019-05-04T09:25:54.375Z 789 TID-ouran6s59 PipelineProcessWorker JID-3689240289b8f069a3b45d9b INFO: done: 0.184 sec
+2019-05-04_09:25:54.37872 2019-05-04T09:25:54.378Z 789 TID-ouran6itp ActionMailer::DeliveryJob JID-5225f4310f6b98bc629bf34b INFO: start
+2019-05-04_09:25:54.39914 2019-05-04T09:25:54.399Z 789 TID-ouran6rp1 PipelineNotificationWorker JID-15c7ba511429402d5b5264d4 INFO: done: 0.084 sec
+2019-05-04_09:25:54.40305 2019-05-04T09:25:54.399Z 789 TID-ouran6gm5 PipelineProcessWorker JID-ee603575644fb8f47d5b319a INFO: done: 0.303 sec
+2019-05-04_09:25:54.42129 2019-05-04T09:25:54.421Z 789 TID-ouran6twd PipelineProcessWorker JID-20d850e460934bc7de1101d8 INFO: done: 0.161 sec
+2019-05-04_09:25:54.43527 2019-05-04T09:25:54.435Z 789 TID-ouran6gbp ExpirePipelineCacheWorker JID-ccf9a74ae32cab44cacd447c INFO: done: 0.1 sec
+2019-05-04_09:25:54.45662 2019-05-04T09:25:54.456Z 789 TID-ouran66d9 PipelineHooksWorker JID-9fe225ef4b5d760882c299cb INFO: done: 0.128 sec
+2019-05-04_09:25:54.46465 sh: 1: /usr/sbin/sendmail: not found
+2019-05-04_09:25:54.47219 2019-05-04T09:25:54.472Z 789 TID-ouran6itp ActionMailer::DeliveryJob JID-5225f4310f6b98bc629bf34b INFO: done: 0.093 sec
+2019-05-04_09:29:50.74282 2019-05-04T09:29:50.742Z 789 TID-ouran75r1 PostReceive JID-db93783dfcca4ee6882214b3 INFO: start
+2019-05-04_09:29:50.76690 2019-05-04T09:29:50.766Z 789 TID-ouran6l69 UpdateMergeRequestsWorker JID-5058ed2fd16f0bb9dc509d05 INFO: start
+2019-05-04_09:29:50.83556 2019-05-04T09:29:50.835Z 789 TID-ouran6l69 UpdateMergeRequestsWorker JID-5058ed2fd16f0bb9dc509d05 INFO: done: 0.069 sec
+2019-05-04_09:29:51.02330 2019-05-04T09:29:51.023Z 789 TID-ouran6jx5 BuildHooksWorker JID-7bd7bbca3531dce01dac74c1 INFO: start
+2019-05-04_09:29:51.02713 2019-05-04T09:29:51.026Z 789 TID-ouran6tpx BuildHooksWorker JID-6e027a140b41c44c09dcf2bc INFO: start
+2019-05-04_09:29:51.03074 2019-05-04T09:29:51.029Z 789 TID-ouran6sex BuildHooksWorker JID-52feed56ac9b72e1dd9dac13 INFO: start
+2019-05-04_09:29:51.03119 2019-05-04T09:29:51.030Z 789 TID-ouran672t BuildHooksWorker JID-2e51406058b10864c86fd3ab INFO: start
+2019-05-04_09:29:51.15064 2019-05-04T09:29:51.150Z 789 TID-ouran6sex BuildHooksWorker JID-52feed56ac9b72e1dd9dac13 INFO: done: 0.121 sec
+2019-05-04_09:29:51.15990 2019-05-04T09:29:51.159Z 789 TID-ouran6tpx BuildHooksWorker JID-6e027a140b41c44c09dcf2bc INFO: done: 0.133 sec
+2019-05-04_09:29:51.16317 2019-05-04T09:29:51.163Z 789 TID-ouran6jx5 BuildHooksWorker JID-7bd7bbca3531dce01dac74c1 INFO: done: 0.14 sec
+2019-05-04_09:29:51.16657 2019-05-04T09:29:51.166Z 789 TID-ouran672t BuildHooksWorker JID-2e51406058b10864c86fd3ab INFO: done: 0.136 sec
+2019-05-04_09:29:51.17325 2019-05-04T09:29:51.173Z 789 TID-ouran6fl1 BuildQueueWorker JID-76c3c4bb02529b3886dc6479 INFO: start
+2019-05-04_09:29:51.17635 2019-05-04T09:29:51.176Z 789 TID-ouran6kp5 PipelineUpdateWorker JID-fa9b5e2aa0d2534d9eafdcfe INFO: start
+2019-05-04_09:29:51.17938 2019-05-04T09:29:51.179Z 789 TID-ouran6gbp StageUpdateWorker JID-02a3ab4579a2389bb3f4cb1e INFO: start
+2019-05-04_09:29:51.19133 2019-05-04T09:29:51.191Z 789 TID-ouran68ht ExpireJobCacheWorker JID-02a799d00e2c275993529545 INFO: start
+2019-05-04_09:29:51.23939 2019-05-04T09:29:51.239Z 789 TID-ouran6rp1 PipelineHooksWorker JID-55bff4793066009e4539f78c INFO: start
+2019-05-04_09:29:51.24008 2019-05-04T09:29:51.240Z 789 TID-ouran6s8x ExpirePipelineCacheWorker JID-1892d7efcfe699b5b15c77d4 INFO: start
+2019-05-04_09:29:51.27942 2019-05-04T09:29:51.279Z 789 TID-ouran6kp5 PipelineUpdateWorker JID-fa9b5e2aa0d2534d9eafdcfe INFO: done: 0.103 sec
+2019-05-04_09:29:51.30218 2019-05-04T09:29:51.302Z 789 TID-ouran68ht ExpireJobCacheWorker JID-02a799d00e2c275993529545 INFO: done: 0.111 sec
+2019-05-04_09:29:51.30442 2019-05-04T09:29:51.304Z 789 TID-ouran6gbp StageUpdateWorker JID-02a3ab4579a2389bb3f4cb1e INFO: done: 0.125 sec
+2019-05-04_09:29:51.33465 2019-05-04T09:29:51.334Z 789 TID-ouran6fl1 BuildQueueWorker JID-76c3c4bb02529b3886dc6479 INFO: done: 0.161 sec
+2019-05-04_09:29:51.36174 2019-05-04T09:29:51.361Z 789 TID-ouran6s8x ExpirePipelineCacheWorker JID-1892d7efcfe699b5b15c77d4 INFO: done: 0.122 sec
+2019-05-04_09:29:51.36513 2019-05-04T09:29:51.365Z 789 TID-ouran6vcl GitGarbageCollectWorker JID-69094e1551df153a690dcde1 INFO: start
+2019-05-04_09:29:51.36883 2019-05-04T09:29:51.368Z 789 TID-ouran6s59 DetectRepositoryLanguagesWorker JID-9dda8e2ee458a58ceba69e0c INFO: start
+2019-05-04_09:29:51.37240 2019-05-04T09:29:51.372Z 789 TID-ouran6wwh ProjectCacheWorker JID-2d7a19f020855b899f246411 INFO: start
+2019-05-04_09:29:51.38731 2019-05-04T09:29:51.387Z 789 TID-ouran6itp CreateGpgSignatureWorker JID-fbe80c4e17bb8573eb239f22 INFO: start
+2019-05-04_09:29:51.40037 2019-05-04T09:29:51.399Z 789 TID-ouran6rp1 PipelineHooksWorker JID-55bff4793066009e4539f78c INFO: done: 0.16 sec
+2019-05-04_09:29:51.40794 2019-05-04T09:29:51.407Z 789 TID-ouran6wwh ProjectCacheWorker JID-2d7a19f020855b899f246411 INFO: done: 0.035 sec
+2019-05-04_09:29:51.41104 2019-05-04T09:29:51.410Z 789 TID-ouran6itp CreateGpgSignatureWorker JID-fbe80c4e17bb8573eb239f22 INFO: done: 0.023 sec
+2019-05-04_09:29:51.41692 2019-05-04T09:29:51.416Z 789 TID-ouran75r1 PostReceive JID-db93783dfcca4ee6882214b3 INFO: done: 0.674 sec
+2019-05-04_09:29:51.56125 2019-05-04T09:29:51.561Z 789 TID-ouran6vcl GitGarbageCollectWorker JID-69094e1551df153a690dcde1 INFO: done: 0.196 sec
+2019-05-04_09:29:53.60294 2019-05-04T09:29:53.602Z 789 TID-ouran6s59 DetectRepositoryLanguagesWorker JID-9dda8e2ee458a58ceba69e0c INFO: done: 2.234 sec
+2019-05-04_09:29:54.31341 2019-05-04T09:29:54.313Z 789 TID-ouran6rp1 BuildHooksWorker JID-47cb8cc12f50b0b3e16dd99b INFO: start
+2019-05-04_09:29:54.31388 2019-05-04T09:29:54.313Z 789 TID-ouran6wwh PipelineUpdateWorker JID-68766445c7dbd3bf1d6dcba8 INFO: start
+2019-05-04_09:29:54.31468 2019-05-04T09:29:54.314Z 789 TID-ouran6itp StageUpdateWorker JID-818d8f1e728779f0a432eed1 INFO: start
+2019-05-04_09:29:54.31612 2019-05-04T09:29:54.316Z 789 TID-ouran75r1 ExpireJobCacheWorker JID-b19250566f4363cb03716520 INFO: start
+2019-05-04_09:29:54.36546 2019-05-04T09:29:54.365Z 789 TID-ouran6xu1 PipelineHooksWorker JID-8aeb7a4e648b2952fff805e1 INFO: start
+2019-05-04_09:29:54.36872 2019-05-04T09:29:54.368Z 789 TID-ouran6k9p ExpirePipelineCacheWorker JID-54d4e884b7fb11071cd23a6c INFO: start
+2019-05-04_09:29:54.37265 2019-05-04T09:29:54.368Z 789 TID-ouran6twd PipelineMetricsWorker JID-33bf5f9a26912e34471d9b12 INFO: start
+2019-05-04_09:29:54.37306 2019-05-04T09:29:54.373Z 789 TID-ouran75r1 ExpireJobCacheWorker JID-b19250566f4363cb03716520 INFO: done: 0.057 sec
+2019-05-04_09:29:54.40154 2019-05-04T09:29:54.401Z 789 TID-ouran6wwh PipelineUpdateWorker JID-68766445c7dbd3bf1d6dcba8 INFO: done: 0.088 sec
+2019-05-04_09:29:54.40859 2019-05-04T09:29:54.408Z 789 TID-ouran6itp StageUpdateWorker JID-818d8f1e728779f0a432eed1 INFO: done: 0.094 sec
+2019-05-04_09:29:54.41080 2019-05-04T09:29:54.408Z 789 TID-ouran6twd PipelineMetricsWorker JID-33bf5f9a26912e34471d9b12 INFO: done: 0.04 sec
+2019-05-04_09:29:54.42322 2019-05-04T09:29:54.423Z 789 TID-ouran6rp1 BuildHooksWorker JID-47cb8cc12f50b0b3e16dd99b INFO: done: 0.11 sec
+2019-05-04_09:29:54.43968 2019-05-04T09:29:54.439Z 789 TID-ouran6k9p ExpirePipelineCacheWorker JID-54d4e884b7fb11071cd23a6c INFO: done: 0.071 sec
+2019-05-04_09:29:54.45797 2019-05-04T09:29:54.457Z 789 TID-ouran6xu1 PipelineHooksWorker JID-8aeb7a4e648b2952fff805e1 INFO: done: 0.092 sec
+2019-05-04_09:29:57.58710 2019-05-04T09:29:57.587Z 789 TID-ouran6g25 ProjectDailyStatisticsWorker JID-09fd9fc5a92c0fea70360649 INFO: start
+2019-05-04_09:29:57.62247 2019-05-04T09:29:57.622Z 789 TID-ouran6g25 ProjectDailyStatisticsWorker JID-09fd9fc5a92c0fea70360649 INFO: done: 0.035 sec
+2019-05-04_09:30:02.36226 2019-05-04T09:30:02.362Z 789 TID-ouran6jx5 PagesDomainVerificationCronWorker JID-96f69bb6d616f7883f389bdf INFO: start
+2019-05-04_09:30:02.37830 2019-05-04T09:30:02.378Z 789 TID-ouran6jx5 PagesDomainVerificationCronWorker JID-96f69bb6d616f7883f389bdf INFO: done: 0.016 sec
+2019-05-04_09:30:14.18809 2019-05-04T09:30:14.188Z 789 TID-ouran6tpx BuildFinishedWorker JID-7e43b8b749dee23e5991d0d6 INFO: start
+2019-05-04_09:30:14.19167 2019-05-04T09:30:14.191Z 789 TID-ouran6fl1 PipelineProcessWorker JID-4eb7d438365d781ce1e6168a INFO: start
+2019-05-04_09:30:14.19333 2019-05-04T09:30:14.193Z 789 TID-ouran672t StageUpdateWorker JID-73349245bc2aa4d23e303479 INFO: start
+2019-05-04_09:30:14.19458 2019-05-04T09:30:14.193Z 789 TID-ouran6sex ExpireJobCacheWorker JID-5d8bd8b6cf332ac18a64e094 INFO: start
+2019-05-04_09:30:14.23385 2019-05-04T09:30:14.233Z 789 TID-ouran6sex ExpireJobCacheWorker JID-5d8bd8b6cf332ac18a64e094 INFO: done: 0.04 sec
+2019-05-04_09:30:14.86662 2019-05-04T09:30:14.866Z 789 TID-ouran672t StageUpdateWorker JID-73349245bc2aa4d23e303479 INFO: done: 0.673 sec
+2019-05-04_09:30:14.91536 2019-05-04T09:30:14.915Z 789 TID-ouran6gbp PipelineProcessWorker JID-db3c2aa02f6dc10eef7fe904 INFO: start
+2019-05-04_09:30:14.91773 2019-05-04T09:30:14.917Z 789 TID-ouran685p BuildHooksWorker JID-cb4d163aa18a63d79cf08e81 INFO: start
+2019-05-04_09:30:14.92021 2019-05-04T09:30:14.920Z 789 TID-ouran75r1 ExpireJobCacheWorker JID-5b5f582bbe92aa21f58925de INFO: start
+2019-05-04_09:30:14.92138 2019-05-04T09:30:14.921Z 789 TID-ouran6kp5 StageUpdateWorker JID-3600f61d8e29d37f59836986 INFO: start
+2019-05-04_09:30:14.93409 2019-05-04T09:30:14.933Z 789 TID-ouran6xu1 ArchiveTraceWorker JID-a091efa0d4b02f58fe076463 INFO: start
+2019-05-04_09:30:14.99154 2019-05-04T09:30:14.991Z 789 TID-ouran6tpx BuildFinishedWorker JID-7e43b8b749dee23e5991d0d6 INFO: done: 0.803 sec
+2019-05-04_09:30:15.02426 2019-05-04T09:30:15.024Z 789 TID-ouran75r1 ExpireJobCacheWorker JID-5b5f582bbe92aa21f58925de INFO: done: 0.104 sec
+2019-05-04_09:30:15.04243 2019-05-04T09:30:15.042Z 789 TID-ouran6twd PipelineProcessWorker JID-e33c270106ce1f9355cae719 INFO: start
+2019-05-04_09:30:15.04351 2019-05-04T09:30:15.043Z 789 TID-ouran6rp1 StageUpdateWorker JID-326ac20e27d1fa5f2adeb32f INFO: start
+2019-05-04_09:30:15.04584 2019-05-04T09:30:15.043Z 789 TID-ouran6k9p ExpireJobCacheWorker JID-151286ee5dfacbcb9ae7d244 INFO: start
+2019-05-04_09:30:15.04617 2019-05-04T09:30:15.043Z 789 TID-ouran6kp5 StageUpdateWorker JID-3600f61d8e29d37f59836986 INFO: done: 0.123 sec
+2019-05-04_09:30:15.05357 2019-05-04T09:30:15.053Z 789 TID-ouran685p BuildHooksWorker JID-cb4d163aa18a63d79cf08e81 INFO: done: 0.136 sec
+2019-05-04_09:30:15.07966 2019-05-04T09:30:15.079Z 789 TID-ouran6xu1 ArchiveTraceWorker JID-a091efa0d4b02f58fe076463 INFO: done: 0.146 sec
+2019-05-04_09:30:15.08966 2019-05-04T09:30:15.089Z 789 TID-ouran6itp PipelineProcessWorker JID-fb7ccaa46c9f5181c1d90447 INFO: start
+2019-05-04_09:30:15.09131 2019-05-04T09:30:15.091Z 789 TID-ouran6wwh StageUpdateWorker JID-ea196ed90ca57e6651317731 INFO: start
+2019-05-04_09:30:15.09297 2019-05-04T09:30:15.092Z 789 TID-ouran6gm5 ExpireJobCacheWorker JID-84fe73a4d29cf8ca07df4dc3 INFO: start
+2019-05-04_09:30:15.10104 2019-05-04T09:30:15.093Z 789 TID-ouran6k9p ExpireJobCacheWorker JID-151286ee5dfacbcb9ae7d244 INFO: done: 0.05 sec
+2019-05-04_09:30:15.13821 2019-05-04T09:30:15.138Z 789 TID-ouran6rp1 StageUpdateWorker JID-326ac20e27d1fa5f2adeb32f INFO: done: 0.095 sec
+2019-05-04_09:30:15.14631 2019-05-04T09:30:15.146Z 789 TID-ouran6gm5 ExpireJobCacheWorker JID-84fe73a4d29cf8ca07df4dc3 INFO: done: 0.053 sec
+2019-05-04_09:30:15.15489 2019-05-04T09:30:15.154Z 789 TID-ouran66d9 PipelineNotificationWorker JID-bb07432a07ba2f2d27165098 INFO: start
+2019-05-04_09:30:15.15585 2019-05-04T09:30:15.155Z 789 TID-ouran6w75 PipelineHooksWorker JID-35e67dc2230bc580ee5d20ac INFO: start
+2019-05-04_09:30:15.15788 2019-05-04T09:30:15.156Z 789 TID-ouran6g25 ExpirePipelineCacheWorker JID-6cd72e0bee907878e40fc12c INFO: start
+2019-05-04_09:30:15.19015 2019-05-04T09:30:15.190Z 789 TID-ouran6twd PipelineProcessWorker JID-e33c270106ce1f9355cae719 INFO: done: 0.148 sec
+2019-05-04_09:30:15.20925 2019-05-04T09:30:15.208Z 789 TID-ouran6l69 ActionMailer::DeliveryJob JID-87fe1315011b63ff3091936f INFO: start
+2019-05-04_09:30:15.21342 2019-05-04T09:30:15.213Z 789 TID-ouran6fl1 PipelineProcessWorker JID-4eb7d438365d781ce1e6168a INFO: done: 1.022 sec
+2019-05-04_09:30:15.22860 2019-05-04T09:30:15.228Z 789 TID-ouran6itp PipelineProcessWorker JID-fb7ccaa46c9f5181c1d90447 INFO: done: 0.139 sec
+2019-05-04_09:30:15.23208 2019-05-04T09:30:15.231Z 789 TID-ouran6gbp PipelineProcessWorker JID-db3c2aa02f6dc10eef7fe904 INFO: done: 0.316 sec
+2019-05-04_09:30:15.23818 2019-05-04T09:30:15.237Z 789 TID-ouran6wwh StageUpdateWorker JID-ea196ed90ca57e6651317731 INFO: done: 0.146 sec
+2019-05-04_09:30:15.23914 2019-05-04T09:30:15.238Z 789 TID-ouran66d9 PipelineNotificationWorker JID-bb07432a07ba2f2d27165098 INFO: done: 0.084 sec
+2019-05-04_09:30:15.26404 2019-05-04T09:30:15.263Z 789 TID-ouran6g25 ExpirePipelineCacheWorker JID-6cd72e0bee907878e40fc12c INFO: done: 0.107 sec
+2019-05-04_09:30:15.29742 2019-05-04T09:30:15.297Z 789 TID-ouran6w75 PipelineHooksWorker JID-35e67dc2230bc580ee5d20ac INFO: done: 0.142 sec
+2019-05-04_09:30:15.29871 sh: 1: /usr/sbin/sendmail: not found
+2019-05-04_09:30:15.30627 2019-05-04T09:30:15.306Z 789 TID-ouran6l69 ActionMailer::DeliveryJob JID-87fe1315011b63ff3091936f INFO: done: 0.098 sec
+2019-05-04_09:30:54.01396 2019-05-04T09:30:54.013Z 789 TID-ouran6fl1 PostReceive JID-cfc609c9fc11a734efb031c3 INFO: start
+2019-05-04_09:30:54.04483 2019-05-04T09:30:54.044Z 789 TID-ouran6k9p UpdateMergeRequestsWorker JID-55d5e37f71cdb7d5873eda4a INFO: start
+2019-05-04_09:30:54.08141 2019-05-04T09:30:54.081Z 789 TID-ouran6k9p UpdateMergeRequestsWorker JID-55d5e37f71cdb7d5873eda4a INFO: done: 0.037 sec
+2019-05-04_09:30:54.36263 2019-05-04T09:30:54.362Z 789 TID-ouran6xu1 BuildHooksWorker JID-ec912520caf27efd6b3edfd4 INFO: start
+2019-05-04_09:30:54.36312 2019-05-04T09:30:54.362Z 789 TID-ouran685p BuildHooksWorker JID-fe163591bc2a55c090bbc809 INFO: start
+2019-05-04_09:30:54.36377 2019-05-04T09:30:54.363Z 789 TID-ouran6gm5 BuildHooksWorker JID-7add3a0b2fd1ff99e4874e61 INFO: start
+2019-05-04_09:30:54.36633 2019-05-04T09:30:54.366Z 789 TID-ouran6tpx BuildHooksWorker JID-dfbe0a3acbb3c2e0830f6cd5 INFO: start
+2019-05-04_09:30:54.45426 2019-05-04T09:30:54.454Z 789 TID-ouran685p BuildHooksWorker JID-fe163591bc2a55c090bbc809 INFO: done: 0.091 sec
+2019-05-04_09:30:54.47045 2019-05-04T09:30:54.470Z 789 TID-ouran6tpx BuildHooksWorker JID-dfbe0a3acbb3c2e0830f6cd5 INFO: done: 0.104 sec
+2019-05-04_09:30:54.47216 2019-05-04T09:30:54.472Z 789 TID-ouran6xu1 BuildHooksWorker JID-ec912520caf27efd6b3edfd4 INFO: done: 0.11 sec
+2019-05-04_09:30:54.47461 2019-05-04T09:30:54.474Z 789 TID-ouran6gm5 BuildHooksWorker JID-7add3a0b2fd1ff99e4874e61 INFO: done: 0.111 sec
+2019-05-04_09:30:54.47914 2019-05-04T09:30:54.479Z 789 TID-ouran6rp1 BuildQueueWorker JID-1195c8b3a3fe4bffe128555b INFO: start
+2019-05-04_09:30:54.47961 2019-05-04T09:30:54.479Z 789 TID-ouran6kp5 PipelineUpdateWorker JID-b81f7c194359ab307a052caf INFO: start
+2019-05-04_09:30:54.48029 2019-05-04T09:30:54.480Z 789 TID-ouran672t StageUpdateWorker JID-bc45faeab3f52912836af578 INFO: start
+2019-05-04_09:30:54.49000 2019-05-04T09:30:54.489Z 789 TID-ouran6wwh ExpireJobCacheWorker JID-deddce27bb9fda09dcf7b0ff INFO: start
+2019-05-04_09:30:54.52184 2019-05-04T09:30:54.521Z 789 TID-ouran68ht ExpirePipelineCacheWorker JID-d0216f1eaf4a04f010e54db0 INFO: start
+2019-05-04_09:30:54.52244 2019-05-04T09:30:54.522Z 789 TID-ouran6s8x PipelineHooksWorker JID-db45b4d6957ba9d854ec0eee INFO: start
+2019-05-04_09:30:54.54105 2019-05-04T09:30:54.541Z 789 TID-ouran6kp5 PipelineUpdateWorker JID-b81f7c194359ab307a052caf INFO: done: 0.061 sec
+2019-05-04_09:30:54.54875 2019-05-04T09:30:54.548Z 789 TID-ouran6wwh ExpireJobCacheWorker JID-deddce27bb9fda09dcf7b0ff INFO: done: 0.059 sec
+2019-05-04_09:30:54.55719 2019-05-04T09:30:54.557Z 789 TID-ouran672t StageUpdateWorker JID-bc45faeab3f52912836af578 INFO: done: 0.077 sec
+2019-05-04_09:30:54.58671 2019-05-04T09:30:54.586Z 789 TID-ouran6gbp DetectRepositoryLanguagesWorker JID-f39ffdc9989113675bd0659c INFO: start
+2019-05-04_09:30:54.58805 2019-05-04T09:30:54.587Z 789 TID-ouran66d9 ProjectCacheWorker JID-dbb1319b42dbf512fd90436b INFO: start
+2019-05-04_09:30:54.59851 2019-05-04T09:30:54.598Z 789 TID-ouran6rp1 BuildQueueWorker JID-1195c8b3a3fe4bffe128555b INFO: done: 0.119 sec
+2019-05-04_09:30:54.60589 2019-05-04T09:30:54.605Z 789 TID-ouran68ht ExpirePipelineCacheWorker JID-d0216f1eaf4a04f010e54db0 INFO: done: 0.084 sec
+2019-05-04_09:30:54.60850 2019-05-04T09:30:54.608Z 789 TID-ouran6itp CreateGpgSignatureWorker JID-88939dd14c9629f4e93e2709 INFO: start
+2019-05-04_09:30:54.62902 2019-05-04T09:30:54.628Z 789 TID-ouran66d9 ProjectCacheWorker JID-dbb1319b42dbf512fd90436b INFO: done: 0.042 sec
+2019-05-04_09:30:54.63582 2019-05-04T09:30:54.635Z 789 TID-ouran6itp CreateGpgSignatureWorker JID-88939dd14c9629f4e93e2709 INFO: done: 0.027 sec
+2019-05-04_09:30:54.65069 2019-05-04T09:30:54.650Z 789 TID-ouran6fl1 PostReceive JID-cfc609c9fc11a734efb031c3 INFO: done: 0.636 sec
+2019-05-04_09:30:54.66123 2019-05-04T09:30:54.660Z 789 TID-ouran6s8x PipelineHooksWorker JID-db45b4d6957ba9d854ec0eee INFO: done: 0.138 sec
+2019-05-04_09:30:56.77570 2019-05-04T09:30:56.775Z 789 TID-ouran6gbp DetectRepositoryLanguagesWorker JID-f39ffdc9989113675bd0659c INFO: done: 2.189 sec
+2019-05-04_09:30:57.12049 2019-05-04T09:30:57.120Z 789 TID-ouran6wwh BuildHooksWorker JID-c0051dfa458e684dc95273e5 INFO: start
+2019-05-04_09:30:57.12105 2019-05-04T09:30:57.121Z 789 TID-ouran672t PipelineUpdateWorker JID-62cd232086d136b78511c11e INFO: start
+2019-05-04_09:30:57.12171 2019-05-04T09:30:57.121Z 789 TID-ouran68ht StageUpdateWorker JID-873a791cad3814e08161ff0d INFO: start
+2019-05-04_09:30:57.12267 2019-05-04T09:30:57.122Z 789 TID-ouran66d9 ExpireJobCacheWorker JID-31f23a9a9c64d711c1d15a12 INFO: start
+2019-05-04_09:30:57.16554 2019-05-04T09:30:57.165Z 789 TID-ouran66d9 ExpireJobCacheWorker JID-31f23a9a9c64d711c1d15a12 INFO: done: 0.043 sec
+2019-05-04_09:30:57.16764 2019-05-04T09:30:57.167Z 789 TID-ouran6itp PipelineHooksWorker JID-4f124b7106f7b2d82c42316c INFO: start
+2019-05-04_09:30:57.17081 2019-05-04T09:30:57.170Z 789 TID-ouran6w75 ExpirePipelineCacheWorker JID-1db238fc90ccb2bb33a41514 INFO: start
+2019-05-04_09:30:57.17290 2019-05-04T09:30:57.172Z 789 TID-ouran6g25 PipelineMetricsWorker JID-801801c315a13b015a2f04f2 INFO: start
+2019-05-04_09:30:57.19717 2019-05-04T09:30:57.197Z 789 TID-ouran68ht StageUpdateWorker JID-873a791cad3814e08161ff0d INFO: done: 0.075 sec
+2019-05-04_09:30:57.20540 2019-05-04T09:30:57.204Z 789 TID-ouran672t PipelineUpdateWorker JID-62cd232086d136b78511c11e INFO: done: 0.084 sec
+2019-05-04_09:30:57.21389 2019-05-04T09:30:57.213Z 789 TID-ouran6wwh BuildHooksWorker JID-c0051dfa458e684dc95273e5 INFO: done: 0.093 sec
+2019-05-04_09:30:57.22126 2019-05-04T09:30:57.221Z 789 TID-ouran6g25 PipelineMetricsWorker JID-801801c315a13b015a2f04f2 INFO: done: 0.048 sec
+2019-05-04_09:30:57.23682 2019-05-04T09:30:57.236Z 789 TID-ouran6w75 ExpirePipelineCacheWorker JID-1db238fc90ccb2bb33a41514 INFO: done: 0.066 sec
+2019-05-04_09:30:57.25249 2019-05-04T09:30:57.252Z 789 TID-ouran6itp PipelineHooksWorker JID-4f124b7106f7b2d82c42316c INFO: done: 0.085 sec
+2019-05-04_09:31:00.30066 2019-05-04T09:31:00.300Z 789 TID-ouran6sex ProjectDailyStatisticsWorker JID-4f2338cff63029236ddd552a INFO: start
+2019-05-04_09:31:00.32238 2019-05-04T09:31:00.322Z 789 TID-ouran6sex ProjectDailyStatisticsWorker JID-4f2338cff63029236ddd552a INFO: done: 0.022 sec
+2019-05-04_09:31:05.83010 2019-05-04T09:31:05.830Z 789 TID-ouran6fl1 ProjectDailyStatisticsWorker JID-e9c1c58d4c8b934cb4e2ef72 INFO: start
+2019-05-04_09:31:05.86842 2019-05-04T09:31:05.868Z 789 TID-ouran6fl1 ProjectDailyStatisticsWorker JID-e9c1c58d4c8b934cb4e2ef72 INFO: done: 0.038 sec
+2019-05-04_09:33:01.11136 2019-05-04T09:33:01.111Z 789 TID-ouran66d9 BuildSuccessWorker JID-8babc1f1719b8180ec6c835d INFO: start
+2019-05-04_09:33:01.11309 2019-05-04T09:33:01.112Z 789 TID-ouran6wwh BuildFinishedWorker JID-f7c0a725818474bf05fb0e50 INFO: start
+2019-05-04_09:33:01.11558 2019-05-04T09:33:01.115Z 789 TID-ouran672t PipelineProcessWorker JID-c6d0f3b32786bb8200e10b01 INFO: start
+2019-05-04_09:33:01.11777 2019-05-04T09:33:01.117Z 789 TID-ouran66fl StageUpdateWorker JID-ddea198b7ad06e7c5266fa40 INFO: start
+2019-05-04_09:33:01.13582 2019-05-04T09:33:01.135Z 789 TID-ouran6rp1 ExpireJobCacheWorker JID-ed27a654898c7eee3020311c INFO: start
+2019-05-04_09:33:01.40148 2019-05-04T09:33:01.401Z 789 TID-ouran6twd BuildQueueWorker JID-2bcd21bde328a06ef1a46827 INFO: start
+2019-05-04_09:33:01.40399 2019-05-04T09:33:01.401Z 789 TID-ouran6xu1 PipelineUpdateWorker JID-83f220bedf781a3cb42f4d6b INFO: start
+2019-05-04_09:33:01.40709 2019-05-04T09:33:01.404Z 789 TID-ouran6fl1 StageUpdateWorker JID-199ed8a922127d139604d3a3 INFO: start
+2019-05-04_09:33:01.42034 2019-05-04T09:33:01.407Z 789 TID-ouran6itp ExpireJobCacheWorker JID-2809672459319468234ab1b3 INFO: start
+2019-05-04_09:33:01.76933 2019-05-04T09:33:01.765Z 789 TID-ouran6twd BuildQueueWorker JID-2bcd21bde328a06ef1a46827 INFO: done: 0.364 sec
+2019-05-04_09:33:01.79592 2019-05-04T09:33:01.792Z 789 TID-ouran66d9 BuildSuccessWorker JID-8babc1f1719b8180ec6c835d INFO: done: 0.681 sec
+2019-05-04_09:33:01.79917 2019-05-04T09:33:01.796Z 789 TID-ouran6xu1 PipelineUpdateWorker JID-83f220bedf781a3cb42f4d6b INFO: done: 0.395 sec
+2019-05-04_09:33:01.80526 2019-05-04T09:33:01.805Z 789 TID-ouran6rp1 ExpireJobCacheWorker JID-ed27a654898c7eee3020311c INFO: done: 0.669 sec
+2019-05-04_09:33:01.81497 2019-05-04T09:33:01.814Z 789 TID-ouran6itp ExpireJobCacheWorker JID-2809672459319468234ab1b3 INFO: done: 0.407 sec
+2019-05-04_09:33:01.82378 2019-05-04T09:33:01.820Z 789 TID-ouran672t PipelineProcessWorker JID-c6d0f3b32786bb8200e10b01 INFO: done: 0.705 sec
+2019-05-04_09:33:01.83415 2019-05-04T09:33:01.834Z 789 TID-ouran66fl StageUpdateWorker JID-ddea198b7ad06e7c5266fa40 INFO: done: 0.717 sec
+2019-05-04_09:33:01.91275 2019-05-04T09:33:01.912Z 789 TID-ouran6fl1 StageUpdateWorker JID-199ed8a922127d139604d3a3 INFO: done: 0.508 sec
+2019-05-04_09:33:02.13509 2019-05-04T09:33:02.134Z 789 TID-ouran6w75 BuildHooksWorker JID-5339b292de68e7299c954a6c INFO: start
+2019-05-04_09:33:02.13858 2019-05-04T09:33:02.137Z 789 TID-ouran68ht ArchiveTraceWorker JID-3b12760f6bbe8c0eadc4ad30 INFO: start
+2019-05-04_09:33:02.20581 2019-05-04T09:33:02.205Z 789 TID-ouran6wwh BuildFinishedWorker JID-f7c0a725818474bf05fb0e50 INFO: done: 1.093 sec
+2019-05-04_09:33:02.46161 2019-05-04T09:33:02.461Z 789 TID-ouran68ht ArchiveTraceWorker JID-3b12760f6bbe8c0eadc4ad30 INFO: done: 0.324 sec
+2019-05-04_09:33:02.47985 2019-05-04T09:33:02.479Z 789 TID-ouran75r1 BuildHooksWorker JID-4ba4332d9ff381063118df5d INFO: start
+2019-05-04_09:33:02.48106 2019-05-04T09:33:02.480Z 789 TID-ouran6tpx PipelineUpdateWorker JID-911fd70fadcb8ec489bf00eb INFO: start
+2019-05-04_09:33:02.48267 2019-05-04T09:33:02.481Z 789 TID-ouran6gbp StageUpdateWorker JID-85a432c74f83fa82224ab1be INFO: start
+2019-05-04_09:33:02.48555 2019-05-04T09:33:02.485Z 789 TID-ouran6s8x ExpireJobCacheWorker JID-31f9ea62b1b3e6bb1cd21542 INFO: start
+2019-05-04_09:33:02.60757 2019-05-04T09:33:02.607Z 789 TID-ouran6s8x ExpireJobCacheWorker JID-31f9ea62b1b3e6bb1cd21542 INFO: done: 0.122 sec
+2019-05-04_09:33:02.60946 2019-05-04T09:33:02.609Z 789 TID-ouran6tpx PipelineUpdateWorker JID-911fd70fadcb8ec489bf00eb INFO: done: 0.129 sec
+2019-05-04_09:33:02.70043 2019-05-04T09:33:02.700Z 789 TID-ouran6w75 BuildHooksWorker JID-5339b292de68e7299c954a6c INFO: done: 0.565 sec
+2019-05-04_09:33:02.70449 2019-05-04T09:33:02.700Z 789 TID-ouran6gbp StageUpdateWorker JID-85a432c74f83fa82224ab1be INFO: done: 0.219 sec
+2019-05-04_09:33:02.71323 2019-05-04T09:33:02.713Z 789 TID-ouran75r1 BuildHooksWorker JID-4ba4332d9ff381063118df5d INFO: done: 0.233 sec
+2019-05-04_09:33:33.88535 2019-05-04T09:33:33.885Z 789 TID-ouran6sex BuildSuccessWorker JID-85810e100ed1aa7462be1bfd INFO: start
+2019-05-04_09:33:33.88732 2019-05-04T09:33:33.887Z 789 TID-ouran66d9 BuildFinishedWorker JID-ae52c9fe0a97cd6427f7f27c INFO: start
+2019-05-04_09:33:33.88943 2019-05-04T09:33:33.889Z 789 TID-ouran6vcl PipelineProcessWorker JID-c6ae4948fb5b06ef5162feb8 INFO: start
+2019-05-04_09:33:33.89287 2019-05-04T09:33:33.892Z 789 TID-ouran6wwh StageUpdateWorker JID-bb4efca0b45a9271b80d274a INFO: start
+2019-05-04_09:33:33.89582 2019-05-04T09:33:33.895Z 789 TID-ouran6fl1 ExpireJobCacheWorker JID-132fc175e0fa38cb6df8eaa7 INFO: start
+2019-05-04_09:33:33.97425 2019-05-04T09:33:33.974Z 789 TID-ouran6sex BuildSuccessWorker JID-85810e100ed1aa7462be1bfd INFO: done: 0.089 sec
+2019-05-04_09:33:34.02256 2019-05-04T09:33:34.022Z 789 TID-ouran6fl1 ExpireJobCacheWorker JID-132fc175e0fa38cb6df8eaa7 INFO: done: 0.127 sec
+2019-05-04_09:33:34.07869 2019-05-04T09:33:34.078Z 789 TID-ouran6wwh StageUpdateWorker JID-bb4efca0b45a9271b80d274a INFO: done: 0.186 sec
+2019-05-04_09:33:34.17210 2019-05-04T09:33:34.171Z 789 TID-ouran68ht BuildQueueWorker JID-561362f7b5c2ee89e42adfda INFO: start
+2019-05-04_09:33:34.17405 2019-05-04T09:33:34.173Z 789 TID-ouran6g25 PipelineUpdateWorker JID-db4de004720d9e2edb29e340 INFO: start
+2019-05-04_09:33:34.17898 2019-05-04T09:33:34.178Z 789 TID-ouran672t BuildHooksWorker JID-00c16aa371613522a8bf63f1 INFO: start
+2019-05-04_09:33:34.18532 2019-05-04T09:33:34.185Z 789 TID-ouran66fl StageUpdateWorker JID-c04254037ce2e9b8e26e0c8d INFO: start
+2019-05-04_09:33:34.18822 2019-05-04T09:33:34.187Z 789 TID-ouran6gbp ExpireJobCacheWorker JID-a0e133facdfa2f9651c5bd05 INFO: start
+2019-05-04_09:33:34.19712 2019-05-04T09:33:34.189Z 789 TID-ouran6w75 ArchiveTraceWorker JID-3dc989097c9780155df95e0e INFO: start
+2019-05-04_09:33:34.29932 2019-05-04T09:33:34.299Z 789 TID-ouran66d9 BuildFinishedWorker JID-ae52c9fe0a97cd6427f7f27c INFO: done: 0.412 sec
+2019-05-04_09:33:34.32853 2019-05-04T09:33:34.328Z 789 TID-ouran6g25 PipelineUpdateWorker JID-db4de004720d9e2edb29e340 INFO: done: 0.154 sec
+2019-05-04_09:33:34.35582 2019-05-04T09:33:34.355Z 789 TID-ouran6gbp ExpireJobCacheWorker JID-a0e133facdfa2f9651c5bd05 INFO: done: 0.168 sec
+2019-05-04_09:33:34.36712 2019-05-04T09:33:34.367Z 789 TID-ouran68ht BuildQueueWorker JID-561362f7b5c2ee89e42adfda INFO: done: 0.195 sec
+2019-05-04_09:33:34.37239 2019-05-04T09:33:34.372Z 789 TID-ouran672t BuildHooksWorker JID-00c16aa371613522a8bf63f1 INFO: done: 0.194 sec
+2019-05-04_09:33:34.38040 2019-05-04T09:33:34.380Z 789 TID-ouran66fl StageUpdateWorker JID-c04254037ce2e9b8e26e0c8d INFO: done: 0.195 sec
+2019-05-04_09:33:34.41390 2019-05-04T09:33:34.412Z 789 TID-ouran6tpx BuildHooksWorker JID-c4d378252b47dc0efd82281b INFO: start
+2019-05-04_09:33:34.41392 2019-05-04T09:33:34.413Z 789 TID-ouran6s8x BuildQueueWorker JID-3a4138bf16602f5a327160ff INFO: start
+2019-05-04_09:33:34.41957 2019-05-04T09:33:34.419Z 789 TID-ouran6l69 PipelineUpdateWorker JID-da50bac14dac29d5b956377a INFO: start
+2019-05-04_09:33:34.41985 2019-05-04T09:33:34.413Z 789 TID-ouran6jx5 PipelineUpdateWorker JID-535cf1212fd8f06c0cd6c9f7 INFO: start
+2019-05-04_09:33:34.42138 2019-05-04T09:33:34.421Z 789 TID-ouran6k9p StageUpdateWorker JID-776ace6be642b7e6c0978477 INFO: start
+2019-05-04_09:33:34.42517 2019-05-04T09:33:34.425Z 789 TID-ouran685p ExpireJobCacheWorker JID-6ee12cb174f74b18fbd7855b INFO: start
+2019-05-04_09:33:34.42556 2019-05-04T09:33:34.415Z 789 TID-ouran6s59 StageUpdateWorker JID-df20a62d8a88501b6c9237ec INFO: start
+2019-05-04_09:33:34.42630 2019-05-04T09:33:34.415Z 789 TID-ouran75r1 ExpireJobCacheWorker JID-08384490cb1952bd6a5f398d INFO: start
+2019-05-04_09:33:34.44930 2019-05-04T09:33:34.448Z 789 TID-ouran6w75 ArchiveTraceWorker JID-3dc989097c9780155df95e0e INFO: done: 0.26 sec
+2019-05-04_09:33:34.54371 2019-05-04T09:33:34.543Z 789 TID-ouran6l69 PipelineUpdateWorker JID-da50bac14dac29d5b956377a INFO: done: 0.124 sec
+2019-05-04_09:33:34.54622 2019-05-04T09:33:34.543Z 789 TID-ouran75r1 ExpireJobCacheWorker JID-08384490cb1952bd6a5f398d INFO: done: 0.128 sec
+2019-05-04_09:33:34.55121 2019-05-04T09:33:34.544Z 789 TID-ouran6vcl PipelineProcessWorker JID-c6ae4948fb5b06ef5162feb8 INFO: done: 0.655 sec
+2019-05-04_09:33:34.55332 2019-05-04T09:33:34.551Z 789 TID-ouran6jx5 PipelineUpdateWorker JID-535cf1212fd8f06c0cd6c9f7 INFO: done: 0.138 sec
+2019-05-04_09:33:34.56768 2019-05-04T09:33:34.567Z 789 TID-ouran685p ExpireJobCacheWorker JID-6ee12cb174f74b18fbd7855b INFO: done: 0.143 sec
+2019-05-04_09:33:34.57349 2019-05-04T09:33:34.573Z 789 TID-ouran6s8x BuildQueueWorker JID-3a4138bf16602f5a327160ff INFO: done: 0.16 sec
+2019-05-04_09:33:34.57740 2019-05-04T09:33:34.577Z 789 TID-ouran6tpx BuildHooksWorker JID-c4d378252b47dc0efd82281b INFO: done: 0.164 sec
+2019-05-04_09:33:34.62654 2019-05-04T09:33:34.626Z 789 TID-ouran6k9p StageUpdateWorker JID-776ace6be642b7e6c0978477 INFO: done: 0.205 sec
+2019-05-04_09:33:34.64043 2019-05-04T09:33:34.640Z 789 TID-ouran6s59 StageUpdateWorker JID-df20a62d8a88501b6c9237ec INFO: done: 0.224 sec
+2019-05-04_09:33:53.96029 2019-05-04T09:33:53.960Z 789 TID-ouran6sex BuildSuccessWorker JID-89b6eac20d9057c7d53bf37d INFO: start
+2019-05-04_09:33:53.96258 2019-05-04T09:33:53.962Z 789 TID-ouran66fl BuildFinishedWorker JID-bcaae4538d423a3c3f178160 INFO: start
+2019-05-04_09:33:53.96604 2019-05-04T09:33:53.965Z 789 TID-ouran75r1 StageUpdateWorker JID-a2cf422e20c230b0060dc2c8 INFO: start
+2019-05-04_09:33:53.96897 2019-05-04T09:33:53.967Z 789 TID-ouran672t PipelineProcessWorker JID-805158637d1cb4835be4c1d8 INFO: start
+2019-05-04_09:33:53.97247 2019-05-04T09:33:53.972Z 789 TID-ouran6gbp ExpireJobCacheWorker JID-525b3a2f8c038dd353008b5a INFO: start
+2019-05-04_09:33:54.02606 2019-05-04T09:33:54.026Z 789 TID-ouran6sex BuildSuccessWorker JID-89b6eac20d9057c7d53bf37d INFO: done: 0.066 sec
+2019-05-04_09:33:54.04724 2019-05-04T09:33:54.047Z 789 TID-ouran75r1 StageUpdateWorker JID-a2cf422e20c230b0060dc2c8 INFO: done: 0.081 sec
+2019-05-04_09:33:54.04916 2019-05-04T09:33:54.049Z 789 TID-ouran6gbp ExpireJobCacheWorker JID-525b3a2f8c038dd353008b5a INFO: done: 0.077 sec
+2019-05-04_09:33:54.06197 2019-05-04T09:33:54.061Z 789 TID-ouran672t PipelineProcessWorker JID-805158637d1cb4835be4c1d8 INFO: done: 0.094 sec
+2019-05-04_09:33:54.13994 2019-05-04T09:33:54.139Z 789 TID-ouran66d9 BuildHooksWorker JID-3d104a6393a45d9cf9ab4dff INFO: start
+2019-05-04_09:33:54.14436 2019-05-04T09:33:54.144Z 789 TID-ouran6w75 ArchiveTraceWorker JID-3e0f6c13fa7394eeb8d8ca8f INFO: start
+2019-05-04_09:33:54.18073 2019-05-04T09:33:54.180Z 789 TID-ouran66fl BuildFinishedWorker JID-bcaae4538d423a3c3f178160 INFO: done: 0.218 sec
+2019-05-04_09:33:54.21993 2019-05-04T09:33:54.219Z 789 TID-ouran66d9 BuildHooksWorker JID-3d104a6393a45d9cf9ab4dff INFO: done: 0.08 sec
+2019-05-04_09:33:54.35163 2019-05-04T09:33:54.351Z 789 TID-ouran6w75 ArchiveTraceWorker JID-3e0f6c13fa7394eeb8d8ca8f INFO: done: 0.207 sec
+2019-05-04_09:33:54.44258 2019-05-04T09:33:54.442Z 789 TID-ouran6tpx BuildHooksWorker JID-4eea8c63a35d9528588e9a97 INFO: start
+2019-05-04_09:33:54.44585 2019-05-04T09:33:54.445Z 789 TID-ouran6k9p PipelineUpdateWorker JID-596f6b5368741fa88acf0e5a INFO: start
+2019-05-04_09:33:54.44716 2019-05-04T09:33:54.446Z 789 TID-ouran6jx5 StageUpdateWorker JID-3cf160fa95e2032c106436fd INFO: start
+2019-05-04_09:33:54.45094 2019-05-04T09:33:54.447Z 789 TID-ouran685p ExpireJobCacheWorker JID-e57689b120588892d0d0983d INFO: start
+2019-05-04_09:33:54.57603 2019-05-04T09:33:54.575Z 789 TID-ouran6k9p PipelineUpdateWorker JID-596f6b5368741fa88acf0e5a INFO: done: 0.13 sec
+2019-05-04_09:33:54.58091 2019-05-04T09:33:54.580Z 789 TID-ouran6jx5 StageUpdateWorker JID-3cf160fa95e2032c106436fd INFO: done: 0.134 sec
+2019-05-04_09:33:54.58932 2019-05-04T09:33:54.588Z 789 TID-ouran685p ExpireJobCacheWorker JID-e57689b120588892d0d0983d INFO: done: 0.141 sec
+2019-05-04_09:33:54.61086 2019-05-04T09:33:54.610Z 789 TID-ouran6tpx BuildHooksWorker JID-4eea8c63a35d9528588e9a97 INFO: done: 0.168 sec
+2019-05-04_09:34:13.21201 2019-05-04T09:34:13.211Z 789 TID-ouran75r1 BuildFinishedWorker JID-307e1576efe0db09a0296765 INFO: start
+2019-05-04_09:34:13.21407 2019-05-04T09:34:13.213Z 789 TID-ouran66fl PipelineProcessWorker JID-c789ef4954742a5d7c4e06f0 INFO: start
+2019-05-04_09:34:13.21803 2019-05-04T09:34:13.217Z 789 TID-ouran6gbp ExpireJobCacheWorker JID-d63b8c67ed6c65bd23333eb5 INFO: start
+2019-05-04_09:34:13.21934 2019-05-04T09:34:13.216Z 789 TID-ouran672t StageUpdateWorker JID-305926215ecff2ee13a1cdbe INFO: start
+2019-05-04_09:34:13.23349 2019-05-04T09:34:13.212Z 789 TID-ouran6g25 BuildSuccessWorker JID-b636eb7055eddf3a1ee31f22 INFO: start
+2019-05-04_09:34:13.26979 2019-05-04T09:34:13.269Z 789 TID-ouran6g25 BuildSuccessWorker JID-b636eb7055eddf3a1ee31f22 INFO: done: 0.057 sec
+2019-05-04_09:34:13.28559 2019-05-04T09:34:13.285Z 789 TID-ouran6gbp ExpireJobCacheWorker JID-d63b8c67ed6c65bd23333eb5 INFO: done: 0.068 sec
+2019-05-04_09:34:13.44175 2019-05-04T09:34:13.441Z 789 TID-ouran672t StageUpdateWorker JID-305926215ecff2ee13a1cdbe INFO: done: 0.225 sec
+2019-05-04_09:34:13.51120 2019-05-04T09:34:13.510Z 789 TID-ouran6sex BuildHooksWorker JID-60a0b78d11e5a6e6054a2d69 INFO: start
+2019-05-04_09:34:13.51480 2019-05-04T09:34:13.511Z 789 TID-ouran66d9 ArchiveTraceWorker JID-4e7b80efccae8e30d35e6dbd INFO: start
+2019-05-04_09:34:13.55978 2019-05-04T09:34:13.559Z 789 TID-ouran75r1 BuildFinishedWorker JID-307e1576efe0db09a0296765 INFO: done: 0.348 sec
+2019-05-04_09:34:13.61960 2019-05-04T09:34:13.619Z 789 TID-ouran6sex BuildHooksWorker JID-60a0b78d11e5a6e6054a2d69 INFO: done: 0.109 sec
+2019-05-04_09:34:13.69965 2019-05-04T09:34:13.699Z 789 TID-ouran66d9 ArchiveTraceWorker JID-4e7b80efccae8e30d35e6dbd INFO: done: 0.188 sec
+2019-05-04_09:34:13.73368 2019-05-04T09:34:13.733Z 789 TID-ouran6tpx PipelineNotificationWorker JID-1682c5f5e9fbb69ba1a2c37b INFO: start
+2019-05-04_09:34:13.73625 2019-05-04T09:34:13.736Z 789 TID-ouran685p PipelineHooksWorker JID-10a344d4fa0dae2b026e2882 INFO: start
+2019-05-04_09:34:13.73922 2019-05-04T09:34:13.739Z 789 TID-ouran6s59 ExpirePipelineCacheWorker JID-38570b1c3b1bf39344f571fa INFO: start
+2019-05-04_09:34:13.74616 2019-05-04T09:34:13.745Z 789 TID-ouran6k9p PipelineSuccessWorker JID-0e18b12dee34f8e0caa5add7 INFO: start
+2019-05-04_09:34:13.75470 2019-05-04T09:34:13.754Z 789 TID-ouran6jx5 PipelineMetricsWorker JID-d35628d9b1211fe083995d15 INFO: start
+2019-05-04_09:34:13.79257 2019-05-04T09:34:13.792Z 789 TID-ouran66fl PipelineProcessWorker JID-c789ef4954742a5d7c4e06f0 INFO: done: 0.579 sec
+2019-05-04_09:34:13.81958 2019-05-04T09:34:13.819Z 789 TID-ouran6k9p PipelineSuccessWorker JID-0e18b12dee34f8e0caa5add7 INFO: done: 0.074 sec
+2019-05-04_09:34:13.83583 2019-05-04T09:34:13.835Z 789 TID-ouran6s59 ExpirePipelineCacheWorker JID-38570b1c3b1bf39344f571fa INFO: done: 0.097 sec
+2019-05-04_09:34:13.85428 2019-05-04T09:34:13.854Z 789 TID-ouran685p PipelineHooksWorker JID-10a344d4fa0dae2b026e2882 INFO: done: 0.118 sec
+2019-05-04_09:34:13.94187 2019-05-04T09:34:13.941Z 789 TID-ouran6tpx PipelineNotificationWorker JID-1682c5f5e9fbb69ba1a2c37b INFO: done: 0.208 sec
+2019-05-04_09:34:13.94644 2019-05-04T09:34:13.946Z 789 TID-ouran6jx5 PipelineMetricsWorker JID-d35628d9b1211fe083995d15 INFO: done: 0.192 sec
+2019-05-04_09:35:58.83249 2019-05-04T09:35:58.832Z 789 TID-ouran66fl PostReceive JID-1cc4e36f12c01fe37f8d12e7 INFO: start
+2019-05-04_09:35:58.86674 2019-05-04T09:35:58.866Z 789 TID-ouran6s59 UpdateMergeRequestsWorker JID-2d7a73c86fd19578ff40e315 INFO: start
+2019-05-04_09:35:58.89933 2019-05-04T09:35:58.899Z 789 TID-ouran6s59 UpdateMergeRequestsWorker JID-2d7a73c86fd19578ff40e315 INFO: done: 0.033 sec
+2019-05-04_09:35:59.49590 2019-05-04T09:35:59.495Z 789 TID-ouran6sex BuildHooksWorker JID-18e05c242d98a137c69fa9f3 INFO: start
+2019-05-04_09:35:59.49829 2019-05-04T09:35:59.498Z 789 TID-ouran6w75 BuildHooksWorker JID-f06d3e9eb541220e2c1d386c INFO: start
+2019-05-04_09:35:59.50171 2019-05-04T09:35:59.500Z 789 TID-ouran6jx5 BuildHooksWorker JID-1e2539f4c4f656d3a69a34fd INFO: start
+2019-05-04_09:35:59.50320 2019-05-04T09:35:59.498Z 789 TID-ouran6tpx BuildHooksWorker JID-e9b3d7ebf399d54695f9eff4 INFO: start
+2019-05-04_09:35:59.63030 2019-05-04T09:35:59.630Z 789 TID-ouran6tpx BuildHooksWorker JID-e9b3d7ebf399d54695f9eff4 INFO: done: 0.132 sec
+2019-05-04_09:35:59.63348 2019-05-04T09:35:59.630Z 789 TID-ouran6sex BuildHooksWorker JID-18e05c242d98a137c69fa9f3 INFO: done: 0.135 sec
+2019-05-04_09:35:59.63587 2019-05-04T09:35:59.635Z 789 TID-ouran6jx5 BuildHooksWorker JID-1e2539f4c4f656d3a69a34fd INFO: done: 0.134 sec
+2019-05-04_09:35:59.63885 2019-05-04T09:35:59.638Z 789 TID-ouran6w75 BuildHooksWorker JID-f06d3e9eb541220e2c1d386c INFO: done: 0.141 sec
+2019-05-04_09:35:59.64542 2019-05-04T09:35:59.645Z 789 TID-ouran6rp1 BuildQueueWorker JID-584027a4e5c8da8d0fe07e0c INFO: start
+2019-05-04_09:35:59.64590 2019-05-04T09:35:59.645Z 789 TID-ouran685p PipelineUpdateWorker JID-e99428667a819ccecafda9b0 INFO: start
+2019-05-04_09:35:59.64655 2019-05-04T09:35:59.646Z 789 TID-ouran6wwh StageUpdateWorker JID-155e54309e7f64d27a80e158 INFO: start
+2019-05-04_09:35:59.66016 2019-05-04T09:35:59.660Z 789 TID-ouran68ht ExpireJobCacheWorker JID-a6e2b9a418ff8951b178f6fa INFO: start
+2019-05-04_09:35:59.69910 2019-05-04T09:35:59.699Z 789 TID-ouran68ht ExpireJobCacheWorker JID-a6e2b9a418ff8951b178f6fa INFO: done: 0.039 sec
+2019-05-04_09:35:59.71500 2019-05-04T09:35:59.714Z 789 TID-ouran6rp1 BuildQueueWorker JID-584027a4e5c8da8d0fe07e0c INFO: done: 0.07 sec
+2019-05-04_09:35:59.75461 2019-05-04T09:35:59.754Z 789 TID-ouran6k9p ExpirePipelineCacheWorker JID-b96bc6adb6d52ee8f2cf7311 INFO: start
+2019-05-04_09:35:59.75771 2019-05-04T09:35:59.757Z 789 TID-ouran672t PipelineHooksWorker JID-a326b57410391fbc08ba71de INFO: start
+2019-05-04_09:35:59.77477 2019-05-04T09:35:59.774Z 789 TID-ouran6wwh StageUpdateWorker JID-155e54309e7f64d27a80e158 INFO: done: 0.128 sec
+2019-05-04_09:35:59.77859 2019-05-04T09:35:59.777Z 789 TID-ouran685p PipelineUpdateWorker JID-e99428667a819ccecafda9b0 INFO: done: 0.132 sec
+2019-05-04_09:35:59.80487 2019-05-04T09:35:59.804Z 789 TID-ouran6g25 DetectRepositoryLanguagesWorker JID-d2e70e86759f420a2c5b00a7 INFO: start
+2019-05-04_09:35:59.80718 2019-05-04T09:35:59.806Z 789 TID-ouran66d9 ProjectCacheWorker JID-42b13ab02f47357742eadc6e INFO: start
+2019-05-04_09:35:59.81157 2019-05-04T09:35:59.811Z 789 TID-ouran6k9p ExpirePipelineCacheWorker JID-b96bc6adb6d52ee8f2cf7311 INFO: done: 0.057 sec
+2019-05-04_09:35:59.83007 2019-05-04T09:35:59.830Z 789 TID-ouran6gm5 CreateGpgSignatureWorker JID-6e1c99412ae4815634ac3d83 INFO: start
+2019-05-04_09:35:59.84480 2019-05-04T09:35:59.844Z 789 TID-ouran66fl PostReceive JID-1cc4e36f12c01fe37f8d12e7 INFO: done: 1.012 sec
+2019-05-04_09:35:59.84877 2019-05-04T09:35:59.847Z 789 TID-ouran6gm5 CreateGpgSignatureWorker JID-6e1c99412ae4815634ac3d83 INFO: done: 0.018 sec
+2019-05-04_09:35:59.85201 2019-05-04T09:35:59.851Z 789 TID-ouran672t PipelineHooksWorker JID-a326b57410391fbc08ba71de INFO: done: 0.094 sec
+2019-05-04_09:35:59.93690 2019-05-04T09:35:59.936Z 789 TID-ouran66d9 ProjectCacheWorker JID-42b13ab02f47357742eadc6e INFO: done: 0.13 sec
+2019-05-04_09:36:01.80410 2019-05-04T09:36:01.803Z 789 TID-ouran6tpx BuildHooksWorker JID-de7faa2f48ad079e457f6a89 INFO: start
+2019-05-04_09:36:01.80436 2019-05-04T09:36:01.804Z 789 TID-ouran6sex PipelineUpdateWorker JID-15447e0612d7cb29d06d0983 INFO: start
+2019-05-04_09:36:01.80578 2019-05-04T09:36:01.805Z 789 TID-ouran6jx5 StageUpdateWorker JID-29d8c26ac71308dd78955288 INFO: start
+2019-05-04_09:36:01.81078 2019-05-04T09:36:01.810Z 789 TID-ouran6w75 ExpireJobCacheWorker JID-a30992f5393cfceb86fb9512 INFO: start
+2019-05-04_09:36:01.85265 2019-05-04T09:36:01.852Z 789 TID-ouran6w75 ExpireJobCacheWorker JID-a30992f5393cfceb86fb9512 INFO: done: 0.042 sec
+2019-05-04_09:36:01.86498 2019-05-04T09:36:01.864Z 789 TID-ouran68ht PipelineHooksWorker JID-56879e18c60659337bf21557 INFO: start
+2019-05-04_09:36:01.86561 2019-05-04T09:36:01.865Z 789 TID-ouran6wwh ExpirePipelineCacheWorker JID-7ba230d391e2c8df119a59b0 INFO: start
+2019-05-04_09:36:01.86879 2019-05-04T09:36:01.868Z 789 TID-ouran685p PipelineMetricsWorker JID-46224f59c51b4146efd80cd8 INFO: start
+2019-05-04_09:36:01.90768 2019-05-04T09:36:01.907Z 789 TID-ouran685p PipelineMetricsWorker JID-46224f59c51b4146efd80cd8 INFO: done: 0.038 sec
+2019-05-04_09:36:01.93594 2019-05-04T09:36:01.935Z 789 TID-ouran6sex PipelineUpdateWorker JID-15447e0612d7cb29d06d0983 INFO: done: 0.131 sec
+2019-05-04_09:36:01.94033 2019-05-04T09:36:01.939Z 789 TID-ouran6tpx BuildHooksWorker JID-de7faa2f48ad079e457f6a89 INFO: done: 0.136 sec
+2019-05-04_09:36:01.97866 2019-05-04T09:36:01.978Z 789 TID-ouran6jx5 StageUpdateWorker JID-29d8c26ac71308dd78955288 INFO: done: 0.173 sec
+2019-05-04_09:36:02.00928 2019-05-04T09:36:02.008Z 789 TID-ouran6wwh ExpirePipelineCacheWorker JID-7ba230d391e2c8df119a59b0 INFO: done: 0.143 sec
+2019-05-04_09:36:02.02008 2019-05-04T09:36:02.020Z 789 TID-ouran68ht PipelineHooksWorker JID-56879e18c60659337bf21557 INFO: done: 0.155 sec
+2019-05-04_09:36:02.65505 2019-05-04T09:36:02.655Z 789 TID-ouran6g25 DetectRepositoryLanguagesWorker JID-d2e70e86759f420a2c5b00a7 INFO: done: 2.85 sec
+2019-05-04_09:36:04.88101 2019-05-04T09:36:04.880Z 789 TID-ouran685p ProjectDailyStatisticsWorker JID-92cf912d178f9bc65a80bbe3 INFO: start
+2019-05-04_09:36:05.04920 2019-05-04T09:36:05.049Z 789 TID-ouran685p ProjectDailyStatisticsWorker JID-92cf912d178f9bc65a80bbe3 INFO: done: 0.168 sec
+2019-05-04_09:36:08.80666 2019-05-04T09:36:08.806Z 789 TID-ouran6rp1 BuildFinishedWorker JID-f4e752ac4f85d8c9c1755c90 INFO: start
+2019-05-04_09:36:08.80845 2019-05-04T09:36:08.808Z 789 TID-ouran6itp PipelineProcessWorker JID-bb56da6a68dabc3f46a6c997 INFO: start
+2019-05-04_09:36:08.81374 2019-05-04T09:36:08.813Z 789 TID-ouran66fl StageUpdateWorker JID-f54b630d020bd445f21c4d61 INFO: start
+2019-05-04_09:36:08.81687 2019-05-04T09:36:08.816Z 789 TID-ouran6w75 ExpireJobCacheWorker JID-f2c399a5f2c8b7d5ebe7987f INFO: start
+2019-05-04_09:36:08.81762 2019-05-04T09:36:08.817Z 789 TID-ouran6sex BuildFinishedWorker JID-51e1e5e51d2b863a5bf58c69 INFO: start
+2019-05-04_09:36:08.81927 2019-05-04T09:36:08.819Z 789 TID-ouran68ht PipelineProcessWorker JID-a06980b54d28070a250cddcd INFO: start
+2019-05-04_09:36:08.83731 2019-05-04T09:36:08.837Z 789 TID-ouran6jx5 BuildFinishedWorker JID-5c073d677e838a72f9a03c10 INFO: start
+2019-05-04_09:36:08.83883 2019-05-04T09:36:08.838Z 789 TID-ouran672t BuildFinishedWorker JID-9fa231cb45fa9703229763f9 INFO: start
+2019-05-04_09:36:08.84985 2019-05-04T09:36:08.823Z 789 TID-ouran66d9 StageUpdateWorker JID-b539d0da74f5a708f96800e9 INFO: start
+2019-05-04_09:36:08.85087 2019-05-04T09:36:08.833Z 789 TID-ouran6k9p ExpireJobCacheWorker JID-db8cc292d2bdd542c440e15a INFO: start
+2019-05-04_09:36:08.85591 2019-05-04T09:36:08.835Z 789 TID-ouran6tpx PipelineProcessWorker JID-477ce6a63cc9691ffad80f95 INFO: start
+2019-05-04_09:36:08.85705 2019-05-04T09:36:08.824Z 789 TID-ouran6wwh ExpireJobCacheWorker JID-9df49fb9c61718f92a81bf66 INFO: start
+2019-05-04_09:36:08.86440 2019-05-04T09:36:08.846Z 789 TID-ouran6g25 StageUpdateWorker JID-93985534e2a8edb44794c0a6 INFO: start
+2019-05-04_09:36:08.86482 2019-05-04T09:36:08.846Z 789 TID-ouran6kp5 ExpireJobCacheWorker JID-0d8ddad1a67edf4a4d9d3dc7 INFO: start
+2019-05-04_09:36:08.87051 2019-05-04T09:36:08.846Z 789 TID-ouran6gm5 PipelineProcessWorker JID-650d8d0dac8ddf50f3344c71 INFO: start
+2019-05-04_09:36:08.88909 2019-05-04T09:36:08.833Z 789 TID-ouran685p StageUpdateWorker JID-8022b07d807beb2e01278f5d INFO: start
+2019-05-04_09:36:08.96282 2019-05-04T09:36:08.962Z 789 TID-ouran6w75 ExpireJobCacheWorker JID-f2c399a5f2c8b7d5ebe7987f INFO: done: 0.147 sec
+2019-05-04_09:36:08.97158 2019-05-04T09:36:08.963Z 789 TID-ouran6xu1 BuildHooksWorker JID-48712b2c4b806b1070996b4f INFO: start
+2019-05-04_09:36:08.97653 2019-05-04T09:36:08.976Z 789 TID-ouran6wwh ExpireJobCacheWorker JID-9df49fb9c61718f92a81bf66 INFO: done: 0.152 sec
+2019-05-04_09:36:08.97949 2019-05-04T09:36:08.964Z 789 TID-ouran6s8x ArchiveTraceWorker JID-76b5e3be6d9c177696580cb8 INFO: start
+2019-05-04_09:36:08.98496 2019-05-04T09:36:08.971Z 789 TID-ouran6k9p ExpireJobCacheWorker JID-db8cc292d2bdd542c440e15a INFO: done: 0.138 sec
+2019-05-04_09:36:08.98751 2019-05-04T09:36:08.979Z 789 TID-ouran6s59 BuildHooksWorker JID-632d6160d5015fae870d79b3 INFO: start
+2019-05-04_09:36:08.99126 2019-05-04T09:36:08.991Z 789 TID-ouran6fl1 BuildHooksWorker JID-a4525a167f10165cbd322478 INFO: start
+2019-05-04_09:36:08.99656 2019-05-04T09:36:08.988Z 789 TID-ouran6l69 ArchiveTraceWorker JID-3d3efd5803bfc97a29bdd0cc INFO: start
+2019-05-04_09:36:09.01095 2019-05-04T09:36:08.994Z 789 TID-ouran6vcl ArchiveTraceWorker JID-cf9d2afb9989a6e1c5345076 INFO: start
+2019-05-04_09:36:09.01357 2019-05-04T09:36:09.013Z 789 TID-ouran672t BuildFinishedWorker JID-9fa231cb45fa9703229763f9 INFO: done: 0.175 sec
+2019-05-04_09:36:09.01709 2019-05-04T09:36:09.017Z 789 TID-ouran6jx5 BuildFinishedWorker JID-5c073d677e838a72f9a03c10 INFO: done: 0.18 sec
+2019-05-04_09:36:09.01822 2019-05-04T09:36:09.018Z 789 TID-ouran66d9 StageUpdateWorker JID-b539d0da74f5a708f96800e9 INFO: done: 0.194 sec
+2019-05-04_09:36:09.02515 2019-05-04T09:36:09.018Z 789 TID-ouran6sex BuildFinishedWorker JID-51e1e5e51d2b863a5bf58c69 INFO: done: 0.201 sec
+2019-05-04_09:36:09.04037 2019-05-04T09:36:09.040Z 789 TID-ouran6s8x ArchiveTraceWorker JID-76b5e3be6d9c177696580cb8 INFO: done: 0.076 sec
+2019-05-04_09:36:09.06193 2019-05-04T09:36:09.061Z 789 TID-ouran75r1 PipelineHooksWorker JID-a4612ff049bd6c8e423fb4d7 INFO: start
+2019-05-04_09:36:09.07038 2019-05-04T09:36:09.070Z 789 TID-ouran6gbp ExpirePipelineCacheWorker JID-58d2607022a916debf8941c8 INFO: start
+2019-05-04_09:36:09.07158 2019-05-04T09:36:09.071Z 789 TID-ouran6vcl ArchiveTraceWorker JID-cf9d2afb9989a6e1c5345076 INFO: done: 0.077 sec
+2019-05-04_09:36:09.07690 2019-05-04T09:36:09.076Z 789 TID-ouran6g25 StageUpdateWorker JID-93985534e2a8edb44794c0a6 INFO: done: 0.231 sec
+2019-05-04_09:36:09.08438 2019-05-04T09:36:09.077Z 789 TID-ouran66fl StageUpdateWorker JID-f54b630d020bd445f21c4d61 INFO: done: 0.264 sec
+2019-05-04_09:36:09.09767 2019-05-04T09:36:09.097Z 789 TID-ouran6itp PipelineProcessWorker JID-bb56da6a68dabc3f46a6c997 INFO: done: 0.289 sec
+2019-05-04_09:36:09.11288 2019-05-04T09:36:09.112Z 789 TID-ouran6xu1 BuildHooksWorker JID-48712b2c4b806b1070996b4f INFO: done: 0.149 sec
+2019-05-04_09:36:09.12847 2019-05-04T09:36:09.128Z 789 TID-ouran6s59 BuildHooksWorker JID-632d6160d5015fae870d79b3 INFO: done: 0.149 sec
+2019-05-04_09:36:09.13045 2019-05-04T09:36:09.130Z 789 TID-ouran6gm5 PipelineProcessWorker JID-650d8d0dac8ddf50f3344c71 INFO: done: 0.284 sec
+2019-05-04_09:36:09.14204 2019-05-04T09:36:09.141Z 789 TID-ouran68ht PipelineProcessWorker JID-a06980b54d28070a250cddcd INFO: done: 0.323 sec
+2019-05-04_09:36:09.15212 2019-05-04T09:36:09.152Z 789 TID-ouran6tpx PipelineProcessWorker JID-477ce6a63cc9691ffad80f95 INFO: done: 0.316 sec
+2019-05-04_09:36:09.16262 2019-05-04T09:36:09.162Z 789 TID-ouran6w75 ArchiveTraceWorker JID-1f11665dc1011f5eb279a343 INFO: start
+2019-05-04_09:36:09.16461 2019-05-04T09:36:09.164Z 789 TID-ouran6twd BuildHooksWorker JID-8a9cd245a6db92ff0058414b INFO: start
+2019-05-04_09:36:09.17562 2019-05-04T09:36:09.175Z 789 TID-ouran6gbp ExpirePipelineCacheWorker JID-58d2607022a916debf8941c8 INFO: done: 0.105 sec
+2019-05-04_09:36:09.17867 2019-05-04T09:36:09.178Z 789 TID-ouran6rp1 BuildFinishedWorker JID-f4e752ac4f85d8c9c1755c90 INFO: done: 0.372 sec
+2019-05-04_09:36:09.20545 2019-05-04T09:36:09.205Z 789 TID-ouran6twd BuildHooksWorker JID-8a9cd245a6db92ff0058414b INFO: done: 0.041 sec
+2019-05-04_09:36:09.27437 2019-05-04T09:36:09.274Z 789 TID-ouran6w75 ArchiveTraceWorker JID-1f11665dc1011f5eb279a343 INFO: done: 0.112 sec
+2019-05-04_09:36:09.45645 2019-05-04T09:36:09.456Z 789 TID-ouran75r1 PipelineHooksWorker JID-a4612ff049bd6c8e423fb4d7 INFO: done: 0.395 sec
+2019-05-04_09:36:09.87597 2019-05-04T09:36:09.875Z 789 TID-ouran6l69 ArchiveTraceWorker JID-3d3efd5803bfc97a29bdd0cc INFO: done: 0.888 sec
+2019-05-04_09:36:09.90569 2019-05-04T09:36:09.905Z 789 TID-ouran685p StageUpdateWorker JID-8022b07d807beb2e01278f5d INFO: done: 1.073 sec
+2019-05-04_09:36:10.09680 2019-05-04T09:36:10.096Z 789 TID-ouran6kp5 ExpireJobCacheWorker JID-0d8ddad1a67edf4a4d9d3dc7 INFO: done: 1.25 sec
+2019-05-04_09:36:10.23961 2019-05-04T09:36:10.239Z 789 TID-ouran6fl1 BuildHooksWorker JID-a4525a167f10165cbd322478 INFO: done: 1.248 sec
+2019-05-04_09:36:30.57885 2019-05-04T09:36:30.578Z 789 TID-ouran6g25 BuildHooksWorker JID-26937b120f71120cd40749af INFO: start
+2019-05-04_09:36:30.61022 2019-05-04T09:36:30.610Z 789 TID-ouran6g25 BuildHooksWorker JID-26937b120f71120cd40749af INFO: done: 0.031 sec
+2019-05-04_09:36:30.61208 2019-05-04T09:36:30.612Z 789 TID-ouran6w75 BuildHooksWorker JID-48625cfb4202694119a9842d INFO: start
+2019-05-04_09:36:30.64440 2019-05-04T09:36:30.644Z 789 TID-ouran6w75 BuildHooksWorker JID-48625cfb4202694119a9842d INFO: done: 0.032 sec
+2019-05-04_09:36:30.64548 2019-05-04T09:36:30.645Z 789 TID-ouran6wwh BuildHooksWorker JID-6004c7adf36c3f6a7d527e69 INFO: start
+2019-05-04_09:36:30.67885 2019-05-04T09:36:30.678Z 789 TID-ouran6rp1 BuildHooksWorker JID-faebe64beb8241ddc1e2456a INFO: start
+2019-05-04_09:36:30.68368 2019-05-04T09:36:30.683Z 789 TID-ouran6wwh BuildHooksWorker JID-6004c7adf36c3f6a7d527e69 INFO: done: 0.038 sec
+2019-05-04_09:36:30.71345 2019-05-04T09:36:30.713Z 789 TID-ouran6rp1 BuildHooksWorker JID-faebe64beb8241ddc1e2456a INFO: done: 0.035 sec
+2019-05-04_09:36:30.72886 2019-05-04T09:36:30.728Z 789 TID-ouran6s8x BuildQueueWorker JID-22ea74f5bcfc84b3d664a999 INFO: start
+2019-05-04_09:36:30.72947 2019-05-04T09:36:30.729Z 789 TID-ouran6k9p PipelineUpdateWorker JID-f7cf6273fe01223d2f3c67f6 INFO: start
+2019-05-04_09:36:30.73002 2019-05-04T09:36:30.729Z 789 TID-ouran6s59 StageUpdateWorker JID-9ef27df4f4909dea7e41aaf5 INFO: start
+2019-05-04_09:36:30.73228 2019-05-04T09:36:30.732Z 789 TID-ouran6tpx ExpireJobCacheWorker JID-a6ede76f0af380ee526a03c1 INFO: start
+2019-05-04_09:36:30.76863 2019-05-04T09:36:30.768Z 789 TID-ouran6itp ExpirePipelineCacheWorker JID-23807883e36d88030b0626fd INFO: start
+2019-05-04_09:36:30.77066 2019-05-04T09:36:30.770Z 789 TID-ouran6twd PipelineHooksWorker JID-e196054755e5fde83fe7300e INFO: start
+2019-05-04_09:36:30.77929 2019-05-04T09:36:30.779Z 789 TID-ouran6tpx ExpireJobCacheWorker JID-a6ede76f0af380ee526a03c1 INFO: done: 0.047 sec
+2019-05-04_09:36:30.80070 2019-05-04T09:36:30.800Z 789 TID-ouran6k9p PipelineUpdateWorker JID-f7cf6273fe01223d2f3c67f6 INFO: done: 0.071 sec
+2019-05-04_09:36:30.81090 2019-05-04T09:36:30.810Z 789 TID-ouran6s8x BuildQueueWorker JID-22ea74f5bcfc84b3d664a999 INFO: done: 0.082 sec
+2019-05-04_09:36:30.81194 2019-05-04T09:36:30.811Z 789 TID-ouran6s59 StageUpdateWorker JID-9ef27df4f4909dea7e41aaf5 INFO: done: 0.082 sec
+2019-05-04_09:36:30.82682 2019-05-04T09:36:30.826Z 789 TID-ouran6itp ExpirePipelineCacheWorker JID-23807883e36d88030b0626fd INFO: done: 0.059 sec
+2019-05-04_09:36:30.86023 2019-05-04T09:36:30.860Z 789 TID-ouran6twd PipelineHooksWorker JID-e196054755e5fde83fe7300e INFO: done: 0.09 sec
+2019-05-04_09:36:33.86230 2019-05-04T09:36:33.862Z 789 TID-ouran6sex BuildHooksWorker JID-24ca018bff7026eb8bbabbe9 INFO: start
+2019-05-04_09:36:33.86298 2019-05-04T09:36:33.862Z 789 TID-ouran66fl PipelineUpdateWorker JID-be1bc7a3388e54f0a4860abc INFO: start
+2019-05-04_09:36:33.86330 2019-05-04T09:36:33.863Z 789 TID-ouran6vcl StageUpdateWorker JID-07bcf13be380f0017ba4f241 INFO: start
+2019-05-04_09:36:33.86468 2019-05-04T09:36:33.864Z 789 TID-ouran6gm5 ExpireJobCacheWorker JID-df139e2c5da9cd58a1c48910 INFO: start
+2019-05-04_09:36:33.89733 2019-05-04T09:36:33.897Z 789 TID-ouran6vcl StageUpdateWorker JID-07bcf13be380f0017ba4f241 INFO: done: 0.034 sec
+2019-05-04_09:36:33.90330 2019-05-04T09:36:33.902Z 789 TID-ouran66fl PipelineUpdateWorker JID-be1bc7a3388e54f0a4860abc INFO: done: 0.04 sec
+2019-05-04_09:36:33.90874 2019-05-04T09:36:33.908Z 789 TID-ouran6gm5 ExpireJobCacheWorker JID-df139e2c5da9cd58a1c48910 INFO: done: 0.044 sec
+2019-05-04_09:36:33.92269 2019-05-04T09:36:33.922Z 789 TID-ouran6sex BuildHooksWorker JID-24ca018bff7026eb8bbabbe9 INFO: done: 0.06 sec
+2019-05-04_09:38:34.35132 2019-05-04T09:38:34.351Z 789 TID-ouran6jx5 BuildSuccessWorker JID-523c6f5f30b4698e4246b97b INFO: start
+2019-05-04_09:38:34.35238 2019-05-04T09:38:34.352Z 789 TID-ouran66d9 BuildFinishedWorker JID-41e5e935684d60ab2d340403 INFO: start
+2019-05-04_09:38:34.38982 2019-05-04T09:38:34.389Z 789 TID-ouran672t ExpireJobCacheWorker JID-74b03e54e6e57e317a1a4802 INFO: start
+2019-05-04_09:38:34.39033 2019-05-04T09:38:34.390Z 789 TID-ouran6vcl StageUpdateWorker JID-3dc88d0c1bf3e3bd9b722bf1 INFO: start
+2019-05-04_09:38:34.39112 2019-05-04T09:38:34.390Z 789 TID-ouran68ht PipelineProcessWorker JID-4a3882a59ca0243e7018391d INFO: start
+2019-05-04_09:38:35.24418 2019-05-04T09:38:35.244Z 789 TID-ouran6jx5 BuildSuccessWorker JID-523c6f5f30b4698e4246b97b INFO: done: 0.893 sec
+2019-05-04_09:38:35.24565 2019-05-04T09:38:35.245Z 789 TID-ouran672t ExpireJobCacheWorker JID-74b03e54e6e57e317a1a4802 INFO: done: 0.856 sec
+2019-05-04_09:38:35.30111 2019-05-04T09:38:35.301Z 789 TID-ouran6vcl StageUpdateWorker JID-3dc88d0c1bf3e3bd9b722bf1 INFO: done: 0.911 sec
+2019-05-04_09:38:35.56566 2019-05-04T09:38:35.565Z 789 TID-ouran6xu1 BuildQueueWorker JID-25e48a89811cd611d96fa49e INFO: start
+2019-05-04_09:38:35.57357 2019-05-04T09:38:35.572Z 789 TID-ouran6gbp StageUpdateWorker JID-5a2ad41123baf07bf45fc28d INFO: start
+2019-05-04_09:38:35.59471 2019-05-04T09:38:35.594Z 789 TID-ouran6wwh ExpireJobCacheWorker JID-00cc64863ba24d073be9820e INFO: start
+2019-05-04_09:38:35.59996 2019-05-04T09:38:35.595Z 789 TID-ouran66fl PipelineUpdateWorker JID-8e7d87e191d8cea510c1a4e4 INFO: start
+2019-05-04_09:38:35.64580 2019-05-04T09:38:35.645Z 789 TID-ouran6k9p BuildHooksWorker JID-ef06c7f1545bf5dc877239b5 INFO: start
+2019-05-04_09:38:35.65050 2019-05-04T09:38:35.650Z 789 TID-ouran6s59 ArchiveTraceWorker JID-2b4f89d23e120e56b9702e26 INFO: start
+2019-05-04_09:38:35.68802 2019-05-04T09:38:35.687Z 789 TID-ouran66d9 BuildFinishedWorker JID-41e5e935684d60ab2d340403 INFO: done: 1.336 sec
+2019-05-04_09:38:35.69012 2019-05-04T09:38:35.690Z 789 TID-ouran66fl PipelineUpdateWorker JID-8e7d87e191d8cea510c1a4e4 INFO: done: 0.095 sec
+2019-05-04_09:38:35.70167 2019-05-04T09:38:35.701Z 789 TID-ouran6wwh ExpireJobCacheWorker JID-00cc64863ba24d073be9820e INFO: done: 0.107 sec
+2019-05-04_09:38:35.70274 2019-05-04T09:38:35.702Z 789 TID-ouran68ht PipelineProcessWorker JID-4a3882a59ca0243e7018391d INFO: done: 1.312 sec
+2019-05-04_09:38:35.80061 2019-05-04T09:38:35.800Z 789 TID-ouran6gbp StageUpdateWorker JID-5a2ad41123baf07bf45fc28d INFO: done: 0.228 sec
+2019-05-04_09:38:35.90158 2019-05-04T09:38:35.900Z 789 TID-ouran6s59 ArchiveTraceWorker JID-2b4f89d23e120e56b9702e26 INFO: done: 0.25 sec
+2019-05-04_09:38:35.98947 2019-05-04T09:38:35.988Z 789 TID-ouran6k9p BuildHooksWorker JID-ef06c7f1545bf5dc877239b5 INFO: done: 0.343 sec
+2019-05-04_09:38:36.09985 2019-05-04T09:38:36.099Z 789 TID-ouran6xu1 BuildQueueWorker JID-25e48a89811cd611d96fa49e INFO: done: 0.534 sec
+2019-05-04_09:38:36.20908 2019-05-04T09:38:36.209Z 789 TID-ouran6gm5 BuildHooksWorker JID-9489fe53d306c62452c6afb0 INFO: start
+2019-05-04_09:38:36.20997 2019-05-04T09:38:36.209Z 789 TID-ouran6kp5 PipelineUpdateWorker JID-c82f05bb300cebee20d110ff INFO: start
+2019-05-04_09:38:36.21110 2019-05-04T09:38:36.211Z 789 TID-ouran6l69 StageUpdateWorker JID-a3d4f85dcf6587dce8f80f78 INFO: start
+2019-05-04_09:38:36.21307 2019-05-04T09:38:36.212Z 789 TID-ouran6fl1 ExpireJobCacheWorker JID-3c91cea4f81a1ddd110f2191 INFO: start
+2019-05-04_09:38:36.30939 2019-05-04T09:38:36.308Z 789 TID-ouran6kp5 PipelineUpdateWorker JID-c82f05bb300cebee20d110ff INFO: done: 0.098 sec
+2019-05-04_09:38:36.31430 2019-05-04T09:38:36.314Z 789 TID-ouran6fl1 ExpireJobCacheWorker JID-3c91cea4f81a1ddd110f2191 INFO: done: 0.101 sec
+2019-05-04_09:38:36.31745 2019-05-04T09:38:36.317Z 789 TID-ouran6l69 StageUpdateWorker JID-a3d4f85dcf6587dce8f80f78 INFO: done: 0.106 sec
+2019-05-04_09:38:36.34067 2019-05-04T09:38:36.340Z 789 TID-ouran6gm5 BuildHooksWorker JID-9489fe53d306c62452c6afb0 INFO: done: 0.132 sec
+2019-05-04_09:38:57.60791 2019-05-04T09:38:57.607Z 789 TID-ouran6s59 BuildSuccessWorker JID-d05dcd9c8d6357e83c4fc35b INFO: start
+2019-05-04_09:38:57.60827 2019-05-04T09:38:57.608Z 789 TID-ouran6w75 BuildFinishedWorker JID-f68b21da03e32eb8df011092 INFO: start
+2019-05-04_09:38:57.60881 2019-05-04T09:38:57.608Z 789 TID-ouran6twd PipelineProcessWorker JID-645621b4754464794f5833e5 INFO: start
+2019-05-04_09:38:57.60965 2019-05-04T09:38:57.609Z 789 TID-ouran6itp StageUpdateWorker JID-f9ae64563ee9b9be264ddc3e INFO: start
+2019-05-04_09:38:57.61039 2019-05-04T09:38:57.610Z 789 TID-ouran6s8x ExpireJobCacheWorker JID-3020d6de68f2039746d4f798 INFO: start
+2019-05-04_09:38:57.64659 2019-05-04T09:38:57.646Z 789 TID-ouran6s59 BuildSuccessWorker JID-d05dcd9c8d6357e83c4fc35b INFO: done: 0.038 sec
+2019-05-04_09:38:57.66273 2019-05-04T09:38:57.662Z 789 TID-ouran6s8x ExpireJobCacheWorker JID-3020d6de68f2039746d4f798 INFO: done: 0.052 sec
+2019-05-04_09:38:57.78620 2019-05-04T09:38:57.786Z 789 TID-ouran66d9 BuildHooksWorker JID-45d4f5f391bc616f979a796a INFO: start
+2019-05-04_09:38:57.78910 2019-05-04T09:38:57.788Z 789 TID-ouran6tpx ArchiveTraceWorker JID-b6eaa7f8488620ef69b2394c INFO: start
+2019-05-04_09:38:57.83936 2019-05-04T09:38:57.839Z 789 TID-ouran6w75 BuildFinishedWorker JID-f68b21da03e32eb8df011092 INFO: done: 0.231 sec
+2019-05-04_09:38:57.86169 2019-05-04T09:38:57.861Z 789 TID-ouran6xu1 BuildQueueWorker JID-6e1b694045bfbb9b6cd553b6 INFO: start
+2019-05-04_09:38:57.86440 2019-05-04T09:38:57.864Z 789 TID-ouran6jx5 StageUpdateWorker JID-c9c6becc74a1e50c3f5eb4e3 INFO: start
+2019-05-04_09:38:57.87411 2019-05-04T09:38:57.861Z 789 TID-ouran6gm5 PipelineUpdateWorker JID-8786ac2b74fa8399b7617ad1 INFO: start
+2019-05-04_09:38:57.88739 2019-05-04T09:38:57.887Z 789 TID-ouran672t ExpireJobCacheWorker JID-92017ed73185aa66a1a66e1e INFO: start
+2019-05-04_09:38:57.97269 2019-05-04T09:38:57.972Z 789 TID-ouran6gm5 PipelineUpdateWorker JID-8786ac2b74fa8399b7617ad1 INFO: done: 0.111 sec
+2019-05-04_09:38:57.97502 2019-05-04T09:38:57.974Z 789 TID-ouran6twd PipelineProcessWorker JID-645621b4754464794f5833e5 INFO: done: 0.366 sec
+2019-05-04_09:38:57.97824 2019-05-04T09:38:57.978Z 789 TID-ouran672t ExpireJobCacheWorker JID-92017ed73185aa66a1a66e1e INFO: done: 0.091 sec
+2019-05-04_09:38:57.98487 2019-05-04T09:38:57.984Z 789 TID-ouran6xu1 BuildQueueWorker JID-6e1b694045bfbb9b6cd553b6 INFO: done: 0.123 sec
+2019-05-04_09:38:58.73879 2019-05-04T09:38:58.738Z 789 TID-ouran6jx5 StageUpdateWorker JID-c9c6becc74a1e50c3f5eb4e3 INFO: done: 0.874 sec
+2019-05-04_09:38:58.75351 2019-05-04T09:38:58.753Z 789 TID-ouran6tpx ArchiveTraceWorker JID-b6eaa7f8488620ef69b2394c INFO: done: 0.965 sec
+2019-05-04_09:38:58.86424 2019-05-04T09:38:58.864Z 789 TID-ouran6itp StageUpdateWorker JID-f9ae64563ee9b9be264ddc3e INFO: done: 1.255 sec
+2019-05-04_09:38:58.92078 2019-05-04T09:38:58.920Z 789 TID-ouran685p BuildHooksWorker JID-bb3d4ff1e2dcaf6bdcbc7136 INFO: start
+2019-05-04_09:38:58.92309 2019-05-04T09:38:58.922Z 789 TID-ouran6g25 PipelineUpdateWorker JID-2cd56dc4723206a3608b2aaa INFO: start
+2019-05-04_09:38:58.93258 2019-05-04T09:38:58.924Z 789 TID-ouran75r1 StageUpdateWorker JID-ee67b5b3d30281146285de3c INFO: start
+2019-05-04_09:38:58.93501 2019-05-04T09:38:58.933Z 789 TID-ouran6fl1 ExpireJobCacheWorker JID-9ea103d87c1824ad296ee987 INFO: start
+2019-05-04_09:38:58.99750 2019-05-04T09:38:58.997Z 789 TID-ouran75r1 StageUpdateWorker JID-ee67b5b3d30281146285de3c INFO: done: 0.073 sec
+2019-05-04_09:38:59.01291 2019-05-04T09:38:59.012Z 789 TID-ouran6g25 PipelineUpdateWorker JID-2cd56dc4723206a3608b2aaa INFO: done: 0.09 sec
+2019-05-04_09:38:59.01659 2019-05-04T09:38:59.016Z 789 TID-ouran6fl1 ExpireJobCacheWorker JID-9ea103d87c1824ad296ee987 INFO: done: 0.083 sec
+2019-05-04_09:38:59.03065 2019-05-04T09:38:59.030Z 789 TID-ouran685p BuildHooksWorker JID-bb3d4ff1e2dcaf6bdcbc7136 INFO: done: 0.11 sec
+2019-05-04_09:38:59.18754 2019-05-04T09:38:59.187Z 789 TID-ouran66d9 BuildHooksWorker JID-45d4f5f391bc616f979a796a INFO: done: 1.401 sec
+2019-05-04_09:39:17.29097 2019-05-04T09:39:17.290Z 789 TID-ouran6wwh BuildSuccessWorker JID-cde163fe97ad77a446ee8093 INFO: start
+2019-05-04_09:39:17.29214 2019-05-04T09:39:17.292Z 789 TID-ouran6tpx BuildFinishedWorker JID-c1e7df4daac96fa042f52bef INFO: start
+2019-05-04_09:39:17.30251 2019-05-04T09:39:17.296Z 789 TID-ouran6sex PipelineProcessWorker JID-b98c10ea85410f0124145220 INFO: start
+2019-05-04_09:39:17.30764 2019-05-04T09:39:17.307Z 789 TID-ouran6jx5 ExpireJobCacheWorker JID-d6c47f59fe13fcef08105908 INFO: start
+2019-05-04_09:39:17.30821 2019-05-04T09:39:17.308Z 789 TID-ouran6gbp StageUpdateWorker JID-a2aa9e0a69d91d6394d9a724 INFO: start
+2019-05-04_09:39:17.32091 2019-05-04T09:39:17.320Z 789 TID-ouran6wwh BuildSuccessWorker JID-cde163fe97ad77a446ee8093 INFO: done: 0.03 sec
+2019-05-04_09:39:17.36083 2019-05-04T09:39:17.360Z 789 TID-ouran6jx5 ExpireJobCacheWorker JID-d6c47f59fe13fcef08105908 INFO: done: 0.053 sec
+2019-05-04_09:39:17.43180 2019-05-04T09:39:17.431Z 789 TID-ouran6gbp StageUpdateWorker JID-a2aa9e0a69d91d6394d9a724 INFO: done: 0.124 sec
+2019-05-04_09:39:17.49193 2019-05-04T09:39:17.491Z 789 TID-ouran66fl BuildQueueWorker JID-8a8e6ad5b0c970692be2db9d INFO: start
+2019-05-04_09:39:17.49458 2019-05-04T09:39:17.494Z 789 TID-ouran6w75 StageUpdateWorker JID-d33b2658fcfdd41c165c1004 INFO: start
+2019-05-04_09:39:17.49654 2019-05-04T09:39:17.496Z 789 TID-ouran6twd ExpireJobCacheWorker JID-bb49c44f21e6481c6772833e INFO: start
+2019-05-04_09:39:17.49674 2019-05-04T09:39:17.494Z 789 TID-ouran6s8x BuildHooksWorker JID-9c41ac33ebfab556c9a9929d INFO: start
+2019-05-04_09:39:17.49782 2019-05-04T09:39:17.497Z 789 TID-ouran6s59 ArchiveTraceWorker JID-f554521e4527f2660b56c5c9 INFO: start
+2019-05-04_09:39:17.50339 2019-05-04T09:39:17.492Z 789 TID-ouran66d9 PipelineUpdateWorker JID-4737b54bf52e16f7a41ea7fe INFO: start
+2019-05-04_09:39:17.53615 2019-05-04T09:39:17.536Z 789 TID-ouran6tpx BuildFinishedWorker JID-c1e7df4daac96fa042f52bef INFO: done: 0.244 sec
+2019-05-04_09:39:17.57664 2019-05-04T09:39:17.576Z 789 TID-ouran6sex PipelineProcessWorker JID-b98c10ea85410f0124145220 INFO: done: 0.28 sec
+2019-05-04_09:39:17.58227 2019-05-04T09:39:17.582Z 789 TID-ouran6twd ExpireJobCacheWorker JID-bb49c44f21e6481c6772833e INFO: done: 0.086 sec
+2019-05-04_09:39:17.58429 2019-05-04T09:39:17.584Z 789 TID-ouran66d9 PipelineUpdateWorker JID-4737b54bf52e16f7a41ea7fe INFO: done: 0.092 sec
+2019-05-04_09:39:17.60310 2019-05-04T09:39:17.603Z 789 TID-ouran6s8x BuildHooksWorker JID-9c41ac33ebfab556c9a9929d INFO: done: 0.108 sec
+2019-05-04_09:39:17.60774 2019-05-04T09:39:17.607Z 789 TID-ouran66fl BuildQueueWorker JID-8a8e6ad5b0c970692be2db9d INFO: done: 0.116 sec
+2019-05-04_09:39:17.61204 2019-05-04T09:39:17.611Z 789 TID-ouran6w75 StageUpdateWorker JID-d33b2658fcfdd41c165c1004 INFO: done: 0.117 sec
+2019-05-04_09:39:17.69025 2019-05-04T09:39:17.690Z 789 TID-ouran6s59 ArchiveTraceWorker JID-f554521e4527f2660b56c5c9 INFO: done: 0.193 sec
+2019-05-04_09:39:17.75080 2019-05-04T09:39:17.750Z 789 TID-ouran6xu1 BuildHooksWorker JID-c4a49bcb6da24f12ffa8aea4 INFO: start
+2019-05-04_09:39:17.75305 2019-05-04T09:39:17.752Z 789 TID-ouran672t PipelineUpdateWorker JID-4f0a59ee659de0c388ddc4f7 INFO: start
+2019-05-04_09:39:17.75566 2019-05-04T09:39:17.755Z 789 TID-ouran6k9p StageUpdateWorker JID-3819d91e6fd95d6f6ef68872 INFO: start
+2019-05-04_09:39:17.75770 2019-05-04T09:39:17.757Z 789 TID-ouran6gm5 ExpireJobCacheWorker JID-ece0bc12a22e52ebdc30dfba INFO: start
+2019-05-04_09:39:17.88356 2019-05-04T09:39:17.883Z 789 TID-ouran672t PipelineUpdateWorker JID-4f0a59ee659de0c388ddc4f7 INFO: done: 0.131 sec
+2019-05-04_09:39:17.89131 2019-05-04T09:39:17.890Z 789 TID-ouran6gm5 ExpireJobCacheWorker JID-ece0bc12a22e52ebdc30dfba INFO: done: 0.133 sec
+2019-05-04_09:39:17.89425 2019-05-04T09:39:17.894Z 789 TID-ouran6k9p StageUpdateWorker JID-3819d91e6fd95d6f6ef68872 INFO: done: 0.139 sec
+2019-05-04_09:39:17.95914 2019-05-04T09:39:17.959Z 789 TID-ouran6xu1 BuildHooksWorker JID-c4a49bcb6da24f12ffa8aea4 INFO: done: 0.209 sec
+2019-05-04_09:39:36.08990 2019-05-04T09:39:36.089Z 789 TID-ouran6jx5 BuildSuccessWorker JID-3f46e84cf0bc26018979aabb INFO: start
+2019-05-04_09:39:36.09038 2019-05-04T09:39:36.090Z 789 TID-ouran6sex BuildFinishedWorker JID-93ed588d61afa57dac526abd INFO: start
+2019-05-04_09:39:36.09115 2019-05-04T09:39:36.091Z 789 TID-ouran6wwh PipelineProcessWorker JID-b60d112b9296b5a2da053fd3 INFO: start
+2019-05-04_09:39:36.09910 2019-05-04T09:39:36.099Z 789 TID-ouran6gbp StageUpdateWorker JID-268eeac191b44e668944c08f INFO: start
+2019-05-04_09:39:36.09989 2019-05-04T09:39:36.099Z 789 TID-ouran6k9p ExpireJobCacheWorker JID-055d1d7ebdc3f1e36ca9d12f INFO: start
+2019-05-04_09:39:36.12122 2019-05-04T09:39:36.121Z 789 TID-ouran6jx5 BuildSuccessWorker JID-3f46e84cf0bc26018979aabb INFO: done: 0.031 sec
+2019-05-04_09:39:36.14074 2019-05-04T09:39:36.140Z 789 TID-ouran6k9p ExpireJobCacheWorker JID-055d1d7ebdc3f1e36ca9d12f INFO: done: 0.041 sec
+2019-05-04_09:39:36.24134 2019-05-04T09:39:36.241Z 789 TID-ouran6gbp StageUpdateWorker JID-268eeac191b44e668944c08f INFO: done: 0.142 sec
+2019-05-04_09:39:36.31852 2019-05-04T09:39:36.318Z 789 TID-ouran672t PipelineNotificationWorker JID-b0953a4e1f06a9b8f31c36f8 INFO: start
+2019-05-04_09:39:36.31984 2019-05-04T09:39:36.319Z 789 TID-ouran6tpx PipelineHooksWorker JID-d4f5a44bc034b2f36bbd00e9 INFO: start
+2019-05-04_09:39:36.32071 2019-05-04T09:39:36.319Z 789 TID-ouran6gm5 ExpirePipelineCacheWorker JID-8d4bb169c57955b34433cc5e INFO: start
+2019-05-04_09:39:36.32214 2019-05-04T09:39:36.320Z 789 TID-ouran6w75 PipelineSuccessWorker JID-67f00930e31b973117ef7080 INFO: start
+2019-05-04_09:39:36.32277 2019-05-04T09:39:36.322Z 789 TID-ouran66fl BuildHooksWorker JID-d27a7c5e715cdf5acd305c85 INFO: start
+2019-05-04_09:39:36.32380 2019-05-04T09:39:36.322Z 789 TID-ouran6s59 ArchiveTraceWorker JID-859d8d3e5810adf07be57d57 INFO: start
+2019-05-04_09:39:36.32431 2019-05-04T09:39:36.323Z 789 TID-ouran6s8x PipelineMetricsWorker JID-faf88d0c4622fd5769f14962 INFO: start
+2019-05-04_09:39:36.35206 2019-05-04T09:39:36.352Z 789 TID-ouran6wwh PipelineProcessWorker JID-b60d112b9296b5a2da053fd3 INFO: done: 0.261 sec
+2019-05-04_09:39:36.35925 2019-05-04T09:39:36.359Z 789 TID-ouran6sex BuildFinishedWorker JID-93ed588d61afa57dac526abd INFO: done: 0.269 sec
+2019-05-04_09:39:36.37924 2019-05-04T09:39:36.378Z 789 TID-ouran6w75 PipelineSuccessWorker JID-67f00930e31b973117ef7080 INFO: done: 0.058 sec
+2019-05-04_09:39:36.38379 2019-05-04T09:39:36.383Z 789 TID-ouran6s8x PipelineMetricsWorker JID-faf88d0c4622fd5769f14962 INFO: done: 0.06 sec
+2019-05-04_09:39:36.41162 2019-05-04T09:39:36.411Z 789 TID-ouran6gm5 ExpirePipelineCacheWorker JID-8d4bb169c57955b34433cc5e INFO: done: 0.092 sec
+2019-05-04_09:39:36.41268 2019-05-04T09:39:36.412Z 789 TID-ouran672t PipelineNotificationWorker JID-b0953a4e1f06a9b8f31c36f8 INFO: done: 0.094 sec
+2019-05-04_09:39:36.42480 2019-05-04T09:39:36.424Z 789 TID-ouran66fl BuildHooksWorker JID-d27a7c5e715cdf5acd305c85 INFO: done: 0.102 sec
+2019-05-04_09:39:36.47397 2019-05-04T09:39:36.473Z 789 TID-ouran6tpx PipelineHooksWorker JID-d4f5a44bc034b2f36bbd00e9 INFO: done: 0.155 sec
+2019-05-04_09:39:36.54429 2019-05-04T09:39:36.544Z 789 TID-ouran6s59 ArchiveTraceWorker JID-859d8d3e5810adf07be57d57 INFO: done: 0.221 sec
+2019-05-04_09:40:59.93398 2019-05-04T09:40:59.933Z 789 TID-ouran6sex ProjectDailyStatisticsWorker JID-11ac70a5f1720430db6db5a3 INFO: start
+2019-05-04_09:41:00.14206 2019-05-04T09:41:00.141Z 789 TID-ouran6sex ProjectDailyStatisticsWorker JID-11ac70a5f1720430db6db5a3 INFO: done: 0.208 sec
+2019-05-04_09:45:08.65884 2019-05-04T09:45:08.658Z 789 TID-ouran685p PagesDomainVerificationCronWorker JID-dd2cd0cf0c475d34969dab65 INFO: start
+2019-05-04_09:45:08.72887 2019-05-04T09:45:08.728Z 789 TID-ouran685p PagesDomainVerificationCronWorker JID-dd2cd0cf0c475d34969dab65 INFO: done: 0.07 sec
+2019-05-04_09:50:32.47390 2019-05-04T09:50:32.473Z 789 TID-ouran6itp ExpireBuildArtifactsWorker JID-683ae0a63524cc14748ffffa INFO: start
+2019-05-04_09:50:32.48662 2019-05-04T09:50:32.486Z 789 TID-ouran6itp ExpireBuildArtifactsWorker JID-683ae0a63524cc14748ffffa INFO: done: 0.013 sec
+2019-05-04_09:51:16.15362 2019-05-04T09:51:16.153Z 789 TID-ouran68ht ClusterProjectConfigureWorker JID-a5b2ea081a40381b0eca68eb INFO: start
+2019-05-04_09:51:16.19336 2019-05-04T09:51:16.193Z 789 TID-ouran68ht ClusterProjectConfigureWorker JID-a5b2ea081a40381b0eca68eb INFO: done: 0.04 sec
+2019-05-04_09:52:38.88304 2019-05-04T09:52:38.882Z 789 TID-ouran6twd PostReceive JID-9ee5a273be8de5ad6ea39a94 INFO: start
+2019-05-04_09:52:38.99987 2019-05-04T09:52:38.999Z 789 TID-ouran66d9 ProjectCacheWorker JID-c361044fe5a82489a49f5749 INFO: start
+2019-05-04_09:52:39.09495 2019-05-04T09:52:39.094Z 789 TID-ouran66d9 ProjectCacheWorker JID-c361044fe5a82489a49f5749 INFO: done: 0.095 sec
+2019-05-04_09:52:39.15792 2019-05-04T09:52:39.157Z 789 TID-ouran6gbp UpdateMergeRequestsWorker JID-c46d58d646e6684b86ccc5c2 INFO: start
+2019-05-04_09:52:39.21994 2019-05-04T09:52:39.219Z 789 TID-ouran6gbp UpdateMergeRequestsWorker JID-c46d58d646e6684b86ccc5c2 INFO: done: 0.062 sec
+2019-05-04_09:52:39.85161 2019-05-04T09:52:39.851Z 789 TID-ouran6fl1 BuildHooksWorker JID-616e8bf568172f2d906f866e INFO: start
+2019-05-04_09:52:39.85371 2019-05-04T09:52:39.853Z 789 TID-ouran6vcl BuildHooksWorker JID-83eaf0ef41b9a1771bb96a45 INFO: start
+2019-05-04_09:52:39.85621 2019-05-04T09:52:39.855Z 789 TID-ouran6l69 BuildHooksWorker JID-fd228538ce4fa169f2edb4de INFO: start
+2019-05-04_09:52:39.94699 2019-05-04T09:52:39.946Z 789 TID-ouran6fl1 BuildHooksWorker JID-616e8bf568172f2d906f866e INFO: done: 0.095 sec
+2019-05-04_09:52:39.94868 2019-05-04T09:52:39.948Z 789 TID-ouran6vcl BuildHooksWorker JID-83eaf0ef41b9a1771bb96a45 INFO: done: 0.095 sec
+2019-05-04_09:52:39.95132 2019-05-04T09:52:39.951Z 789 TID-ouran6l69 BuildHooksWorker JID-fd228538ce4fa169f2edb4de INFO: done: 0.095 sec
+2019-05-04_09:52:39.96660 2019-05-04T09:52:39.966Z 789 TID-ouran672t BuildQueueWorker JID-12b24448a50b23ac416ec53f INFO: start
+2019-05-04_09:52:39.97021 2019-05-04T09:52:39.970Z 789 TID-ouran6kp5 PipelineUpdateWorker JID-5670f5e008b4d6ba3b7f3495 INFO: start
+2019-05-04_09:52:39.97231 2019-05-04T09:52:39.972Z 789 TID-ouran6itp StageUpdateWorker JID-b3a1053fbb35ee99329cde32 INFO: start
+2019-05-04_09:52:39.97624 2019-05-04T09:52:39.976Z 789 TID-ouran68ht ExpireJobCacheWorker JID-7e401b28ebcc208b85d93414 INFO: start
+2019-05-04_09:52:40.01615 2019-05-04T09:52:40.016Z 789 TID-ouran6rp1 PipelineHooksWorker JID-d956fe59f80aca00b4822ceb INFO: start
+2019-05-04_09:52:40.02084 2019-05-04T09:52:40.018Z 789 TID-ouran6sex ExpirePipelineCacheWorker JID-e27a8d38f2683ca477f76dbc INFO: start
+2019-05-04_09:52:40.02467 2019-05-04T09:52:40.018Z 789 TID-ouran672t BuildQueueWorker JID-12b24448a50b23ac416ec53f INFO: done: 0.052 sec
+2019-05-04_09:52:40.03465 2019-05-04T09:52:40.033Z 789 TID-ouran6kp5 PipelineUpdateWorker JID-5670f5e008b4d6ba3b7f3495 INFO: done: 0.064 sec
+2019-05-04_09:52:40.03835 2019-05-04T09:52:40.038Z 789 TID-ouran68ht ExpireJobCacheWorker JID-7e401b28ebcc208b85d93414 INFO: done: 0.062 sec
+2019-05-04_09:52:40.04526 2019-05-04T09:52:40.045Z 789 TID-ouran6itp StageUpdateWorker JID-b3a1053fbb35ee99329cde32 INFO: done: 0.073 sec
+2019-05-04_09:52:40.07023 2019-05-04T09:52:40.070Z 789 TID-ouran6s59 ProjectCacheWorker JID-be269730139b6b3b098cc4fd INFO: start
+2019-05-04_09:52:40.07131 2019-05-04T09:52:40.071Z 789 TID-ouran6k9p DetectRepositoryLanguagesWorker JID-8a6b5089d89eaa6041f62ffe INFO: start
+2019-05-04_09:52:40.09572 2019-05-04T09:52:40.095Z 789 TID-ouran6s59 ProjectCacheWorker JID-be269730139b6b3b098cc4fd INFO: done: 0.025 sec
+2019-05-04_09:52:40.10933 2019-05-04T09:52:40.109Z 789 TID-ouran6tpx CreateGpgSignatureWorker JID-e36df97e1b0b4fc0b604b8bc INFO: start
+2019-05-04_09:52:40.12257 2019-05-04T09:52:40.122Z 789 TID-ouran6twd PostReceive JID-9ee5a273be8de5ad6ea39a94 INFO: done: 1.239 sec
+2019-05-04_09:52:40.12793 2019-05-04T09:52:40.127Z 789 TID-ouran6tpx CreateGpgSignatureWorker JID-e36df97e1b0b4fc0b604b8bc INFO: done: 0.019 sec
+2019-05-04_09:52:40.15348 2019-05-04T09:52:40.153Z 789 TID-ouran6sex ExpirePipelineCacheWorker JID-e27a8d38f2683ca477f76dbc INFO: done: 0.135 sec
+2019-05-04_09:52:40.16205 2019-05-04T09:52:40.161Z 789 TID-ouran6rp1 PipelineHooksWorker JID-d956fe59f80aca00b4822ceb INFO: done: 0.146 sec
+2019-05-04_09:52:43.25811 2019-05-04T09:52:43.258Z 789 TID-ouran6k9p DetectRepositoryLanguagesWorker JID-8a6b5089d89eaa6041f62ffe INFO: done: 3.187 sec
+2019-05-04_09:56:03.45103 2019-05-04T09:56:03.450Z 789 TID-ouran6fl1 BuildFinishedWorker JID-8eb2936da1834e27831e587f INFO: start
+2019-05-04_09:56:03.45179 2019-05-04T09:56:03.451Z 789 TID-ouran6gm5 PipelineProcessWorker JID-c8446d399889693f89c82b0e INFO: start
+2019-05-04_09:56:03.45204 2019-05-04T09:56:03.451Z 789 TID-ouran6xu1 StageUpdateWorker JID-30ff278dbe76c9ae244d4272 INFO: start
+2019-05-04_09:56:03.45293 2019-05-04T09:56:03.452Z 789 TID-ouran6twd ExpireJobCacheWorker JID-98b060473e2a3f71cf03c2c3 INFO: start
+2019-05-04_09:56:03.46462 2019-05-04T09:56:03.464Z 789 TID-ouran6wwh PipelineProcessWorker JID-d4c237132e8164276f8f3c51 INFO: start
+2019-05-04_09:56:03.46928 2019-05-04T09:56:03.469Z 789 TID-ouran6tpx PipelineProcessWorker JID-e085e3d7cd849b785ab120fc INFO: start
+2019-05-04_09:56:03.47229 2019-05-04T09:56:03.466Z 789 TID-ouran6g25 StageUpdateWorker JID-3761e561f63707266721acc5 INFO: start
+2019-05-04_09:56:03.47475 2019-05-04T09:56:03.466Z 789 TID-ouran6jx5 BuildFinishedWorker JID-e3270cf909068032ab2d17c3 INFO: start
+2019-05-04_09:56:03.47573 2019-05-04T09:56:03.467Z 789 TID-ouran66fl StageUpdateWorker JID-1a193a9724bb3c79f691bd19 INFO: start
+2019-05-04_09:56:03.47605 2019-05-04T09:56:03.469Z 789 TID-ouran6rp1 BuildFinishedWorker JID-904c7cb2f32bcfbe4574346a INFO: start
+2019-05-04_09:56:03.47852 2019-05-04T09:56:03.469Z 789 TID-ouran6l69 ExpireJobCacheWorker JID-c46abb415e9a51f2bb184e76 INFO: start
+2019-05-04_09:56:03.47995 2019-05-04T09:56:03.466Z 789 TID-ouran685p ExpireJobCacheWorker JID-6caa3816cff4b789f56bbc41 INFO: start
+2019-05-04_09:56:03.55304 2019-05-04T09:56:03.552Z 789 TID-ouran6s8x BuildHooksWorker JID-7ddb932e46ad8889663229a1 INFO: start
+2019-05-04_09:56:03.56150 2019-05-04T09:56:03.561Z 789 TID-ouran6w75 ArchiveTraceWorker JID-475e23fcdbf36bb5bccbb1d5 INFO: start
+2019-05-04_09:56:03.56770 2019-05-04T09:56:03.567Z 789 TID-ouran68ht BuildHooksWorker JID-324b91e36b256e0103f28d78 INFO: start
+2019-05-04_09:56:03.57877 2019-05-04T09:56:03.578Z 789 TID-ouran672t ArchiveTraceWorker JID-05fcf173144cd4f1daac4e9d INFO: start
+2019-05-04_09:56:03.58031 2019-05-04T09:56:03.579Z 789 TID-ouran6s59 PipelineHooksWorker JID-238d6e0cc48813311158cafe INFO: start
+2019-05-04_09:56:03.58047 2019-05-04T09:56:03.580Z 789 TID-ouran6itp BuildHooksWorker JID-7e013f32e1aad6bcf18dd764 INFO: start
+2019-05-04_09:56:03.58150 2019-05-04T09:56:03.581Z 789 TID-ouran6k9p ArchiveTraceWorker JID-2e3764ba5eb768665e8360c2 INFO: start
+2019-05-04_09:56:03.58734 2019-05-04T09:56:03.587Z 789 TID-ouran6twd ExpireJobCacheWorker JID-98b060473e2a3f71cf03c2c3 INFO: done: 0.134 sec
+2019-05-04_09:56:03.59386 2019-05-04T09:56:03.593Z 789 TID-ouran6g25 StageUpdateWorker JID-3761e561f63707266721acc5 INFO: done: 0.127 sec
+2019-05-04_09:56:03.60190 2019-05-04T09:56:03.589Z 789 TID-ouran6sex ExpirePipelineCacheWorker JID-519b214f043dcfbfacddf34c INFO: start
+2019-05-04_09:56:03.60483 2019-05-04T09:56:03.596Z 789 TID-ouran6xu1 StageUpdateWorker JID-30ff278dbe76c9ae244d4272 INFO: done: 0.145 sec
+2019-05-04_09:56:03.61069 2019-05-04T09:56:03.590Z 789 TID-ouran6l69 ExpireJobCacheWorker JID-c46abb415e9a51f2bb184e76 INFO: done: 0.121 sec
+2019-05-04_09:56:03.62333 2019-05-04T09:56:03.623Z 789 TID-ouran6jx5 BuildFinishedWorker JID-e3270cf909068032ab2d17c3 INFO: done: 0.157 sec
+2019-05-04_09:56:03.62601 2019-05-04T09:56:03.619Z 789 TID-ouran6wwh PipelineProcessWorker JID-d4c237132e8164276f8f3c51 INFO: done: 0.154 sec
+2019-05-04_09:56:03.62708 2019-05-04T09:56:03.627Z 789 TID-ouran6fl1 BuildFinishedWorker JID-8eb2936da1834e27831e587f INFO: done: 0.176 sec
+2019-05-04_09:56:03.63390 2019-05-04T09:56:03.613Z 789 TID-ouran685p ExpireJobCacheWorker JID-6caa3816cff4b789f56bbc41 INFO: done: 0.146 sec
+2019-05-04_09:56:03.64601 2019-05-04T09:56:03.639Z 789 TID-ouran6rp1 BuildFinishedWorker JID-904c7cb2f32bcfbe4574346a INFO: done: 0.17 sec
+2019-05-04_09:56:03.65814 2019-05-04T09:56:03.658Z 789 TID-ouran66fl StageUpdateWorker JID-1a193a9724bb3c79f691bd19 INFO: done: 0.191 sec
+2019-05-04_09:56:03.68802 2019-05-04T09:56:03.687Z 789 TID-ouran672t ArchiveTraceWorker JID-05fcf173144cd4f1daac4e9d INFO: done: 0.109 sec
+2019-05-04_09:56:03.70035 2019-05-04T09:56:03.699Z 789 TID-ouran6w75 ArchiveTraceWorker JID-475e23fcdbf36bb5bccbb1d5 INFO: done: 0.138 sec
+2019-05-04_09:56:03.71029 2019-05-04T09:56:03.710Z 789 TID-ouran6gm5 PipelineProcessWorker JID-c8446d399889693f89c82b0e INFO: done: 0.259 sec
+2019-05-04_09:56:03.71302 2019-05-04T09:56:03.712Z 789 TID-ouran6k9p ArchiveTraceWorker JID-2e3764ba5eb768665e8360c2 INFO: done: 0.132 sec
+2019-05-04_09:56:03.73150 2019-05-04T09:56:03.731Z 789 TID-ouran6tpx PipelineProcessWorker JID-e085e3d7cd849b785ab120fc INFO: done: 0.262 sec
+2019-05-04_09:56:03.74426 2019-05-04T09:56:03.744Z 789 TID-ouran6itp BuildHooksWorker JID-7e013f32e1aad6bcf18dd764 INFO: done: 0.164 sec
+2019-05-04_09:56:03.74966 2019-05-04T09:56:03.749Z 789 TID-ouran68ht BuildHooksWorker JID-324b91e36b256e0103f28d78 INFO: done: 0.182 sec
+2019-05-04_09:56:03.75389 2019-05-04T09:56:03.753Z 789 TID-ouran6s8x BuildHooksWorker JID-7ddb932e46ad8889663229a1 INFO: done: 0.2 sec
+2019-05-04_09:56:03.75723 2019-05-04T09:56:03.757Z 789 TID-ouran6sex ExpirePipelineCacheWorker JID-519b214f043dcfbfacddf34c INFO: done: 0.167 sec
+2019-05-04_09:56:03.76886 2019-05-04T09:56:03.768Z 789 TID-ouran6s59 PipelineHooksWorker JID-238d6e0cc48813311158cafe INFO: done: 0.189 sec
+2019-05-04_10:00:06.25786 2019-05-04T10:00:06.257Z 789 TID-ouran68ht ImportExportProjectCleanupWorker JID-4ba80570cd941264370ef888 INFO: start
+2019-05-04_10:00:06.25862 2019-05-04T10:00:06.258Z 789 TID-ouran685p RepositoryArchiveCacheWorker JID-dcf4eeb474799fc067446dd3 INFO: start
+2019-05-04_10:00:06.26507 2019-05-04T10:00:06.264Z 789 TID-ouran6s8x PruneWebHookLogsWorker JID-0ef5084b00be0c86d6922aaa INFO: start
+2019-05-04_10:00:06.27161 2019-05-04T10:00:06.271Z 789 TID-ouran6itp StuckMergeJobsWorker JID-b5ce12fe7870bb4445bc1573 INFO: start
+2019-05-04_10:00:06.27761 2019-05-04T10:00:06.277Z 789 TID-ouran6gm5 PagesDomainVerificationCronWorker JID-0da95515fd554df12c7594b8 INFO: start
+2019-05-04_10:00:06.36616 2019-05-04T10:00:06.366Z 789 TID-ouran6fl1 StuckCiJobsWorker JID-a6492fbb6b7da9dc824ef4b4 INFO: start
+2019-05-04_10:00:06.36904 2019-05-04T10:00:06.368Z 789 TID-ouran6itp StuckMergeJobsWorker JID-b5ce12fe7870bb4445bc1573 INFO: done: 0.097 sec
+2019-05-04_10:00:06.37093 2019-05-04T10:00:06.370Z 789 TID-ouran685p RepositoryArchiveCacheWorker JID-dcf4eeb474799fc067446dd3 INFO: done: 0.112 sec
+2019-05-04_10:00:06.38151 2019-05-04T10:00:06.381Z 789 TID-ouran6gm5 PagesDomainVerificationCronWorker JID-0da95515fd554df12c7594b8 INFO: done: 0.104 sec
+2019-05-04_10:00:06.38655 2019-05-04T10:00:06.386Z 789 TID-ouran6s8x PruneWebHookLogsWorker JID-0ef5084b00be0c86d6922aaa INFO: done: 0.121 sec
+2019-05-04_10:00:06.38816 2019-05-04T10:00:06.388Z 789 TID-ouran68ht ImportExportProjectCleanupWorker JID-4ba80570cd941264370ef888 INFO: done: 0.13 sec
+2019-05-04_10:00:06.39274 2019-05-04T10:00:06.392Z 789 TID-ouran6fl1 StuckCiJobsWorker JID-a6492fbb6b7da9dc824ef4b4 INFO: done: 0.027 sec
+2019-05-04_10:15:22.89013 2019-05-04T10:15:22.890Z 789 TID-ouran6twd ScheduleMigrateExternalDiffsWorker JID-76cdb11ad063d000c843b664 INFO: start
+2019-05-04_10:15:22.89876 2019-05-04T10:15:22.898Z 789 TID-ouran6k9p StuckImportJobsWorker JID-e72286d80ae09f3ffd0b9a59 INFO: start
+2019-05-04_10:15:22.90293 2019-05-04T10:15:22.902Z 789 TID-ouran6kp5 PagesDomainVerificationCronWorker JID-be1578d521ae5843ccb90bc3 INFO: start
+2019-05-04_10:15:23.00199 2019-05-04T10:15:23.001Z 789 TID-ouran6k9p StuckImportJobsWorker JID-e72286d80ae09f3ffd0b9a59 INFO: done: 0.103 sec
+2019-05-04_10:15:23.00832 2019-05-04T10:15:23.007Z 789 TID-ouran6twd ScheduleMigrateExternalDiffsWorker JID-76cdb11ad063d000c843b664 INFO: done: 0.118 sec
+2019-05-04_10:15:23.00980 2019-05-04T10:15:23.009Z 789 TID-ouran6kp5 PagesDomainVerificationCronWorker JID-be1578d521ae5843ccb90bc3 INFO: done: 0.107 sec
+2019-05-04_10:17:17.19396 2019-05-04T10:17:17.193Z 789 TID-ouran66fl Ci::ArchiveTracesCronWorker JID-bb4cd56b94f03298f790bd8f INFO: start
+2019-05-04_10:17:17.21927 2019-05-04T10:17:17.219Z 789 TID-ouran66fl Ci::ArchiveTracesCronWorker JID-bb4cd56b94f03298f790bd8f INFO: done: 0.025 sec
+2019-05-04_10:19:31.44537 2019-05-04T10:19:31.445Z 789 TID-ouran66d9 PipelineScheduleWorker JID-6dee1f178213cd8d62a15a66 INFO: start
+2019-05-04_10:19:31.50155 2019-05-04T10:19:31.501Z 789 TID-ouran66d9 PipelineScheduleWorker JID-6dee1f178213cd8d62a15a66 INFO: done: 0.056 sec
+2019-05-04_10:20:12.08666 2019-05-04T10:20:12.086Z 789 TID-ouran6twd RepositoryCheck::DispatchWorker JID-53f53901df6bce3330917d64 INFO: start
+2019-05-04_10:20:12.11301 2019-05-04T10:20:12.112Z 789 TID-ouran66d9 RepositoryCheck::BatchWorker JID-a8cd0aed025fa2f5e2f05f5d INFO: start
+2019-05-04_10:20:12.12638 2019-05-04T10:20:12.126Z 789 TID-ouran6twd RepositoryCheck::DispatchWorker JID-53f53901df6bce3330917d64 INFO: done: 0.04 sec
+2019-05-04_10:20:12.13440 2019-05-04T10:20:12.134Z 789 TID-ouran66d9 RepositoryCheck::BatchWorker JID-a8cd0aed025fa2f5e2f05f5d INFO: done: 0.021 sec
+2019-05-04_10:30:23.53849 2019-05-04T10:30:23.538Z 789 TID-ouran66fl PagesDomainVerificationCronWorker JID-aa27a2ef261bb1161335fd17 INFO: start
+2019-05-04_10:30:23.55337 2019-05-04T10:30:23.553Z 789 TID-ouran66fl PagesDomainVerificationCronWorker JID-aa27a2ef261bb1161335fd17 INFO: done: 0.015 sec
+2019-05-04_10:45:16.47972 2019-05-04T10:45:16.479Z 789 TID-ouran6rp1 PagesDomainVerificationCronWorker JID-9f43eebda79e1ad6051e0445 INFO: start
+2019-05-04_10:45:16.49804 2019-05-04T10:45:16.497Z 789 TID-ouran6rp1 PagesDomainVerificationCronWorker JID-9f43eebda79e1ad6051e0445 INFO: done: 0.018 sec
+2019-05-04_10:50:02.91809 2019-05-04T10:50:02.918Z 789 TID-ouran6vcl ExpireBuildArtifactsWorker JID-a26c6313b64b562fbcdf8296 INFO: start
+2019-05-04_10:50:02.92998 2019-05-04T10:50:02.929Z 789 TID-ouran6vcl ExpireBuildArtifactsWorker JID-a26c6313b64b562fbcdf8296 INFO: done: 0.012 sec
+2019-05-04_11:00:19.29070 2019-05-04T11:00:19.290Z 789 TID-ouran6kp5 ImportExportProjectCleanupWorker JID-9613e81a2a44d0dcf0584e0c INFO: start
+2019-05-04_11:00:19.29628 2019-05-04T11:00:19.296Z 789 TID-ouran6wwh RepositoryArchiveCacheWorker JID-58e3750d958367ebda74c5c8 INFO: start
+2019-05-04_11:00:19.32757 2019-05-04T11:00:19.327Z 789 TID-ouran6gbp PruneWebHookLogsWorker JID-e6be64d11863caf5c204dfc5 INFO: start
+2019-05-04_11:00:19.33464 2019-05-04T11:00:19.334Z 789 TID-ouran6w75 PagesDomainVerificationCronWorker JID-e46f06d4ceca766485fbfbe3 INFO: start
+2019-05-04_11:00:19.33732 2019-05-04T11:00:19.337Z 789 TID-ouran68ht StuckCiJobsWorker JID-e19a38ae1c6506118411ac9e INFO: start
+2019-05-04_11:00:19.44936 2019-05-04T11:00:19.449Z 789 TID-ouran6wwh RepositoryArchiveCacheWorker JID-58e3750d958367ebda74c5c8 INFO: done: 0.153 sec
+2019-05-04_11:00:19.45199 2019-05-04T11:00:19.449Z 789 TID-ouran6gbp PruneWebHookLogsWorker JID-e6be64d11863caf5c204dfc5 INFO: done: 0.122 sec
+2019-05-04_11:00:19.45392 2019-05-04T11:00:19.453Z 789 TID-ouran6w75 PagesDomainVerificationCronWorker JID-e46f06d4ceca766485fbfbe3 INFO: done: 0.119 sec
+2019-05-04_11:00:19.45579 2019-05-04T11:00:19.455Z 789 TID-ouran68ht StuckCiJobsWorker JID-e19a38ae1c6506118411ac9e INFO: done: 0.118 sec
+2019-05-04_11:00:19.46154 2019-05-04T11:00:19.461Z 789 TID-ouran6kp5 ImportExportProjectCleanupWorker JID-9613e81a2a44d0dcf0584e0c INFO: done: 0.171 sec

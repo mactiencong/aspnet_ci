@@ -1,0 +1,77 @@
+[0KRunning with gitlab-runner 11.10.1 (1f513601)
+[0;m[0K  on Test ww4q1Wxe
+[0;msection_start:1556961393:prepare_executor[0K[0KUsing Docker executor with image ci_sonarscanner:3.3 ...
+[0;m[0KUsing locally found image version due to if-not-present pull policy
+[0;m[0KUsing docker image sha256:cdf4f3fbc3d409410255639e4e2fa19decb01dbcba8ca1d408d189817aa62fc6 for ci_sonarscanner:3.3 ...
+[0;msection_end:1556961393:prepare_executor[0Ksection_start:1556961393:prepare_script[0KRunning on runner-ww4q1Wxe-project-1-concurrent-0 via 7d514be7bad4...
+section_end:1556961395:prepare_script[0Ksection_start:1556961395:get_sources[0KReinitialized existing Git repository in /builds/root/demo-project/.git/
+[32;1mFetching changes...[0;m
+From http://gitlab/root/demo-project
+ * [new branch]      develop       -> origin/develop
+ * [new branch]      feature/29742 -> origin/feature/29742
+ * [new branch]      master        -> origin/master
+ * [new tag]         20180509      -> 20180509
+ * [new tag]         20180711      -> 20180711
+ * [new tag]         20180808      -> 20180808
+ * [new tag]         20180912      -> 20180912
+ * [new tag]         20181010      -> 20181010
+ * [new tag]         20181114      -> 20181114
+ * [new tag]         20190213      -> 20190213
+ * [new tag]         20190313      -> 20190313
+ * [new tag]         20190410      -> 20190410
+[32;1mChecking out bd774b8c as master...[0;m
+
+[32;1mSkipping Git submodules setup[0;m
+section_end:1556961399:get_sources[0Ksection_start:1556961399:restore_cache[0Ksection_end:1556961401:restore_cache[0Ksection_start:1556961401:download_artifacts[0Ksection_end:1556961403:download_artifacts[0Ksection_start:1556961403:build_script[0K[32;1m$ sonar-scanner[0;m
+INFO: Scanner configuration file: /root/sonar-scanner-3.3.0.1492-linux/conf/sonar-scanner.properties
+INFO: Project root configuration file: /builds/root/demo-project/sonar-project.properties
+INFO: SonarQube Scanner 3.3.0.1492
+INFO: Java 1.8.0_201 Oracle Corporation (64-bit)
+INFO: Linux 3.10.0-957.12.1.el7.x86_64 amd64
+INFO: User cache: /root/.sonar/cache
+INFO: SonarQube server 7.7.0
+INFO: Default locale: "en_US", source code encoding: "UTF-8"
+INFO: Load global settings
+INFO: Load global settings (done) | time=95ms
+INFO: Server id: 9CB61ADC-AWqBzDYBETUdoo8_15WP
+INFO: User cache: /root/.sonar/cache
+INFO: Load/download plugins
+INFO: Load plugins index
+INFO: Load plugins index (done) | time=39ms
+INFO: Load/download plugins (done) | time=1333ms
+INFO: Process project properties
+INFO: Execute project builders
+INFO: Execute project builders (done) | time=4ms
+INFO: Project key: demo-project
+INFO: Base dir: /builds/root/demo-project/web-base/src/main/java/jp/rhp/web/base
+INFO: Working dir: /builds/root/demo-project/web-base/src/main/java/jp/rhp/web/base/.scannerwork
+INFO: Load project settings for component key: 'demo-project'
+INFO: Load project repositories
+INFO: Load project repositories (done) | time=6ms
+INFO: Load quality profiles
+INFO: Load quality profiles (done) | time=109ms
+INFO: Load active rules
+INFO: Load active rules (done) | time=881ms
+INFO: Indexing files...
+INFO: Project configuration:
+INFO: 11 files indexed
+INFO: 0 files ignored because of scm ignore settings
+INFO: Quality profile for java: Sonar way
+INFO: ------------- Run sensors on module demo-project
+INFO: Load metrics repository
+INFO: Load metrics repository (done) | time=61ms
+INFO: Sensor JavaSquidSensor [java]
+INFO: Configured Java source version (sonar.java.source): none
+INFO: JavaClasspath initialization
+INFO: ------------------------------------------------------------------------
+INFO: EXECUTION FAILURE
+INFO: ------------------------------------------------------------------------
+INFO: Total time: 6.807s
+INFO: Final Memory: 25M/293M
+INFO: ------------------------------------------------------------------------
+ERROR: Error during SonarQube Scanner execution
+ERROR: Please provide compiled classes of your project with sonar.java.binaries property
+ERROR: 
+ERROR: Re-run SonarQube Scanner using the -X switch to enable full debug logging.
+section_end:1556961414:build_script[0Ksection_start:1556961414:after_script[0Ksection_end:1556961416:after_script[0Ksection_start:1556961416:upload_artifacts_on_failure[0Ksection_end:1556961418:upload_artifacts_on_failure[0K[31;1mERROR: Job failed: exit code 1
+[0;m

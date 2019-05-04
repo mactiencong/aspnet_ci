@@ -1,0 +1,14 @@
+version: '3'
+services:
+  java_web_test:
+    image: ci_tomcat
+    container_name: java_web_test
+    volumes:
+      - ./src:/usr/local/tomcat/webapps/
+    ports:
+      - 8080:8080
+    networks:
+      - java_web_test
+
+networks:
+  java_web_test:

@@ -1,0 +1,22 @@
+2019-05-04_07:45:18.34949 == Sinatra (v2.0.5) has taken the stage on 9168 for development with backup from Puma
+2019-05-04_07:45:18.34955 Puma starting in single mode...
+2019-05-04_07:45:18.34955 * Version 3.12.0 (ruby 2.5.3-p105), codename: Llamas in Pajamas
+2019-05-04_07:45:18.34955 * Min threads: 0, max threads: 16
+2019-05-04_07:45:18.34956 * Environment: development
+2019-05-04_07:45:18.34956 * Listening on tcp://localhost:9168
+2019-05-04_07:45:18.34956 Use Ctrl-C to stop
+2019-05-04_07:45:53.11019 - Gracefully stopping, waiting for requests to finish
+2019-05-04_07:45:53.11098 === puma shutdown: 2019-05-04 07:45:53 +0000 ===
+2019-05-04_07:45:53.11100 - Goodbye!
+2019-05-04_07:45:53.11100 == Sinatra has ended his set (crowd applauds)
+2019-05-04_07:45:53.79342 == Sinatra (v2.0.5) has taken the stage on 9168 for development with backup from Puma
+2019-05-04_07:45:53.79371 Puma starting in single mode...
+2019-05-04_07:45:53.79376 * Version 3.12.0 (ruby 2.5.3-p105), codename: Llamas in Pajamas
+2019-05-04_07:45:53.79380 * Min threads: 0, max threads: 16
+2019-05-04_07:45:53.79384 * Environment: development
+2019-05-04_07:45:53.79395 * Listening on tcp://localhost:9168
+2019-05-04_07:45:53.79430 Use Ctrl-C to stop
+2019-05-04_07:47:38.90467 - Gracefully stopping, waiting for requests to finish
+2019-05-04_07:47:38.90641 === puma shutdown: 2019-05-04 07:47:38 +0000 ===
+2019-05-04_07:47:38.90645 - Goodbye!
+2019-05-04_07:47:38.90659 == Sinatra has ended his set (crowd applauds)

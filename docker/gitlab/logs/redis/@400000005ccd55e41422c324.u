@@ -1,0 +1,106 @@
+2019-05-04_07:48:00.55501                 _._                                                  
+2019-05-04_07:48:00.55507            _.-``__ ''-._                                             
+2019-05-04_07:48:00.55508       _.-``    `.  `_.  ''-._           Redis 3.2.12 (00000000/0) 64 bit
+2019-05-04_07:48:00.55508   .-`` .-```.  ```\/    _.,_ ''-._                                   
+2019-05-04_07:48:00.55508  (    '      ,       .-`  | `,    )     Running in standalone mode
+2019-05-04_07:48:00.55508  |`-._`-...-` __...-.``-._|'` _.-'|     Port: 0
+2019-05-04_07:48:00.55509  |    `-._   `._    /     _.-'    |     PID: 437
+2019-05-04_07:48:00.55509   `-._    `-._  `-./  _.-'    _.-'                                   
+2019-05-04_07:48:00.55509  |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+2019-05-04_07:48:00.55509  |    `-._`-._        _.-'_.-'    |           http://redis.io        
+2019-05-04_07:48:00.55510   `-._    `-._`-.__.-'_.-'    _.-'                                   
+2019-05-04_07:48:00.55510  |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+2019-05-04_07:48:00.55510  |    `-._`-._        _.-'_.-'    |                                  
+2019-05-04_07:48:00.55510   `-._    `-._`-.__.-'_.-'    _.-'                                   
+2019-05-04_07:48:00.55511       `-._    `-.__.-'    _.-'                                       
+2019-05-04_07:48:00.55511           `-._        _.-'                                           
+2019-05-04_07:48:00.55512               `-.__.-'                                               
+2019-05-04_07:48:00.55513 
+2019-05-04_07:48:00.55513 437:M 04 May 07:48:00.554 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+2019-05-04_07:48:00.55513 437:M 04 May 07:48:00.555 # Server started, Redis version 3.2.12
+2019-05-04_07:48:00.55514 437:M 04 May 07:48:00.555 # WARNING overcommit_memory is set to 0! Background save may fail under low memory condition. To fix this issue add 'vm.overcommit_memory = 1' to /etc/sysctl.conf and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this to take effect.
+2019-05-04_07:48:00.55521 437:M 04 May 07:48:00.555 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
+2019-05-04_07:48:00.55557 437:M 04 May 07:48:00.555 * DB loaded from disk: 0.000 seconds
+2019-05-04_07:48:00.55557 437:M 04 May 07:48:00.555 * The server is now ready to accept connections at /var/opt/gitlab/redis/redis.socket
+2019-05-04_07:53:01.06435 437:M 04 May 07:53:01.064 * 10 changes in 300 seconds. Saving...
+2019-05-04_07:53:01.06660 437:M 04 May 07:53:01.066 * Background saving started by pid 1852
+2019-05-04_07:53:01.11980 1852:C 04 May 07:53:01.119 * DB saved on disk
+2019-05-04_07:53:01.12042 1852:C 04 May 07:53:01.120 * RDB: 4 MB of memory used by copy-on-write
+2019-05-04_07:53:01.16718 437:M 04 May 07:53:01.167 * Background saving terminated with success
+2019-05-04_07:58:02.03349 437:M 04 May 07:58:02.033 * 10 changes in 300 seconds. Saving...
+2019-05-04_07:58:02.03406 437:M 04 May 07:58:02.033 * Background saving started by pid 6102
+2019-05-04_07:58:02.08922 6102:C 04 May 07:58:02.088 * DB saved on disk
+2019-05-04_07:58:02.09035 6102:C 04 May 07:58:02.090 * RDB: 3 MB of memory used by copy-on-write
+2019-05-04_07:58:02.13571 437:M 04 May 07:58:02.135 * Background saving terminated with success
+2019-05-04_08:03:03.05238 437:M 04 May 08:03:03.052 * 10 changes in 300 seconds. Saving...
+2019-05-04_08:03:03.05295 437:M 04 May 08:03:03.052 * Background saving started by pid 7146
+2019-05-04_08:03:03.08804 7146:C 04 May 08:03:03.087 * DB saved on disk
+2019-05-04_08:03:03.08856 7146:C 04 May 08:03:03.088 * RDB: 2 MB of memory used by copy-on-write
+2019-05-04_08:03:03.15333 437:M 04 May 08:03:03.153 * Background saving terminated with success
+2019-05-04_08:08:04.07834 437:M 04 May 08:08:04.078 * 10 changes in 300 seconds. Saving...
+2019-05-04_08:08:04.07892 437:M 04 May 08:08:04.078 * Background saving started by pid 10216
+2019-05-04_08:08:04.12944 10216:C 04 May 08:08:04.129 * DB saved on disk
+2019-05-04_08:08:04.13065 10216:C 04 May 08:08:04.130 * RDB: 2 MB of memory used by copy-on-write
+2019-05-04_08:08:04.17890 437:M 04 May 08:08:04.178 * Background saving terminated with success
+2019-05-04_08:13:05.06745 437:M 04 May 08:13:05.067 * 10 changes in 300 seconds. Saving...
+2019-05-04_08:13:05.06791 437:M 04 May 08:13:05.067 * Background saving started by pid 11460
+2019-05-04_08:13:05.19545 11460:C 04 May 08:13:05.195 * DB saved on disk
+2019-05-04_08:13:05.19660 11460:C 04 May 08:13:05.196 * RDB: 3 MB of memory used by copy-on-write
+2019-05-04_08:13:05.26859 437:M 04 May 08:13:05.268 * Background saving terminated with success
+2019-05-04_08:18:06.02343 437:M 04 May 08:18:06.023 * 10 changes in 300 seconds. Saving...
+2019-05-04_08:18:06.02362 437:M 04 May 08:18:06.023 * Background saving started by pid 12767
+2019-05-04_08:18:06.05326 12767:C 04 May 08:18:06.053 * DB saved on disk
+2019-05-04_08:18:06.05401 12767:C 04 May 08:18:06.053 * RDB: 2 MB of memory used by copy-on-write
+2019-05-04_08:18:06.12495 437:M 04 May 08:18:06.124 * Background saving terminated with success
+2019-05-04_08:23:07.01048 437:M 04 May 08:23:07.010 * 10 changes in 300 seconds. Saving...
+2019-05-04_08:23:07.01108 437:M 04 May 08:23:07.010 * Background saving started by pid 13378
+2019-05-04_08:23:07.06100 13378:C 04 May 08:23:07.060 * DB saved on disk
+2019-05-04_08:23:07.06215 13378:C 04 May 08:23:07.062 * RDB: 2 MB of memory used by copy-on-write
+2019-05-04_08:23:07.11233 437:M 04 May 08:23:07.112 * Background saving terminated with success
+2019-05-04_08:28:08.03751 437:M 04 May 08:28:08.037 * 10 changes in 300 seconds. Saving...
+2019-05-04_08:28:08.03810 437:M 04 May 08:28:08.037 * Background saving started by pid 14942
+2019-05-04_08:28:08.06833 14942:C 04 May 08:28:08.068 * DB saved on disk
+2019-05-04_08:28:08.06879 14942:C 04 May 08:28:08.068 * RDB: 2 MB of memory used by copy-on-write
+2019-05-04_08:28:08.13942 437:M 04 May 08:28:08.139 * Background saving terminated with success
+2019-05-04_08:33:09.06923 437:M 04 May 08:33:09.069 * 10 changes in 300 seconds. Saving...
+2019-05-04_08:33:09.06982 437:M 04 May 08:33:09.069 * Background saving started by pid 16018
+2019-05-04_08:33:09.10946 16018:C 04 May 08:33:09.109 * DB saved on disk
+2019-05-04_08:33:09.11058 16018:C 04 May 08:33:09.110 * RDB: 2 MB of memory used by copy-on-write
+2019-05-04_08:33:09.16957 437:M 04 May 08:33:09.169 * Background saving terminated with success
+2019-05-04_08:38:10.10058 437:M 04 May 08:38:10.100 * 10 changes in 300 seconds. Saving...
+2019-05-04_08:38:10.10115 437:M 04 May 08:38:10.101 * Background saving started by pid 16624
+2019-05-04_08:38:10.14173 16624:C 04 May 08:38:10.141 * DB saved on disk
+2019-05-04_08:38:10.14240 16624:C 04 May 08:38:10.142 * RDB: 3 MB of memory used by copy-on-write
+2019-05-04_08:38:10.20227 437:M 04 May 08:38:10.202 * Background saving terminated with success
+2019-05-04_08:43:11.03969 437:M 04 May 08:43:11.039 * 10 changes in 300 seconds. Saving...
+2019-05-04_08:43:11.04026 437:M 04 May 08:43:11.040 * Background saving started by pid 17678
+2019-05-04_08:43:11.09270 17678:C 04 May 08:43:11.092 * DB saved on disk
+2019-05-04_08:43:11.09378 17678:C 04 May 08:43:11.093 * RDB: 2 MB of memory used by copy-on-write
+2019-05-04_08:43:11.14112 437:M 04 May 08:43:11.140 * Background saving terminated with success
+2019-05-04_08:48:12.08427 437:M 04 May 08:48:12.084 * 10 changes in 300 seconds. Saving...
+2019-05-04_08:48:12.08479 437:M 04 May 08:48:12.084 * Background saving started by pid 18295
+2019-05-04_08:48:12.12490 18295:C 04 May 08:48:12.124 * DB saved on disk
+2019-05-04_08:48:12.12553 18295:C 04 May 08:48:12.125 * RDB: 2 MB of memory used by copy-on-write
+2019-05-04_08:48:12.18503 437:M 04 May 08:48:12.184 * Background saving terminated with success
+2019-05-04_08:53:13.00686 437:M 04 May 08:53:13.006 * 10 changes in 300 seconds. Saving...
+2019-05-04_08:53:13.00756 437:M 04 May 08:53:13.007 * Background saving started by pid 18892
+2019-05-04_08:53:13.05745 18892:C 04 May 08:53:13.057 * DB saved on disk
+2019-05-04_08:53:13.05860 18892:C 04 May 08:53:13.058 * RDB: 2 MB of memory used by copy-on-write
+2019-05-04_08:53:13.10754 437:M 04 May 08:53:13.107 * Background saving terminated with success
+2019-05-04_08:58:14.09292 437:M 04 May 08:58:14.092 * 10 changes in 300 seconds. Saving...
+2019-05-04_08:58:14.09352 437:M 04 May 08:58:14.093 * Background saving started by pid 19476
+2019-05-04_08:58:14.13963 19476:C 04 May 08:58:14.139 * DB saved on disk
+2019-05-04_08:58:14.14045 19476:C 04 May 08:58:14.140 * RDB: 3 MB of memory used by copy-on-write
+2019-05-04_08:58:14.19474 437:M 04 May 08:58:14.194 * Background saving terminated with success
+2019-05-04_09:03:15.09930 437:M 04 May 09:03:15.099 * 10 changes in 300 seconds. Saving...
+2019-05-04_09:03:15.09995 437:M 04 May 09:03:15.099 * Background saving started by pid 20091
+2019-05-04_09:03:15.14711 20091:C 04 May 09:03:15.146 * DB saved on disk
+2019-05-04_09:03:15.14828 20091:C 04 May 09:03:15.148 * RDB: 2 MB of memory used by copy-on-write
+2019-05-04_09:03:15.20076 437:M 04 May 09:03:15.200 * Background saving terminated with success
+2019-05-04_09:05:10.76000 437:signal-handler (1556960710) Received SIGTERM scheduling shutdown...
+2019-05-04_09:05:10.77128 437:M 04 May 09:05:10.771 # User requested shutdown...
+2019-05-04_09:05:10.77136 437:M 04 May 09:05:10.771 * Saving the final RDB snapshot before exiting.
+2019-05-04_09:05:10.81039 437:M 04 May 09:05:10.810 * DB saved on disk
+2019-05-04_09:05:10.81043 437:M 04 May 09:05:10.810 * Removing the pid file.
+2019-05-04_09:05:10.81054 437:M 04 May 09:05:10.810 * Removing the unix socket file.
+2019-05-04_09:05:10.81064 437:M 04 May 09:05:10.810 # Redis is now ready to exit, bye bye...
