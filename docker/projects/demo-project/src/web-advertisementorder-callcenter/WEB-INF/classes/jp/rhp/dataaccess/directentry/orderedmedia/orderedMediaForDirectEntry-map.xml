@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.directentry.orderedmedia.OrderedMediaForDirectEntryDataAccess">
+
+	<resultMap class="jp.rhp.model.directentry.orderedmedia.OrderedMediaForDirectEntry" id="orderedMediaForDirectEntry">
+		<result property="sectionToHire.id"												column="section_to_hire_id"/>
+		<result property="sectionToHire.name"											column="section_to_hire_name"/>
+		<result property="entryInflowRoute.irregularInflowRouteId"						column="irregular_inflow_route_id"/>
+		<result property="entryInflowRoute.media.name"									column="media"/>
+		<result property="entryInflowRoute.area.name"									column="order_area"/>
+		<result property="entryInflowRoute.publicationDate.dateStamp"					column="publication_date"/>
+
+	</resultMap>
+
+	<select id="countOfCriteria" resultClass="java.lang.Integer" >
+		SELECT
+			COUNT(*) AS count
+		FROM (
+			SELECT
+				9999 AS view_order,
+				-1 AS irregular_inflow_route_id,
+				article_workplace.section_to_hire_id,
+				section_to_hire.section_to_hire_name AS section_to_hire_name,
+				media.name media,
+				area.name order_area,
+				advertisement_order_result.publication_date,
+				media.priority AS media_priority,
+				area.priority AS area_priority
+			FROM
+				advertisement_order.latest_advertisement_order_detail
+				INNER JOIN
+				advertisement_order.ordered_item ON
+				ordered_item.advertisement_order_detail_id = latest_advertisement_order_detail.advertisement_order_detail_id
+				INNER JOIN
+				advertisement_order.advertisement_order_result ON
+				advertisement_order_result.advertisement_order_id = latest_advertisement_order_detail.advertisement_order_id
+				INNER JOIN
+				advertisement_order.article ON
+				article.advertisement_order_detail_id = latest_advertisement_order_detail.advertisement_order_detail_id
+				INNER JOIN
+				advertisement_order.article_workplace ON
+				article_workplace.article_id = article.id
+				INNER JOIN
+				hiring.section_to_hire ON
+				section_to_hire.section_to_hire_id = article_workplace.section_to_hire_id
+				INNER JOIN
+				advertisement_order_master.item ON
+				item.id = ordered_item.item_id
+				INNER JOIN
+				advertisement_order_master.area ON
+				area.id = item.area_id
+				INNER JOIN
+				advertisement_order_master.media ON
+				media.id = area.media_id
+				INNER JOIN advertisement_order_master.media_type ON
+				media_type.type = media.media_type
+				INNER JOIN advertisement_order_master.media_type_x_media_category ON
+				media_type_x_media_category.media_type = media_type.type
+			<dynamic prepend="WHERE">
+				<isEqual property="allSectionToHire" compareValue="false" prepend="AND">
+					section_to_hire.section_to_hire_id = #sectionToHireId#
+				</isEqual>
+				<isEqual property="mediaTypeName.notEmpty" compareValue="true" prepend="AND">
+					media.media_type = #mediaTypeName.value#
+				</isEqual>
+				<isEqual property="mediaCategoryList.notEmpty" compareValue="true" prepend="AND">
+					media_type_x_media_category.media_category_id IN
+					<iterate property="mediaCategoryList.selected" open="(" close=")" conjunction=",">
+						#mediaCategoryList.selected[]#
+					</iterate>
+				</isEqual>
+			</dynamic>
+			UNION
+			SELECT
+				1 AS view_order,
+				id AS irregular_inflow_route_id,
+				0 AS section_to_hire_id,
+				'' AS section_to_hire_name,
+				NAME AS media,
+				'' AS order_area,
+				NULL AS publication_date,
+				priority AS media_priority,
+				NULL AS area_priority
+			FROM
+				entry.irregular_inflow_route
+			WHERE
+				EXISTS (
+					SELECT
+						active_irregular_inflow_route.irregular_inflow_route_id
+					FROM
+						entry.active_irregular_inflow_route
+					WHERE
+						active_irregular_inflow_route.irregular_inflow_route_id = irregular_inflow_route.id
+					)
+		) AS ordered_media
+		<dynamic prepend="WHERE">
+			<iterate property="freeword.wordList" prepend="AND" conjunction="AND">
+				(
+					   section_to_hire_name	LIKE '%' || regexp_replace( #freeword.wordList[]#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+					OR media				LIKE '%' || regexp_replace( #freeword.wordList[]#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+					OR order_area			LIKE '%' || regexp_replace( #freeword.wordList[]#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+				)
+			</iterate>
+		</dynamic>
+	</select>
+
+	<select id="listOfCriteria" resultMap="orderedMediaForDirectEntry">
+		SELECT
+				view_order,
+				irregular_inflow_route_id,
+				section_to_hire_id,
+				section_to_hire_name,
+				media,
+				order_area,
+				publication_date,
+				media_priority,
+				area_priority
+		FROM (
+			SELECT
+				9999 AS view_order,
+				-1 AS irregular_inflow_route_id,
+				article_workplace.section_to_hire_id,
+				section_to_hire.section_to_hire_name AS section_to_hire_name,
+				media.name media,
+				area.name order_area,
+				advertisement_order_result.publication_date,
+				media.priority AS media_priority,
+				area.priority AS area_priority
+			FROM
+				advertisement_order.latest_advertisement_order_detail
+				INNER JOIN
+				advertisement_order.ordered_item ON
+				ordered_item.advertisement_order_detail_id = latest_advertisement_order_detail.advertisement_order_detail_id
+				INNER JOIN
+				advertisement_order.advertisement_order_result ON
+				advertisement_order_result.advertisement_order_id = latest_advertisement_order_detail.advertisement_order_id
+				INNER JOIN
+				advertisement_order.article ON
+				article.advertisement_order_detail_id = latest_advertisement_order_detail.advertisement_order_detail_id
+				INNER JOIN
+				advertisement_order.article_workplace ON
+				article_workplace.article_id = article.id
+				INNER JOIN
+				hiring.section_to_hire ON
+				section_to_hire.section_to_hire_id = article_workplace.section_to_hire_id
+				INNER JOIN
+				advertisement_order_master.item ON
+				item.id = ordered_item.item_id
+				INNER JOIN
+				advertisement_order_master.area ON
+				area.id = item.area_id
+				INNER JOIN
+				advertisement_order_master.media ON
+				media.id = area.media_id
+				INNER JOIN advertisement_order_master.media_type ON
+				media_type.type = media.media_type
+				INNER JOIN advertisement_order_master.media_type_x_media_category ON
+				media_type_x_media_category.media_type = media_type.type
+			<dynamic prepend="WHERE">
+				<isEqual property="allSectionToHire" compareValue="false" prepend="AND">
+					section_to_hire.section_to_hire_id = #sectionToHireId#
+				</isEqual>
+				<isEqual property="mediaTypeName.notEmpty" compareValue="true" prepend="AND">
+					media.media_type = #mediaTypeName.value#
+				</isEqual>
+				<isEqual property="mediaCategoryList.notEmpty" compareValue="true" prepend="AND">
+					media_type_x_media_category.media_category_id IN
+					<iterate property="mediaCategoryList.selected" open="(" close=")" conjunction=",">
+						#mediaCategoryList.selected[]#
+					</iterate>
+				</isEqual>
+			</dynamic>
+			UNION
+			SELECT
+				1 AS view_order,
+				id AS irregular_inflow_route_id,
+				0 AS section_to_hire_id,
+				'' AS section_to_hire_name,
+				NAME AS media,
+				'' AS order_area,
+				NULL AS publication_date,
+				priority AS media_priority,
+				NULL AS area_priority
+			FROM
+				entry.irregular_inflow_route
+			WHERE
+				EXISTS (
+					SELECT
+						active_irregular_inflow_route.irregular_inflow_route_id
+					FROM
+						entry.active_irregular_inflow_route
+					WHERE
+						active_irregular_inflow_route.irregular_inflow_route_id = irregular_inflow_route.id
+					)
+		) AS ordered_media
+		<dynamic prepend="WHERE">
+			<iterate property="freeword.wordList" prepend="AND" conjunction="AND">
+				(
+					   section_to_hire_name	LIKE '%' || regexp_replace( #freeword.wordList[]#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+					OR media				LIKE '%' || regexp_replace( #freeword.wordList[]#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+					OR order_area			LIKE '%' || regexp_replace( #freeword.wordList[]#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+				)
+			</iterate>
+		</dynamic>
+		ORDER BY
+			view_order,
+			publication_date DESC,
+			media_priority,
+			area_priority
+		LIMIT #page.limit# OFFSET #page.offset#
+	</select>
+</sqlMap>

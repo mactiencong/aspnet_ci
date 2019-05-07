@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.detailentry.DetailEntryDataAccess">
+
+	<resultMap class="jp.rhp.model.detailentry.DetailEntry" id="detailEntry">
+		<result property="applicantId"																					column="entry_id"/>
+		<result property="entryManagementNo"																			column="entry_management_no"/>
+		<result property="candidate.entry.type"																			column="entry_type"/>
+		<result property="candidate.entry.entryDate.entryDate.date"														column="entry_date"/>
+		<result property="candidate.condition.availableForWorkPeriod"													column="available_for_work_period" />
+		<result property="candidate.condition.availableDateOfWorking"													column="available_date_of_working" />
+		<result property="candidate.profile.jobHistory"																	column="job_history" />
+		<result property="candidate.profile.competency"																	column="competency" />
+		<result property="candidate.condition.desiredCondition"															column="desired_condition" />
+		<result property="candidate.profile.reason"																		column="reason" />
+		<result property="candidate.id"																					column="candidate_id"/>
+		<result property="candidate.interviewDate.date"																	column="start_datetime"/>
+		<result property="candidate.interviewDateTime.date"																column="interview_date"/>
+		<result property="candidate.interviewDateTime.time"																column="interview_time"/>
+		<result property="candidate.interviewBookingInvitation.sentLastDateTime.timeStamp.timeStamp"					column="sent_last_booking_date"/>
+        <result property="candidate.interviewDateTimeAdjustment.adjust"													column="interview_datetime_adjust"/>
+		<result property="candidate.name.fullName"																		column="entry_name"/>
+		<result property="candidate.name.fullNameKana"																	column="entry_name_kana"/>
+		<result property="candidate.profile.nickName"																	column="nick_name" />
+		<result property="candidate.profile.gender.genderId"															column="gender"/>
+		<result property="candidate.profile.marital.id"																	column="marital_status"/>
+		<result property="candidate.entry.currentEmploymentType.id"														column="current_employment_type_id"/>
+		<result property="candidate.entry.currentEmploymentType.currentEmploymentType"									column="current_employment_type_name"/>
+		<result property="candidate.contact.address.zipCode.zipCode"													column="zip_code" />
+		<result property="candidate.contact.address.prefecture.id"														column="prefecture_id" />
+		<result property="candidate.contact.address.prefecture.prefecture"												column="prefecture_name" />
+		<result property="candidate.contact.address.municipality"														column="municipality"/>
+		<result property="candidate.contact.address.streetName"															column="address_street_name" />
+		<result property="candidate.contact.address.buildingNumber"														column="address_building_name" />
+		<result property="candidate.contact.telephoneNumber.telephoneNumber"											column="telephone_number"/>
+		<result property="candidate.contact.mobileTelephoneNumber.mobileTelephoneNumber"								column="mobile_telephone_number"/>
+		<result property="candidate.contact.mailAddress.mailAddress"													column="mail_address"  nullValue=""/>
+		<result property="candidate.contact.mailAddressTwo.mailAddress"													column="mail_address_2" nullValue=""/>
+		<result property="candidate.contact.desiredDateOfContact"														column="desired_date_of_contact"/>
+		<result property="candidate.profile.dateOfBirth.dateOfBirth"													column="date_of_birth"/>
+		<result property="candidate.profile.entryAge.valueAsInteger"													column="entry_age"/>
+		<result property="candidate.entry.entryRoute.id"																column="entry_route_id"/>
+		<result property="candidate.entry.entryRoute.entryRoute"														column="entry_route_name"/>
+		<result property="candidate.entry.entryDevice.id"																column="entry_device_id"/>
+		<result property="candidate.entry.entryDevice.entryDeviceName"													column="device_name"/>
+		<result property="candidate.entry.entryMedia.mediaId"															column="entry_media_id" />
+		<result property="candidate.entry.entryMedia.mediaName"															column="media_name"/>
+		<result property="candidate.hiringStatus.sectionToHire.id"														column="section_to_hire_id"/>
+		<result property="candidate.hiringStatus.sectionToHire.name"													column="section_to_hire_name" />
+		<result property="candidate.hiringStatus.jobTypeToHire.id"														column="jobtype_to_hire_id"/>
+		<result property="candidate.hiringStatus.jobTypeToHire.name"													column="jobtype_to_hire_name" />
+		<result property="candidate.hiringStatus.sectionToHire.interviewBookingMethod"									column="interview_booking_method_type"/>
+		<result property="candidate.hiringStatus.sectionToHire.shopNumber.value"										column="shop_number"/>
+		<result property="candidate.hiringStatus.selectionStatus.id"													column="selection_status_id"/>
+		<result property="candidate.hiringStatus.selectionStatus.name"													column="selection_status_name" />
+		<result property="candidate.hiringStatus.selectionStatus.type"													column="selection_status_display_type" />
+		<result property="candidate.entry.entryMediaInfomation.draftManagementNo"										column="draft_management_no"/>
+		<result property="candidate.entry.entryMediaInfomation.publishedName"											column="published_name"/>
+		<result property="candidate.entry.entryMediaInfomation.publishedNumber"											column="published_number"/>
+		<result property="candidate.entry.entryMediaInfomation.publishedCompanyName"									column="published_company_name"/>
+		<result property="candidate.entry.entryMediaInfomation.workplace"												column="workplace"/>
+		<result property="candidate.entry.entryMediaInfomation.jobType"													column="job_type"/>
+		<result property="candidate.entry.callcenterEntryInflowRoute.entryInflowRoute.media.name"						column="callcenter_media_name"/>
+		<result property="candidate.entry.callcenterEntryInflowRoute.entryInflowRoute.area.name"						column="callcenter_area_name"/>
+		<result property="candidate.entry.callcenterEntryInflowRoute.entryInflowRoute.publicationDate.dateStamp"		column="callcenter_published_date"/>
+		<result property="candidate.profile.educationHistory.schoolName"												column="school_name"/>
+		<result property="candidate.profile.educationHistory.department"												column="department" />
+		<result property="candidate.profile.educationHistory.graduationType"											column="graduation_type" />
+		<result property="candidate.comment.candidateId"																column="candidate_id"/>
+		<result property="candidate.comment.comment"																	column="comment"/>
+		<result property="candidate.caution"																			column="caution"/>
+		<result property="duplication.isDuplication"																	column="isDuplication" nullValue="false"/>
+		<result property="candidate.hiringStatus.sectionToHire.callCenterMemo.text"										column="callcenter_memo"/>
+		<result property="candidate.messageBoard.id"																	column="message_board_id" nullValue=""/>
+		<result property="candidate.messageBoard.status"																column="message_board_status" />
+		<result property="candidate.messageBoard.notification.type"														column="message_board_notification_type"   />
+		<result property="candidate.messageBoard.notification.lineId.value"												column="message_board_line_id" />
+		<result property="candidate.messageBoard.notification.telephoneNumber.telephoneNumber"							column="telephone_number" />
+		<result property="candidate.messageBoard.notification.mobileTelephoneNumber.mobileTelephoneNumber"				column="mobile_telephone_number"/>
+		<result property="candidate.messageBoard.notification.useSms"													column="message_board_notification_use_sms" />
+		<result property="candidate.messageBoard.notification.useLineNotify"											column="message_board_notification_use_line_notify" />
+        <result property="candidate.hiringStatus.sectionToHire.useVideoInterview"                                       column="use_video_interview"/>
+        <result property="videoInterviewStatus"                                                                         column="video_interview_status_type"    />
+	</resultMap>
+
+	<select id="findByCandidateId" resultMap="detailEntry">
+		SELECT
+			detail_entries.entry_id,
+			detail_entries.entry_management_no,
+			detail_entries.entry_date,
+			CASE
+				WHEN detail_entries.entry_type = 'web_entry' THEN
+					'Web'
+				WHEN detail_entries.entry_type = 'direct_entry' THEN
+					'Direct'
+				WHEN detail_entries.entry_type = 'imported_entry' THEN
+					'Imported'
+				WHEN detail_entries.entry_type = 'callcenter_entry' THEN
+					'Callcenter'
+				ELSE
+					'Unknown'
+				END AS entry_type,
+			candidates.available_for_work_period,
+			candidates.available_date_of_working,
+			candidates.job_history,
+			candidates.competency,
+			candidates.desired_condition,
+			candidates.reason,
+			candidates.candidate_id,
+			interview_datetime.start_datetime,
+			to_char(interview_datetime.start_datetime,'YYYYMMDD') AS interview_date,
+			to_char(interview_datetime.start_datetime,'HH24MI') AS interview_time,
+			adjust_interview_schedule_candidate.candidate_id IS NOT NULL AS interview_datetime_adjust,
+			COALESCE(sent_last_mail_date.request_date , '') as sent_last_booking_date,
+			candidates.entry_name,
+			candidates.entry_name_kana,
+			candidates.nick_name,
+			candidates.gender,
+			candidates.marital_status,
+			COALESCE(candidates.current_employment_type_id, 0) as current_employment_type_id,
+			current_employment_type.current_employment_type_name,
+			candidates.zip_code,
+			candidates.prefecture_id,
+			prefectures.prefecture_name,
+			candidates.municipality,
+			candidates.address_street_name,
+			candidates.address_building_name,
+			candidates.telephone_number,
+			candidates.mobile_telephone_number,
+			candidates.mail_address,
+			candidates.mail_address_2,
+			candidates.desired_date_of_contact,
+			candidates.date_of_birth,
+			candidates.entry_age,
+			COALESCE(candidates.entry_device_id, 0) as entry_device_id,
+			entry_device.device_name,
+			COALESCE(candidates.entry_route_id, 0) as entry_route_id,
+			entry_route.entry_route_name,
+			candidates.entry_media_id,
+			media.media_name,
+			jobtype_to_hire.jobtype_to_hire_id,
+			jobtype_to_hire.jobtype_to_hire_name,
+			COALESCE(shop_number.shop_number, '' ) as shop_number,
+			section_to_hire.section_to_hire_id,
+			section_to_hire.section_to_hire_name,
+			interview_booking_method.interview_booking_method_type,
+			selection_statuses.selection_status_id,
+			selection_statuses.selection_status_name,
+			selection_statuses.priority,
+			selection_statuses.display_type AS selection_status_display_type,
+			entry_media_information.draft_management_no,
+			entry_media_information.published_name,
+			entry_media_information.published_number,
+			entry_media_information.published_company_name,
+			entry_media_information.workplace,
+			entry_media_information.job_type,
+			coalesce(callcenter_entry_inflow_route.media_name, '') AS callcenter_media_name,
+			coalesce(callcenter_entry_inflow_route.area_name, '') AS callcenter_area_name,
+			coalesce(to_char(callcenter_entry_inflow_route.published_date,'YYYY/MM/DD'), '') AS callcenter_published_date,
+			education_history.school_name,
+			education_history.department,
+			education_history.graduation_type,
+			latest_hiring_comment.comment,
+			CASE WHEN (select EXTRACT(EPOCH from now() - detail_entries.entry_date)/3600) >= (select noaction_alert_hours from hiring_process.noaction_alert_configurations) THEN true ELSE false END AS no_action_entry,
+			CASE WHEN candidates_duplication.candidate_id is null THEN false ELSE true END AS isDuplication,
+			COALESCE( callcenter_memo.memo, '' ) AS callcenter_memo,
+			caution.candidate_id IS NOT NULL as caution,
+			message_boards.id AS message_board_id,
+			CASE WHEN message_boards.unread IS NULL THEN 'CLOSED' WHEN message_boards.unread THEN 'UNREAD' ELSE 'RELEASED' END AS message_board_status,
+			message_boards.notification_type AS message_board_notification_type,
+			message_boards.line_id AS message_board_line_id,
+			CASE WHEN message_boards.use_sms IS NOT NULL THEN message_boards.use_sms ELSE false END AS message_board_notification_use_sms,
+			CASE WHEN message_boards.use_line_notify IS NOT NULL THEN message_boards.use_line_notify ELSE false END AS message_board_notification_use_line_notify,
+            CASE
+                WHEN available_sectiontohire.section_to_hire_id IS NULL
+                THEN false
+                ELSE true
+            END AS use_video_interview,
+            video_interview_status.status_type AS video_interview_status_type
+		FROM
+			hiring_process.detail_entries
+			INNER JOIN
+				hiring_process.candidates
+				ON
+					detail_entries.candidate_id = candidates.candidate_id
+			INNER JOIN
+				hiring_process.hiring_status
+				ON
+					candidates.candidate_id = hiring_status.candidate_id
+			INNER JOIN
+				hiring_process.selection_statuses
+				ON
+					hiring_status.selection_status_id = selection_statuses.selection_status_id
+			INNER JOIN
+				hiring.jobtype_to_hire
+				ON
+					hiring_status.jobtype_to_hire_id = jobtype_to_hire.jobtype_to_hire_id
+			INNER JOIN
+				hiring.section_to_hire
+				ON
+					hiring_status.section_to_hire_id = section_to_hire.section_to_hire_id
+			LEFT OUTER JOIN
+				hiring.shop_number
+				ON
+					section_to_hire.section_to_hire_id = shop_number.section_to_hire_id
+			INNER JOIN
+				hiring.interview_booking_method
+				ON
+					section_to_hire.section_to_hire_id = interview_booking_method.section_to_hire_id
+			INNER JOIN
+				hiring_process.candidates_active
+				ON
+					candidates.candidate_id = candidates_active.candidate_id
+			LEFT OUTER JOIN
+				hiring_process.interview_datetime
+				ON
+					candidates.candidate_id = interview_datetime.candidate_id
+			LEFT OUTER JOIN
+				entry.current_employment_type
+				ON
+					candidates.current_employment_type_id = current_employment_type.current_employment_type_id
+			LEFT OUTER JOIN
+				entry.entry_route
+				ON
+					candidates.entry_route_id = entry_route.entry_route_id
+			LEFT OUTER JOIN
+				entry.entry_device
+				ON
+					candidates.entry_device_id = entry_device.device_id
+			LEFT OUTER JOIN
+				entry.media
+				ON
+					candidates.entry_media_id = media.media_id
+			LEFT OUTER JOIN
+				hiring_process.entry_media_information
+				ON
+					candidates.candidate_id = entry_media_information.candidate_id
+			LEFT OUTER JOIN
+				hiring_process.callcenter_entry_inflow_route
+				ON
+					candidates.candidate_id = callcenter_entry_inflow_route.candidate_id
+			LEFT OUTER JOIN
+				hiring_process.education_history
+				ON
+					candidates.candidate_id = education_history.candidate_id
+			LEFT OUTER JOIN
+				entry.prefectures
+				ON
+					candidates.prefecture_id = entry.prefectures.prefecture_id
+			LEFT OUTER JOIN
+				hiring_process.latest_hiring_comment
+				ON
+					candidates.candidate_id = latest_hiring_comment.candidate_id
+			LEFT OUTER JOIN (
+				SELECT
+					candidate_id,
+					to_char(MAX(request_date), 'YYYY/MM/DD HH24:MI:SS') as request_date
+				FROM
+					interview_schedule.alternatives
+				GROUP BY
+					candidate_id
+				) sent_last_mail_date
+				ON
+					candidates.candidate_id = sent_last_mail_date.candidate_id
+			LEFT OUTER JOIN
+				hiring_process.candidates_duplication
+				ON
+					candidates.candidate_id = candidates_duplication.candidate_id
+            LEFT OUTER JOIN
+                ( SELECT callcenter_memo.section_to_hire_id id, callcenter_memo.memo FROM hiring.callcenter_memo
+                    WHERE
+                        EXISTS( SELECT latest_callcenter_memo.callcenter_memo_id
+                        FROM hiring.latest_callcenter_memo
+                        WHERE latest_callcenter_memo.callcenter_memo_id = callcenter_memo.id )
+                ) AS callcenter_memo
+            ON
+                callcenter_memo.id = section_to_hire.section_to_hire_id
+			LEFT OUTER JOIN
+				hiring_process.adjust_interview_schedule_candidate
+				ON
+					candidates.candidate_id = adjust_interview_schedule_candidate.candidate_id
+			LEFT OUTER JOIN
+				hiring_process.caution
+				ON
+					candidates.candidate_id = caution.candidate_id
+			LEFT OUTER JOIN
+			(
+				SELECT
+				    message_boards.id,
+				    message_boards.candidate_id
+				  , CASE WHEN released_message_boards.message_board_id IS NULL THEN NULL
+					   WHEN candidate_messages.id IS NOT NULL AND read_candidate_messages.id IS NULL THEN true
+					   ELSE false END AS unread
+				  , notification_methods.notification_method_type AS notification_type
+				  , line_ids.id AS line_id
+				, (SELECT use_sms FROM sms.settings LIMIT 1 OFFSET 0) AS use_sms
+				, (SELECT use_line_notify FROM line.settings LIMIT 1 OFFSET 0) AS use_line_notify
+				FROM message_board.message_boards
+				INNER JOIN
+					message_board.notification_methods
+					ON notification_methods.message_board_id = message_boards.id
+				LEFT OUTER JOIN
+					message_board.released_message_boards
+					ON released_message_boards.message_board_id = message_boards.id
+				LEFT OUTER JOIN
+					line.line_ids
+					ON line_ids.candidate_id = message_boards.candidate_id
+					AND EXISTS (SELECT 1 FROM line.valid_line_ids WHERE valid_line_ids.line_id = line_ids.id)
+					AND ( SELECT settings.use_line_notify FROM line.settings LIMIT 1 OFFSET 0 )
+				LEFT OUTER JOIN
+					message_board.latest_candidate_messages
+					ON latest_candidate_messages.message_board_id = message_boards.id
+				LEFT OUTER JOIN
+					message_board.candidate_messages
+				  ON candidate_messages.id = latest_candidate_messages.candidate_message_id
+				  AND candidate_messages.message_board_id = message_boards.id
+				LEFT OUTER JOIN
+				  message_board.read_candidate_messages
+				  ON read_candidate_messages.candidate_message_id = candidate_messages.id
+				WHERE
+					(SELECT use_message_board FROM message_board.settings LIMIT 1 OFFSET 0)
+			) message_boards
+			ON message_boards.candidate_id = candidates.candidate_id
+            LEFT OUTER JOIN
+                hirevue_video_interview.video_interview_status
+                ON
+                    video_interview_status.candidate_id = candidates.candidate_id
+            LEFT OUTER JOIN
+                hirevue_video_interview.available_sectiontohire
+                ON
+                    available_sectiontohire.section_to_hire_id = section_to_hire.section_to_hire_id
+		WHERE
+			candidates.candidate_id = #candidateId#
+	</select>
+
+	<select id="findQuestionnaireIdByCandidateId" parameterClass="java.lang.Integer" resultClass="java.lang.Long">
+		SELECT
+			questionee_responses.questionnaire
+		FROM
+			hiring_process.detail_entries
+			INNER JOIN
+				hiring_process.response_candidate
+				ON
+					detail_entries.candidate_id = response_candidate.candidate_id
+			INNER JOIN
+				questionnaire.questionee_responses
+				ON
+					response_candidate.response_id = questionee_responses.id
+		WHERE
+			detail_entries.candidate_id = #value#
+	</select>
+
+	<resultMap class="jp.rhp.model.detailentry.DetailEntry" id="similarEntry">
+		<result property="applicantId"																					column="entry_id"/>
+		<result property="candidate.entry.entryDate.entryDate.date"														column="entry_date"/>
+		<result property="candidate.name.fullName"																		column="entry_name"/>
+		<result property="candidate.id"																					column="candidate_id"/>
+		<result property="candidate.name.fullNameKana"																	column="entry_name_kana"/>
+		<result property="candidate.profile.gender.genderId"															column="gender"/>
+		<result property="candidate.contact.telephoneNumber.telephoneNumber"											column="telephone_number"/>
+		<result property="candidate.contact.mobileTelephoneNumber.mobileTelephoneNumber"								column="mobile_telephone_number"/>
+		<result property="candidate.contact.mailAddress.mailAddress"													column="mail_address"  nullValue=""/>
+		<result property="candidate.contact.mailAddressTwo.mailAddress"													column="mail_address_2" nullValue=""/>
+		<result property="candidate.profile.dateOfBirth.dateOfBirth"													column="date_of_birth"/>
+		<result property="candidate.profile.entryAge.valueAsInteger"													column="entry_age"/>
+		<result property="candidate.hiringStatus.sectionToHire.id"														column="section_to_hire_id"/>
+		<result property="candidate.hiringStatus.sectionToHire.name"													column="section_to_hire_name" />
+		<result property="candidate.hiringStatus.jobTypeToHire.id"														column="jobtype_to_hire_id"/>
+		<result property="candidate.hiringStatus.jobTypeToHire.name"													column="jobtype_to_hire_name" />
+		<result property="candidate.hiringStatus.selectionStatus.id"													column="selection_status_id"/>
+		<result property="candidate.hiringStatus.selectionStatus.name"													column="selection_status_name" />
+		<result property="candidate.hiringStatus.selectionStatus.type"													column="selection_status_display_type" />
+		<result property="candidate.comment.candidateId"																column="candidate_id"/>
+		<result property="candidate.comment.comment"																	column="comment"/>
+		<result property="candidate.caution"																			column="caution"/>
+	</resultMap>
+
+	<select id="findSimilarEntryByCandidateId" resultMap="similarEntry">
+		WITH
+			base_candidate
+		AS (
+			SELECT
+				telephone_number
+				, mobile_telephone_number
+				, mail_address
+				, mail_address_2
+				, translate(entry_name_kana,' 　','') AS entry_name_kana
+				, translate(entry_name,' 　','') AS entry_name
+				, date_of_birth
+			FROM
+				hiring_process.candidates
+			WHERE
+				candidates.candidate_id = #candidateId#
+		)
+		SELECT
+			detail_entries.entry_id,
+			detail_entries.entry_date,
+			candidates.entry_name,
+			candidates.entry_name_kana,
+			candidates.candidate_id,
+			candidates.gender,
+			candidates.telephone_number,
+			candidates.mobile_telephone_number,
+			candidates.mail_address,
+			candidates.mail_address_2,
+			candidates.date_of_birth,
+			candidates.entry_age,
+			jobtype_to_hire.jobtype_to_hire_id,
+			jobtype_to_hire.jobtype_to_hire_name,
+			section_to_hire.section_to_hire_id,
+			section_to_hire.section_to_hire_name,
+			selection_statuses.selection_status_id,
+			selection_statuses.selection_status_name,
+			selection_statuses.priority,
+			selection_statuses.display_type AS selection_status_display_type,
+			latest_hiring_comment.comment,
+			caution.candidate_id IS NOT NULL as caution
+		FROM
+			hiring_process.detail_entries
+			INNER JOIN
+				hiring_process.candidates
+				ON
+					detail_entries.candidate_id = candidates.candidate_id
+			INNER JOIN
+				hiring_process.hiring_status
+				ON
+					candidates.candidate_id = hiring_status.candidate_id
+			INNER JOIN
+				hiring_process.selection_statuses
+				ON
+					hiring_status.selection_status_id = selection_statuses.selection_status_id
+			INNER JOIN
+				hiring.jobtype_to_hire
+				ON
+					hiring_status.jobtype_to_hire_id = jobtype_to_hire.jobtype_to_hire_id
+			INNER JOIN
+				hiring.section_to_hire
+				ON
+					hiring_status.section_to_hire_id = section_to_hire.section_to_hire_id
+			INNER JOIN
+				hiring_process.candidates_active
+				ON
+					candidates.candidate_id = candidates_active.candidate_id
+			LEFT OUTER JOIN
+				hiring_process.latest_hiring_comment
+				ON
+					candidates.candidate_id = latest_hiring_comment.candidate_id
+			LEFT OUTER JOIN
+				hiring_process.caution
+				ON
+					candidates.candidate_id = caution.candidate_id
+			WHERE
+			EXISTS(
+				SELECT
+					1
+				FROM
+					base_candidate
+				WHERE
+					(
+						base_candidate.telephone_number != ''
+						AND
+						base_candidate.telephone_number IN (
+							candidates.telephone_number ,
+							candidates.mobile_telephone_number
+						)
+					)
+				OR
+					(
+						base_candidate.mobile_telephone_number != ''
+						AND
+						base_candidate.mobile_telephone_number IN (
+							candidates.telephone_number ,
+							candidates.mobile_telephone_number
+						)
+					)
+				OR
+					(
+						base_candidate.mail_address != ''
+						AND
+						base_candidate.mail_address IN (
+							candidates.mail_address ,
+							candidates.mail_address_2
+						)
+					)
+				OR
+					(
+						base_candidate.mail_address_2 != ''
+					AND
+					base_candidate.mail_address_2 IN (
+						candidates.mail_address ,
+						candidates.mail_address_2
+					)
+				)
+				OR
+					(
+						base_candidate.date_of_birth IS NOT NULL
+					AND
+						base_candidate.date_of_birth = candidates.date_of_birth
+					AND
+						(
+							base_candidate.entry_name != ''
+						AND
+							base_candidate.entry_name IN (
+								translate(candidates.entry_name,' 　','') ,
+								translate(candidates.entry_name_kana,' 　','')
+							)
+						OR
+							(
+								base_candidate.entry_name_kana != ''
+							AND
+								base_candidate.entry_name_kana IN (
+									translate(candidates.entry_name,' 　','') ,
+									translate(candidates.entry_name_kana,' 　','')
+								)
+							)
+						)
+					)
+				)
+				AND
+					candidates.candidate_id != #candidateId#
+			ORDER BY detail_entries.entry_date DESC,candidates.candidate_id
+			LIMIT #page.limit# OFFSET #page.offset#
+	</select>
+
+	<select id="findSimilarEntryCount" resultClass="java.lang.Integer">
+		WITH
+			base_candidate
+		AS (
+			SELECT
+				telephone_number
+				, mobile_telephone_number
+				, mail_address
+				, mail_address_2
+				, translate(entry_name_kana,' 　','') AS entry_name_kana
+				, translate(entry_name,' 　','') AS entry_name
+				, date_of_birth
+			FROM
+				hiring_process.candidates
+			WHERE
+				candidates.candidate_id = #candidateId#
+		)
+		SELECT
+			COUNT(*)
+		FROM
+			hiring_process.detail_entries
+			INNER JOIN
+				hiring_process.candidates
+				ON
+					detail_entries.candidate_id = candidates.candidate_id
+			INNER JOIN
+				hiring_process.hiring_status
+				ON
+					candidates.candidate_id = hiring_status.candidate_id
+			INNER JOIN
+				hiring_process.selection_statuses
+				ON
+					hiring_status.selection_status_id = selection_statuses.selection_status_id
+			INNER JOIN
+				hiring.jobtype_to_hire
+				ON
+					hiring_status.jobtype_to_hire_id = jobtype_to_hire.jobtype_to_hire_id
+			INNER JOIN
+				hiring.section_to_hire
+				ON
+					hiring_status.section_to_hire_id = section_to_hire.section_to_hire_id
+			INNER JOIN
+				hiring_process.candidates_active
+				ON
+					candidates.candidate_id = candidates_active.candidate_id
+			WHERE
+			EXISTS(
+				SELECT
+					1
+				FROM
+					base_candidate
+				WHERE
+					(
+						base_candidate.telephone_number != ''
+						AND
+						base_candidate.telephone_number IN (
+							candidates.telephone_number ,
+							candidates.mobile_telephone_number
+						)
+					)
+				OR
+					(
+						base_candidate.mobile_telephone_number != ''
+						AND
+						base_candidate.mobile_telephone_number IN (
+							candidates.telephone_number ,
+							candidates.mobile_telephone_number
+						)
+					)
+				OR
+					(
+						base_candidate.mail_address != ''
+						AND
+						base_candidate.mail_address IN (
+							candidates.mail_address ,
+							candidates.mail_address_2
+						)
+					)
+				OR
+					(
+						base_candidate.mail_address_2 != ''
+					AND
+					base_candidate.mail_address_2 IN (
+						candidates.mail_address ,
+						candidates.mail_address_2
+					)
+				)
+				OR
+					(
+						base_candidate.date_of_birth IS NOT NULL
+					AND
+						base_candidate.date_of_birth = candidates.date_of_birth
+					AND
+						(
+							base_candidate.entry_name != ''
+						AND
+							base_candidate.entry_name IN (
+								translate(candidates.entry_name,' 　','') ,
+								translate(candidates.entry_name_kana,' 　','')
+							)
+						OR
+							(
+								base_candidate.entry_name_kana != ''
+							AND
+								base_candidate.entry_name_kana IN (
+									translate(candidates.entry_name,' 　','') ,
+									translate(candidates.entry_name_kana,' 　','')
+								)
+							)
+						)
+					)
+				)
+				AND
+					candidates.candidate_id != #candidateId#
+	</select>
+
+	<select id="findDirectEntryCountByCandidateId" parameterClass="java.lang.Integer" resultClass="java.lang.Integer">
+		SELECT
+			COUNT( direct_entries.candidate_id )
+		FROM
+			entry.direct_entries
+		WHERE
+			direct_entries.candidate_id = #candidateId#
+	</select>
+
+	<select id="findWebEntryCountByCandidateId" parameterClass="java.lang.Integer" resultClass="java.lang.Integer">
+		SELECT
+			COUNT( web_entries.candidate_id )
+		FROM
+			entry.web_entries
+		WHERE
+			web_entries.candidate_id = #candidateId#
+	</select>
+
+	<select id="findImportedEntryCountByCandidateId" parameterClass="java.lang.Integer" resultClass="java.lang.Integer">
+		SELECT
+			COUNT( imported_entries.candidate_id )
+		FROM
+			entry.imported_entries
+		WHERE
+			imported_entries.candidate_id = #candidateId#
+	</select>
+
+    <resultMap class="jp.rhp.model.detailentry.DetailEntry" id="shopDetail">
+        <result property="candidate.id"                                                                                 column="candidate_id"/>
+        <result property="candidate.hiringStatus.sectionToHire.id"                                                      column="section_to_hire_id"/>
+        <result property="candidate.hiringStatus.sectionToHire.name"                                                    column="section_to_hire_name" />
+        <result property="candidate.hiringStatus.sectionToHire.shopNumber.value"                                        column="shop_number"/>
+        <result property="candidate.hiringStatus.sectionToHire.callCenterMemo.text"                                     column="callcenter_memo"/>
+        <result property="candidate.hiringStatus.sectionToHire.sectionGroupName"                                        column="section_group_name" />
+        <result property="candidate.hiringStatus.sectionToHire.businessModelType.name"                                  column="name" />
+        <result property="candidate.hiringStatus.sectionToHire.sectionToHireMemo"                                       column="section_to_hire_memo_latest_memo" />
+        <result property="candidate.hiringStatus.sectionToHire.contact.telephoneNumber.telephoneNumber"                 column="shop_telephone_number" />
+        <result property="candidate.hiringStatus.sectionToHire.nameKana.value"                                          column="shop_name_kana" />
+        <result property="candidate.hiringStatus.sectionToHire.status.openingStatusType.name"                           column="opening_status_type_name" />
+    </resultMap>
+
+    <select id="findShopDetailByCandidateId" resultMap="shopDetail" parameterClass="java.lang.Integer" >
+        SELECT
+            candidates.candidate_id,
+            COALESCE (shop_number.shop_number, '') AS shop_number,
+            section_to_hire.section_to_hire_id,
+            section_to_hire.section_to_hire_name,
+            COALESCE(callcenter_memo.memo, '') AS callcenter_memo,
+            section_groups.section_group_name,
+            business_model_type.name,
+            section_to_hire_memo_latest.memo AS section_to_hire_memo_latest_memo,
+            section_to_hire_telephone_number.telephone_number AS shop_telephone_number,
+            section_to_hire_name_kana.name_kana AS shop_name_kana,
+            opening_status_type.name AS opening_status_type_name
+        FROM
+            hiring_process.detail_entries
+            INNER JOIN 
+                hiring_process.candidates
+                ON
+                    detail_entries.candidate_id = candidates.candidate_id
+            INNER JOIN
+                hiring_process.hiring_status
+                ON
+                    candidates.candidate_id = hiring_status.candidate_id
+            INNER JOIN
+                hiring.section_to_hire
+                ON
+                    hiring_status.section_to_hire_id = section_to_hire.section_to_hire_id
+            LEFT JOIN
+                hiring.section_groups
+                ON
+                    section_groups.section_group_id = section_to_hire.section_group_id
+            LEFT JOIN
+                hiring.section_to_hire_business_model
+                ON
+                    section_to_hire_business_model.section_to_hire_id = section_to_hire.section_to_hire_id
+            LEFT JOIN
+                hiring.business_model_type
+                ON
+                    business_model_type.type = section_to_hire_business_model.business_model_type
+            LEFT OUTER JOIN
+                hiring.shop_number
+                ON
+                    section_to_hire.section_to_hire_id = shop_number.section_to_hire_id
+            LEFT JOIN
+                hiring.section_to_hire_memo_latest
+                ON
+                    section_to_hire.section_to_hire_id = section_to_hire_memo_latest.section_to_hire_id
+            LEFT JOIN
+                hiring.section_to_hire_telephone_number
+                ON
+                    section_to_hire.section_to_hire_id = section_to_hire_telephone_number.section_to_hire_id
+            LEFT OUTER JOIN (
+                SELECT
+                    callcenter_memo.section_to_hire_id id,
+                    callcenter_memo.memo
+                FROM
+                    hiring.callcenter_memo
+                WHERE EXISTS (
+                    SELECT
+                        latest_callcenter_memo.callcenter_memo_id
+                    FROM
+                        hiring.latest_callcenter_memo
+                    WHERE
+                        latest_callcenter_memo.callcenter_memo_id = callcenter_memo.id 
+                    )
+            ) AS callcenter_memo
+                ON
+                    callcenter_memo.id = section_to_hire.section_to_hire_id
+            LEFT JOIN
+                hiring.section_to_hire_name_kana
+                ON
+                    section_to_hire_name_kana.section_to_hire_id= section_to_hire.section_to_hire_id
+            LEFT JOIN
+                hiring.section_to_hire_opening_status_type
+                ON
+                    section_to_hire_opening_status_type.section_to_hire_id= section_to_hire.section_to_hire_id
+            LEFT JOIN
+                hiring.opening_status_type
+                ON
+                    opening_status_type.type= section_to_hire_opening_status_type.opening_status_type
+        WHERE
+            candidates.candidate_id = #candidateId#
+    </select>
+</sqlMap>

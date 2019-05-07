@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.personalinformation.operationallog.PersonalInformationOperationalLogDataAccess">
+
+	<typeAlias alias="personalInformationOperationalLog" type="jp.rhp.model.personalinformation.operationallog.PersonalInformationOperationalLog"/>
+
+	<select id="nextId" resultClass="java.lang.Integer">
+		SELECT nextval('operational_log.personal_information_operational_log_id')
+	</select>
+
+	<insert id="registerPersonalInformationOperationalLogForEntryCallcenter" parameterClass="personalInformationOperationalLog">
+		INSERT INTO operational_log.personal_information_operational_log (
+			id,
+			operational_datetime,
+			access_user_id,
+			access_source_ip_address,
+			operational_type,
+			output_count
+		) (
+			SELECT
+				#id#										AS id,
+				#operationalDateTime.datetime.date#			AS operational_datetime,
+				users.user_id								AS access_user_id,
+				#detail.accessUser.access.ipAddress.value#	AS access_source_ip_address,
+				#detail.operation.type#						AS operational_type,
+				#detail.operation.outputCount.count#		AS output_count
+			FROM
+				account.users
+			WHERE
+				EXISTS (
+					SELECT
+						entry_callcenter_user.user_id
+					FROM
+						account.entry_callcenter_user
+					WHERE
+						users.user_id = entry_callcenter_user.user_id
+				)
+		)
+	</insert>
+
+	<insert id="registerOperatedUserForCallcenter" parameterClass="personalInformationOperationalLog">
+		INSERT INTO operational_log.operated_user_for_callcenter (
+			personal_information_operational_log_id,
+			callcenter_user_id,
+			callcenter_user_name
+		) VALUES (
+			#id#,
+			#detail.accessUser.userId.id#,
+			#detail.accessUser.name.value#
+		)
+	</insert>
+
+</sqlMap>

@@ -1,0 +1,22 @@
+
+<table class="recoptable print_display_none" >
+	<col width="18%" /><col width="*" />
+	<tr>
+		<th><span class="labelWithImg">センター備考</span></th>
+		<td class="editable">
+			<div class="note_input_area">
+				<form id="editOperationalNote" name="editOperationalNote" action="#" method="post">
+					<a href="javascript:void(0);" class="save_btn noDialog"><img src="$link.contextPath/images/btnSave.gif" width="49" height="25" alt="保存" class="rollover" /></a>
+					<a href="javascript:void(0);" class="cancel_btn noDialog">キャンセル</a>
+					<a href="javascript:void(0);" class="edit_btn noDialog"><img src="$link.contextPath/images/btnEdit01.gif" width="49" height="25" alt="編集" /></a>
+					<p class="note_view">
+						#escape( ${advertisementOrderDetail.slips.remarks.operationalNote.text} )
+					</p>
+					#formTextarea( 'advertisementOrderDetail.slips.remarks.operationalNote.text' ' rows="10" cols="100" class="regular bg note_edit"')
+					#errorMessages( "advertisementOrderDetail.slips.remarks.operationalNote.text" )
+					#formHiddenInput( 'advertisementOrderDetail.id' $advertisementOrderDetail.id )
+				</form>
+			</div>
+		 </td>
+	</tr>
+</table>

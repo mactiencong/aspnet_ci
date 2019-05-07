@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:sec="http://www.springframework.org/schema/security"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+	">
+
+	<mvc:annotation-driven/>
+
+	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings" value="/loginForm=loginFormController"/>
+	</bean>
+
+	<bean id="loginFormController" class="com.systemsekkei.base.security.web.login.LoginFormController">
+		<property name="loginFormAttributeName" value="loginForm"/>
+		<property name="viewName" value="loginForm"/>
+	</bean>
+
+	<sec:http disable-url-rewriting="true">
+		<sec:intercept-url pattern="/login"                         access="ROLE_ANONYMOUS, ROLE_USER"/>
+		<sec:intercept-url pattern="/login/**"                      access="ROLE_ANONYMOUS, ROLE_USER"/>
+		<sec:intercept-url pattern="/loginForm"                     access="ROLE_ANONYMOUS, ROLE_USER"/>
+		<sec:intercept-url pattern="/errors"                        access="ROLE_ANONYMOUS, ROLE_USER"/>
+		<sec:intercept-url pattern="/errors/**"                     access="ROLE_ANONYMOUS, ROLE_USER"/>
+
+		<sec:intercept-url pattern="/password/admission"            access="ROLE_USER"/>
+		<sec:intercept-url pattern="/password/admission/**"         access="ROLE_USER"/>
+		<sec:intercept-url pattern="/password/resetting"            access="ROLE_USER"/>
+		<sec:intercept-url pattern="/password/resetting/**"         access="ROLE_USER"/>
+		<sec:intercept-url pattern="/password/updating"             access="ROLE_USER"/>
+		<sec:intercept-url pattern="/password/updating/**"          access="ROLE_USER"/>
+
+		<sec:intercept-url pattern="/company"                       access="ROLE_USER"/>
+		<sec:intercept-url pattern="/company/**"                    access="ROLE_USER"/>
+
+		<sec:intercept-url pattern="/*/top"                         access="ROLE_USER"/>
+
+
+
+		<sec:intercept-url pattern="/sessionCheck"                  access="ROLE_USER"/>
+		<sec:intercept-url pattern="/sessionCheck/**"               access="ROLE_USER"/>
+
+		<sec:intercept-url pattern="/*/advertisementorder"          access="ROLE_USER"/>
+		<sec:intercept-url pattern="/*/advertisementorder/**"       access="ROLE_USER"/>
+		
+		<sec:intercept-url pattern="/*/sectiontohire/contact"       access="ROLE_USER"/>
+		<sec:intercept-url pattern="/*/sectiontohire/contact/**"    access="ROLE_USER"/>
+
+		<sec:intercept-url pattern="/**"                            access="ROLE_DUMMY"/>
+
+		<sec:form-login
+			login-page="/loginForm"
+			login-processing-url="/login"
+			authentication-failure-handler-ref="authenticationFailureHandler"
+			default-target-url="/company/list"
+			always-use-default-target="true"
+			/>
+		<sec:logout
+			logout-url="/logout"
+			success-handler-ref="applicationLogoutHandler"
+			/>
+	</sec:http>
+
+	<bean id="authenticationFailureHandler"
+		class="jp.rhp.web.advertisementorder.callcenter.login.LoginFormLockAuthenticationFailureHandler">
+		<property name="defaultFailureUrl" value="/loginForm"/>
+	</bean>
+
+	<!-- AuthenticationManager -->
+	<sec:authentication-manager alias="authenticationManager">
+		<sec:authentication-provider user-service-ref="connectLoginEventUserService"/>
+	</sec:authentication-manager>
+
+	<!-- Authentication Event Listeners -->
+	<bean class="jp.rhp.model.callcenterloginuser.login.listener.AuthenticationFailureBadCredentialsEventListener"/>
+	<bean class="jp.rhp.model.callcenterloginuser.login.listener.AuthenticationFailureServiceExceptionEventListener"/>
+
+	<bean id="applicationLogoutHandler"
+		class="jp.rhp.web.advertisementorder.callcenter.logout.ApplicationLogoutHandler">
+	</bean>
+
+</beans>

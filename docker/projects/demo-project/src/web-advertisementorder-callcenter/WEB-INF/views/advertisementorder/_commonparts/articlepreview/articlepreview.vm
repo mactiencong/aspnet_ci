@@ -1,0 +1,16 @@
+<div class="articlePreviewWrapper print_display_block print_page_break">
+#set($articleSize = $articleListForPreview.articles.size())
+#foreach($articleForPreview in $!{articleListForPreview.articles})
+#set($articleNo = $foreach.index + 1)
+<div class="articlePreview" id="articlePreview$articleNo">
+	<div class="print_display_none">
+		<h3>原稿詳細No.$articleNo <span style="display:inline-box; float:right;"> #if($articleNo > 1)<a name="nextArticle" onclick="$.fancybox.prev()" style="text-decoration:none;" >＜前へ </a> #else＜前へ #end$articleNo/$articleSize #if($articleNo < $articleSize )<a name="nextArticle" onclick="$.fancybox.next()"  style="text-decoration:none;"> 次へ＞</a> #else 次へ＞#end</span> </h3>
+		<div class="clrFix"></div>
+	</div>
+	<div class="detail overFlowAuto print_display_overflow_visible">
+		#parse("/advertisementorder/_commonparts/articlepreview/article.vm")
+	</div>
+	<div class="bottom print_display_none"><a name="closeArticlePreview" onclick="$.fancybox.close()"><img src="$link.contextPath/images/btnClose.gif" class="rollover" /></a></div>
+</div>
+#end
+</div>

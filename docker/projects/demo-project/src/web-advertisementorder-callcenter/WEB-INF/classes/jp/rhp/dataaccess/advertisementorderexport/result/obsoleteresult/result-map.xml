@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.advertisementorderexport.result.obsoleteresult.ObsoleteAdvertisementOrderExportResultDataAccess">
+
+	<resultMap id="result" class="jp.rhp.model.advertisementorderexport.result.obsoleteresult.Result">
+		<result property="request.id"							column="request_id" />
+		<result property="request.status"						column="request_status_type"/>
+		<result property="request.requestedDatetime.timeStamp"	column="requested_datetime" />
+		<result property="request.requestUser.id"				column="request_user_id" />
+		<result property="request.requestUser.name.value"		column="request_user_full_name" />
+		<result property="exportedFile.path"					column="export_file_path" />
+	</resultMap>
+
+	<sql id="corePartsOfResult">
+		FROM
+			advertisement_order_export.request_for_advertisementorder_callcenter AS request
+			INNER JOIN
+				advertisement_order_export.latest_request_status_for_advertisementorder_callcenter AS latest_request_status
+			ON
+				request.id = latest_request_status.request_id
+			INNER JOIN
+				advertisement_order_export.request_status_for_advertisementorder_callcenter AS request_status
+			ON
+				latest_request_status.request_status_id = request_status.id
+			INNER JOIN
+				advertisement_order_export.request_user_for_advertisementorder_callcenter AS request_user
+			ON
+				request.id = request_user.request_id
+			LEFT OUTER JOIN
+				advertisement_order_export.result_for_advertisementorder_callcenter AS result
+			ON
+				request.id = result.request_id
+	</sql>
+
+	<select id="countOfResult" resultClass="java.lang.Integer" >
+		SELECT
+			count(1) AS result_count
+		<include refid="corePartsOfResult" />
+        WHERE
+            request_user.advertisementorder_callcenter_user_id IN
+            <iterate open="(" close=")" conjunction="," property="accountList.list">
+                #accountList.list[].id#
+            </iterate>
+	</select>
+
+	<select id="listOfResult" resultMap="result">
+		SELECT
+			request.id													AS request_id,
+			request_status.request_status_type							AS request_status_type,
+			request.requested_datetime									AS requested_datetime,
+			request_user.advertisementorder_callcenter_user_id			AS request_user_id,
+			request_user.advertisementorder_callcenter_user_full_name	AS request_user_full_name,
+			coalesce( result.export_file_path, '' )						AS export_file_path
+		<include refid="corePartsOfResult" />
+        WHERE
+            request_user.advertisementorder_callcenter_user_id IN
+            <iterate open="(" close=")" conjunction="," property="accountList.list">
+                #accountList.list[].id#
+            </iterate>
+		ORDER BY
+			request.requested_datetime DESC,
+			request.id DESC
+		OFFSET #page.offset# LIMIT #page.limit#
+	</select>
+
+	<select id="findResultByRequestId" resultMap="result">
+		SELECT
+			request.id													AS request_id,
+			request_status.request_status_type							AS request_status_type,
+			request.requested_datetime									AS requested_datetime,
+			request_user.advertisementorder_callcenter_user_id			AS request_user_id,
+			request_user.advertisementorder_callcenter_user_full_name	AS request_user_full_name,
+			coalesce( result.export_file_path, '' )						AS export_file_path
+		<include refid="corePartsOfResult" />
+		WHERE
+			request.id = #requestId#
+	</select>
+
+</sqlMap>

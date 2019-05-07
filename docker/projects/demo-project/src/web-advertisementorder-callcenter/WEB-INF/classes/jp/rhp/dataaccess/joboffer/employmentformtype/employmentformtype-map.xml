@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.joboffer.employmentformtype.EmploymentFormTypeDataAccess">
+
+	<typeAlias alias="employmentFormType" type="jp.rhp.model.joboffer.recruitment.employmentformtype.EmploymentFormType" />
+
+    <resultMap class="employmentFormType" id="employmentFormType">
+		<result property="employmentFormCode" column="employment_form_code"/>
+		<result property="employmentForm" column="employment_form"/>
+		<result property="employmentFormMark" column="employment_form_mark"/>
+    </resultMap>
+
+	<sql id="select">
+		SELECT
+			employment_form_type.employment_form_code,
+			employment_form_type.employment_form,
+			employment_form_type.employment_form_mark
+		FROM
+			joboffer.employment_form_type
+	</sql>
+
+	<select id="listAll" resultMap="employmentFormType">
+		<include refid="select"/>
+	</select>
+
+</sqlMap>

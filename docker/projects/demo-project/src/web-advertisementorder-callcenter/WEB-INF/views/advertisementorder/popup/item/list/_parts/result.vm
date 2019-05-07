@@ -1,0 +1,37 @@
+
+<div class="header">
+	<div class="count"><em>$itemList.page.count</em> 件見つかりました</div>
+	<div class="pager">
+		#pageLink( $itemPopupSearchCriteria.page "/advertisementorder/popup/item/listing/page" )
+	</div>
+</div>
+<div class="listing">
+	<table class="recoplist">
+		<col width="25%" /><col width="23%" /><col width="*" /><col width="16%" /><col width="12%" />
+		<thead>
+			<tr class="header">
+				<th>媒体</th>
+				<th>版（エリア）</th>
+				<th>プラン</th>
+				<th>価格（税別）</th>
+				<th>&nbsp;</th>
+			</tr>
+		</thead>
+		<tbody>
+			#foreach( $item in $itemList.items )
+			<tr>
+				<td>#escape($item.media.name.value)
+				<input type="hidden" value="$item.id" name="itemId" />
+				<input type="hidden" value="$item.media.name.value" name="mediaName" />
+				<input type="hidden" value="$item.plan.issue.area.name.value" name="areaName" />
+				<input type="hidden" value="$item.plan.issue.size.value" name="size" />
+				<input type="hidden" value="$item.plan.price.value" name="price" /></td>
+				<td>#escape($item.plan.issue.area.name.value)</td>
+				<td>#escape($item.plan.issue.size.value)</td>
+				<td class="price">$text.priceFormat($item.plan.price.value) 円</td>
+				<td class="function last"><a href="" onclick="select($foreach.index)" ><img src="$link.contextPath/images/btnSelect.png" alt="選択" class="rollover"/ ></a></td>
+			</tr>
+			#end
+		</thead>
+	</table>
+</div>

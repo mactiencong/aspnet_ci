@@ -1,0 +1,42 @@
+<div class="scheduleearchPannel">
+	<div class="inner">
+		<form name="applSearch" method="post" action='$link.relativeAndCompany("/sectiontohire/schedule/bookingstatus/search")'>
+			<div class="defaultSearchCond">
+				<table summary="検索条件" class="regular">
+					<col width="13%" /><col width="*" />
+					<tr>
+						<th>面接日</th>
+						<td>
+							<div>
+								#formInput('criteria.interviewDateRange.start' 'class="regular bg w100"' 'interviewDateFrom' )～
+								#formInput('criteria.interviewDateRange.end' 'class="regular bg w100"' 'interviewDateTo' )
+							</div>
+							<div class="interviewFilter">
+								#springFormCheckbox('criteria.bookingOnly' '')
+								<label for="bookingOnly">予約ありのみ</label>
+							</div>
+							#springBind('criteria.interviewDateRange*') #foreach($error in ${status.errorMessages}) <p class="err">$!{error}</p> #end
+						</td>
+					</tr>
+					<tr>
+						<th>メモ</th>
+						<td>
+							#formInput('criteria.memo' 'class="regular bg wide"')
+						</td>
+					</tr>
+				</table>
+			</div>
+			<!--[if lte IE 7.0]><div style="clear:both; height:1px; width:100%;"></div><![endif]-->
+			<div class="controls">
+				<p class="reset">
+					<a href="$link.relativeAndCompany("/sectiontohire/schedule/bookingstatus/init").query("?sectionToHireId=${sectionToHire.id}")">
+						<img src="$link.contextPath/images/btnResetCond.gif" width="101" height="25" alt="条件をリセット" class="rollover" />
+					</a>
+				</p>
+				<p class="submit">
+					<input type="image" id="search" name="search" src="$link.contextPath/images/btnSearch01.gif" width="268" height="39" alt="検索する" class="rollover" />
+				</p>
+			</div>
+		</form>
+	</div>
+</div>

@@ -1,0 +1,71 @@
+<h4>募集要項</h4>
+<table class="recoptable" summary="募集要項">
+	<col width="18%" /><col width="*" />
+	<tr>
+		<th>雇用形態</th>
+		<td>
+			#foreach( $employmentFormCode in $!{newSingleOrderSheet.article.jobOffer.recruitment.employmentFormList.selected} )
+				#escape( $!{employmentFormTypeList.getName($employmentFormCode)} )&nbsp;
+			#end
+		</td>
+	</tr>
+	<tr>
+		<th>原稿掲載職種表示名称</th>
+		<td>
+			#escape( $!{newSingleOrderSheet.article.jobOffer.recruitment.jobTypeDescription.text})
+		</td>
+	</tr>
+	<tr>
+		<th>資格</th>
+		<td>
+			#escape($!{newSingleOrderSheet.article.jobOffer.recruitment.qualification.text})
+		</td>
+	</tr>
+	#parse("/advertisementorder/register/single/_parts/form/article/income.vm")
+	#parse("/advertisementorder/register/single/_parts/form/article/treatment.vm")
+	<tr>
+		<th>勤務曜日・時間</th>
+		<td>
+			#escape( $!{newSingleOrderSheet.article.jobOffer.recruitment.workingTime.workingDayTimeDescription.text} )
+		</td>
+	</tr>
+	<tr>
+		<th>週あたり最低勤務日数</th>
+		<td>
+			#escape( $!{wrokingDayPerWeekCodeTypeList.getName( $!{newSingleOrderSheet.article.jobOffer.recruitment.workingTime.workingDayPerWeekCode} )} )
+		</td>
+	</tr>
+	<tr>
+		<th>勤務時間帯</th>
+		<td>
+			<table summary="layout" class="innerLayout">
+				<tr>
+					<td>
+						#escape( $!{newSingleOrderSheet.article.jobOffer.recruitment.workingTime.text} )
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<th>採用予定人数</th>
+		<td>
+			#if( $newSingleOrderSheet.article.jobOffer.recruitment.adoptionNumberPlan.code == '99' )
+				#if( $newSingleOrderSheet.article.jobOffer.recruitment.adoptionNumberPlan.number != '' )
+					$!{newSingleOrderSheet.article.jobOffer.recruitment.adoptionNumberPlan.number}名
+				#end
+			#else
+				$!{adoptionNumberPlanList.getName( $newSingleOrderSheet.article.jobOffer.recruitment.adoptionNumberPlan.code )}
+			#end
+		</td>
+	</tr>
+	<tr>
+		<th>採用予定人数本文</th>
+		<td>
+			#escape( $!{newSingleOrderSheet.article.jobOffer.recruitment.adoptionNumberPlan.description.text} )
+		</td>
+	</tr>
+</table>
+<div id="advertiseAddition">
+	#parse("/advertisementorder/register/single/_parts/form/article/recruitment_addition.vm")
+</div>

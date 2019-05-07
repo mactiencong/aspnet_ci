@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.joboffer.income.cassette.CassetteIncomeDataAccess">
+
+	<typeAlias alias="cassetteIncome" type="jp.rhp.model.joboffer.recruitment.obsoletedincome.cassette.CassetteIncome" />
+	<typeAlias alias="trainingPeriodUnit" type="jp.rhp.model.joboffer.recruitment.obsoletedincome.cassette.TrainingPeriodUnit" />
+	<typeAlias alias="trainingPeriodAddition" type="jp.rhp.model.joboffer.recruitment.obsoletedincome.cassette.TrainingPeriodAddition" />
+	
+	<resultMap class="cassetteIncome" id="cassetteIncome">
+		<result property="baseWage" column="base_wage"/>
+		<result property="weekendWage" column="weekend_wage"/>
+		<result property="highSchoolStudentWage.possibility.possible" column="admit_high_school_student"/>
+		<result property="highSchoolStudentWage.onlyDecidedOnCareer" column="only_decided_on_career"/>
+		<result property="highSchoolStudentWage.diff" column="difference_student_wage"/>
+		<result property="training.existence.exist" column="conduct_training"/>
+		<result property="training.trainingPeriod.number" column="training_period"/>
+		<result property="training.trainingPeriod.unit.type" column="training_period_unit_type"/>
+		<result property="training.trainingPeriod.unit.name" column="training_period_unit_name"/>
+		<result property="training.trainingPeriod.addition.id" column="training_period_addition_id"/>
+		<result property="training.trainingPeriod.addition.value" column="training_period_addition_value"/>
+		<result property="training.wage.diff" column="difference_training_period_wage"/>
+		<result property="training.wage.studentWage" column="student_training_period_wage"/>
+	</resultMap>
+
+	<resultMap class="trainingPeriodUnit" id="trainingPeriodUnit">
+		<result property="type" column="type"/>
+		<result property="name" column="name"/>
+	</resultMap>
+
+	<resultMap class="trainingPeriodAddition" id="trainingPeriodAddition">
+		<result property="id" column="id"/>
+		<result property="value" column="value"/>
+	</resultMap>
+	
+	<select id="findTrainingPeriodUnitMap" resultMap="trainingPeriodUnit">
+		SELECT 
+			type,
+			name
+		FROM joboffer.training_period_unit
+		ORDER BY priority
+	</select>
+	
+	<select id="findTrainingPeriodAdditionMap" resultMap="trainingPeriodAddition">
+		SELECT 
+			id,
+			value
+		FROM joboffer.training_period_addition
+		ORDER BY priority
+	</select>
+
+	<select id="findByJobOfferId" resultMap="cassetteIncome">
+		SELECT 
+			ci.base_wage,
+			ci.weekend_wage,
+			ci.admit_high_school_student, 
+			ci.only_decided_on_career,
+			ci.difference_student_wage, 
+			ci.conduct_training, 
+			ci.training_period, 
+			tpu.type training_period_unit_type, 
+			tpu.name training_period_unit_name, 
+			ci.difference_training_period_wage, 
+			ci.student_training_period_wage, 
+			tpa.id training_period_addition_id, 
+			tpa.value training_period_addition_value
+		FROM joboffer.cassette_income ci
+			LEFT OUTER JOIN joboffer.training_period_unit tpu
+			ON ci.training_period_unit_type = tpu.type
+			LEFT OUTER JOIN joboffer.training_period_addition tpa
+			ON ci.training_period_addition_id = tpa.id
+		WHERE
+			ci.job_offer_id = #value#
+	</select>
+	
+	
+	<update id="modify">
+		UPDATE
+			joboffer.cassette_income
+		SET 
+			base_wage = #cassetteIncome.baseWageInt#,
+			weekend_wage = #cassetteIncome.weekendWageInt#,
+			admit_high_school_student = #cassetteIncome.highSchoolStudentWage.possibility.possible#, 
+			conduct_training = #cassetteIncome.training.existence.exist#, 
+			<isEqual property="cassetteIncome.highSchoolStudentWage.possibility.possible" compareValue="true">
+				difference_student_wage = #cassetteIncome.highSchoolStudentWage.diffInt#,
+				only_decided_on_career = #cassetteIncome.highSchoolStudentWage.onlyDecidedOnCareer#,
+			</isEqual>
+			<isEqual property="cassetteIncome.training.existence.exist" compareValue="true">
+				training_period = #cassetteIncome.training.trainingPeriod.numberInt#,
+				training_period_unit_type = #cassetteIncome.training.trainingPeriod.unit.type#,
+				difference_training_period_wage =  #cassetteIncome.training.wage.diffInt#, 
+				training_period_addition_id = #cassetteIncome.training.trainingPeriod.addition.id#,
+				<isEqual property="cassetteIncome.highSchoolStudentWage.possibility.possible" compareValue="true">
+					student_training_period_wage = #cassetteIncome.training.wage.studentWageInt#,
+				</isEqual>
+			</isEqual>
+			updated_at = now()
+		WHERE 
+			job_offer_id = #jobOfferId#
+	</update>
+
+</sqlMap>

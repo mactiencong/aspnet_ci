@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.mail.destination.DestinationDataAccess">
+
+	<resultMap id="destination" class="jp.rhp.model.mail.destination.Destination">
+		<result property="mailAddress.mailAddress" column="user_mail_address"/>
+	</resultMap>
+
+	<select id="hrUsers" resultMap="destination">
+	<![CDATA[
+		SELECT
+			active_users.user_mail_address
+		FROM
+			account.active_users
+		WHERE
+				active_users.role = 'HR'
+			AND active_users.availability_status_type = 'ENABLED'
+			AND ( active_users.from_date IS NULL OR active_users.from_date <= CURRENT_DATE )
+			AND ( active_users.to_date   IS NULL OR active_users.to_date   >= CURRENT_DATE )
+			AND active_users.user_mail_address IS NOT NULL
+			AND active_users.user_mail_address != ''
+	]]>
+	</select>
+
+	<select id="svUsers" parameterClass="int" resultMap="destination">
+	<![CDATA[
+		SELECT
+			active_users.user_mail_address
+		FROM
+			account.active_users
+		INNER JOIN
+			account.user_x_section_to_hire
+		ON active_users.user_id = user_x_section_to_hire.user_id
+		WHERE
+			user_x_section_to_hire.section_to_hire_id = #value#
+			AND active_users.role = 'SV'
+			AND active_users.availability_status_type = 'ENABLED'
+			AND ( active_users.from_date IS NULL OR active_users.from_date <= CURRENT_DATE )
+			AND ( active_users.to_date   IS NULL OR active_users.to_date   >= CURRENT_DATE )
+			AND active_users.user_mail_address IS NOT NULL
+			AND active_users.user_mail_address != ''
+	]]>
+	</select>
+
+	<select id="svUsersBySectionToHireIds" resultMap="destination">
+	<![CDATA[
+		SELECT
+			active_users.user_mail_address
+		FROM
+			account.active_users
+		INNER JOIN
+			account.user_x_section_to_hire
+		ON active_users.user_id = user_x_section_to_hire.user_id
+		WHERE
+	]]>
+		<iterate prepend="user_x_section_to_hire.section_to_hire_id IN" open="(" close=")" conjunction=",">
+			#[]#
+		</iterate>
+	<![CDATA[
+			AND active_users.role = 'SV'
+			AND active_users.availability_status_type = 'ENABLED'
+			AND ( active_users.from_date IS NULL OR active_users.from_date <= CURRENT_DATE )
+			AND ( active_users.to_date   IS NULL OR active_users.to_date   >= CURRENT_DATE )
+			AND active_users.user_mail_address IS NOT NULL
+			AND active_users.user_mail_address != ''
+		GROUP BY
+			active_users.user_id,
+			active_users.user_mail_address
+	]]>
+	</select>
+
+	<select id="shopUsers" parameterClass="int" resultMap="destination">
+	<![CDATA[
+		SELECT
+			active_users.user_mail_address
+		FROM
+			account.active_users
+		INNER JOIN
+			account.user_x_section_to_hire
+		ON active_users.user_id = user_x_section_to_hire.user_id
+		WHERE
+			user_x_section_to_hire.section_to_hire_id = #value#
+			AND active_users.role = 'SHOP'
+			AND active_users.availability_status_type = 'ENABLED'
+			AND ( active_users.from_date IS NULL OR active_users.from_date <= CURRENT_DATE )
+			AND ( active_users.to_date   IS NULL OR active_users.to_date   >= CURRENT_DATE )
+			AND active_users.user_mail_address IS NOT NULL
+			AND active_users.user_mail_address != ''
+	]]>
+	</select>
+
+	<select id="shopAndHiringShopUsers" parameterClass="int" resultMap="destination">
+	<![CDATA[
+		SELECT
+			active_users.user_mail_address
+		FROM
+			account.active_users
+		INNER JOIN
+			account.user_x_section_to_hire
+		ON active_users.user_id = user_x_section_to_hire.user_id
+		WHERE
+			user_x_section_to_hire.section_to_hire_id = #value#
+			AND active_users.role in ( 'SHOP', 'HIRING_SHOP' )
+			AND active_users.availability_status_type = 'ENABLED'
+			AND ( active_users.from_date IS NULL OR active_users.from_date <= CURRENT_DATE )
+			AND ( active_users.to_date   IS NULL OR active_users.to_date   >= CURRENT_DATE )
+			AND active_users.user_mail_address IS NOT NULL
+			AND active_users.user_mail_address != ''
+	]]>
+	</select>
+
+	<select id="mediaCenterUsers" resultMap="destination">
+	<![CDATA[
+		SELECT
+			user_mail_addresses.user_mail_address
+		FROM
+			account.users
+		INNER JOIN
+			account.user_mail_addresses
+		ON	users.user_id = user_mail_addresses.user_id
+		INNER JOIN
+			account.advertisement_order_callcenter_user
+		ON advertisement_order_callcenter_user.user_id = users.user_id
+		WHERE
+			user_mail_addresses.user_mail_address IS NOT NULL
+			AND user_mail_addresses.user_mail_address != ''
+	]]>
+	</select>
+
+	<select id="candidate" resultMap="destination">
+	<![CDATA[
+		SELECT
+			candidates.mail_address AS user_mail_address
+		FROM
+			hiring_process.candidates
+			INNER JOIN
+				hiring_process.candidates_active
+				ON
+					candidates.candidate_id = candidates_active.candidate_id
+		WHERE
+			candidates.candidate_id = #candidateId#
+			AND candidates.mail_address IS NOT NULL
+			AND candidates.mail_address != ''
+		UNION
+		SELECT
+			candidates.mail_address_2 AS user_mail_address
+		FROM
+			hiring_process.candidates
+			INNER JOIN
+				hiring_process.candidates_active
+				ON
+					candidates.candidate_id = candidates_active.candidate_id
+		WHERE
+			candidates.candidate_id = #candidateId#
+			AND candidates.mail_address_2 IS NOT NULL
+			AND candidates.mail_address_2 != ''
+	]]>
+	</select>
+
+</sqlMap>

@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.advertisementordersearch.AdvertisementOrderSearchDataAccess">
+
+	<resultMap class="jp.rhp.model.advertisementorder.summary.AdvertisementOrderSummary" id="advertisementOrderSummary" groupBy="id" >
+		<result property="id" 													column="advertisement_order_id"/>
+		<result property="type" 												column="order_type"/>
+		<result property="orderDateTime.timeStamp.timeStamp"					column="order_datetime" />
+		<result property="detail.order.workplaceList.workplaces"				resultMap="jp.rhp.dataaccess.advertisementordersearch.AdvertisementOrderSearchDataAccess.workplace" />
+		<result property="detail.order.item.media.name.value" 					column="media_name" />
+		<result property="detail.order.item.plan.issue.area.name.value" 		column="area_name" />
+		<result property="detail.order.item.plan.issue.size.value" 				column="item_size" />
+		<result property="detail.order.item.plan.price.value" 					column="item_price" />
+		<result property="detail.result.publicationDate.dateStamp.dateStamp"	column="publication_date" />
+		<result property="status.summaryStatus" 								column="summary_status"/>
+		<result property="status.orderStatus.type"								column="order_status_type"/>
+		<result property="status.orderStatus.name.value"						column="order_status_type_name"/>
+	</resultMap>
+
+	<resultMap class="jp.rhp.model.workplace.Workplace" id="workplace" >
+		<result property="id" 													column="workplace_id"/>
+		<result property="workplaceName.text" 									column="workplace_name" />
+	</resultMap>
+
+	<sql id="criteriaWorkplacePartOfAdvertisementOrdersForSearch">
+		SELECT
+			advertisement_order_detail.id						AS	advertisement_order_detail_id,
+			advertisement_order_detail.advertisement_order_id	AS	advertisement_order_id,
+			article_workplace.workplace_id						AS	workplace_id
+		FROM
+			advertisement_order.advertisement_order_detail
+			INNER JOIN
+				advertisement_order.latest_advertisement_order_detail
+			ON
+				latest_advertisement_order_detail.advertisement_order_detail_id = advertisement_order_detail.id
+			INNER JOIN
+				advertisement_order.article
+			ON
+				article.advertisement_order_detail_id = advertisement_order_detail.id
+			INNER JOIN
+				advertisement_order.article_workplace
+			ON
+				article.id = article_workplace.article_id
+	</sql>
+
+	<sql id="criteriaPartOfAdvertisementOrdersForSearch">
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="criteria.contents.advertisementOrderId.value" prepend="AND">
+				advertisement_order.id = #criteria.contents.advertisementOrderId.valueAsInteger#
+			</isNotEmpty>
+			<isEqual property="criteria.contents.workplaceId.notEmpty" compareValue="true" prepend="AND">
+				EXISTS (
+					SELECT
+						advertisement_order_for_criteria.advertisement_order_id
+					FROM
+						advertisement_order_for_criteria
+					WHERE
+						advertisement_order_for_criteria.workplace_id = #criteria.contents.workplaceId.valueAsInteger#
+						AND advertisement_order.id = advertisement_order_for_criteria.advertisement_order_id
+					)
+			</isEqual>
+			<isNotEmpty property="criteria.contents.orderedDate.range.from.dateStamp" prepend="AND">
+			<![CDATA[
+				date_trunc( 'day', advertisement_order.order_datetime ) >= #criteria.contents.orderedDate.fromDate#
+			]]>
+			</isNotEmpty>
+			<isNotEmpty property="criteria.contents.orderedDate.range.to.dateStamp" prepend="AND">
+			<![CDATA[
+				date_trunc( 'day', advertisement_order.order_datetime ) <= #criteria.contents.orderedDate.toDate#
+			]]>
+			</isNotEmpty>
+			<isNotEmpty property="criteria.contents.publicationDate.range.from.dateStamp" prepend="AND">
+			<![CDATA[
+				advertisement_order_result.publication_date >= #criteria.contents.publicationDate.fromDate#
+			]]>
+			</isNotEmpty>
+			<isNotEmpty property="criteria.contents.publicationDate.range.to.dateStamp" prepend="AND">
+			<![CDATA[
+				advertisement_order_result.publication_date <= #criteria.contents.publicationDate.toDate#
+			]]>
+			</isNotEmpty>
+			<isEqual property="criteria.contents.mediaCode.notEmpty" compareValue="true" prepend="AND">
+				media.code = #criteria.contents.mediaCode.value#
+			</isEqual>
+			<isNotEmpty property="criteria.contents.mediaAreaName.value" prepend="AND">
+				area.name LIKE '%' || #criteria.contents.mediaAreaName.value# || '%'
+			</isNotEmpty>
+
+			<isEqual property="criteria.contents.mediaTypeName.notEmpty" compareValue="true" prepend="AND">
+				media.media_type = #criteria.contents.mediaTypeName.value#
+			</isEqual>
+			<isEqual property="criteria.contents.mediaCategoryList.notEmpty" compareValue="true" prepend="AND">
+				EXISTS (
+					SELECT
+						media_type.type
+					FROM
+						advertisement_order_master.media_type
+					INNER JOIN
+						advertisement_order_master.media_type_x_media_category
+					ON
+						media_type_x_media_category.media_type = media_type.type
+					WHERE
+						media_type_x_media_category.media_category_id IN
+						<iterate property="criteria.contents.mediaCategoryList.selected" open="(" close=")" conjunction=",">
+							#criteria.contents.mediaCategoryList.selected[]#
+						</iterate>
+						AND media_type.type = media.media_type
+				)
+			</isEqual>
+			<isEqual property="criteria.contents.biller.notEmpty" compareValue="true" prepend="AND">
+				EXISTS (
+					SELECT
+						biller.id
+					FROM
+						advertisement_order_master.biller
+			        INNER JOIN
+			        	advertisement_order_master.biller_of_item
+			        ON
+			        	biller.id = biller_of_item.biller_id
+					WHERE
+						biller.code = #criteria.contents.biller.value#
+			        	AND biller_of_item.item_id = item.id
+				)
+			</isEqual>
+
+			<isEqual property="criteria.contents.resultStatus" compareValue="WITHOUT_RESULT" prepend="AND">
+				advertisement_order_result.id IS NULL
+			</isEqual>
+			<isEqual property="criteria.contents.resultStatus" compareValue="ONLY_RESULT" prepend="AND">
+				advertisement_order_result.id IS NOT NULL
+			</isEqual>
+			<isEqual property="criteria.contents.cancelStatus" compareValue="ONLY_CANCEL" prepend="AND">
+				canceled_advertisement_order.advertisement_order_id IS NOT NULL
+			</isEqual>
+			<isEqual property="criteria.contents.cancelStatus" compareValue="WITHOUT_CANCEL" prepend="AND">
+				canceled_advertisement_order.advertisement_order_id IS NULL
+			</isEqual>
+			<isEqual property="criteria.contents.orderStatusList.notEmpty" compareValue="true" prepend="AND">
+				order_status.order_status_type IN
+				<iterate property="criteria.contents.orderStatusList.selected" open="(" close=")" conjunction=",">
+					#criteria.contents.orderStatusList.selected[]#
+				</iterate>
+			</isEqual>
+			<isEqual property="mediaCompanyList.mediaCompanies.empty" compareValue="false" prepend="AND">
+				media_company.code IN
+				<iterate property="mediaCompanyList.mediaCompanies" open="(" close=")" conjunction=",">
+					#mediaCompanyList.mediaCompanies[].code#
+				</iterate>
+			</isEqual>
+		</dynamic>
+	</sql>
+
+	<sql id="corePartOfAdvertisementOrdersForSearch">
+		FROM
+			advertisement_order.advertisement_order
+		INNER JOIN
+			advertisement_order.available_for_callcenter
+		ON
+			available_for_callcenter.advertisement_order_id = advertisement_order.id
+		INNER JOIN
+			advertisement_order.order_status
+		ON
+			advertisement_order.id = order_status.advertisement_order_id
+		INNER JOIN
+			advertisement_order.order_status_type
+		ON
+			order_status.order_status_type = order_status_type.type
+		INNER JOIN
+			advertisement_order.latest_advertisement_order_detail
+		ON
+			advertisement_order.id = latest_advertisement_order_detail.advertisement_order_id
+		LEFT OUTER JOIN
+			advertisement_order.advertisement_order_result
+		ON
+			advertisement_order_result.advertisement_order_id = advertisement_order.id
+		LEFT OUTER JOIN
+			advertisement_order.canceled_advertisement_order
+		ON
+			canceled_advertisement_order.advertisement_order_id = advertisement_order.id
+		INNER JOIN
+			advertisement_order.advertisement_order_type
+		ON
+			advertisement_order_type.type = advertisement_order.type
+		INNER JOIN
+			advertisement_order.ordered_item
+		ON
+			ordered_item.advertisement_order_detail_id = latest_advertisement_order_detail.advertisement_order_detail_id
+		INNER JOIN
+			advertisement_order_master.item
+		ON
+			item.id = ordered_item.item_id
+		INNER JOIN
+			advertisement_order_master.price_of_item
+		ON
+			price_of_item.item_id = item.id
+		INNER JOIN
+			advertisement_order_master.area
+		ON
+			area.id = item.area_id
+		INNER JOIN
+			advertisement_order_master.media
+		ON
+			media.id = area.media_id
+		INNER JOIN
+			advertisement_order_master.media_company
+		ON
+			media_company.code = media.media_company_code
+	</sql>
+
+	<select id="findByAdvertisementOrderId" parameterClass="java.util.HashMap"   resultMap="advertisementOrderSummary" >
+		<!-- KAMATA: コールセンターで無効な媒体発注を取得できないようにする -->
+		SELECT
+			advertisement_order_summary.advertisement_order_id,
+			advertisement_order_summary.order_datetime,
+			advertisement_order_summary.publication_date,
+			advertisement_order_summary.order_status_type,
+			advertisement_order_summary.order_status_type_name,
+			article_workplace.workplace_id						AS workplace_id,
+			article_workplace.workplace							AS workplace_name,
+			advertisement_order_summary.order_type,
+			advertisement_order_summary.summary_status,
+			advertisement_order_summary.item_size,
+			advertisement_order_summary.item_price,
+			advertisement_order_summary.area_name,
+			advertisement_order_summary.media_name
+		FROM (
+			SELECT
+				advertisement_order.id 																		AS advertisement_order_id,
+				latest_advertisement_order_detail.advertisement_order_detail_id								AS advertisement_order_detail_id,
+				advertisement_order.order_datetime															AS order_datetime,
+				advertisement_order_result.publication_date													AS publication_date,
+				order_status_type.type																		AS order_status_type,
+				order_status_type.name																		AS order_status_type_name,
+				advertisement_order_type.type																AS order_type,
+				CASE
+					WHEN canceled_advertisement_order.advertisement_order_id is not null THEN
+						'CANCELED'
+					WHEN advertisement_order_result.advertisement_order_id is not null THEN
+						'HAS_RESULT'
+					ELSE
+						'REQUESTED'
+					END 																					AS summary_status,
+				item.size																					AS item_size,
+				price_of_item.price																			AS item_price,
+				area.name																					AS area_name,
+				media.name																					AS media_name
+				<include refid="corePartOfAdvertisementOrdersForSearch" />
+			) AS advertisement_order_summary
+			INNER JOIN
+				advertisement_order.article
+			ON
+				article.advertisement_order_detail_id = advertisement_order_summary.advertisement_order_detail_id
+			INNER JOIN
+				advertisement_order.article_workplace
+			ON
+				article.id = article_workplace.article_id
+		WHERE
+			advertisement_order_summary.advertisement_order_id = #id#
+		ORDER BY
+			article.id
+	</select>
+
+	<select id="countOfCriteria" parameterClass="java.util.HashMap"   resultClass="java.lang.Integer">
+		<!-- KAMATA: コールセンターで無効な媒体発注をカウントしないようにする -->
+		WITH advertisement_order_for_criteria AS ( <include refid="criteriaWorkplacePartOfAdvertisementOrdersForSearch"/> )
+		SELECT
+			COUNT(1) AS search_count
+		<include refid="corePartOfAdvertisementOrdersForSearch" />
+		<include refid="criteriaPartOfAdvertisementOrdersForSearch"/>
+	</select>
+
+	<select id="listOfCriteria" parameterClass="java.util.HashMap"   resultMap="advertisementOrderSummary" >
+		<!-- KAMATA: コールセンターで無効な媒体発注を取得しないようにする -->
+		WITH advertisement_order_for_criteria AS ( <include refid="criteriaWorkplacePartOfAdvertisementOrdersForSearch"/> )
+		SELECT
+			advertisement_order_summary.advertisement_order_id,
+			advertisement_order_summary.order_datetime,
+			advertisement_order_summary.publication_date,
+			advertisement_order_summary.order_status_type,
+			advertisement_order_summary.order_status_type_name,
+			article_workplace.workplace_id						AS workplace_id,
+			article_workplace.workplace							AS workplace_name,
+			advertisement_order_summary.order_type,
+			advertisement_order_summary.summary_status,
+			advertisement_order_summary.item_size,
+			advertisement_order_summary.item_price,
+			advertisement_order_summary.area_name,
+			advertisement_order_summary.media_name
+		FROM (
+			SELECT
+				row_number() over (
+					<dynamic prepend="ORDER BY">
+						<isEqual property="criteria.sort.type" compareValue="ORDERED_DATETIME">
+							date_trunc( 'minute', advertisement_order.order_datetime ) <isEqual property="criteria.sort.descending" compareValue="true">DESC</isEqual>,
+							advertisement_order.id <isEqual property="criteria.sort.descending" compareValue="true">DESC</isEqual>
+						</isEqual>
+						<isEqual property="criteria.sort.type" compareValue="ORDER_STATUS">
+							order_status_type.priority <isEqual property="criteria.sort.descending" compareValue="true">DESC</isEqual>,
+							date_trunc( 'minute', advertisement_order.order_datetime ) DESC,
+							advertisement_order.id DESC
+						</isEqual>
+					</dynamic>
+				)																							AS priority,
+				advertisement_order.id 																		AS advertisement_order_id,
+				latest_advertisement_order_detail.advertisement_order_detail_id								AS advertisement_order_detail_id,
+				advertisement_order.order_datetime															AS order_datetime,
+				advertisement_order_result.publication_date													AS publication_date,
+				order_status_type.type																		AS order_status_type,
+				order_status_type.name																		AS order_status_type_name,
+				advertisement_order_type.type																AS order_type,
+				CASE
+					WHEN canceled_advertisement_order.advertisement_order_id is not null AND
+						advertisement_order_result.advertisement_order_id is not null THEN
+						'RESULT_CANCELED'
+					WHEN canceled_advertisement_order.advertisement_order_id is not null THEN
+						'CANCELED'
+					WHEN advertisement_order_result.advertisement_order_id is not null THEN
+						'HAS_RESULT'
+					ELSE
+						'REQUESTED'
+					END 																					AS summary_status,
+				item.size																					AS item_size,
+				price_of_item.price																			AS item_price,
+				area.name																					AS area_name,
+				media.name																					AS media_name
+			<include refid="corePartOfAdvertisementOrdersForSearch" />
+			<include refid="criteriaPartOfAdvertisementOrdersForSearch"/>
+			OFFSET #criteria.page.offset# LIMIT #criteria.page.limit#
+			) AS advertisement_order_summary
+			INNER JOIN
+				advertisement_order.article
+			ON
+				article.advertisement_order_detail_id = advertisement_order_summary.advertisement_order_detail_id
+			INNER JOIN
+				advertisement_order.article_workplace
+			ON
+				article.id = article_workplace.article_id
+		ORDER BY
+			advertisement_order_summary.priority,
+			article.id
+	</select>
+</sqlMap>

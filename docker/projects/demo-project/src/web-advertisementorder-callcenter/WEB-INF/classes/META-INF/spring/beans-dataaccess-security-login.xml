@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+	">
+
+	<bean id="connectLoginEventUserService" class="jp.rhp.dataaccess.login.advertisementordercallcenter.LoginJdbcDaoImpl">
+
+		<property name="dataSource" ref="callcenterDataSource" />
+		<property name="accountLockCount" value="3" />
+
+		<property name="usersByUsernameQuery">
+			<value>
+			<![CDATA[
+				SELECT
+					active_users.user_id
+				FROM
+					account.active_users
+				INNER JOIN
+					account.user_x_callcenter
+				ON user_x_callcenter.user_id = active_users.user_id
+				INNER JOIN
+					callcenter.callcenter
+				ON callcenter.id = user_x_callcenter.callcenter_id
+				WHERE
+						active_users.login_user_id = ?
+					AND active_users.availability_status_type = 'ENABLED'
+					AND ( active_users.from_date IS NULL OR active_users.from_date <= CURRENT_DATE )
+					AND ( active_users.to_date IS NULL OR active_users.to_date >= CURRENT_DATE )
+					AND callcenter.callcenter_type = 'ADVERTISEMENT_ORDER_CALLCENTER'
+			]]>
+			</value>
+		</property>
+
+		<property name="authoritiesByUsernameQuery">
+			<value>
+			<![CDATA[
+				SELECT
+					  active_users.login_user_id
+					, 'ROLE_' || active_users.role AS role
+				FROM
+					account.active_users
+				WHERE
+						active_users.login_user_id = ?
+					AND active_users.availability_status_type = 'ENABLED'
+					AND ( active_users.from_date IS NULL OR active_users.from_date <= CURRENT_DATE )
+					AND ( active_users.to_date IS NULL OR active_users.to_date >= CURRENT_DATE )
+			]]>
+			</value>
+		</property>
+	</bean>
+</beans>

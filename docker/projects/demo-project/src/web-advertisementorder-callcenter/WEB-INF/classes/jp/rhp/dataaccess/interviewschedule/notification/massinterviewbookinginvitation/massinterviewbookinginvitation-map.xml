@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.interviewschedule.notification.massinterviewbookinginvitation.MassInterviewBookingInvitationDataAccess">
+
+	<resultMap id="receiver" class="jp.rhp.model.interviewschedule.notification.massinterviewbookinginvitation.Receiver">
+		<result property="candidateId" column="candidate_id" />
+		<result property="sectionToHireId" column="section_to_hire_id" />
+		<result property="mailAddress1.mailAddress" column="mail_address" />
+		<result property="mailAddress2.mailAddress" column="mail_address_2" />
+		<result property="target" column="is_target" />
+	</resultMap>
+
+	<select id="prototypeReceiver" resultMap="receiver">
+		SELECT
+			candidates.candidate_id					AS candidate_id,
+			hiring_status.section_to_hire_id		AS section_to_hire_id,
+			candidates.mail_address					AS mail_address,
+			candidates.mail_address_2				AS mail_address_2,
+			CASE
+				WHEN mail_address = '' AND mail_address_2 = '' THEN
+					false
+				WHEN hiring_status.section_to_hire_id = 0 THEN
+					false
+				WHEN interview_booking_method.interview_booking_method_type != 'InterviewFrame' THEN
+					false
+				WHEN bookings.is_booked THEN
+					false
+				WHEN alternatives.is_invited THEN
+					false
+				WHEN adjust_interview_schedule_candidate.candidate_id IS NOT NULL THEN
+					false
+				ELSE
+					true
+			END									AS is_target
+		FROM
+			hiring_process.candidates
+			INNER JOIN
+				hiring_process.hiring_status
+				ON
+					candidates.candidate_id = hiring_status.candidate_id
+			INNER JOIN
+				hiring.interview_booking_method
+				ON
+					hiring_status.section_to_hire_id = interview_booking_method.section_to_hire_id
+			LEFT OUTER JOIN (
+				SELECT
+					COUNT(1) != 0 AS is_booked
+				FROM
+					interview_schedule.bookings
+				WHERE
+					candidate_id = #candidateId#
+				) AS bookings
+				ON
+					true
+			LEFT OUTER JOIN (
+				SELECT
+					COUNT(1) != 0 AS is_invited
+				FROM
+					interview_schedule.alternatives
+				WHERE
+					candidate_id = #candidateId#
+				) AS alternatives
+				ON
+					true
+			LEFT OUTER JOIN
+				hiring_process.adjust_interview_schedule_candidate
+				ON
+					candidates.candidate_id = adjust_interview_schedule_candidate.candidate_id
+		WHERE
+			candidates.candidate_id = #candidateId#
+	</select>
+
+	<select id="prototypeReceiverForUseMessageBoard" resultMap="receiver">
+		SELECT
+			candidates.candidate_id								AS candidate_id,
+			hiring_status.section_to_hire_id					AS section_to_hire_id,
+			candidates.mail_address								AS mail_address,
+			candidates.mail_address_2							AS mail_address_2,
+			CASE
+				WHEN mail_address = '' AND mail_address_2 = '' AND message_boards.id IS NULL THEN
+					false
+				WHEN hiring_status.section_to_hire_id = 0 THEN
+					false
+				WHEN interview_booking_method.interview_booking_method_type != 'InterviewFrame' THEN
+					false
+				WHEN bookings.is_booked THEN
+					false
+				WHEN alternatives.is_invited THEN
+					false
+				WHEN adjust_interview_schedule_candidate.candidate_id IS NOT NULL THEN
+					false
+				ELSE
+					true
+			END												AS is_target
+		FROM
+			hiring_process.candidates
+			INNER JOIN
+				hiring_process.hiring_status
+				ON
+					candidates.candidate_id = hiring_status.candidate_id
+			INNER JOIN
+				hiring.interview_booking_method
+				ON
+					hiring_status.section_to_hire_id = interview_booking_method.section_to_hire_id
+			LEFT OUTER JOIN (
+				SELECT
+					COUNT(1) != 0 AS is_booked
+				FROM
+					interview_schedule.bookings
+				WHERE
+					candidate_id = #candidateId#
+				) AS bookings
+				ON
+					true
+			LEFT OUTER JOIN (
+				SELECT
+					COUNT(1) != 0 AS is_invited
+				FROM
+					interview_schedule.alternatives
+				WHERE
+					candidate_id = #candidateId#
+				) AS alternatives
+				ON
+					true
+			LEFT OUTER JOIN
+				hiring_process.adjust_interview_schedule_candidate
+				ON
+					candidates.candidate_id = adjust_interview_schedule_candidate.candidate_id
+			LEFT OUTER JOIN
+				line.line_ids
+				ON line_ids.candidate_id = candidates.candidate_id
+				AND EXISTS (SELECT 1 FROM line.valid_line_ids WHERE valid_line_ids.line_id = line_ids.id)
+				AND ( SELECT settings.use_line_notify FROM line.settings LIMIT 1 OFFSET 0 )
+			LEFT OUTER JOIN
+				message_board.message_boards
+				ON message_boards.candidate_id = candidates.candidate_id
+			LEFT OUTER JOIN
+				message_board.notification_methods
+				ON notification_methods.message_board_id = message_boards.id
+		WHERE
+			candidates.candidate_id = #candidateId#
+	</select>
+
+</sqlMap>

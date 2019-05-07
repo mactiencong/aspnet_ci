@@ -1,0 +1,10 @@
+<select name="workplace.id" id="workplace.id" class="regular normalWidth">
+    <option value="0">▼選択してください</option>
+    #foreach( ${workplace} in ${workplaceList.workplaces})
+        #if(${jobOfferCriteria.workplace.id} == ${workplace.id})
+            <option value="${workplace.id}" selected>${workplace.workplaceName.text}</option>
+        #else
+            <option value="${workplace.id}">${workplace.workplaceName.text}</option>
+        #end
+    #end
+</select>

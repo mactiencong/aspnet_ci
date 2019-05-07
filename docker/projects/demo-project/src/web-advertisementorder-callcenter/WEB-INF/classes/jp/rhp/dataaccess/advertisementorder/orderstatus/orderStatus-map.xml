@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.advertisementorder.orderstatus.OrderStatusDataAccess">
+
+
+	<resultMap id="orderStatus" class="jp.rhp.model.advertisementorder.orderstatus.OrderStatus">
+		<result property="type" 												column="type" />
+    	<result property="name.value" 											column="name" />
+	</resultMap>
+
+	<select id="listAll"  resultMap="orderStatus" >
+	SELECT
+			type,
+			name
+	FROM
+		advertisement_order.order_status_type
+	WHERE
+		order_status_type.available_for_callcenter
+	ORDER BY
+		order_status_type.priority ASC
+	</select>
+
+</sqlMap>

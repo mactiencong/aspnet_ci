@@ -1,0 +1,62 @@
+<div class="countView" style="position:relative; margin-bottom:15px;">
+	<p><em class="count">#escape(${advertisementOrderSummaries.searchCount})</em> 件見つかりました。</p>
+	<ul style="position:absolute;top:-14px;right:0;">
+		<li>
+			<a href='$link.relativeAndCompany("/advertisementorder/export")'>
+				<img src="$link.contextPath/images/btnMediaOrderExport.png" width="140" height="42" alt="発注データ出力" class="rollover" />
+			</a>
+		</li>
+	</ul>
+</div>
+<div class="listHeader">
+	<ul class="collectiveregistration">
+		<li class="statusModify">
+			<a href='javascript:void(0);' class="changeStatus">
+				<img src="$link.contextPath/images/btnOrderStatusBatchChange.png" class="rollover" alt="発注状態一括変更"/>
+			</a>
+		</li>
+	</ul>
+	#page( $criteria.page "/advertisementorder/history/paging" )
+	#formSingleSelect( "${criteriaPath}.page.limit" ${criteria.page.perPages} 'tabindex="25" class="regular w070 perPage"' )
+</div><!-- //listHeader -->
+<table summary="発注リスト" class="recoplist">
+	<col width="3%" /><col width="9%" /><col width="13%" /><col width="*" /><col width="20%" /><col width="12%" /><col width="10%" /><col width="10%" /><col width="7%" />
+	<thead>
+		<tr class="header">
+			<th rowspan="2">
+				<form name="selectAll" action="#" method="post">
+    				<input name="checkAll" type="checkbox" id="selectAll"/>
+    			</form>
+			</th>
+			<th rowspan="2">発注番号</th>
+			<th rowspan="2" class="sort"><a href="javascript:void(0);" class="ORDERED_DATETIME">発注依頼日時</a>#if( $criteria.sort.type.isOrderedDatetime() )<span>#if( $criteria.sort.descending )▼#else▲#end</span>#end</th>
+			<th rowspan="2">原稿掲載店舗</th>
+			<th>媒体／版（エリア）</th>
+			<th rowspan="2">価格（税別）</th>
+			<th rowspan="2">発行日</th>
+			<th rowspan="2" class="sort"><a href="javascript:void(0);" class="ORDER_STATUS">発注状態</a>#if( $criteria.sort.type.isOrderStatus() )<span>#if( $criteria.sort.descending )▼#else▲#end</span>#end</th>
+			<th rowspan="2">&nbsp;</th>
+		</tr>
+		<tr class="header">
+			<th>プラン</th>
+		</tr>
+	</thead>
+	#foreach( $advertisementOrderSummary in ${advertisementOrderSummaries.advertisementOrderSummaries} )
+	#set( $index=$foreach.index )
+	<tbody>
+		#parse("/advertisementorder/history/list/result/line.vm")
+	</tbody>
+	#end
+</table>
+<div class="listHeader bottom">
+	<ul class="collectiveregistration bottom">
+		<li class="statusModify">
+			<a href='javascript:void(0);' class="changeStatus">
+				<img src="$link.contextPath/images/btnOrderStatusBatchChange.png" class="rollover" alt="発注状態一括変更"/>
+			</a>
+		</li>
+	</ul>
+	<form name="batch" action="#" class="batch" method="POST"></form>
+	#page( $criteria.page "/advertisementorder/history/paging" )
+	#formSingleSelect( "${criteriaPath}.page.limit" ${criteria.page.perPages} 'tabindex="25" class="regular w070 perPage"' )
+</div><!-- //listHeader -->

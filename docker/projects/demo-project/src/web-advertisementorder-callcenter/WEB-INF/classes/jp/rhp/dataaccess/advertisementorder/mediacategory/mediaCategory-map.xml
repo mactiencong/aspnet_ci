@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.advertisementorder.mediacategory.MediaCategoryDataAccess">
+
+
+	<resultMap id="mediaCategory" class="jp.rhp.model.advertisementorder.mediacategory.MediaCategory">
+		<result property="id"			column="id" />
+    	<result property="name.value"	column="name" />
+	</resultMap>
+
+	<select id="listAll" resultMap="mediaCategory" >
+	SELECT
+		id,
+		name
+	FROM
+		advertisement_order_master.media_category
+	ORDER BY
+		media_category.priority ASC
+	</select>
+
+</sqlMap>

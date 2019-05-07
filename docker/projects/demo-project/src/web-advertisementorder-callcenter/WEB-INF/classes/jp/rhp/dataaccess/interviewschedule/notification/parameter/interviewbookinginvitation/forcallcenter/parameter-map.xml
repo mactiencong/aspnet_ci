@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.interviewschedule.notification.parameter.interviewbookinginvitation.forcallcenter.InterviewBookingInvitationParameterDataAccess">
+
+	<resultMap class="jp.rhp.model.interviewschedule.notification.parameter.interviewbookinginvitation.forcallcenter.InterviewBookingInvitationParameter" id="mailParameter">
+		<result property="entryDate.value"							column = "entry_date" />
+		<result property="candidate.name.value"						column = "entry_name" />
+		<result property="candidate.nameKana.value"					column = "entry_name_kana" />
+		<result property="candidate.nickName.value"					column = "nick_name" />
+		<result property="sectionToHireName.value"					column = "section_to_hire_name" />
+		<result property="jobTypeToHireName.value"					column = "jobtype_to_hire_name" />
+		<result property="selectionStatus.value"					column = "selection_status_name" />
+		<result property="invitationUrlParameter.alternativesId"	column = "alternatives_id" />
+		<result property="invitationUrlParameter.requestKey"		column = "request_key" />
+		<result property="invitationUrlParameter.urlFormat"			column = "interview_booking_url_format_for_mail" />
+	</resultMap>
+
+	<select id="findParameterByAlternatives" resultMap="mailParameter">
+		SELECT
+			to_char( entries.entry_date, 'YYYY年MM月DD日 HH24時MI分' )			AS entry_date,
+			candidates.entry_name												AS entry_name,
+			coalesce(candidates.entry_name_kana, '')							AS entry_name_kana,
+			coalesce(candidates.nick_name, '')									AS nick_name,
+			section_to_hire.section_to_hire_name								AS section_to_hire_name,
+			jobtype_to_hire.jobtype_to_hire_name								AS jobtype_to_hire_name,
+			CASE
+				WHEN selection_statuses.selection_status_id = 0 THEN
+					''
+				ELSE
+					selection_statuses.selection_status_name
+				END																AS selection_status_name,
+			#id#													AS alternatives_id,
+			#request.key#											AS request_key,
+			settings_for_alternatives.interview_booking_url_format_for_mail		AS interview_booking_url_format_for_mail
+		FROM
+			hiring_process.candidates
+			INNER JOIN
+				hiring_process.hiring_status
+				ON
+					candidates.candidate_id = hiring_status.candidate_id
+			INNER JOIN
+				hiring.section_to_hire
+				ON
+					hiring_status.section_to_hire_id = section_to_hire.section_to_hire_id
+			INNER JOIN
+				hiring.jobtype_to_hire
+				ON
+					hiring_status.jobtype_to_hire_id = jobtype_to_hire.jobtype_to_hire_id
+			INNER JOIN
+				hiring_process.selection_statuses
+				ON
+					hiring_status.selection_status_id = selection_statuses.selection_status_id
+			INNER JOIN
+				entry.detail_entries
+				ON
+					candidates.candidate_id = detail_entries.candidate_id
+			INNER JOIN
+				entry.entries
+				ON
+					detail_entries.entry_id = entries.entry_id
+			INNER JOIN
+				interview_schedule.settings_for_alternatives
+				ON true
+		WHERE
+			candidates.candidate_id = #candidateId#
+	</select>
+
+	<resultMap class="jp.rhp.model.interviewschedule.notification.parameter.interviewbookinginvitation.forcallcenter.InterviewBookingInvitationParameter" id="massMailParameter">
+		<result property="entryDate.value"							column = "entry_date" />
+		<result property="candidate.name.value"						column = "entry_name" />
+		<result property="candidate.nameKana.value"					column = "entry_name_kana" />
+		<result property="candidate.nickName.value"					column = "nick_name" />
+		<result property="sectionToHireName.value"					column = "section_to_hire_name" />
+		<result property="jobTypeToHireName.value"					column = "jobtype_to_hire_name" />
+		<result property="selectionStatus.value"					column = "selection_status_name" />
+		<result property="invitationUrlParameter.urlFormat"			column = "interview_booking_url_format_for_mail" />
+	</resultMap>
+
+	<select id="findParameterByCandidateId" resultMap="massMailParameter">
+		SELECT
+			to_char( entries.entry_date, 'YYYY年MM月DD日 HH24時MI分' )			AS entry_date,
+			candidates.entry_name												AS entry_name,
+			coalesce(candidates.entry_name_kana, '')							AS entry_name_kana,
+			coalesce(candidates.nick_name, '')									AS nick_name,
+			section_to_hire.section_to_hire_name								AS section_to_hire_name,
+			jobtype_to_hire.jobtype_to_hire_name								AS jobtype_to_hire_name,
+			CASE
+				WHEN selection_statuses.selection_status_id = 0 THEN
+					''
+				ELSE
+					selection_statuses.selection_status_name
+				END																AS selection_status_name,
+			settings_for_alternatives.interview_booking_url_format_for_mail		AS interview_booking_url_format_for_mail
+		FROM
+			hiring_process.candidates
+			INNER JOIN
+				hiring_process.hiring_status
+				ON
+					candidates.candidate_id = hiring_status.candidate_id
+			INNER JOIN
+				hiring.section_to_hire
+				ON
+					hiring_status.section_to_hire_id = section_to_hire.section_to_hire_id
+			INNER JOIN
+				hiring.jobtype_to_hire
+				ON
+					hiring_status.jobtype_to_hire_id = jobtype_to_hire.jobtype_to_hire_id
+			INNER JOIN
+				hiring_process.selection_statuses
+				ON
+					hiring_status.selection_status_id = selection_statuses.selection_status_id
+			INNER JOIN
+				entry.detail_entries
+				ON
+					candidates.candidate_id = detail_entries.candidate_id
+			INNER JOIN
+				entry.entries
+				ON
+					detail_entries.entry_id = entries.entry_id
+			INNER JOIN
+				interview_schedule.settings_for_alternatives
+				ON true
+		WHERE
+			candidates.candidate_id = #candidateId#
+	</select>
+
+</sqlMap>

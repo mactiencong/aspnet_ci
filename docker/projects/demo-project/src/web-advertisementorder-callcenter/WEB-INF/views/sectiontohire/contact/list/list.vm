@@ -1,0 +1,54 @@
+#recopHtml()
+<head>
+#recopHead('店舗連絡先一覧｜店舗連絡')
+<script type="text/javascript">
+	$(".perPage").live("change", function()
+	{
+		changePerPage('$link.relativeAndCompany("/sectiontohire/contact/changePerPage")', $(this).val());
+	});
+</script>
+</head>
+<body id="bidAppl">
+<div id="wrapper">
+<div style="width:100%;">
+	<div id="current_company_header">
+		<div class="company">
+			<div class="value">
+				<div style="float:left;"><span class="mark">●</span>$!{current_company.name}</div>
+				<div style="clear:both;"></div>
+			</div>
+		</div>
+	</div>
+</div>
+#css("$link.contextPath/css/commons/current_company_header.css")
+#javascript("$link.contextPath/js/jquery.sticky.js")
+#javascript("$link.contextPath/js/commons/current_company_header.js")
+#css("$link.contextPath/css/sectiontohire/contact/contact.css?$!{version}")
+#recopHeaderOfLogoOnly
+<hr />
+<div  id="container">
+<div class="pannel">
+<div class="inner">
+<div class="content">
+	<div class="ttlBlock" style="position:relative; width:100%;">
+		<h2 class="appl">店舗連絡先一覧</h2>
+		<a href="" onClick="window.close();return false;">
+			<img src="$link.contextPath/images/btnClose.png" />
+		</a>
+	</div><!-- //ttlBlock -->
+	<div style="clear:both;">
+		#parse("/sectiontohire/contact/list/search/item.vm")
+		#parse("/sectiontohire/contact/list/result/result.vm")
+		#token()
+		#csrfToken()
+	</div>
+</div><!-- //content -->
+</div><!-- //inner -->
+</div><!-- //pannel -->
+</div><!-- //container -->
+
+#recopFooter()
+
+</div><!-- //wrapper -->
+</body>
+#endRecopHtml()

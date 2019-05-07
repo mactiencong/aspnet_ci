@@ -1,0 +1,21 @@
+	<table class="recoptable print_display_none" >
+		<col width="18%" /><col width="*" />
+		<tr>
+			<th>
+				商品按分価格
+			</th>
+			<td>
+				<table summary="layout" class="innerTable regular">
+					<col width="80%"/><col width="*"/>
+					<tbody>
+						#foreach($costPerSectionToHire in $costPerSectionToHireList.costPerSectionToHires)
+						<tr style="border-bottom:1px dashed #ccc;">
+							<th>#escape($costPerSectionToHire.sectionToHire.name)</th>
+							<td  class="equipartitionPrice" >$text.priceFormat($costPerSectionToHire.cost.value)&nbsp;円</td>
+						</tr>
+						#end
+					</tbody>
+				</table>
+			</td>
+		</tr>
+	</table>

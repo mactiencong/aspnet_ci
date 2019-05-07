@@ -1,0 +1,39 @@
+#formHiddenInput( 'newJointOrderSheet.item.id' $newJointOrderSheet.item.id 'class="noCheck itemId"' )
+#formHiddenInput( 'newJointOrderSheet.item.media.name.value' $newJointOrderSheet.item.media.name.value 'class="noCheck mediaName"' )
+#formHiddenInput( 'newJointOrderSheet.item.plan.issue.area.name.value' $newJointOrderSheet.item.plan.issue.area.name.value 'class="noCheck orderArea"' )
+#formHiddenInput( 'newJointOrderSheet.item.plan.issue.size.value' $newJointOrderSheet.item.plan.issue.size.value 'class="noCheck size"' )
+#formHiddenInput( 'newJointOrderSheet.item.plan.price.value' $newJointOrderSheet.item.plan.price.value 'class="noCheck price"' )
+<div class="itemNoSelect" style="margin-left:30px;#if(!$newJointOrderSheet.item.empty) display:none;#end">商品が選択されていません。</div>
+<div class="itemInformation" #if($newJointOrderSheet.item.empty)style="display:none;"#end>
+	<table class="recoptable" summary="商品情報">
+		<col width="18%" /><col width="32%" /><col width="18%" /><col width="32%" />
+		<tr>
+			<th>
+				<div class="title"><span>媒体</span></div>
+			</th>
+			<td>
+				<span class="mediaNameView">#escape($newJointOrderSheet.item.media.name.value)</span>
+			</td>
+			<th>
+				<div class="title"><span>版（エリア）</span></div>
+			</th>
+			<td>
+				<span class="orderAreaView">#escape($newJointOrderSheet.item.plan.issue.area.name.value)</span>
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<div class="title"><span>プラン</span></div>
+			</th>
+			<td>
+				<span class="sizeView">#escape($newJointOrderSheet.item.plan.issue.size.value)</span>
+			</td>
+			<th>
+				<div class="title"><span>価格（税別）</span></div>
+			</th>
+			<td>
+				<span class="priceView itemPriceFormat">#escape($text.priceFormat($newJointOrderSheet.item.plan.price.value) )円</span>
+			</td>
+		</tr>
+	</table>
+</div>

@@ -1,0 +1,54 @@
+#recopHtml()
+<head>
+	#recopHead('予約状況一覧')
+	<script type="text/javascript" src="$link.contextPath/js/jquery.ui.datepicker2.js"></script>
+	<script type="text/javascript" src="$link.contextPath/js/schedule/bookingstatus/list.js"></script>
+	<link href="$link.contextPath/css/schedule/bookingstatus.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript">
+	$(document).ready(function() {
+		settingBookingStatus({
+			parPageUrl : "$link.relativeAndCompany("/sectiontohire/schedule/bookingstatus/changePerPage")",
+			calendarIconImageUrl : "$link.contextPath/images/icnCalendar2.gif"
+		});
+		$("a.statusChange").live( "click", function(){
+			var url = $(this).attr("href");
+			var successTarget = $(this).parents("tr.interview");
+			$.ajax({
+				type    : "POST",
+				url     : url,
+				success : function( data )
+				{
+					$(data).ajaxResponse({
+						successTarget:successTarget
+					});
+					settingDelete();
+				},
+				error   : function ( XMLHttpRequest, status, errorThrown )
+				{
+					$('html').html( XMLHttpRequest.responseText );
+				}
+			});
+		});
+	});
+	</script>
+</head>
+<body id="bidSchedule">
+#recopHeader()
+<hr />
+
+<div id="container">
+<div class="pannel">
+<div class="inner">
+<div class="content">
+	#parse('schedule/interviewframe/bookingstatus/list/contents/title.vm')
+	#parse('schedule/interviewframe/bookingstatus/list/contents/search.vm')
+	<div id="_result">
+		#parse('schedule/interviewframe/bookingstatus/list/contents/result.vm')
+	</div>
+</div>
+</div>
+</div>
+	#recopFooter()
+</div>
+</body>
+</html>

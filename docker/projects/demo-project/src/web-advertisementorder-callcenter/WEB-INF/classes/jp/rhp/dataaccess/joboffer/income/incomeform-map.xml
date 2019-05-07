@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.joboffer.income.IncomeFormDataAccess">
+
+	<typeAlias alias="incomeForm" type="jp.rhp.model.joboffer.recruitment.obsoletedincome.IncomeForm" />
+
+	<resultMap class="incomeForm" id="incomeForm">
+		<result property="incomeFormCode" column="income_form_code"/>
+		<result property="incomeForm" column="income_form"/>
+	</resultMap>
+
+	<sql id="select">
+		SELECT
+			income.income_form_code,
+			income.income_form
+		FROM
+			joboffer.income
+	</sql>
+
+	<select id="listAll" resultMap="incomeForm">
+		<include refid="select"/>
+		ORDER BY
+			income.income_form_code
+	</select>
+
+</sqlMap>

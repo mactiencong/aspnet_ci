@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.callcenterloginuser.login.lock.LoginFailureDataAccess">
+
+	<insert id="registerLoginFailure" parameterClass="java.lang.Integer">
+		INSERT INTO account.login_failure (
+			user_id
+		) VALUES (
+			#userId#
+		)
+	</insert>
+
+	<select id="countLoginFailure" parameterClass="java.lang.Integer" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*) as login_failure_count
+		FROM
+			account.login_failure
+		WHERE
+			user_id = #userId#
+	</select>
+
+	<select id="findUserIdByLoginUserId" parameterClass="java.lang.String" resultClass="java.lang.Integer">
+		<![CDATA[
+		SELECT
+			user_id
+		FROM
+			account.active_users
+		WHERE
+				login_user_id = #loginUserId#
+			AND active_users.availability_status_type = 'ENABLED'
+			AND ( active_users.from_date IS NULL OR active_users.from_date <= CURRENT_DATE )
+			AND ( active_users.to_date IS NULL OR active_users.to_date >= CURRENT_DATE )
+		]]>
+	</select>
+</sqlMap>

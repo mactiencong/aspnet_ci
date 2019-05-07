@@ -1,0 +1,127 @@
+#recopHtml()
+<head>
+#recopHead('掲載情報編集｜発注管理')
+
+#javascript("$link.contextPath/js/si.files.js")
+#javascript("$link.contextPath/js/advertisementorder/result.js")
+#javascript("$link.contextPath/js/commons/error.js")
+#javascript("$link.contextPath/js/jquery.ui.datepicker2.js")
+#css("$link.contextPath/css/advertisementorder/advertisementorder.css")
+#css("$link.contextPath/css/advertisementorder/advertisementorderresult.css")
+<script type="text/javascript">
+	$(document).ready(function(){
+		recop.settings.urlCalendarIconImage = '$link.contextPath/images/icnCalendar2.gif';
+		$.advertisementOrderResultModification();
+	});
+</script>
+
+#set( $advertisementOrderResult = $advertisementOrderResultModification )
+#set( $advertisementOrderResultPath = 'advertisementOrderResultModification' )
+</head>
+<body>
+#recopHeader()
+
+<hr />
+<div  id="container">
+<div class="pannel">
+<div class="inner">
+<div class="content">
+	<div class="print_display_none">
+		<div class="ttlBlock" style="width:100%;">
+			<h2 class="employ">掲載情報編集</h2>
+		</div><!-- //ttlBlock -->
+		<div class="clrFix"></div>
+	</div>
+	<div class="wrapsection">
+		#parse("/advertisementorder/result/_parts/order.vm")
+		#parse("/advertisementorder/result/_parts/item.vm")
+	</div>
+
+	<form name="modifyForm" id="modifyForm" action="$link.relativeAndCompany("/advertisementorder/detail/${advertisementOrder.id}/result/modify/execute")#result" method="POST" enctype="multipart/form-data">
+		<h3 id="result">掲載情報</h3>
+
+		<div class="section">
+			<table class="recoptable" summary="掲載情報">
+				<col width="18%" /><col width="32%" /><col width="18%" /><col width="32%" />
+				<tr>
+					<th>
+						<div class="title"><span>発行日</span>#required('class="needIcon"')</div>
+					</th>
+					<td class="input">
+						#formInput("${advertisementOrderResultPath}.issue.publicationDate.dateStamp.dateStamp" 'class="regular"' 'publicationDate')
+						#errorMessages("${advertisementOrderResultPath}.issue.publicationDate.dateStamp.dateStamp")
+					</td>
+					<th>
+						<div class="title"><span>台割</span></div>
+					</th>
+					<td class="input">
+						#formInput("${advertisementOrderResultPath}.issue.article.flatPlan.value" 'class="regular flatPlan"' )
+						#errorMessages("${advertisementOrderResultPath}.issue.article.flatPlan.value")
+					</td>
+				</tr>
+				<tr>
+					<th rowspan="5">
+						<div class="title"><span>原稿ファイル</span></div>
+					</th>
+					<td colspan="3" class="input" style="border-bottom:none;padding:0;"></td>
+				</tr>
+			#foreach( $articleFile in ${advertisementOrderResult.issue.article.articleFileList.files} )
+				#set( $articleFileIndex = ${foreach.index} )
+				<tr>
+					<td colspan="3" style="border-top:none;border-bottom:none;" #errorClass("${advertisementOrderResultPath}.issue.article.articleFileList.*")>
+						<div class="editMethod">
+						#if( ${articleFile.notEmptyFileName} )
+							<a href="$link.relativeAndCompany("/advertisementorder/detail/${advertisementOrder.id}/result/modify/articlefile/download/$!{articleFile.serialNumber}")" class="articleFileDownload">#escape(${articleFile.name.value})</a>
+						#end
+							<span>
+								#formRadioButton( "${advertisementOrderResultPath}.issue.article.articleFileList.files[${articleFileIndex}].editType" ${articleFileEditTypeOptions} '&nbsp;' 'class="selectEditMethod"' 0 )
+							</span>
+						</div>
+						<div class="articleFile" #if( ${articleFile.editType.isNotEdit()} ) style="display:none;" #end>
+							<label class="cabinet">
+								<input type="file" id="uploadFile$!{articleFile.serialNumber}" style="width:90%;" name="uploadFile$!{articleFile.serialNumber}" accept="$!{articleFileTypes}" class="file" />
+							</label>
+							<a href="javascript:void(0);" class="resetFile noDialog" style="display:none;"><img src="$link.contextPath/images/cross.png" class="rollover"></a>
+							<input type="text" id="targetInput$!{articleFile.serializeNumber}" value="選択されていません。" class="uploadFilePath" readonly />
+						</div>
+					</td>
+				</tr>
+			#end
+				<tr>
+					<td colspan="3" class="input" style="border-top:none;">
+						<div>
+							#errorMessages("${advertisementOrderResultPath}.issue.article.articleFileList.*")
+						</div>
+						<script type="text/javascript">
+							SI.Files.stylizeAll();
+						</script>
+					</td>
+				</tr>
+				<tr>
+					<th>
+						<div class="title"><span>備考</span></div>
+					</th>
+					<td colspan="3" class="input">
+						#formTextarea( "${advertisementOrderResultPath}.memo.text" 'class="regular memo"' )
+						#errorMessages("${advertisementOrderResultPath}.memo.text")
+					</td>
+				</tr>
+			</table>
+		</div>
+		#token()
+	</form>
+	<div class="registBtn">
+		<a href="$link.relativeAndCompany("/advertisementorder/detail/${advertisementOrder.id}")" class="return"><img src="$link.contextPath/images/btnCancel.gif" alt="変更しないで戻る" width="132" height="33" class="return rollover" /></a>
+		<a id="_modifyButton" href="#modalLoading" class="execute noDialog" rel="modify">
+			<img src="$link.contextPath/images/btnRevise.gif" alt="変更する" class="regist rollover" />
+		</a>
+	</div>
+</div><!-- //content -->
+</div><!-- //inner -->
+</div><!-- //pannel -->
+</div><!-- //container -->
+
+#recopFooter()
+
+</body>
+</html>

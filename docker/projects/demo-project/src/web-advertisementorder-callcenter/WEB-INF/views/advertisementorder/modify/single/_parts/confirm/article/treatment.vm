@@ -1,0 +1,32 @@
+#if($!{editSingleOrderSheet.jobOfferSettings.useCassetteTreatment.use})
+<tr>
+	<th class="a-lt">待遇</th>
+	<td>
+		<table summary="layout" class="innerTable regular" style="width:100%">
+			<col width="40%" /><col width="*" />
+		#foreach( $treatment in $!editSingleOrderSheet.article.jobOffer.recruitment.cassetteTreatment.treatmentList.treatments )
+			<tr>
+				<td><label>$treatment.name</label></td>
+				<td>
+					#if($treatment.existence.exist)有り #else 無し #end&nbsp;
+				</td>
+			</tr>
+		#end
+			<tr>
+				<td><label>交通費支給</label></td>
+				<td>
+					#escape($!{trafficExpensesMap.get($!editSingleOrderSheet.article.jobOffer.recruitment.cassetteTreatment.trafficExpenses.type)}) &nbsp;
+				</td>
+			</tr>
+		#if($!{editSingleOrderSheet.article.jobOffer.recruitment.cassetteTreatment.trafficExpenses.limitRequired})
+			<tr>
+				<td><label>交通費上限</label></td>
+				<td>
+					$text.priceFormat($!{editSingleOrderSheet.article.jobOffer.recruitment.cassetteTreatment.trafficExpenses.limit}) 円
+				</td>
+			</tr>
+		#end
+		</table>
+	</td>
+</tr>
+#end

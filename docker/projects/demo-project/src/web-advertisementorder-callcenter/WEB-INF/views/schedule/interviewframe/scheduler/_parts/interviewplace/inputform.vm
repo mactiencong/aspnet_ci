@@ -1,0 +1,59 @@
+<div style='width:100%;text-align:center;margin-top:10px;'>
+	<table style="width:95%;text-align:left;margin:0 auto;">
+		<col width="15%" /><col width="*" />
+		<tr>
+			<th>会場名<span style="color:#DD0000;margin-left:3px;">*</span></th>
+			<td>
+				<input type='text' value="#escape($!{templateInterviewPlace.name.value})" class='regular w250 bg placeInput' style="margin:5px;" id="inputInterviewPlaceName">
+				<div class="interviewPlaceName errorMsg" style="color:#e53500;margin-left:5px;"><!-- --></div>
+			</td>
+		</tr>
+		<tr>
+			<th>都道府県<span style="color:#DD0000;margin-left:3px;">*</span></th>
+			<td>
+				<select class="regular bg placeInput" style="margin:5px;" id="inputPrefecture">
+					<option value="">未選択</option>
+					#foreach( $item in ${prefectureOptions.entrySet()} )
+						<option value="${item.key}" #if(${item.key} == $!{templateInterviewPlace.detail.location.address.prefecture.code})selected #end>${item.value}</option>
+					#end
+				</select>
+				<div class="prefecture errorMsg" style="color:#e53500;margin-left:5px;"><!-- --></div>
+			</td>
+		</tr>
+		<tr>
+			<th>市区町村<span style="color:#DD0000;margin-left:3px;">*</span></th>
+			<td>
+				<input type='text' value="#escape($!{templateInterviewPlace.detail.location.address.city.municipality.name.value})" class='regular w200 bg placeInput' style="margin:5px;" id="inputMunicipality">
+				<div class="municipality errorMsg" style="color:#e53500;margin-left:5px;"><!-- --></div>
+			</td>
+		</tr>
+		<tr>
+			<th>町名番地<span style="color:#DD0000;margin-left:3px;">*</span></th>
+			<td>
+				<input type='text' value="#escape($!{templateInterviewPlace.detail.location.address.city.street.name.value})" class='regular w200 bg placeInput' style="margin:5px;" id="inputStreet">
+				<div class="street errorMsg" style="color:#e53500;margin-left:5px;"><!-- --></div>
+			</td>
+		</tr>
+		<tr>
+			<th>建物名</th>
+			<td>
+				<input type='text' value="#escape($!{templateInterviewPlace.detail.location.address.city.street.buildingName.value})" class='regular w250 bg placeInput' style="margin:5px;" id="inputBuilding">
+				<div class="building errorMsg" style="color:#e53500;margin-left:5px;"><!-- --></div>
+			</td>
+		</tr>
+		<tr>
+			<th>電話番号</th>
+			<td>
+				<input type='text' value="#escape($!{templateInterviewPlace.detail.contact.telephoneNumber.areaCode})" class='regular bg placeInput' style="width:50px;margin:5px;" id="inputPhoneNumber1">-<input type='text' value="#escape($!{templateInterviewPlace.detail.contact.telephoneNumber.localOffeceNumber})" class='regular bg placeInput' style="width:50px;margin:5px;" id="inputPhoneNumber2">-<input type='text' value="#escape($!{templateInterviewPlace.detail.contact.telephoneNumber.number})" class='regular bg placeInput' style="width:50px;margin:5px;" id="inputPhoneNumber3">
+				<div class="phoneNumber errorMsg" style="color:#e53500;margin-left:5px;"><!-- --></div>
+			</td>
+		</tr>
+		<tr>
+			<th>地図座標</th>
+			<td>
+				<span style="margin:3px;color:#666666;">緯度</span><input type='text' value='#escape($!{templateInterviewPlace.detail.location.coordinate.latitude.value})' class='regular w120 bg placeInput' style="margin:5px;" id="inputLatitude"><span style="margin:3px;color:#666666;">経度</span><input type='text' value='#escape($!{templateInterviewPlace.detail.location.coordinate.longitude.value})' class='regular w120 bg placeInput' style="margin:5px;" id="inputLongitude"><span style="margin-left:5px;"><a name="coordinateSetting" onclick='$.fancybox.pos(1);return false;'>地図から設定</a></span>
+				<div class="coordinate errorMsg" style="color:#e53500;margin-left:5px;"><!-- --></div>
+			</td>
+		</tr>
+	</table>
+</div>

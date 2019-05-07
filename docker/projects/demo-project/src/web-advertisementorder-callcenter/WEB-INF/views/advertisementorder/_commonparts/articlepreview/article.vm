@@ -1,0 +1,6 @@
+
+	<h3 class="articleTitle displayNone print_display_block">発注番号$advertisementOrderId - 原稿No.$articleNo</h3>
+	#parse("/advertisementorder/_commonparts/articlepreview/summary.vm")
+	#parse("/advertisementorder/_commonparts/articlepreview/job.vm")
+	#parse("/advertisementorder/_commonparts/articlepreview/recruitment.vm")
+	#parse("/advertisementorder/_commonparts/articlepreview/entrymethod.vm")

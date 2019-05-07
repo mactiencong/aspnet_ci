@@ -1,0 +1,32 @@
+
+<td class="tmplName">
+    $!{joboffer.workplace.workplaceNumber}<br />
+    #escape($!{joboffer.workplace.name})
+</td>
+<td>
+    <a id="jobPreview${joboffer.id}" class="jobPreview" href='$link.relativeAndCompany("/joboffer/preview/${joboffer.id}")' rel="preview${joboffer.id}">#escape($!{joboffer.title})</a>
+</td>
+<td>
+	<div>
+    	$!{joboffer.jobTypeName}
+    </div>
+</td>
+<td style="text-align:center;">
+    #if($joboffer.posting.offering)
+        <a href="javascript:void(0);" onClick="return postingClose(${joboffer.id})"><img src="$link.contextPath/images/btnSelectDisclose.gif" width="89" height="28" alt="公開中" /></a>
+    #else
+        <a href="javascript:void(0);" onClick="return postingOpen(${joboffer.id})"><img src="$link.contextPath/images/btnSelectClose.gif" width="89" height="28" alt="非公開" /></a>
+    #end
+    #if(!$!joboffer.application.useWebEntry.useWebEntry)<div class="useWebEntry"><span>WEB応募なし</span></div>#end
+</td>
+<td class="function last">
+    <ul>
+        <li><a href='$link.relativeAndCompany("/joboffer/register/copy").query("jobofferId=${joboffer.id}")'><img src="$link.contextPath/images/btnCopy.gif" width="58" height="25" alt="コピー" class="rollover" /></a></li>
+    #if($joboffer.posting.offering)
+        <li><img src="$link.contextPath/images/btnDeleteDisabled.gif" width="49" height="25" alt="削除" /></li>
+    #else
+        <li><a href="javascript:void(0);" onClick="return deleteConfirm('$link.relativeAndCompany("/joboffer/list/delete").query("jobOfferId=${joboffer.id}")')" ><img src="$link.contextPath/images/btnDelete.gif" width="49" height="25" alt="削除" class="rollover" /></a></li>
+    #end
+        <li><a href="$link.relativeAndCompany("/joboffer/modify").query("jobofferId=${joboffer.id}")"><img src="$link.contextPath/images/btnEdit02.gif" width="49" height="25" alt="編集" class="rollover" /></a></li>
+    </ul>
+</td>

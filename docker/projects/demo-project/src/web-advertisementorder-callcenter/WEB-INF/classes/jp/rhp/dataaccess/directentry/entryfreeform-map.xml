@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.directentry.DirectEntryEntryFreeFormDataAccess">
+
+	<resultMap class="jp.rhp.model.directentry.DirectEntryEntryFreeForm" id="directEntryEntryFreeForm">
+		<result property="questionnaireId" column="questionnaire_id"/>
+	</resultMap>
+
+	<select id="getDirectEntryEntryFreeForm" resultMap="directEntryEntryFreeForm">
+		SELECT questionnaire_id
+		FROM entry.direct_entry_questionnaire
+	</select>
+
+	<insert id="insert" parameterClass="jp.rhp.model.directentry.DirectEntryEntryFreeForm">
+		INSERT INTO entry.direct_entry_questionnaire( questionnaire_id )
+		VALUES ( #questionnaireId# )
+	</insert>
+
+	<delete id="delete" parameterClass="jp.rhp.model.directentry.DirectEntryEntryFreeForm">
+		DELETE FROM entry.direct_entry_questionnaire
+	</delete>
+
+	<select id="isExist" resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM entry.direct_entries;
+	</select>
+
+</sqlMap>

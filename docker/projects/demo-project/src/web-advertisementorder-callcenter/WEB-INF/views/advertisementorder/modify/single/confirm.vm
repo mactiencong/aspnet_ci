@@ -1,0 +1,37 @@
+#recopHtml()
+<head>
+#recopHead('発注依頼変更確認｜発注管理')
+#css("$link.contextPath/css/advertisementorder/advertisementorder.css")
+#javascript("$link.contextPath/js/advertisementorder/modify_confirm.js")
+
+<script type="text/javascript">
+	recop.settings.executeUrl= '$link.relativeAndCompany("/advertisementorder/modify/single/execute")';
+	recop.settings.redirectUrl= '$link.relativeAndCompany("/advertisementorder/detail/")';
+</script>
+
+</head>
+<body>
+#recopHeader()
+<hr />
+<div  id="container">
+	<div class="pannel">
+		<div class="inner">
+			<div class="content">
+				<div class="ttlBlock" style="position:relative; width:100%;">
+					<h2 class="employ">発注依頼変更確認</h2>
+				</div><!-- //ttlBlock -->
+				<div class="clrFix"></div>
+				<div>
+					<form action="$link.relativeAndCompany("/advertisementorder/modify/single/execute")" method="POST">
+						#parse("/advertisementorder/modify/single/_parts/confirm/singleorder.vm")
+					</form>
+				</div>
+			</div><!-- //content -->
+		</div><!-- //inner -->
+	</div><!-- //pannel -->
+</div><!-- //container -->
+
+#recopFooter()
+
+</body>
+</html>

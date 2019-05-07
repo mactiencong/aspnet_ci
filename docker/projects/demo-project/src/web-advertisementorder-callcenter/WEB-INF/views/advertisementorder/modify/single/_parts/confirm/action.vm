@@ -1,0 +1,15 @@
+<div class="actionArea">
+	<div class="btns employ">
+		<p class="return">
+			<a href='$link.relativeAndCompany("/advertisementorder/modify/single/return").query("requestToken=")$!{requestToken}' class="btnReturn noDialog">
+				<img src="$link.contextPath/images/btnRevise02.gif" width="90" height="33" alt="修正する" class="rollover" />
+			</a>
+		</p>
+		<p class="revise">
+			<a class="execute inline" rel="group1" href="#modalLoading">
+				<img src="$link.contextPath/images/btnRevise.gif" width="268" height="39" alt="変更する" class="rollover" />
+			</a>
+			<a class="execute noDialog" rel="group1" href="#modalSuccess"></a>
+		</p>
+	</div>
+</div>

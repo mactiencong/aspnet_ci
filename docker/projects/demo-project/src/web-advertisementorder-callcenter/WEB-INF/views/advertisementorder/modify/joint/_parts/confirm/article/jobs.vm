@@ -1,0 +1,26 @@
+<table class="recoplist">
+	<col width="5%"/><col width="18%"/><col width="18%" /><col width="18%" /><col width="*" /><col width="6%"/>
+	<tr class="header">
+		<th>原稿No.</th>
+		<th>案件名</th>
+		<th>原稿掲載店舗</th>
+		<th>原稿掲載職種</th>
+		<th>給与</th>
+		<th>&nbsp;</th>
+	</tr>
+	#foreach( $article in $editJointOrderSheet.articleList.articles )
+	#set( $articleNo = $foreach.index + 1 )
+	<tr>
+		<td>#escape( $articleNo )</td>
+		<td>#escape( $article.jobOffer.title )</td>
+		<td>#escape( $article.jobOffer.workplace.name )</td>
+		<td>#escape( $article.jobOffer.jobTypeName )</td>
+		<td>#parse("/advertisementorder/modify/joint/_parts/confirm/article/income.vm")</td>
+		<td class="last"><a href="#articlePreview$articleNo" rel="article" class="viewArticle"><img src="$link.contextPath/images/btnDetail.png" class="rollover" alt="詳細" /></a></td>
+	</tr>
+	#end
+</table>
+#set( $advertisementOrderId = $editJointOrderSheet.advertisementOrder.id)
+#set( $articleListForPreview = $editJointOrderSheet.articleList )
+#set( $jobOfferSettings = $editJointOrderSheet.jobOfferSettings )
+#parse( "/advertisementorder/_commonparts/articlepreview/articlepreview.vm" )

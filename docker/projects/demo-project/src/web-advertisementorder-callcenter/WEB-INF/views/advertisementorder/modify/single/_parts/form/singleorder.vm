@@ -1,0 +1,9 @@
+<div class="wrapsection">
+	#parse("/advertisementorder/modify/single/_parts/form/order/single.vm")
+	#parse("/advertisementorder/modify/single/_parts/form/order/item.vm")
+	<div id="singleArticle">
+		#parse("/advertisementorder/modify/single/_parts/form/article/article.vm")
+	</div>
+</div>
+#parse("/advertisementorder/modify/single/_parts/form/action.vm")
+#token

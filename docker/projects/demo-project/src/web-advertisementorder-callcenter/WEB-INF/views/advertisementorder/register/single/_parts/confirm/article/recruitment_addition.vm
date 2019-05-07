@@ -1,0 +1,19 @@
+#foreach($advertiseAddition in $newSingleOrderSheet.article.jobOffer.recruitment.advertiseAdditionList.list)
+#set($number = $foreach.index+1)
+<tr>
+	<th>募集要項補足$number</th>
+	<td>
+		<table summary="layout" class="innerTable regular">
+			<col width="10%" /><col width="*" />
+			<tr>
+				<td class="nowrap">見出し</td>
+				<td>#escape($!{advertiseAddition.title.text}) </td>
+			</tr>
+			<tr>
+				<td class="nowrap">本文&nbsp;&nbsp;</td>
+				<td>#escape($!{advertiseAddition.description.text})</td>
+			</tr>
+		</table>
+	</td>
+</tr>
+#end

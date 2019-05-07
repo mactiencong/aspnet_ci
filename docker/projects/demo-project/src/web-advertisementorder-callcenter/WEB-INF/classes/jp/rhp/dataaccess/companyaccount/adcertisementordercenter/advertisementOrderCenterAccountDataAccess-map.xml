@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.companyaccount.adcertisementordercenter.AdvertisementOrderCenterAccountDataAccess">
+
+	<resultMap id="companyAccount" class="jp.rhp.model.companyaccount.CompanyAccount">
+		<result property="id" column="user_id" />
+		<result property="mailAddress.mailAddress" column="mail_address" />
+	</resultMap>
+
+	<select id="find" resultMap="companyAccount">
+		SELECT
+			  users.user_id											AS user_id
+			, user_mail_addresses.user_mail_address					AS mail_address
+		FROM
+			account.users
+		INNER JOIN
+			account.advertisement_order_callcenter_user
+		ON users.user_id = advertisement_order_callcenter_user.user_id
+		LEFT OUTER JOIN
+			account.user_mail_addresses
+		ON users.user_id = user_mail_addresses.user_id
+	</select>
+
+</sqlMap>

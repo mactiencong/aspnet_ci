@@ -1,0 +1,65 @@
+#recopHtml()
+<head>
+#recopHead('発注詳細｜発注管理')
+
+#javascript("$link.contextPath/js/commons/print.js")
+#javascript("$link.contextPath/js/advertisementorder/detail.js")
+#javascript("$link.contextPath/js/advertisementorder/articlepreview.js")
+#css("$link.contextPath/css/advertisementorder/advertisementorder.css")
+#css("$link.contextPath/css/advertisementorder/articlepreview.css")
+<link href="$link.contextPath/css/commons/print.css?#version" rel="stylesheet" type="text/css" media="print" />
+<script type="text/javascript">
+	$(document).ready(function(){
+		recop.settings.urlChangeStatus                     = '$link.relativeAndCompany("/advertisementorder/detail/$!{advertisementOrderDetail.id}/changeorderstatus" )';
+		recop.settings.urlWriteOperationalNote             = '$link.relativeAndCompany("/advertisementorder/detail/$!{advertisementOrderDetail.id}/writeOperationalNote" )';
+		recop.settings.urlCancelEditOperationalNote        = '$link.relativeAndCompany("/advertisementorder/detail/$!{advertisementOrderDetail.id}/cancelEditOperationalNote" )'
+	});
+</script>
+</head>
+<body>
+#recopHeader()
+
+<hr />
+<div  id="container">
+	<div class="pannel">
+		<div class="inner">
+			<div class="content  #if($!{advertisementOrderDetail.status.canceled}) canceled #end">
+				<div class="print_display_none">
+					<div class="ttlBlock" style="position:relative; width:100%;">
+						<h2 class="employ">発注詳細</h2>
+						<div style="position:absolute; right:0; top:0;">
+							<a href="$link.relativeAndCompany("/advertisementorder/history/list")"><img src="$link.contextPath/images/btnGoList02.png" alt="戻る" class="return rollover" /></a>
+						</div>
+					</div><!-- //ttlBlock -->
+					<div class="clrFix"></div>
+				</div>
+				<div class="wrapsection">
+					<div>
+					#parse("/advertisementorder/history/detail/_parts/order/order.vm")
+					#parse("/advertisementorder/history/detail/_parts/item/item.vm")
+					</div>
+
+					#if( $!{advertisementOrderDetail.type.single} )
+						#parse("/advertisementorder/history/detail/_parts/article/single/article.vm")
+					#else
+						#parse("/advertisementorder/history/detail/_parts/article/joint/article.vm")
+					#end
+					<div class="print_display_none">
+					#parse("/advertisementorder/history/detail/_parts/result/result.vm")
+					</div>
+				</div>
+				<div class="print_display_none">
+					<a href="$link.relativeAndCompany("/advertisementorder/history/list")"><img src="$link.contextPath/images/btnGoList02.png" alt="戻る" class="return rollover" /></a>
+				</div>
+				<form id="tokenManagement" name="tokenManagement" action="#" method="post">
+					#csrfToken()
+				</form>
+			</div><!-- //content -->
+		</div><!-- //inner -->
+	</div><!-- //pannel -->
+</div><!-- //container -->
+
+#recopFooter()
+
+</body>
+</html>

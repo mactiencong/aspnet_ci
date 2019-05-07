@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.interviewschedule.notification.InterviewBookingInvitationForCallcenterNotificationMailDataAccess">
+
+	<insert id="registerInterviewBookingInvitationMailForCallcenter">
+		INSERT INTO callcenter_mail.interview_booking_invitation_mail (
+			mail_message_id,
+			alternatives_id
+		) VALUES (
+			#mailMessageId#,
+			#alternativesId#
+		)
+	</insert>
+
+	<select id="findMailMessageIdByAlternatives" resultClass="java.lang.Integer">
+		SELECT
+			interview_booking_invitation_mail.mail_message_id
+		FROM
+			callcenter_mail.interview_booking_invitation_mail
+		WHERE
+			interview_booking_invitation_mail.alternatives_id = #id#
+		LIMIT
+			1
+	</select>
+	
+	<select id="findMailRequestDateByAlternatives" resultClass="java.util.Date" >
+			SELECT
+		alternatives.request_date
+	FROM
+		interview_schedule.alternatives
+	WHERE
+		alternatives.id = #id#
+	</select>
+
+</sqlMap>

@@ -1,0 +1,11 @@
+<div style="width:100%;" class="print_display_none">
+	<div id="current_company_header">
+		<div class="company">
+			<div class="value">
+				<div style="float:left;"><span class="mark">●</span>$!{current_company.name}</div>
+				<div style="float:right;"><a href="$link.relative("/company/list")"><img src="$link.contextPath/images/btnMenu_CompanySelect.png" style="margin-bottom:3px;" class="rollover" alt="企業選択"/></a></div>
+				<div style="clear:both;"></div>
+			</div>
+		</div>
+	</div>
+</div>

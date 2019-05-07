@@ -1,0 +1,11 @@
+<div class="detailTitle" style="position:relative;">
+	<h2>
+		$!{sectionToHire.name} の面接枠設定
+	</h2>
+	<div class="bookingStatus">
+		<a href='$link.relativeAndCompany("/sectiontohire/schedule/bookingstatus/init").query("?sectionToHireId=")${scheduleCriteria.sectionToHire.id}'>
+			<img src="$link.contextPath/images/btnBookingStatus.gif" alt="予約状況" class="rollover" />
+		</a>
+	</div>
+</div>
+<hr />

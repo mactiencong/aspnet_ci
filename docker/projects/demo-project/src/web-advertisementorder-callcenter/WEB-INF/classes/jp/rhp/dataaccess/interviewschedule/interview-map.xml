@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.interviewschedule.InterviewDataAccess">
+
+	<typeAlias alias="interview" type="jp.rhp.model.interviewschedule.interview.Interview" />
+
+	<resultMap class="interview" id="interview">
+		<result property="id" column="id"/>
+		<result property="sectionToHireId" column="section_to_hire_id"/>
+		<result property="frame.dateAndTime.date" column="interview_date"/>
+		<result property="frame.dateAndTime.timeRange.from" column="from_interview_time"/>
+		<result property="frame.dateAndTime.timeRange.to" column="to_interview_time"/>
+		<result property="frame.capacity.value" column="capacity"/>
+		<result property="detail.remarks.memo" column="memo"/>
+		<result property="detail.remarks.color" column="color"/>
+ 		<result property="frame.capacity.booked" column="booked"/>
+ 		<result property="openStatus" column="posting_status"/>
+		<result property="detail.interviewPlace.name.value" column="interview_place_name" />
+		<result property="detail.interviewPlace.detail.location.address.prefecture.code" column="prefecture_code" />
+		<result property="detail.interviewPlace.detail.location.address.prefecture.name.value" column="prefecture_name" />
+		<result property="detail.interviewPlace.detail.location.address.city.municipality.name.value" column="municipality" />
+		<result property="detail.interviewPlace.detail.location.address.city.street.name.value" column="street_name" />
+		<result property="detail.interviewPlace.detail.location.address.city.street.buildingName.value" column="building_name" />
+		<result property="detail.interviewPlace.detail.contact.telephoneNumber.telephoneNumber" column="phone_number" />
+		<result property="detail.interviewPlace.detail.location.coordinate.latitude.value" column="latitude" />
+		<result property="detail.interviewPlace.detail.location.coordinate.longitude.value" column="longitude" />
+	</resultMap>
+
+	<sql id="interviewBooked">
+		SELECT
+			COUNT(1)
+		FROM
+			interview_schedule.bookings
+		WHERE
+				interview_id = interviews.id
+			AND NOT EXISTS (
+				SELECT
+					candidate_id
+				FROM
+					hiring_process.candidates_delete
+				WHERE
+					candidate_id = bookings.candidate_id
+			)
+	</sql>
+
+	<sql id="interviewColumns">
+		interviews.id,
+		interviews.section_to_hire_id,
+		to_char(interviews.interview_date,'YYYY/MM/DD') as interview_date,
+		interviews.from_interview_time,
+		interviews.to_interview_time,
+		interviews.capacity,
+		interviews.memo,
+		interviews.color,
+		( <include refid="interviewBooked"/> ) as booked,
+		interview_posting_status.posting_status,
+		COALESCE(interview_place.name,'') as interview_place_name,
+		COALESCE(interview_place.prefecture_code,'') as prefecture_code,
+		COALESCE(prefectures.name,'') as prefecture_name,
+		COALESCE(interview_place.municipality,'') as municipality,
+		COALESCE(interview_place.street_name,'') as street_name,
+		COALESCE(interview_place.building_name,'') as building_name,
+		COALESCE(interview_place.phone_number,'') as phone_number,
+		COALESCE(interview_place.latitude,'') as latitude,
+		COALESCE(interview_place.longitude,'') as longitude
+	</sql>
+
+	<sql id="multipleSectionToHireIdList" >
+		SELECT
+			multiple_section_to_hire_interview.section_to_hire_id
+		FROM
+			hiring.multiple_section_to_hire_interview
+			LEFT OUTER JOIN
+				hiring.multiple_section_to_hire_interview_x_section_to_hire
+			ON
+				multiple_section_to_hire_interview.multiple_section_to_hire_interview_id = multiple_section_to_hire_interview_x_section_to_hire.multiple_section_to_hire_interview_id
+			LEFT OUTER JOIN
+				hiring.shared_multiple_section_to_hire_interview
+			ON
+				shared_multiple_section_to_hire_interview.multiple_section_to_hire_interview_id = multiple_section_to_hire_interview.multiple_section_to_hire_interview_id
+		WHERE
+			(
+				multiple_section_to_hire_interview_x_section_to_hire.section_to_hire_id = #sectionToHireId#
+			OR
+				shared_multiple_section_to_hire_interview.multiple_section_to_hire_interview_id IS NOT NULL
+			)
+		AND 
+			NOT EXISTS(
+				SELECT
+					closed_section_to_hire.section_to_hire_id
+				FROM
+					hiring.closed_section_to_hire
+				WHERE
+					closed_section_to_hire.section_to_hire_id = multiple_section_to_hire_interview.section_to_hire_id
+			)
+	</sql>
+
+	<select id="findByID" resultMap="interview">
+		SELECT
+			<include refid="interviewColumns"/>
+		FROM
+			interview_schedule.interviews
+		INNER JOIN
+			interview_schedule.interview_posting_status
+			ON interviews.id = interview_posting_status.interview_id
+		LEFT OUTER JOIN
+			interview_schedule.interview_place
+			ON interviews.id = interview_place.interview_id
+		LEFT OUTER JOIN
+			address.prefectures
+			ON interview_place.prefecture_code = prefectures.code
+		WHERE
+			id = #interviewID#
+	</select>
+
+	<sql id="where_criteria">
+		WHERE
+			interviews.section_to_hire_id = #sectionToHireId#
+		<dynamic>
+			<isNotEmpty property="dateRange.from.date" prepend="AND ">
+				interviews.interview_date &gt;= #dateRange.from.date#
+			</isNotEmpty>
+			<isNotEmpty property="dateRange.to.date" prepend="AND ">
+				interviews.interview_date &lt;= #dateRange.to.date#
+			</isNotEmpty>
+			<isNotEqual property="obtainOverCapacity" compareValue="true" prepend="AND ">
+				( <include refid="interviewBooked"/> ) &lt;= interviews.capacity
+			</isNotEqual>
+			<isNotEqual property="obtainClosedInterview" compareValue="true" prepend="AND ">
+				interview_posting_status.posting_status = 'OPEN'
+			</isNotEqual>
+		</dynamic>
+	</sql>
+
+	<select id="countByCriteria" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			interview_schedule.interviews
+		INNER JOIN
+			interview_schedule.interview_posting_status
+			ON interviews.id = interview_posting_status.interview_id
+		<include refid="where_criteria"/>
+	</select>
+
+	<select id="findByCriteria" resultMap="interview">
+		SELECT
+			<include refid="interviewColumns"/>
+		FROM
+			interview_schedule.interviews
+		INNER JOIN
+			interview_schedule.interview_posting_status
+			ON interviews.id = interview_posting_status.interview_id
+		LEFT OUTER JOIN
+			interview_schedule.interview_place
+			ON interviews.id = interview_place.interview_id
+		LEFT OUTER JOIN
+			address.prefectures
+			ON interview_place.prefecture_code = prefectures.code
+		<include refid="where_criteria"/>
+		ORDER BY
+			  interviews.interview_date
+			, interviews.from_interview_time
+			, interviews.to_interview_time
+		LIMIT #page.limit# OFFSET #page.offset#
+	</select>
+
+	<sql id="activeBooking">
+		SELECT
+			bookings.id,
+			bookings.interview_id,
+			bookings.time_booked
+		FROM
+			interview_schedule.bookings
+		WHERE
+		NOT EXISTS ( SELECT candidate_id FROM hiring_process.candidates_delete WHERE bookings.candidate_id = candidates_delete.candidate_id )
+	</sql>
+
+	<sql id="interviewAndBookingCounts">
+		SELECT
+			interviews.id,
+			interviews.section_to_hire_id,
+			interviews.interview_date,
+			interviews.from_interview_time,
+			interviews.to_interview_time,
+			interviews.capacity,
+			interviews.memo,
+			interviews.color,
+			count(active_bookings.id) as booked,
+			interview_posting_status.posting_status,
+			COALESCE(interview_place.name,'') as interview_place_name,
+			COALESCE(interview_place.prefecture_code,'') as prefecture_code,
+			COALESCE(prefectures.name,'') as prefecture_name,
+			COALESCE(interview_place.municipality,'') as municipality,
+			COALESCE(interview_place.street_name,'') as street_name,
+			COALESCE(interview_place.building_name,'') as building_name,
+			COALESCE(interview_place.phone_number,'') as phone_number,
+			COALESCE(interview_place.latitude,'') as latitude,
+			COALESCE(interview_place.longitude,'') as longitude
+		FROM
+			interview_schedule.interviews
+		INNER JOIN
+			interview_schedule.interview_posting_status
+		ON interviews.id = interview_posting_status.interview_id
+		LEFT OUTER JOIN
+			interview_schedule.interview_place
+		ON interviews.id = interview_place.interview_id
+		LEFT OUTER JOIN
+			address.prefectures
+		ON interview_place.prefecture_code = prefectures.code
+		LEFT OUTER JOIN (
+			<include refid="activeBooking"/>
+		) as active_bookings
+		ON interviews.id = active_bookings.interview_id
+		GROUP BY
+			interviews.id,
+			interviews.section_to_hire_id,
+			interviews.interview_date,
+			interviews.from_interview_time,
+			interviews.to_interview_time,
+			interviews.capacity,
+			interviews.memo,
+			interviews.color,
+			interview_posting_status.posting_status,
+			interview_place.name,
+			interview_place.prefecture_code,
+			prefectures.name,
+			interview_place.municipality,
+			interview_place.street_name,
+			interview_place.building_name,
+			interview_place.phone_number,
+			interview_place.latitude,
+			interview_place.longitude
+	</sql>
+
+	<select id="getID" resultClass="java.lang.Long">
+		SELECT nextval( 'interview_schedule.interview_id' )
+	</select>
+
+	<select id="listForAlternatives" resultMap="interview">
+		SELECT
+			interview_alternatives.*
+		FROM (
+			SELECT
+				interviews.id,
+				interviews.section_to_hire_id,
+				to_char(interviews.interview_date,'YYYY/MM/DD') as interview_date,
+				interviews.from_interview_time,
+				interviews.to_interview_time,
+				interviews.capacity,
+				interviews.memo,
+				interviews.color,
+				( <include refid="interviewBooked"/> ) as booked,
+				interview_posting_status.posting_status,
+				COALESCE(interview_place.name, '') as interview_place_name,
+				COALESCE(interview_place.prefecture_code, '') as prefecture_code,
+				COALESCE(prefectures.name, '') as prefecture_name,
+				COALESCE(interview_place.municipality, '') as municipality,
+				COALESCE(interview_place.street_name, '') as street_name,
+				COALESCE(interview_place.building_name, '') as building_name,
+				COALESCE(interview_place.phone_number, '') as phone_number,
+				COALESCE(interview_place.latitude, '') as latitude,
+				COALESCE(interview_place.longitude, '') as longitude
+			FROM
+				interview_schedule.interviews
+			INNER JOIN
+				interview_schedule.interview_posting_status
+			ON interviews.id = interview_posting_status.interview_id
+			LEFT OUTER JOIN
+				interview_schedule.interview_place
+			ON interviews.id = interview_place.interview_id
+			LEFT OUTER JOIN
+				address.prefectures
+			ON interview_place.prefecture_code = prefectures.code
+			WHERE
+					(
+						interviews.section_to_hire_id = #sectionToHireId#
+						OR interviews.section_to_hire_id IN
+							(<include refid="multipleSectionToHireIdList" />)
+					)
+			<isEqual property="reservationDeadline.use" compareValue="true" prepend="AND">
+				(interviews.interview_date + from_interview_time) <![CDATA[>]]> now() + (#reservationDeadline.hours# || ' hour')::interval
+			</isEqual>
+			<isNotEqual property="reservationDeadline.use" compareValue="true" prepend="AND">
+				interviews.interview_date <![CDATA[>]]> date_trunc('day', now())
+			</isNotEqual>
+				AND ( <include refid="interviewBooked"/> ) <![CDATA[<]]> capacity
+			<isEqual property="type" compareValue="date">
+				AND interviews.interview_date <![CDATA[<=]]> to_date( #dayLimit#, 'YYYY/MM/DD')
+			</isEqual>
+			ORDER BY
+				interviews.interview_date,
+				interviews.from_interview_time,
+				interviews.to_interview_time
+			<isEqual property="type" compareValue="size">
+			OFFSET 0 LIMIT cast(#sizeLimit# as int )
+			</isEqual>
+			) interview_alternatives
+		ORDER BY
+			interview_alternatives.interview_place_name,
+			interview_alternatives.prefecture_code,
+			interview_alternatives.municipality,
+			interview_alternatives.street_name,
+			interview_alternatives.building_name,
+			interview_alternatives.phone_number,
+			interview_alternatives.latitude,
+			interview_alternatives.longitude,
+			interview_alternatives.interview_date,
+			interview_alternatives.from_interview_time,
+			interview_alternatives.to_interview_time
+	</select>
+
+	<select id="listForBooking" resultMap="interview">
+		SELECT
+			interview_and_bookingcounts.id,
+			interview_and_bookingcounts.section_to_hire_id,
+			interview_and_bookingcounts.interview_date,
+			interview_and_bookingcounts.from_interview_time,
+			interview_and_bookingcounts.to_interview_time,
+			interview_and_bookingcounts.capacity,
+			interview_and_bookingcounts.memo,
+			interview_and_bookingcounts.color,
+			interview_and_bookingcounts.booked,
+			interview_and_bookingcounts.posting_status,
+			interview_and_bookingcounts.interview_place_name,
+			interview_and_bookingcounts.prefecture_code,
+			interview_and_bookingcounts.prefecture_name,
+			interview_and_bookingcounts.municipality,
+			interview_and_bookingcounts.street_name,
+			interview_and_bookingcounts.building_name,
+			interview_and_bookingcounts.phone_number,
+			interview_and_bookingcounts.latitude,
+			interview_and_bookingcounts.longitude
+		FROM
+		(
+			<include refid="interviewAndBookingCounts"/>
+		) as interview_and_bookingcounts
+		WHERE
+				(
+					interview_and_bookingcounts.section_to_hire_id = #sectionToHireId#
+					OR interview_and_bookingcounts.section_to_hire_id IN
+						(<include refid="multipleSectionToHireIdList" />)
+				)
+			AND interview_and_bookingcounts.interview_date &gt;= date_trunc('day', now())
+			AND NOT EXISTS ( SELECT bookings.id FROM interview_schedule.bookings WHERE candidate_id = #candidateId# AND interview_id = interview_and_bookingcounts.id )
+		ORDER BY
+			interview_and_bookingcounts.interview_date,
+			interview_and_bookingcounts.from_interview_time,
+			interview_and_bookingcounts.to_interview_time
+	</select>
+
+
+	<select id="listForCallcenterEntryRegister" resultMap="interview">
+		SELECT
+			interview_and_bookingcounts.id,
+			interview_and_bookingcounts.section_to_hire_id,
+			interview_and_bookingcounts.interview_date,
+			interview_and_bookingcounts.from_interview_time,
+			interview_and_bookingcounts.to_interview_time,
+			interview_and_bookingcounts.capacity,
+			interview_and_bookingcounts.memo,
+			interview_and_bookingcounts.color,
+			interview_and_bookingcounts.booked,
+			interview_and_bookingcounts.posting_status,
+			interview_and_bookingcounts.interview_place_name,
+			interview_and_bookingcounts.prefecture_code,
+			interview_and_bookingcounts.prefecture_name,
+			interview_and_bookingcounts.municipality,
+			interview_and_bookingcounts.street_name,
+			interview_and_bookingcounts.building_name,
+			interview_and_bookingcounts.phone_number,
+			interview_and_bookingcounts.latitude,
+			interview_and_bookingcounts.longitude
+		FROM
+		(
+			<include refid="interviewAndBookingCounts"/>
+		) as interview_and_bookingcounts
+		WHERE
+			(
+				interview_and_bookingcounts.section_to_hire_id = #sectionToHireId#
+				OR interview_and_bookingcounts.section_to_hire_id IN
+					(<include refid="multipleSectionToHireIdList" />)
+			)
+			AND interview_and_bookingcounts.interview_date <![CDATA[>=]]> date_trunc('day', now())
+			AND interview_and_bookingcounts.interview_date <![CDATA[<]]> (
+					SELECT
+						date_trunc('day', now()) + (entry_register_day_limit || ' days')::interval AS to_interview_date
+					FROM
+						interview_schedule.settings_for_callcenter
+				)
+			AND interview_and_bookingcounts.booked <![CDATA[<]]> interview_and_bookingcounts.capacity
+		ORDER BY
+			interview_and_bookingcounts.interview_date,
+			interview_and_bookingcounts.from_interview_time,
+			interview_and_bookingcounts.to_interview_time
+	</select>
+
+	<select id="findByIDForWebEntry" resultMap="interview">
+		SELECT
+			web_entry_interviews.*
+		FROM (
+			SELECT
+				interviews.id,
+				interviews.section_to_hire_id,
+				to_char(interviews.interview_date,'YYYY/MM/DD') as interview_date,
+				interviews.from_interview_time,
+				interviews.to_interview_time,
+				interviews.capacity,
+				interviews.memo,
+				interviews.color,
+				( <include refid="interviewBooked"/> ) as booked,
+				interview_posting_status.posting_status,
+				COALESCE(interview_place.name,'') as interview_place_name,
+				COALESCE(interview_place.prefecture_code,'') as prefecture_code,
+				COALESCE(interview_place.name,'') as prefecture_name,
+				COALESCE(interview_place.municipality,'') as municipality,
+				COALESCE(interview_place.street_name,'') as street_name,
+				COALESCE(interview_place.building_name,'') as building_name,
+				COALESCE(interview_place.phone_number,'') as phone_number,
+				COALESCE(interview_place.latitude,'') as latitude,
+				COALESCE(interview_place.longitude,'') as longitude
+			FROM
+				interview_schedule.interviews
+				INNER JOIN
+					interview_schedule.interview_posting_status
+				ON
+					interviews.id = interview_posting_status.interview_id
+				LEFT OUTER JOIN (
+					SELECT
+						interview_place.*,
+						prefectures.name as prefecture_name
+					FROM
+						interview_schedule.interview_place
+						INNER JOIN
+							address.prefectures
+						ON
+							interview_place.prefecture_code = prefectures.code
+				) interview_place
+				ON
+					interview_place.interview_id = interviews.id
+			WHERE
+				interview_posting_status.posting_status = 'OPEN'
+				AND interviews.section_to_hire_id = #sectionToHireId#
+				AND interviews.interview_date <![CDATA[>]]> date_trunc('day', now())
+			ORDER BY
+				interviews.interview_date,
+				interviews.from_interview_time,
+				interviews.to_interview_time
+			OFFSET 0 LIMIT #sizeLimit# ) AS web_entry_interviews
+		WHERE
+			web_entry_interviews.id = #interviewId#
+	</select>
+
+	<insert id="save">
+		INSERT INTO interview_schedule.interviews(
+			id,
+			section_to_hire_id,
+			interview_date,
+			from_interview_time,
+			to_interview_time,
+			capacity,
+			memo,
+			color
+		)
+		VALUES (
+			#id#,
+			#sectionToHireId#,
+			to_date(#frame.dateAndTime.date#, 'yyyy-MM-dd'),
+			to_timestamp(#frame.dateAndTime.timeRange.from#, 'HH24:MI'),
+			to_timestamp(#frame.dateAndTime.timeRange.to#, 'HH24:MI'),
+			#frame.capacity.intValue#,
+			#detail.remarks.memo#,
+			#detail.remarks.color#
+		);
+	</insert>
+
+	<insert id="saveInterviewPlace">
+		INSERT INTO interview_schedule.interview_place(
+		  interview_id,
+		  name,
+		  prefecture_code,
+		  municipality,
+		  street_name,
+		  building_name,
+		  phone_number,
+		  latitude,
+		  longitude
+		)
+		VALUES (
+			#id#,
+			#detail.interviewPlace.name.value#,
+			#detail.interviewPlace.detail.location.address.prefecture.code#,
+			#detail.interviewPlace.detail.location.address.city.municipality.name.value#,
+			#detail.interviewPlace.detail.location.address.city.street.name.value#,
+			#detail.interviewPlace.detail.location.address.city.street.buildingName.value#,
+			#detail.interviewPlace.detail.contact.telephoneNumber.telephoneNumber#,
+			#detail.interviewPlace.detail.location.coordinate.latitude.value#,
+			#detail.interviewPlace.detail.location.coordinate.longitude.value#
+		)
+	</insert>
+
+	<insert id="savePostingStatus">
+		INSERT INTO interview_schedule.interview_posting_status(
+			interview_id,
+			posting_status
+		)
+		VALUES (
+			#interviewId#,
+			#status#
+		)
+	</insert>
+
+	<update id="updateLimited">
+		UPDATE
+			interview_schedule.interviews
+		SET
+			capacity=#frame.capacity.intValue#,
+			memo=#detail.remarks.memo#,
+			color=#detail.remarks.color#
+		WHERE id = #id#
+	</update>
+
+	<delete id="deleteInterviewPlace" parameterClass="interview">
+		DELETE FROM interview_schedule.interview_place WHERE interview_id = #id#;
+	</delete>
+
+	<delete id="deletePostingStatus">
+		DELETE FROM interview_schedule.interview_posting_status WHERE interview_id = #interviewId#;
+	</delete>
+
+	<delete id="cancel" parameterClass="interview">
+		DELETE FROM interview_schedule.interviews WHERE id = #id#;
+	</delete>
+
+</sqlMap>

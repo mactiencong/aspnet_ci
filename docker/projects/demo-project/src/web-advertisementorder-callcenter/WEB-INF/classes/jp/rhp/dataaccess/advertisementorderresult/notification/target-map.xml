@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.advertisementorderresult.notification.AdvertisementOrderResultNotificationTargetDataAccess">
+
+	<select id="listOfSectionToHireIdByAdvertisementOrderId" resultClass="java.lang.Integer">
+		SELECT DISTINCT
+			workplace.section_to_hire_id
+		FROM
+			advertisement_order.latest_advertisement_order_detail
+			INNER JOIN
+				advertisement_order.article
+			ON
+				latest_advertisement_order_detail.advertisement_order_detail_id = article.advertisement_order_detail_id
+			INNER JOIN
+				advertisement_order.article_workplace
+			ON
+				article.id = article_workplace.article_id
+			INNER JOIN
+				workplace.workplace
+			ON
+				article_workplace.workplace_id = workplace.workplace_id
+		WHERE
+			latest_advertisement_order_detail.advertisement_order_id = #advertisementOrderId#
+		ORDER BY
+			workplace.section_to_hire_id
+	</select>
+
+	<resultMap id="destination" class="jp.rhp.model.mail.destination.Destination">
+		<result property="mailAddress.mailAddress" column="user_mail_address"/>
+	</resultMap>
+
+	<select id="listOfDestinationByAdvertisementOrderId" resultMap="destination">
+	<![CDATA[
+		SELECT
+			active_users.user_mail_address
+		FROM
+			account.active_users
+		INNER JOIN
+			account.user_x_section_to_hire
+		ON active_users.user_id = user_x_section_to_hire.user_id
+		WHERE
+			EXISTS (
+				SELECT
+					workplace.section_to_hire_id
+				FROM
+					advertisement_order.latest_advertisement_order_detail
+					INNER JOIN
+						advertisement_order.article
+					ON
+						latest_advertisement_order_detail.advertisement_order_detail_id = article.advertisement_order_detail_id
+					INNER JOIN
+						advertisement_order.article_workplace
+					ON
+						article.id = article_workplace.article_id
+					INNER JOIN
+						workplace.workplace
+					ON
+						article_workplace.workplace_id = workplace.workplace_id
+				WHERE
+					latest_advertisement_order_detail.advertisement_order_id = #advertisementOrderId#
+					AND workplace.section_to_hire_id = user_x_section_to_hire.section_to_hire_id
+				)
+			AND active_users.role = 'SV'
+			AND active_users.availability_status_type = 'ENABLED'
+			AND ( active_users.from_date IS NULL OR active_users.from_date <= CURRENT_DATE )
+			AND ( active_users.to_date   IS NULL OR active_users.to_date   >= CURRENT_DATE )
+			AND active_users.user_mail_address IS NOT NULL
+			AND active_users.user_mail_address != ''
+		GROUP BY
+			active_users.user_id,
+			active_users.user_mail_address
+	]]>
+	</select>
+
+</sqlMap>

@@ -1,0 +1,61 @@
+<tr class="summaryLine #if( ${advertisementOrderSummary.status.summaryStatus.canceled} || ${advertisementOrderSummary.status.summaryStatus.resultCanceled} )  canceled #elseif( ${advertisementOrderSummary.status.summaryStatus.hasResult} )  published #end ">
+	<td rowspan="2" class="select">
+		<form  name="advertisementOrderId$!{advertisementOrderSummary.id}" action="#" method="post" class="advertisementOrderIds">
+			<input type="checkbox" name="advertisementOrderIds" class="selectItem" value="$!{advertisementOrderSummary.id}" />
+        </form>
+	</td>
+	<td rowspan="2"  class="id">
+		#escape(${advertisementOrderSummary.id})
+	</td>
+	<td class="date" rowspan="2">
+		$!date.format('yyyy/MM/dd(E)',${advertisementOrderSummary.orderDateTime.timeStamp.date})<br />
+		$!date.format('HH:mm',${advertisementOrderSummary.orderDateTime.timeStamp.date})
+	</td>
+	<td rowspan="2">
+		<ul>
+		#foreach( $workplace in  ${advertisementOrderSummary.detail.order.workplaceList.workplaces} )
+			<li #if(${advertisementOrderSummary.type.isJoint()})style="border-bottom:1px dashed #ccc"#end>#escape( $!workplace.name() )</li>
+		#end
+		</ul>
+	</td>
+	<td class="item">
+		#escape($!{advertisementOrderSummary.detail.order.item.media.name.value})／#escape($!{advertisementOrderSummary.detail.order.item.plan.issue.area.name.value})
+	</td>
+	<td class="number" rowspan="2">
+		$!text.priceFormat(${advertisementOrderSummary.detail.order.item.plan.price.value})円
+	</td>
+	<td class="date" rowspan="2">
+		#if( ${advertisementOrderSummary.status.summaryStatus.hasResult} || ${advertisementOrderSummary.status.summaryStatus.resultCanceled} )
+			$!date.format('yyyy/MM/dd',${advertisementOrderSummary.detail.result.publicationDate.dateStamp.date})<br />
+			$!date.format('(E)',${advertisementOrderSummary.detail.result.publicationDate.dateStamp.toDate()})
+		#else
+		- 
+		#end
+	</td>
+	<td class="status editable" rowspan="2">
+		<div class="statusChangeArea">
+			<dl class="selectBox">
+				<dt class="statusButton #if( ${advertisementOrderSummary.status.orderStatus.requested} ) highlight #end">
+					<span>#escape(${advertisementOrderSummary.status.orderStatus.name.value})</span>
+				</dt>
+				<dd>
+					<select id="orderStatus#escape(${index}) " name="orderStatus#escape(${index})" class="selectOrderStatus noCheck orderStatusType" size="2">
+					#foreach($orderStatus in $orderStatusOptions.entrySet())
+						<option value="$esc.html($orderStatus.key)" #if( $orderStatus.key == ${advertisementOrderSummary.status.orderStatus.type} ) selected #end>#escape($orderStatus.value)</option>
+					#end
+					</select>
+				</dd>
+			</dl>
+		</div>
+	</td>
+	<td class="function last" rowspan="2">
+		<a href='$link.relativeAndCompany("/advertisementorder/detail/$advertisementOrderSummary.id")'><img src="$link.contextPath/images/btnDetail.png" class="rollover" alt="詳細" /></a>
+		<input type="hidden" name="_index" value="#escape(${index})" class="noCheck" />
+		<input type="hidden" name="_advertisementOrderId" value="${advertisementOrderSummary.id}" class="noCheck" />
+	</td>
+</tr>
+<tr #if( ${advertisementOrderSummary.status.summaryStatus.canceled} || ${advertisementOrderSummary.status.summaryStatus.resultCanceled} )  class="canceled"	#elseif( ${advertisementOrderSummary.status.summaryStatus.hasResult} )  class="published" #end	">
+	<td>
+		#escape(${advertisementOrderSummary.detail.order.item.plan.issue.size.value})
+	</td>
+</tr>

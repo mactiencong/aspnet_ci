@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<name><![CDATA[$!{defaultInterviewPlace.name.value}]]></name>
+<prefecture_code><![CDATA[$!{defaultInterviewPlace.detail.location.address.prefecture.code}]]></prefecture_code>
+<prefecture_name><![CDATA[$!{defaultInterviewPlace.detail.location.address.prefecture.name.value}]]></prefecture_name>
+<municipality><![CDATA[$!{defaultInterviewPlace.detail.location.address.city.municipality.name.value}]]></municipality>
+<street><![CDATA[$!{defaultInterviewPlace.detail.location.address.city.street.name.value}]]></street>
+<building><![CDATA[$!{defaultInterviewPlace.detail.location.address.city.street.buildingName.value}]]></building>
+<area_code><![CDATA[$!{defaultInterviewPlace.detail.contact.telephoneNumber.areaCode}]]></area_code>
+<local_number><![CDATA[$!{defaultInterviewPlace.detail.contact.telephoneNumber.localOffeceNumber}]]></local_number>
+<subcriber_number><![CDATA[$!{defaultInterviewPlace.detail.contact.telephoneNumber.number}]]></subcriber_number>
+<latitude><![CDATA[$!{defaultInterviewPlace.detail.location.coordinate.latitude.value}]]></latitude>
+<longitude><![CDATA[$!{defaultInterviewPlace.detail.location.coordinate.longitude.value}]]></longitude>
+</root>

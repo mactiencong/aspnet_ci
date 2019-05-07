@@ -1,0 +1,69 @@
+#recopHtml()
+<head>
+	#recopHead('面接日時設定')
+	#javascript("$link.contextPath/js/lib/dhtmlxscheduler/dhtmlxscheduler.js")
+	#css("$link.contextPath/js/lib/dhtmlxscheduler/dhtmlxscheduler_recop.css")
+	#css("$link.contextPath/css/schedule/freeschedule/schedule.css")
+	#javascript("$link.contextPath/js/schedule/memo.js")
+	#javascript("$link.contextPath/js/schedule/freeschedule/schedule.js")
+	#javascript("$link.contextPath/js/schedule/freeschedule/locale.js")
+	#javascript("$link.contextPath/js/schedule/validate.js")
+	#javascript("$link.contextPath/js/commons/sectiontohire.js")
+	#javascript("$link.contextPath/js/jquery.ui.datepicker2.js")
+	#javascript("$link.contextPath/js/commons/dateUtil.js")
+	<script type="text/javascript" charset="utf-8">
+	<!--
+	function init() {
+		//----------------------------------------------------------
+		// 画面設定
+		//----------------------------------------------------------
+		var sectionToHireId = ${scheduleCriteria.sectionToHireId};
+
+		// 時間の範囲指定
+		scheduler.config.time_step = ${scheduleConfiguration.stepTime};
+		scheduler.config.first_hour = ${scheduleConfiguration.firstHour};
+		scheduler.config.last_hour = ${scheduleConfiguration.lastHour};
+		scheduler.config.cal_icn_url = "$link.contextPath/images/icnCalendar2.gif"; //日付入力補助用アイコンURL
+		scheduler.config.event_load_url = '$link.relativeAndCompany("/sectiontohire/schedule/free/load").query("?sectionToHireId=")${scheduleCriteria.sectionToHire.id}'; //読み込みURL
+		scheduler.config.event_action_url = '$link.relativeAndCompany("/sectiontohire/schedule/free/action").query("?sectionToHireId=")${scheduleCriteria.sectionToHire.id}&csrfToken=$!{csrfToken}'; //アクションURL
+		scheduler.config.event_error_url = "$link.relative('/errors/500')"; //エラーURL
+		scheduler.config.session_check_url = "$link.relative('/sessionCheck')"; //SessionチェックURL
+
+		#if(${sectionToHire.interviewBookingMethod.interviewFrame})
+			// 面接枠店舗の場合はスケジュールの編集を不可能とする
+			scheduler.config.readonly = true;
+		#else
+			scheduler.config.readonly = false;
+		#end
+		schedulerInitialize()
+	}
+	settings.memo_url ='$link.relativeAndCompany("/sectiontohire/schedule/memo/edit")'; //メモ編集
+
+	$(document).ready(function(){
+		// 店舗絞り込み
+		$("tr.shopCasette,tr.shopCassette").formWordSearch({
+			defWord:"店舗名を入力",
+			emptyErrMsg:"店舗名を入力してください。"
+		});
+	});
+	//-->
+	</script>
+</head>
+<body id="bidSchedule" onload="init();">
+#recopHeader()
+<hr />
+
+<div id="container">
+<div class="pannel">
+<div class="inner">
+<div class="content">
+	#parse('schedule/freeschedule/scheduler/_parts/title.vm')
+	#parse('schedule/freeschedule/scheduler/_parts/controller.vm')
+	#parse('schedule/freeschedule/scheduler/_parts/container.vm')
+</div>
+</div>
+</div>
+	#recopFooter()
+</div>
+</body>
+</html>

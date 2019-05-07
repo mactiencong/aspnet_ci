@@ -1,0 +1,30 @@
+
+<div class="articleHeader">
+	<h4>案件情報</h4>
+	<div class="selectArticleBtn"><a href="" id="jobOfferSelectBtn"><img src="$link.contextPath/images/btnSelectArticle.png" class="rollover" alt="原稿を選択する" /></a></div>
+</div>
+<div class="clrFix"></div>
+
+#springBind("newSingleOrderSheet.article.jobOffer.*")
+#set($hasError = ${status.errorMessages.size()} > 0)
+<table class="recoptable" summary="案件情報">
+	<col width="18%" /><col width="*" />
+	<tr>
+		<th>案件名</th>
+		<td>
+			#escape(${newSingleOrderSheet.article.jobOffer.title})
+		</td>
+	</tr>
+	<tr>
+		<th>原稿掲載職種</th>
+		<td>
+			#escape(${newSingleOrderSheet.article.jobOffer.jobTypeName})
+		</td>
+	</tr>
+	<tr>
+		<th>アクセス</th>
+		<td>
+			#escape(${newSingleOrderSheet.article.jobOffer.workplace.access.text})
+		</td>
+	</tr>
+</table>

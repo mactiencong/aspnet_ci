@@ -1,0 +1,36 @@
+
+<div class="header">
+	<div class="count"><em>$jobOfferList.allCount</em> 件見つかりました</div>
+	<div class="pager">
+		#pageLink( $jobOfferPopupSearchCriteria.page "/advertisementorder/popup/joboffer/listing/page" )
+	</div>
+</div>
+<div class="listing">
+	<table class="recoplist">
+		<col width="28%" /><col width="*" /><col width="30%" /><col width="12%" />
+		<thead>
+			<tr class="header">
+				<th>案件名</th>
+				<th>原稿掲載店舗名</th>
+				<th>原稿掲載職種</th>
+				<th>&nbsp;</th>
+			</tr>
+		</thead>
+		<tbody>
+			#foreach( $jobOffer in $jobOfferList.jobOffers )
+			<tr>
+				<td>#escape($jobOffer.title)</td>
+				<td>#escape($jobOffer.workplace.name)
+				<input type="hidden" value="$jobOffer.id" name="jobOfferId" />
+				</td>
+				<td>#escape($jobOffer.jobTypeName)</td>
+				#if( $useJobOfferApprovalSetting.notUse || $jobOffer.jobOfferApproval.notApprovalTarget || $jobOffer.jobOfferApproval.status.approval)
+					<td class="function last"><a href="" onclick="select($foreach.index)" ><img src="$link.contextPath/images/btnSelect.png" alt="選択" class="rollover"/ ></a></td>
+				#else
+					<td class="function last">未承認</td>
+				#end
+			</tr>
+			#end
+		</tbody>
+	</table>
+</div>

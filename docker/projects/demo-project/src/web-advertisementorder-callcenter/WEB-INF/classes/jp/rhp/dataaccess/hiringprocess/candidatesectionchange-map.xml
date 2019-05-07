@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.hiringprocess.CandidateSectionChangeDataAccess">
+
+	<resultMap class="jp.rhp.model.hiringprocess.hiringstatus.HiringStatus" id="hiringStatus">
+		<result property="selectionStatus.id" column="selection_status_id"/>
+		<result property="sectionToHire.id" column="section_to_hire_id"/>
+		<result property="jobTypeToHire.id" column="jobtype_to_hire_id"/>
+	</resultMap>
+
+	<select id="findHiringStatus" parameterClass="Int" resultMap="hiringStatus">
+		SELECT
+			selection_status_id,
+			section_to_hire_id,
+			jobtype_to_hire_id
+		FROM
+			hiring_process.hiring_status
+		WHERE
+			candidate_id = #value#
+	</select>
+
+	<select  id="isExistsInterviewDatetime" parameterClass="Int" resultClass="Boolean" >
+		SELECT
+			CASE COUNT(candidate_id) WHEN 0 THEN false ELSE true END
+		FROM
+			hiring_process.interview_datetime
+		WHERE
+			candidate_id = #value#
+		AND start_datetime is not null
+		AND end_datetime is not null
+	</select>
+
+	<insert id="insertSectionChanged">
+		INSERT INTO
+			hiring_process.hiring_section_changed
+		(
+			candidate_id,
+			section_to_hire_id
+		)
+		VALUES
+		(
+			#candidateId#,
+			#sectionToHireId#
+		)
+	</insert>
+
+</sqlMap>

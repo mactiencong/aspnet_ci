@@ -1,0 +1,15 @@
+<div id='coordinate' class='recopDialog' style="width:565px;height:520px;">
+	<div class='title' id="handleMap" style="line-height:16px;">
+		<span style='vertical-align:middle;'><strong>会場地図</strong></span>
+	</div>
+	<div class='body' style="text-align:center;">
+		<div style="width:100%;text-align:center;">
+			<iframe name="mapFrame" frameborder="0" style="border:0px; width:535px; height:420px;">
+			iframe非対応のため地図を表示できません。
+			</iframe>
+		</div>
+	</div>
+	<div class='buttons'>
+		<input type='button' value='閉じる' class='button' onclick='$.fancybox.close();' />
+	</div>
+</div>

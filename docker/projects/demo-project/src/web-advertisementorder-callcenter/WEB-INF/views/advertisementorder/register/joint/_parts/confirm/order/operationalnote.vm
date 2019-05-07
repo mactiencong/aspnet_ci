@@ -1,0 +1,10 @@
+
+<table class="recoptable" >
+	<col width="18%" /><col width="*" />
+	<tr>
+		<th><span class="labelWithImg">センター備考</span></th>
+		<td>
+			#escape( $newJointOrderSheet.advertisementOrder.slips.remarks.operationalNote.text )
+		 </td>
+	</tr>
+</table>

@@ -1,0 +1,59 @@
+
+#if( $contactOfSectionToHire.hasUser() )
+	#set( $rowspan = $contactOfSectionToHire.userCount() )
+#else
+	#set( $rowspan = 1 )
+#end
+<tr class="">
+	<td rowspan="$rowspan">
+		#if( $contactOfSectionToHire.sectionToHire.hasShopNumber() )
+			#escape( $contactOfSectionToHire.sectionToHire.shopNumber.value )
+		#else
+			未登録
+		#end
+	</td>
+	<td rowspan="$rowspan">
+		#escape( $contactOfSectionToHire.sectionToHire.name )
+	</td>
+	<td rowspan="$rowspan">
+		#if( $contactOfSectionToHire.sectionToHire.contact.hasTelephoneNumber() )
+			#escape( $contactOfSectionToHire.sectionToHire.contact.telephoneNumber.telephoneNumber )
+		#else
+			未登録
+		#end
+	</td>
+	<td rowspan="$rowspan">
+		#escape( ${sectionGroupMap.get( $contactOfSectionToHire.sectionToHire.groupId )} )
+	</td>
+	<td rowspan="$rowspan">
+		#escape( $contactOfSectionToHire.sectionToHire.businessModelType.name )
+	</td>
+	<td rowspan="$rowspan">
+		#escape( $contactOfSectionToHire.sectionToHire.status.openingStatusType.name )
+	</td>
+	#if( $contactOfSectionToHire.hasUser() )
+		#foreach( $shopUser in $contactOfSectionToHire.shopUserList.list )
+			#set( $userNo = $foreach.index + 1 )
+		<td #if( $rowspan != $userNo ) class="thinBorderBottom" #end >
+			#escape( $shopUser.name.value )
+		</td>
+		<td class="last <td #if( $rowspan != $userNo ) thinBorderBottom #end ">
+			#if( $shopUser.hasMailAddress() )
+				#escape( $shopUser.mailAddress.mailAddress )
+			#else
+				未登録
+			#end
+		</td>
+			#if( $rowspan != $userNo )
+		</tr><tr>
+			#end
+		#end
+	#else
+		<td >
+			--
+		</td>
+		<td class="last">
+			--
+		</td>
+	#end
+</tr>

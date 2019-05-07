@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.joboffer.jobtype.JobTypeDataAccess">
+
+	<typeAlias alias="jobOfferJobType" type="jp.rhp.model.joboffer.recruitment.jobtype.JobType" />
+
+	<resultMap class="jobOfferJobType" id="jobOfferJobType">
+		<result property="code" column="job_type_code"/>
+		<result property="name" column="job_type"/>
+		<result property="jobtypeToHireId" column="jobtype_to_hire_id"/>
+	</resultMap>
+
+	<sql id="selectJobType">
+		SELECT
+			job_type.job_type_code,
+			job_type.job_type,
+			job_type.jobtype_to_hire_id
+	</sql>
+
+	<sql id="fromJobType">
+		FROM
+			jobtype.job_type
+			INNER JOIN jobtype.job_type_priority ON
+				job_type.job_type_code = job_type_priority.job_type_code
+	</sql>
+
+	<sql id="orderByJobType">
+		ORDER BY
+			job_type_priority.priority
+	</sql>
+
+	<select id="listAll" resultMap="jobOfferJobType">
+		<include refid="selectJobType"/>
+		<include refid="fromJobType"/>
+		<include refid="orderByJobType"/>
+	</select>
+
+	<select id="findByCode" resultMap="jobOfferJobType">
+		<include refid="selectJobType"/>
+		<include refid="fromJobType"/>
+		WHERE
+			job_type.job_type_code = #value#
+	</select>
+
+</sqlMap>

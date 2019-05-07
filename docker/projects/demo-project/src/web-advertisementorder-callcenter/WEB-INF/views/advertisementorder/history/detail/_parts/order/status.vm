@@ -1,0 +1,32 @@
+<div style="width:50%;float:left" class="print_display_none">
+	<table class="recoptable" >
+		<col width="36%" /><col width="*" />
+		<tbody>
+			<tr>
+				<th>発注状態</th>
+				<td class="editable">
+					<div class="statusChangeArea">
+						<dl class="selectBox">
+							<dt class="statusButton #if( ${advertisementOrderDetail.status.orderStatus.requested} ) highlight #end">
+								<span>#escape(${advertisementOrderDetail.status.orderStatus.name.value})</span>
+							</dt>
+							<dd>
+								<select id="orderStatusType" name="orderStatusType" class="noCheck orderStatusType" size="2">
+								#foreach($orderStatus in $orderStatusOptions.entrySet())
+									<option value="$esc.html($orderStatus.key)" #if($orderStatus.key == ${advertisementOrderDetail.status.orderStatus.type} )selected #end>#escape($orderStatus.value)</option>
+								#end
+								</select>
+							</dd>
+						</dl>
+					</div>
+				</td>
+			</tr>
+			#if($settings.function.useArticleConfirmation)
+    			<tr>
+        			<th>原稿確認</th>
+        			<td>#escape( $!{advertisementOrderDetail.slips.remarks.articleConfirmation.label()} )</td>
+        		</tr>
+			#end
+		</tbody>
+	</table>
+</div>

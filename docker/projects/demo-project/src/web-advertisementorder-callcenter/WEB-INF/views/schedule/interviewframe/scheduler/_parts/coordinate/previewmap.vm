@@ -1,0 +1,38 @@
+#recopHtml()
+<head>
+	#recopHead('座標設定')
+	
+	<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
+	#javascript("$link.contextPath/js/commons/map.js")
+	
+	<script type="text/javascript" charset="utf-8">
+	<!--
+		var googleMaps;
+		$(document).ready(function(){
+			// Map読み取り
+			googleMaps = $("div#map_canvas").createGoogleMaps({
+				latitude: $!{latitude},
+				longitude: $!{longitude},
+				zoom:18,
+				movemarker:false
+			});
+		});
+	//-->
+	</script>
+
+</head>
+<body style="background:#ffffff;">
+<div style="border:1px solid #000;width:520px; height:350px; padding:2px;">
+	<div id="map_canvas" style="width:520px; height:350px"></div>
+</div>
+<div style="width:520px; margin-top:5px;">
+	<table class="recoptable">
+		<col width="15%" /><col width="35%" /><col width="15%" /><col width="35%" />
+		<tr>
+			<th>緯度</th><td><span id="show_lat"></span></td>
+			<th>経度</th><td><span id="show_lng"></span></td>
+		</tr>
+	</table>
+</div>
+</body>
+</html>

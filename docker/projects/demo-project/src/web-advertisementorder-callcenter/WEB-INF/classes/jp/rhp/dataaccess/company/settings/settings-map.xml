@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.company.settings.CompanySettingsDataAccess">
+
+	<resultMap class="jp.rhp.model.company.settings.CompanySettings" id="settings">
+		<result property="entry.candidateAgeType" column="candidate_age_type" />
+	</resultMap>
+
+	<select id="findCompanyConfigurations" resultMap="settings">
+		SELECT
+			candidate_age_type."type" AS candidate_age_type
+		FROM
+			( SELECT "value" AS "type" FROM employer.configurations WHERE "key" = 'candidate_age_type' ) AS candidate_age_type
+	</select>
+
+</sqlMap>

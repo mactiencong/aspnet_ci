@@ -1,0 +1,16 @@
+<div id='place' class='recopDialog' style="width:600px;">
+	<div class='title' id="handlePlace" style="line-height:16px;">
+		<span style='vertical-align:middle;'><strong> 面接会場設定</strong></span>
+	</div>
+	<div class='body'>
+		<div id="selectPlaceTemplateArea">
+			#parse("/schedule/interviewframe/scheduler/_parts/interviewplace/selecttemplate.vm")
+		</div>
+		<div style="margin:20px;text-align:left;" id="inputInterviewPlaceArea">
+			#parse("/schedule/interviewframe/scheduler/_parts/interviewplace/inputform.vm")
+		</div>
+	</div>
+	<div class='buttons'>
+		<input type='button' value='キャンセル' class='button' onclick='$.interviewPlace.cancel();' /><input type='button' value='設定する' class='button' onclick=' $.interviewPlace.setting();'/></div>
+	</div>
+</div>

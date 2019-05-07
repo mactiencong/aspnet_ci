@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.address.popup.AddressPopupDataAccess">
+
+	<typeAlias alias="addressPopupSearchCriteria" type="jp.rhp.model.address.popup.AddressPopupSearchCriteria" />
+
+	<resultMap id="addressPopup" class="jp.rhp.model.address.AddressPopup">
+		<result property="zipCodePopup.value"                           	column="zip_code"               	 	/>
+		<result property="area.prefecture.code"                		   		column="prefecture_code"        	 	/>
+		<result property="area.prefecture.name.value"          	   			column="prefecture_name"        	 	/>
+		<result property="area.zone.municipality.code"         		  		column="city_code"              	 	/>
+		<result property="area.zone.municipality.name.value"   		   		column="city_name"              	 	/>
+		<result property="area.zone.municipality.name.kanaForDisplay"  	 	column="city_name_kana_for_display"  	/>
+		<result property="area.zone.municipality.name.kanaForSearch"   		column="city_name_kana_for_search"   	/>
+		<result property="area.zone.street.name.value"         				column="street_name"            	 	/>
+		<result property="area.zone.street.name.kanaForDisplay"          	column="street_name_kana_for_display"   />
+		<result property="area.zone.street.name.kanaForSearch"          	column="street_name_kana_for_search" 	/>
+	</resultMap>
+	
+	<sql id="where">
+		<dynamic prepend="WHERE ">
+			<isNotEmpty property="spaceSeparatedWords.value">
+				<iterate property="spaceSeparatedWords.listSubWords" conjunction="AND ">
+				(  
+					<isEqual property="spaceSeparatedWords.listSubWords[].isNumber" compareValue="true">
+						addresses.zip_code                      LIKE ''  || regexp_replace( #spaceSeparatedWords.listSubWords[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+					</isEqual>
+					<isNotEqual property="spaceSeparatedWords.listSubWords[].isNumber" compareValue="true">
+						   prefectures.name                     LIKE '%' || regexp_replace( #spaceSeparatedWords.listSubWords[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+						OR cities.name                          LIKE '%' || regexp_replace( #spaceSeparatedWords.listSubWords[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+						OR cities.name_kana_for_search          LIKE '%' || $spaceSeparatedWords.listSubWords[].index$.key                                          || '%'
+						OR addresses.street                     LIKE '%' || regexp_replace( #spaceSeparatedWords.listSubWords[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+						OR addresses.street_kana_for_search     LIKE '%' || $spaceSeparatedWords.listSubWords[].index$.key                                          || '%' 
+					</isNotEqual>
+				)
+				</iterate>
+			</isNotEmpty>
+		</dynamic>
+	</sql>
+
+	<sql id="joinTables">
+		INNER JOIN 
+			address.cities
+		ON 
+			cities.code = addresses.city_code
+		INNER JOIN 
+			address.prefectures
+		ON 
+			prefectures.code = cities.prefecture_code
+		<isNotEmpty property="spaceSeparatedWords.value">
+			<iterate property="spaceSeparatedWords.listSubWords">
+				JOIN
+					(SELECT public.han2zenkana( regexp_replace( #spaceSeparatedWords.listSubWords[].value#, '([%_])', E'\\\\\\1', 'g' ) ) as key) as $spaceSeparatedWords.listSubWords[].index$ on true
+				
+			</iterate>
+		</isNotEmpty>
+	</sql>
+
+	<select id="addressCount" parameterClass="addressPopupSearchCriteria" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(1)
+		FROM
+			address.addresses
+		<include refid="joinTables" />
+		<include refid="where" />
+	</select>
+
+	<select id="addresses" parameterClass="addressPopupSearchCriteria" resultMap="addressPopup">
+		SELECT
+			addresses.zip_code                         AS zip_code,
+			prefectures.code                           AS prefecture_code,
+			prefectures.name                           AS prefecture_name,
+			cities.code                                AS city_code,
+			cities.name                                AS city_name,
+			cities.name_kana_for_display               AS city_name_kana_for_display,
+			cities.name_kana_for_search                AS city_name_kana_for_search,
+			addresses.street                           AS street_name,
+			addresses.street_kana_for_display          AS street_name_kana_for_display,
+			addresses.street_kana_for_search           AS street_name_kana_for_search
+		FROM
+			address.addresses
+		<include refid="joinTables" />
+		<include refid="where" />
+		ORDER BY
+			addresses.zip_code
+		OFFSET #page.offset# LIMIT #page.limit#;
+	</select>
+</sqlMap>

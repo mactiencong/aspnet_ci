@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.advertisementorderexport.request.obsoleterequest.ObsoleteAdvertisementOrderExportRequestDataAccess">
+
+	<select id="nextId" resultClass="java.lang.Integer">
+		SELECT
+			nextval('advertisement_order_export.request_for_advertisementorder_callcenter_id') AS id
+	</select>
+
+	<insert id="registerRequest" parameterClass="jp.rhp.model.advertisementorderexport.request.obsoleterequest.Request">
+		INSERT INTO advertisement_order_export.request_for_advertisementorder_callcenter (
+			id,
+			requested_datetime
+		) VALUES (
+			#id#,
+			now()
+		)
+	</insert>
+
+	<insert id="registerRequestUser" parameterClass="jp.rhp.model.advertisementorderexport.request.obsoleterequest.Request">
+		INSERT INTO advertisement_order_export.request_user_for_advertisementorder_callcenter (
+			request_id,
+			user_id,
+			advertisementorder_callcenter_user_id,
+			advertisementorder_callcenter_user_full_name
+		) VALUES (
+			#id#,
+			( SELECT user_id FROM account.advertisement_order_callcenter_user ),
+			#requestUser.id#,
+			#requestUser.name.value#
+		)
+	</insert>
+
+	<insert id="registerRequestStatus" parameterClass="jp.rhp.model.advertisementorderexport.request.obsoleterequest.Request">
+		INSERT INTO advertisement_order_export.request_status_for_advertisementorder_callcenter (
+			request_id,
+			request_status_type
+		) VALUES (
+			#id#,
+			#status#
+		)
+	</insert>
+
+	<insert id="registerRequestTarget">
+		INSERT INTO advertisement_order_export.request_target_for_advertisementorder_callcenter (
+			request_id,
+			advertisement_order_detail_id
+		) (
+			SELECT
+				#request.id#						AS request_id,
+				advertisement_order_detail_id		AS advertisement_order_detail_id
+			FROM
+				advertisement_order.latest_advertisement_order_detail
+			INNER JOIN
+				advertisement_order.available_for_callcenter
+			ON
+				available_for_callcenter.advertisement_order_id = latest_advertisement_order_detail.advertisement_order_id
+		<dynamic prepend="WHERE">
+			<isEqual property="criteria.contents.orderedDate.notEmpty" compareValue="true" prepend="AND">
+				EXISTS (
+					SELECT
+						advertisement_order.id
+					FROM
+						advertisement_order.advertisement_order
+					WHERE
+						latest_advertisement_order_detail.advertisement_order_id = advertisement_order.id
+					<isEqual property="criteria.contents.orderedDate.from.notEmpty" compareValue="true">
+					<![CDATA[
+						AND advertisement_order.order_datetime >= #criteria.contents.orderedDate.fromDate#
+					]]>
+					</isEqual>
+					<isEqual property="criteria.contents.orderedDate.to.notEmpty" compareValue="true">
+					<![CDATA[
+						AND advertisement_order.order_datetime <= #criteria.contents.orderedDate.toDate#
+					]]>
+					</isEqual>
+					)
+			</isEqual>
+			<isEqual property="criteria.contents.publicationDate.notEmpty" compareValue="true" prepend="AND">
+				EXISTS (
+					SELECT
+						advertisement_order_result.advertisement_order_id
+					FROM
+						advertisement_order.advertisement_order_result
+					LEFT OUTER JOIN
+						advertisement_order.canceled_advertisement_order
+					ON
+						canceled_advertisement_order.advertisement_order_id = advertisement_order_result.advertisement_order_id
+					WHERE
+						latest_advertisement_order_detail.advertisement_order_id = advertisement_order_result.advertisement_order_id
+						AND canceled_advertisement_order.advertisement_order_id IS NULL
+					<isNotEmpty property="criteria.contents.publicationDate.range.from.dateStamp">
+					<![CDATA[
+						AND advertisement_order_result.publication_date >= #criteria.contents.publicationDate.fromDate#
+					]]>
+					</isNotEmpty>
+					<isNotEmpty property="criteria.contents.publicationDate.range.to.dateStamp">
+					<![CDATA[
+						AND advertisement_order_result.publication_date <= #criteria.contents.publicationDate.toDate#
+					]]>
+					</isNotEmpty>
+					)
+			</isEqual>
+
+			<isEqual property="criteria.contents.mediaTypeName.notEmpty" compareValue="true" prepend="AND">
+                EXISTS (
+                    SELECT
+                        advertisement_order.id
+                    FROM
+                        advertisement_order.advertisement_order
+                    INNER JOIN
+                        advertisement_order.advertisement_order_detail
+                    ON
+                        advertisement_order.id = advertisement_order_detail.advertisement_order_id
+                    INNER JOIN
+                        advertisement_order.ordered_item
+                    ON
+                        ordered_item.advertisement_order_detail_id = advertisement_order_detail.id
+                    INNER JOIN
+                        advertisement_order_master.item
+                    ON
+                        item.id = ordered_item.item_id
+                    INNER JOIN
+                        advertisement_order_master.area
+                    ON
+                        area.id = item.area_id
+                    INNER JOIN
+                        advertisement_order_master.media
+                    ON
+                        media.id = area.media_id
+					INNER JOIN
+						advertisement_order_master.media_type
+					ON
+						media_type.type = media.media_type
+                    WHERE
+						media.media_type = #criteria.contents.mediaTypeName.value#
+                        AND
+                        latest_advertisement_order_detail.advertisement_order_detail_id = advertisement_order_detail.id
+                )
+			</isEqual>
+			<isEqual property="criteria.contents.mediaCategoryList.notEmpty" compareValue="true" prepend="AND">
+                EXISTS (
+                    SELECT
+                        advertisement_order.id
+                    FROM
+                        advertisement_order.advertisement_order
+                    INNER JOIN
+                        advertisement_order.advertisement_order_detail
+                    ON
+                        advertisement_order.id = advertisement_order_detail.advertisement_order_id
+                    INNER JOIN
+                        advertisement_order.ordered_item
+                    ON
+                        ordered_item.advertisement_order_detail_id = advertisement_order_detail.id
+                    INNER JOIN
+                        advertisement_order_master.item
+                    ON
+                        item.id = ordered_item.item_id
+                    INNER JOIN
+                        advertisement_order_master.area
+                    ON
+                        area.id = item.area_id
+                    INNER JOIN
+                        advertisement_order_master.media
+                    ON
+                        media.id = area.media_id
+					INNER JOIN
+						advertisement_order_master.media_type
+					ON
+						media_type.type = media.media_type
+					INNER JOIN
+						advertisement_order_master.media_type_x_media_category
+					ON
+						media_type_x_media_category.media_type = media_type.type
+                    WHERE
+						media_type_x_media_category.media_category_id IN
+						<iterate property="criteria.contents.mediaCategoryList.selected" open="(" close=")" conjunction=",">
+							#criteria.contents.mediaCategoryList.selected[]#
+						</iterate>
+                        AND
+                        latest_advertisement_order_detail.advertisement_order_detail_id = advertisement_order_detail.id
+                )
+			</isEqual>
+			<isEqual property="criteria.contents.biller.notEmpty" compareValue="true" prepend="AND">
+                EXISTS (
+                    SELECT
+                        advertisement_order.id
+                    FROM
+                        advertisement_order.advertisement_order
+                    INNER JOIN
+                        advertisement_order.advertisement_order_detail
+                    ON
+                        advertisement_order.id = advertisement_order_detail.advertisement_order_id
+                    INNER JOIN
+                        advertisement_order.ordered_item
+                    ON
+                        ordered_item.advertisement_order_detail_id = advertisement_order_detail.id
+                    INNER JOIN
+                        advertisement_order_master.item
+                    ON
+                        item.id = ordered_item.item_id
+                    INNER JOIN
+                        advertisement_order_master.area
+                    ON
+                        area.id = item.area_id
+                    INNER JOIN
+                        advertisement_order_master.media
+                    ON
+                        media.id = area.media_id
+					INNER JOIN
+						advertisement_order_master.biller_of_item
+					ON
+						biller_of_item.item_id = item.id
+					INNER JOIN
+						advertisement_order_master.biller
+					ON
+						biller.id = biller_of_item.biller_id
+                    WHERE
+						biller.code = #criteria.contents.biller.value#
+                        AND
+                        latest_advertisement_order_detail.advertisement_order_detail_id = advertisement_order_detail.id
+                )
+			</isEqual>
+
+            <isEqual property="mediaCompanyList.mediaCompanies.empty" compareValue="false" prepend="AND">
+                EXISTS (
+                    SELECT
+                        advertisement_order.id
+                    FROM
+                        advertisement_order.advertisement_order
+                    INNER JOIN
+                        advertisement_order.advertisement_order_detail
+                    ON
+                        advertisement_order.id = advertisement_order_detail.advertisement_order_id
+                    INNER JOIN
+                        advertisement_order.ordered_item
+                    ON
+                        ordered_item.advertisement_order_detail_id = advertisement_order_detail.id
+                    INNER JOIN
+                        advertisement_order_master.item
+                    ON
+                        item.id = ordered_item.item_id
+                    INNER JOIN
+                        advertisement_order_master.area
+                    ON
+                        area.id = item.area_id
+                    INNER JOIN
+                        advertisement_order_master.media
+                    ON
+                        media.id = area.media_id
+                    INNER JOIN
+                        advertisement_order_master.media_company
+                    ON
+                        media_company.code = media.media_company_code
+                    WHERE
+                        media_company.code IN
+                        <iterate property="mediaCompanyList.mediaCompanies" open="(" close=")" conjunction=",">
+                            #mediaCompanyList.mediaCompanies[].code#
+                        </iterate>
+                        AND
+                        latest_advertisement_order_detail.advertisement_order_detail_id = advertisement_order_detail.id
+                )
+            </isEqual>
+		</dynamic>
+		)
+	</insert>
+
+</sqlMap>

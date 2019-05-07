@@ -1,0 +1,52 @@
+#画像ファイルへアクセスするためのルートパス
+#指定した場合の画像パスは、指定したパスからの相対パスとしてローカルアクセスされ、
+#指定しない場合はHTTP経由の相対パスとして画像ファイルへアクセスされます
+#image.local.base.dir=/var/app/mobylet-example/images
+
+#リサイズした画像をキャッシュしておくディレクトリ
+image.cache.base.dir=/tmp/mobylet/cache
+
+#ImageScaleServletへのパス
+image.scale.servlet.path=${contextPath}/scale
+
+### 以下のプロパティはVer.1.0.1以上で利用可能です ###
+
+#ImageSourceTypeの設定
+#変換元画像をどのソースから取得するかの設定
+# （例）LOCALに設定した場合に、HTTP経由の画像は無視します
+# DEFAULT : どのソースを指定しても処理します（デフォルト）
+# LOCAL : ローカルパスで取得する画像のみ処理します（要image.local.base.dir設定）
+# NETWORK : ネットワークパス（HTTP/HTTPS経由）で取得する画像のみ処理します
+image.source.type=DEFAULT
+
+#変換元画像（ネットワーク経由）のURLを正規表現で制限
+#変換元画像がネットワーク上に存在する場合に
+#ここに指定した正規表現と一致するURLのみ処理します
+#ブランクの場合（デフォルト）はURLのチェックは行いません
+image.source.url.allow=
+
+#ネットワーク上の画像処理可能上限サイズ
+#HTTP/HTTPS経由で取得した画像を処理可能な上限バイト数を設定出来ます。
+#このサイズを超えた画像に対しては処理を行いません
+#0を指定した場合はサイズ上限チェックを行いません（デフォルト）
+#（注意）ネットワーク上の画像はHEAD要求で返却されるContentLengthでチェックします
+#      Content-Lengthヘッダが返却されない場合、画像処理を行いません
+image.source.network.limit.size=
+
+#ローカル上の画像処理可能上限サイズ
+#ローカルパスで取得した画像に対して処理可能な上限バイト数を設定出来ます。
+#このサイズを超えた画像に対しては処理を行いません
+#0を指定した場合はサイズ上限チェックを行いません（デフォルト）
+image.source.local.limit.size=
+
+#画像変換エンジンとしてImageMagickを有効にします
+imagemagick.use=true
+
+#ImageMagick「convert」のインストールディレクトリ
+#Pathが通っている場合は省略可能です
+imagemagick.path=/usr/local/bin
+
+#作業用一時ディレクトリの指定
+#省略した場合は「/tmp/mobylet/work/imagemagick/」を利用します
+imagemagick.workdir=/tmp/mobylet/workspace
+

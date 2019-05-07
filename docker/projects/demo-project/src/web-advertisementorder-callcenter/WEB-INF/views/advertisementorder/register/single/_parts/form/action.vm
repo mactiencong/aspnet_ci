@@ -1,0 +1,12 @@
+<div class="actionArea">
+#if($hasError)
+	<p class="err">「給与」が最低賃金より低く設定されています。</p>
+#end
+	<div class="btns employ">
+		<p class="revise">
+			<a name="-" class="btnConf noDialog">
+				<input type="image" src="$link.contextPath/images/btnConfirm.gif" width="268" height="39" alt="確認する" class="rollover" />
+			</a>
+		</p>
+	</div>
+</div>

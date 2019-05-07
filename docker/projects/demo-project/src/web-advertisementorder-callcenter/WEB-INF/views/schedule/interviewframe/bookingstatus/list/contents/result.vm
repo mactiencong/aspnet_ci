@@ -1,0 +1,36 @@
+<script type="text/javascript">
+$(document).ready(function() {
+	settingDelete();
+});
+</script>
+<div class="listHeader booking">
+	#page( $criteria.page "/sectiontohire/schedule/bookingstatus/paging" )
+	#formSingleSelect( 'criteria.page.limit' $criteria.page.perPages 'tabindex="25" class="regular w070"' 'perPage' )
+</div>
+<table summary="予約状況一覧" class="recoplist">
+	<col width="12%" /><col width="12%" /><col width="10%" /><col width="20%" /><col width="*" />#if($!{configulation.useBookingForWebEntry})<col width="12%" />#end<col width="7%" />
+	<thead>
+		<tr class="header">
+			<th>日付</th>
+			<th>時刻</th>
+			<th>予約/定員</th>
+			<th>面接会場</th>
+			<th>メモ</th>
+			#if($!{configulation.useBookingForWebEntry})
+			<th>公開状態</th>
+			#end
+			<th class="last">&nbsp;</th>
+		</tr>
+    </thead>
+	<tbody>
+		#foreach( $interview in $interviews )
+			<tr class="interview" interviewID="$interview.id">
+				#parse("schedule/interviewframe/bookingstatus/list/contents/line.vm")
+			</tr>
+		#end
+    </tbody>
+</table>
+<div class="listHeader bottom">
+	#page( $criteria.page "/sectiontohire/schedule/bookingstatus/paging" )
+	#formSingleSelect( 'criteria.page.limit' $criteria.page.perPages 'tabindex="25" class="regular w070"' 'perPage' )
+</div>

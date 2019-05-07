@@ -1,0 +1,54 @@
+<div class="employPannel">
+    <div class="inner">
+        <div class="defaultSearchCond">
+            <div class="eplLt">
+                <table summary="検索条件1" class="regular">
+                <tr>
+                    <th>HP公開状態</th>
+                    <td>
+                        #formRadioButton('jobOfferCriteria.postingStatus' $jobOfferCriteria.postingStatusMap  '&nbsp;&nbsp;&nbsp;' '' '' '' true )
+                    </td>
+                </tr>
+                <tr>
+                    <th>原稿掲載職種</th>
+                    <td>
+                        #springFormSingleSelect('jobOfferCriteria.jobTypeCode' $jobTypeList.map 'class="regular"')
+                    </td>
+                </tr>
+                <tr class="shopCassette">
+                    <th>案件名</th>
+                    <td>
+                        #springFormInput('jobOfferCriteria.title' 'class="regular bg w250"')
+                    </td>
+                </tr>
+                </table>
+            </div>
+            <div class="eplRt">
+                <table class="regular mstEdit" summary="検索条件2">
+                    <tr class="regular">
+                        <th>原稿掲載店舗分類</th>
+                        <td>
+                            #springFormSingleSelect('jobOfferCriteria.workplaceGroupId' $workplaceGroupList.map 'class="regular"')
+                        </td>
+                    </tr>
+                    <tr class="shopCassette">
+                        <th>原稿掲載店舗</th>
+                        <td style="padding-bottom:7px !important;">
+                            <p id="_workplace">
+                                #parse("joboffer/list/search/workplace.vm")
+                            </p>
+                            #springFormInput( 'jobOfferCriteria.workplace.freeword' 'class="shopRefiner suggest"' )
+                            <a href="javascript:void(0);" id="workplaceSearch" class="mg refineShop"><img src="$link.contextPath/images/btnRefine.gif" width="70" height="25" alt="絞り込む"  class="rollover" /></a><a href="javascript:void(0);" id="workplaceReset" class="refineShopCancel"><img src="$link.contextPath/images/btnClearShop.gif" width="63" height="25" alt="入力をリセット" /></a>
+                            <span class="shopRfineSubTxt" style="font-size:93%;"></span><span class="shopRfineErr" style="font-size:93%; color:#F00;"></span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!--[if lte IE 7.0]><div style="clear:both; height:1px; width:100%;"></div><![endif]-->
+        <div class="controls">
+            <p class="reset"><a href="$link.relativeAndCompany("/joboffer")'><img src="$link.contextPath/images/btnResetCond.gif" width="101" height="25" alt="条件をリセット" class="rollover" /></a></p>
+            <p class="submit"><input type="image" id="search" name="search" src="$link.contextPath/images/btnSearch01.gif" width="268" height="39" alt="検索する" class="rollover" /></p>
+        </div>
+    <!-- //inner --></div>
+<!-- //employPannel --></div>

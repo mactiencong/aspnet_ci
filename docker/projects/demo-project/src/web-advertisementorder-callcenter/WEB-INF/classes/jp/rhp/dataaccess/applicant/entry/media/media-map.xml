@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.applicant.entry.media.MediaDataAccess">
+
+	<resultMap class="jp.rhp.model.applicant.entry.media.Media" id="media">
+		<result property="id" column="media_id"/>
+		<result property="name" column="media_name"/>
+		<result property="enable" column="enable"/>
+		<result property="displayOrder" column="display_order"/>
+	</resultMap>
+
+	<resultMap class="jp.rhp.model.applicant.entry.media.MediaGroupAndMedia" id="mediaGroupAndMedia" groupBy="mediaGroupId">
+		<result property="mediaGroupId" column="media_group_id"/>
+		<result property="mediaGroupName" column="media_group_name"/>
+		<result property="mediaList.list" resultMap="jp.rhp.dataaccess.applicant.entry.media.MediaDataAccess.media"/>
+	</resultMap>
+
+	<select id="findById" parameterClass="java.lang.Integer" resultMap="media">
+		SELECT
+			media_id,
+			media_name,
+			enable,
+			display_order
+		FROM
+			entry.media
+		WHERE
+			media_id = #value#
+	</select>
+
+	<select id="listAll" resultMap="media">
+		SELECT
+			media_id,
+			media_name,
+			enable,
+			display_order
+		FROM
+			entry.media
+		WHERE
+			enable = 'ENABLE'
+		ORDER BY
+			display_order
+	</select>
+
+	<select id="listOfExistsCandidate" resultMap="media">
+		SELECT
+			media_id,
+			media_name,
+			enable,
+			display_order
+		FROM
+			entry.media
+		WHERE
+			enable = 'ENABLE'
+		AND EXISTS
+			(
+				SELECT
+					candidate_id
+				FROM
+					hiring_process.candidates
+				WHERE
+					entry_media_id = media.media_id
+				AND NOT EXISTS
+					(
+						SELECT
+							candidate_id
+						FROM
+							hiring_process.candidates_delete
+						WHERE
+							candidate_id = candidates.candidate_id
+					)
+			)
+		ORDER BY
+			display_order
+	</select>
+
+	<select id="groupList" resultMap="mediaGroupAndMedia">
+		SELECT
+			media_group.media_group_id,
+			media_group.media_group_name,
+			media.media_id,
+			media.media_name,
+			media.enable,
+			media.display_order
+		FROM
+			entry.media
+		INNER JOIN
+			entry.media_group ON media.media_group_id = media_group.media_group_id
+		WHERE
+			media.enable = 'ENABLE'
+		ORDER BY
+			media_group.display_order, media.display_order
+	</select>
+
+</sqlMap>

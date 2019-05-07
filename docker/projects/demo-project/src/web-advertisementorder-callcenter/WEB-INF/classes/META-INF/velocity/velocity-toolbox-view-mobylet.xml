@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<tools>
+  <toolbox scope="application">
+    <tool class="com.systemsekkei.base.web.view.velocity.tool.mobylet.MobyletInstanceTool"/>
+  </toolbox>
+  <toolbox scope="request">
+    <tool class="com.systemsekkei.base.web.view.velocity.tool.mobylet.MobyletAnchorLinkTool"/>
+    <tool class="com.systemsekkei.base.web.view.velocity.tool.mobylet.MobyletImageTool"/>
+    <tool class="com.systemsekkei.base.web.view.velocity.tool.mobylet.MobyletXmlHeaderTool"/>
+    <tool class="com.systemsekkei.base.web.view.velocity.tool.mobylet.MobyletCSSTool"/>
+    <tool class="com.systemsekkei.base.web.view.velocity.tool.mobylet.MobyletEmojiTool"/>
+  </toolbox>
+</tools>

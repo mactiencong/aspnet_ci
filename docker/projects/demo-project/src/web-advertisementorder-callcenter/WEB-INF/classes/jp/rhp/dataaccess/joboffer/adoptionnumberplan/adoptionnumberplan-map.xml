@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.joboffer.adoptionnumberplan.AdoptionNumberPlanDataAccess">
+
+	<typeAlias alias="adoptionNumberPlan" type="jp.rhp.model.joboffer.recruitment.adoptionNumberPlan.AdoptionNumberPlan" />
+
+	<resultMap class="adoptionNumberPlan" id="adoptionNumberPlan">
+		<result property="adoptionNumberPlanCode" column="adoption_number_plan_code"/>
+		<result property="adoptionNumber" column="adoption_number"/>
+	</resultMap>
+
+	<sql id="select">
+		SELECT
+			adoption_number_plan.adoption_number_plan_code,
+			adoption_number_plan.adoption_number
+		FROM
+			joboffer.adoption_number_plan
+	</sql>
+
+	<select id="listAll" resultMap="adoptionNumberPlan">
+		<include refid="select"/>
+		ORDER BY
+			adoption_number_plan.adoption_number_plan_code
+	</select>
+
+</sqlMap>

@@ -1,0 +1,205 @@
+<div class="section">
+	<h4>募集要項</h4>
+	<table class="recoptable" summary="募集要項">
+		<col width="18%" /><col width="*" />
+		<tr>
+			<th>雇用形態</th>
+			<td>
+				#foreach( $employmentFormCode in $!articleForPreview.jobOffer.recruitment.employmentFormList.selected )
+					#escape($!{employmentFormTypeList.getName($employmentFormCode)})&nbsp;
+				#end
+			</td>
+		</tr>
+		<tr>
+			<th>原稿掲載職種表示名称</th>
+			<td>
+				#escape($!{articleForPreview.jobOffer.recruitment.jobTypeDescription.text})
+			</td>
+		</tr>
+		<tr>
+			<th>資格</th>
+			<td>
+				#escape($!{articleForPreview.jobOffer.recruitment.qualification.text})
+			</td>
+		</tr>
+		<tr>
+			<th>給与</th>
+			<td>
+				#if( $!{articleForPreview.jobOffer.recruitment.jobOfferIncome.use()} )
+					<div class="jobDetailText">#escape( $!{articleForPreview.jobOffer.recruitment.jobOfferIncome.text.detailText.value} )</div>
+				#else
+				<table summary="layout" class="innerTable regular">
+					<col width="40%"/><col width="*"/>
+					<tbody>
+						#if( $!{articleForPreview.jobOffer.recruitment.income.cassette} )
+							<tr>
+								<th>給与形態</th>
+								<td>#escape($!{incomeFormList.getName( $!{articleForPreview.jobOffer.recruitment.income.incomeForm.incomeFormCode} )})</td>
+							</tr>
+							<tr>
+								<th>基本時給(平日時給)</th>
+								<td>
+									#escape($text.priceFormat($!{articleForPreview.jobOffer.recruitment.income.cassetteIncome.baseWage}))円
+								</td>
+							</tr>
+							<tr>
+								<th>土日時給</th>
+								<td>
+									#escape($text.priceFormat($!{articleForPreview.jobOffer.recruitment.income.cassetteIncome.weekendWage}))円
+								</td>
+							</tr>
+							<tr>
+								<th>高校生可否</th>
+								<td >
+									#if(${articleForPreview.jobOffer.recruitment.income.cassetteIncome.highSchoolStudentWage.possibility.possible})
+										可
+									#else
+										不可
+									#end
+									&nbsp;
+								</td>
+							</tr>
+							#if(${articleForPreview.jobOffer.recruitment.income.cassetteIncome.highSchoolStudentWage.possibility.possible})
+							<tr>
+								<th>高校生時給(マイナス入力)</th>
+								<td>
+									-#escape($text.priceFormat($!{articleForPreview.jobOffer.recruitment.income.cassetteIncome.highSchoolStudentWage.diff}))円&nbsp;(&nbsp;$text.priceFormat($!{articleForPreview.jobOffer.recruitment.income.cassetteIncome.calcStudentWage})円&nbsp;)
+								</td>
+							</tr>
+							#end
+							<tr>
+								<th>研修有無</th>
+								<td>
+									#if(${articleForPreview.jobOffer.recruitment.income.cassetteIncome.training.existence.exist})
+										有り
+									#else
+										無し
+									#end
+									&nbsp;
+								</td>
+							</tr>
+							#if(${articleForPreview.jobOffer.recruitment.income.cassetteIncome.training.existence.exist})
+							<tr>
+								<th>研修期間</th>
+								<td>
+									#escape($!{articleForPreview.jobOffer.recruitment.income.cassetteIncome.training.trainingPeriod.number}) #escape($!{articleForPreview.jobOffer.recruitment.income.cassetteIncome.training.trainingPeriod.unit.name}) #escape($!{articleForPreview.jobOffer.recruitment.income.cassetteIncome.training.trainingPeriod.addition.value})
+								</td>
+							</tr>
+							<tr>
+								<th>研修時給(マイナス入力)</th>
+								<td>
+									-#escape($text.priceFormat($!{articleForPreview.jobOffer.recruitment.income.cassetteIncome.training.wage.diff}))円&nbsp;(&nbsp;#escape($text.priceFormat($!{articleForPreview.jobOffer.recruitment.income.cassetteIncome.calcTrainingWage}))&nbsp;円&nbsp;)
+								</td>
+							</tr>
+							#if(${articleForPreview.jobOffer.recruitment.income.cassetteIncome.highSchoolStudentWage.possibility.possible})
+								<tr>
+									<th>高校生研修時給</th>
+									<td>
+										#escape($text.priceFormat($!{articleForPreview.jobOffer.recruitment.income.cassetteIncome.training.wage.studentWage})) 円
+									</td>
+								</tr>
+								#end
+							#end
+						#else
+							<tr>
+								<td>
+									<div style="margin-bottom:10px;">
+										給与形態：<span style="margin-left:5px;">#escape($!{incomeFormList.getName( $!{articleForPreview.jobOffer.recruitment.income.incomeForm.incomeFormCode} )})</span>
+									</div>
+									#escape($!{articleForPreview.jobOffer.recruitment.income.description.text})
+								</td>
+							</tr>
+						#end
+					</tbody>
+				</table>
+				#end
+			</td>
+		</tr>
+		#if($!{jobOfferSettings.useCassetteTreatment.use})
+			<tr>
+				<th>待遇</th>
+				<td>
+					<table summary="layout" class="innerTable regular">
+						<col width="40%"/><col width="*"/>
+						#foreach( $treatment in $!{articleForPreview.jobOffer.recruitment.cassetteTreatment.treatmentList.treatments} )
+						<tr>
+							<th>#escape($treatment.name)</th>
+							<td>
+								#if($treatment.existence.exist)有り #else 無し #end&nbsp;
+							</td>
+						</tr>
+						#end
+						<tr>
+							<th>交通費支給</th>
+							<td>
+								#escape($!{articleForPreview.jobOffer.recruitment.cassetteTreatment.trafficExpenses.name}) &nbsp;
+							</td>
+						</tr>
+						#if($!{articleForPreview.jobOffer.recruitment.cassetteTreatment.trafficExpenses.limitRequired})
+						<tr>
+							<th>交通費上限</th>
+							<td>
+								#escape($text.priceFormat($!{articleForPreview.jobOffer.recruitment.cassetteTreatment.trafficExpenses.limit})) 円
+							</td>
+						</tr>
+						#end
+					</table>
+				</td>
+			</tr>
+		#end
+		<tr>
+			<th>勤務曜日・時間</th>
+			<td>
+				#escape($!{articleForPreview.jobOffer.recruitment.workingTime.workingDayTimeDescription.text})
+			</td>
+		</tr>
+		<tr>
+			<th>週あたり最低勤務日数</th>
+			<td>
+				#escape($!{workingDayPerWeekCodeTypeList.getName( $!{articleForPreview.jobOffer.recruitment.workingTime.workingDayPerWeekCode} )})
+			</td>
+		</tr>
+		<tr>
+			<th>勤務時間帯</th>
+			<td>
+				#escape($!{articleForPreview.jobOffer.recruitment.workingTime.text})
+			</td>
+		</tr>
+		<tr>
+			<th>採用予定人数</th>
+			<td>
+				#if($articleForPreview.jobOffer.recruitment.adoptionNumberPlan.code == '99')
+			        #if($articleForPreview.jobOffer.recruitment.adoptionNumberPlan.number != '')
+			            $!{articleForPreview.jobOffer.recruitment.adoptionNumberPlan.number}名
+                    #end
+				#else
+                    $!{adoptionNumberPlanList.getName($articleForPreview.jobOffer.recruitment.adoptionNumberPlan.code)}
+				#end
+			</td>
+		</tr>
+		<tr>
+			<th>採用予定人数本文</th>
+			<td>
+				#escape($!{articleForPreview.jobOffer.recruitment.adoptionNumberPlan.description.text})
+			</td>
+		</tr>
+		#foreach( $advertiseAddition in $!articleForPreview.jobOffer.recruitment.advertiseAdditionList.list)
+		<tr>
+			<th>募集要項補足$velocityCount</th>
+			<td>
+				<table summary="layout" class="innerTable regular">
+					<col width="6%" /><col width="*" />
+					<tr>
+						<td class="nowrap">見出し</td>
+						<td>#escape($!{advertiseAddition.title.text})</td>
+					</tr>
+					<tr>
+						<td class="nowrap">本文&nbsp;&nbsp;</td>
+						<td>#escape($!{advertiseAddition.description.text}) </td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		#end
+	</table>
+</div>

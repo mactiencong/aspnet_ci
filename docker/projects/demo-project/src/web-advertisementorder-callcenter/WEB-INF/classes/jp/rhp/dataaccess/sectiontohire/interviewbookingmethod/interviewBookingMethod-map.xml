@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.sectiontohire.interviewbookingmethod.InterviewBookingMethodDataAccess">
+
+	<typeAlias alias="interviewBookingSetting" type="jp.rhp.model.sectiontohire.interviewbookingmethod.InterviewBookingSetting"/>
+
+	<insert id="register" parameterClass="interviewBookingSetting">
+		INSERT INTO
+			hiring.interview_booking_method
+		(
+			section_to_hire_id,
+			interview_booking_method_type,
+			use_booking_for_web_entry
+		)
+		VALUES
+		(
+			#sectionToHireId#,
+			#interviewBookingMethod#,
+			#useWebBooking#
+		)
+	</insert>
+
+	<update id="modify" parameterClass="interviewBookingSetting">
+		UPDATE
+			hiring.interview_booking_method
+		SET
+			interview_booking_method_type = #interviewBookingMethod#,
+			use_booking_for_web_entry = #useWebBooking#
+		WHERE
+			section_to_hire_id = #sectionToHireId#
+	</update>
+</sqlMap>

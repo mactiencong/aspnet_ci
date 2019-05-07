@@ -1,0 +1,1082 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.advertisementorder.article.ArticleDataAccess">
+
+	<resultMap class="jp.rhp.model.advertisementorder.article.Article" id="article"  groupBy="id" >
+    	<result property="id" 																						column="article_id"/>
+    	<result property="jobOffer.id" 																				column="job_offer_id"/>
+    	<result property="jobOffer.title" 																			column="title"/>
+    	<result property="jobOffer.workplace.id"																	column="workplace_id"/>
+    	<result property="jobOffer.workplace.name" 																	column="workplace_name"/>
+    	<result property="jobOffer.jobTypeName" 																	column="job_type_name"/>
+    	<result property="jobOffer.jobTypeCode" 																	column="job_type_code"/>
+    	<result property="jobOffer.recruitment.jobTypeDescription.text"												column="job_type_display_name"/>
+    	<result property="jobOffer.recruitment.qualification.text"													column="qualification"/>
+    	<result property="jobOffer.workplace.access.text"															column="access_description"/>
+    	<result property="jobOffer.job.jobDescription.text"															column="jop_description"/>
+    	<result property="jobOffer.job.catchPhrase.text"															column="catch_phrase"/>
+    	<result property="jobOffer.job.readPhrase.text"																column="read_phrase"/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.use.value"													column="use_joboffer_income"/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.detail.incomeForm.code"										column="joboffer_income_form_code"/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.detail.incomeForm.workingTime.hoursPerDay.value"				column="working_time_per_day_hours"/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.detail.incomeForm.workingTime.hoursPerMonth.value"			column="working_time_per_day_month"/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.detail.incomeForm.workingTime.workingSegment.unit.value"		column="working_time_segments_unit"/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.detail.incomeForm.workingTime.workingSegment.minutes.value"	column="working_time_segments_minutes"/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.detail.baseIncome.range.type"									column="base_wage_range_type"/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.detail.baseIncome.range.from.value"							column="base_from_wage"								nullValue=""/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.detail.baseIncome.range.to.value"								column="base_to_wage"								nullValue=""/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.detail.notes.summaryNote.value"								column="summary_note"								nullValue=""/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.detail.notes.detailNote.value"								column="detail_note"								nullValue=""/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.training.income.incomeForm.code"								column="training_income_form_code"/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.training.income.incomeForm.workingTime.hoursPerDay.value"		column="training_working_time_per_day"/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.training.income.incomeForm.workingTime.hoursPerMonth.value"	column="training_working_time_per_month"/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.training.income.range.type"									column="training_wage_range_type"/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.training.income.range.from.value"								column="training_from_wage"							nullValue=""/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.training.income.range.to.value"								column="training_to_wage"							nullValue=""/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.training.period.number.value"									column="training_period_number"						nullValue=""/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.training.period.unit.type.value"								column="training_period_unit_type"					nullValue=""/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.training.period.unit.name.value"								column="training_period_unit_name"					nullValue=""/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.training.period.differAccordingToProficiency.value"			column="training_differ_according_to_proficiency"	nullValue=""/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.training.existence.value"										column="training_existence"							nullValue=""/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.text.summaryText.value"										column="income_summary_text"/>
+    	<result property="jobOffer.recruitment.jobOfferIncome.text.detailText.value"										column="income_detail_text"/>
+    	<result property="jobOffer.recruitment.income.inputMethod"													column="income_input_method_type"/>
+    	<result property="jobOffer.recruitment.income.incomeForm.incomeForm"										column="income_form"/>
+    	<result property="jobOffer.recruitment.income.incomeForm.incomeFormCode"									column="income_form_code"/>
+    	<result property="jobOffer.recruitment.income.description.text"												column="income_description"/>
+    	<result property="jobOffer.recruitment.income.cassetteIncome.baseWage"										column="base_wage"/>
+    	<result property="jobOffer.recruitment.income.cassetteIncome.weekendWage"									column="weekend_wage"/>
+    	<result property="jobOffer.recruitment.income.cassetteIncome.highSchoolStudentWage.possibility.typeCode"	column="admit_high_school_student"/>
+    	<result property="jobOffer.recruitment.income.cassetteIncome.highSchoolStudentWage.diff"					column="difference_student_wage"/>
+    	<result property="jobOffer.recruitment.income.cassetteIncome.training.existence.typeCode"					column="conduct_training"/>
+    	<result property="jobOffer.recruitment.income.cassetteIncome.training.trainingPeriod.number"				column="training_period"/>
+    	<result property="jobOffer.recruitment.income.cassetteIncome.training.trainingPeriod.unit.type"				column="obsoleted_training_period_unit_type"/>
+    	<result property="jobOffer.recruitment.income.cassetteIncome.training.trainingPeriod.unit.name"				column="obsoleted_training_period_unit_name"/>
+    	<result property="jobOffer.recruitment.income.cassetteIncome.training.trainingPeriod.addition.id"			column="training_period_addition_id"/>
+    	<result property="jobOffer.recruitment.income.cassetteIncome.training.trainingPeriod.addition.value"		column="training_period_addition_value"/>
+    	<result property="jobOffer.recruitment.income.cassetteIncome.training.wage.diff"							column="difference_training_period_wage"/>
+    	<result property="jobOffer.recruitment.income.cassetteIncome.training.wage.studentWage"						column="student_training_period_wage"/>
+    	<result property="jobOffer.recruitment.cassetteTreatment.trafficExpenses.type" 								column="traffic_expenses_type"/>
+		<result property="jobOffer.recruitment.cassetteTreatment.trafficExpenses.name" 								column="traffic_expenses_type_name"/>
+		<result property="jobOffer.recruitment.cassetteTreatment.trafficExpenses.limit"								column="traffic_expenses_limit"/>
+    	<result property="jobOffer.recruitment.workingTime.workingDayTimeDescription.text"							column="working_day_time_description"/>
+    	<result property="jobOffer.recruitment.workingTime.workingDayPerWeekCode"									column="working_day_per_week_type_code"/>
+    	<result property="jobOffer.recruitment.workingTime.workingTimeMorningFlag"									column="working_time_morning_flag" />
+    	<result property="jobOffer.recruitment.workingTime.workingTimeDayFlag"										column="working_time_day_flag" />
+    	<result property="jobOffer.recruitment.workingTime.workingTimeEveningFlag"									column="working_time_evening_flag" />
+    	<result property="jobOffer.recruitment.workingTime.workingTimeNightFlag"									column="working_time_night_flag" />
+    	<result property="jobOffer.recruitment.adoptionNumberPlan.code"												column="adoption_number_plan_code" />
+    	<result property="jobOffer.recruitment.adoptionNumberPlan.number"											column="adoption_number_plan_number" />
+    	<result property="jobOffer.recruitment.adoptionNumberPlan.description.text"									column="adoption_number_plan_description" />
+    	<result property="jobOffer.application.useWebEntry.type"													column="use_webentry" />
+    	<result property="jobOffer.application.applyMethod.text"													column="apply_method" />
+    	<result property="jobOffer.application.applyProcess.text"													column="apply_process" />
+    </resultMap>
+
+    <resultMap class="jp.rhp.model.joboffer.job.JobAddition" id="jobAddition">
+    	<result property="serialNo" 														column="job_addition_serial_no"/>
+    	<result property="jobTitle.text" 													column="job_addition_title"/>
+    	<result property="jobDescription.text" 												column="job_addition_description"/>
+    </resultMap>
+
+    <resultMap class="jp.rhp.model.joboffer.job.MeritIndex" id="merit">
+		<result property="code" 															column="merit_code"/>
+	</resultMap>
+
+	<resultMap class="jp.rhp.model.joboffer.recruitment.AdvertiseAddition" id="advertiseAddition">
+    	<result property="serialNo" 														column="advertise_addition_serial_no"/>
+    	<result property="title.text" 														column="advertise_addition_title"/>
+    	<result property="description.text" 												column="advertise_addition_description"/>
+    </resultMap>
+
+    <resultMap class="jp.rhp.model.joboffer.recruitment.EmploymentForm" id="employmentForm">
+		<result property="code" 															column="employment_form_code"/>
+	</resultMap>
+
+    <resultMap class="jp.rhp.model.joboffer.recruitment.treatment.cassette.Treatment" id="treatment" >
+    	<result property="name" 															column="treatment_name"/>
+    	<result property="existence.exist" 													column="treatment_exist"/>
+    </resultMap>
+
+	<select id="nextId" resultClass="java.lang.Integer">
+		SELECT nextval ( 'advertisement_order.article_id' )
+	</select>
+
+	<resultMap id="conditionalIncome" class="jp.rhp.model.joboffer.income.conditionalincome.ConditionalIncome">
+		<result property="condition.value" column="condition" />
+		<result property="range.type" column="wage_range_type" />
+		<result property="range.from.value" column="from_wage" />
+		<result property="range.to.value" column="to_wage" />
+		<result property="includeMidnight.value" column="include_midnight" />
+	</resultMap>
+
+	<select id="listOfArticleById" resultClass="java.lang.Integer" parameterClass="java.lang.Integer">
+		SELECT
+			article.id
+		FROM
+			advertisement_order.article
+		INNER JOIN
+			advertisement_order.advertisement_order_detail
+		ON
+			advertisement_order_detail.id = article.advertisement_order_detail_id
+		INNER JOIN
+			advertisement_order.latest_advertisement_order_detail
+		ON
+			latest_advertisement_order_detail.advertisement_order_detail_id = advertisement_order_detail.id
+		INNER JOIN
+			advertisement_order.advertisement_order
+		ON
+			advertisement_order.id = advertisement_order_detail.advertisement_order_id
+		WHERE
+			advertisement_order.id = #advertisementOrderId#
+		ORDER BY
+			article.id
+	</select>
+
+	<select id="jobAdditionListOfArticle" resultMap="jobAddition" parameterClass="java.lang.Integer">
+		SELECT
+			article.id							AS	article_id,
+			article_job_addition.serial_no		AS	job_addition_serial_no,
+			article_job_addition.title			AS	job_addition_title,
+			article_job_addition.description	AS	job_addition_description
+		FROM
+			advertisement_order.article
+		INNER JOIN
+			advertisement_order.article_job_addition
+		ON
+			article_job_addition.article_id = article.id
+		WHERE
+			article.id = #articleId#
+		ORDER BY
+			article_job_addition.display_order
+	</select>
+
+	<select id="meritListOfArticle" resultMap="merit" parameterClass="java.lang.Integer">
+		SELECT
+			article_merit.merit_code	AS	merit_code
+		FROM
+			advertisement_order.article
+		LEFT OUTER JOIN
+			advertisement_order.article_merit
+		ON
+			article_merit.article_id = article.id
+		WHERE
+			article.id = #articleId#
+	</select>
+
+	<select id="employmentFormListOfArticle" resultMap="employmentForm" parameterClass="java.lang.Integer">
+		SELECT
+			article_employment_form_type.employment_form_code	AS	employment_form_code
+		FROM
+			advertisement_order.article
+		INNER JOIN
+			advertisement_order.article_employment_form_type
+		ON
+			article_employment_form_type.article_id = article.id
+		WHERE
+			article.id = #articleId#
+	</select>
+
+	<select id="advertiseAdditionListOfArticle" resultMap="advertiseAddition" parameterClass="java.lang.Integer">
+		SELECT
+			article.id								AS	article_id,
+			article_advertise_addition.serial_no	AS	advertise_addition_serial_no,
+			article_advertise_addition.title		AS	advertise_addition_title,
+			article_advertise_addition.description	AS	advertise_addition_description
+		FROM
+			advertisement_order.article
+		INNER JOIN
+			advertisement_order.article_advertise_addition
+		ON
+			article_advertise_addition.article_id = article.id
+		WHERE
+			article.id = #articleId#
+		ORDER BY
+			article_advertise_addition.display_order
+	</select>
+
+	<select id="treatmentListOfArticle" resultMap="treatment" parameterClass="java.lang.Integer">
+		SELECT
+			article.id										AS	article_id,
+			treatment.name									AS	treatment_name,
+			article_treatment.treatment_id IS NOT NULL 		AS	treatment_exist
+		FROM
+			advertisement_order.article
+		CROSS
+			JOIN joboffer.treatment
+		LEFT OUTER JOIN
+			advertisement_order.article_treatment
+		ON
+			article_treatment.article_id = article.id
+		AND
+			article_treatment.treatment_id = treatment.id
+		WHERE
+			article.id = #articleId#
+	</select>
+
+	<select id="findById" resultMap="article" parameterClass="java.lang.Integer">
+		SELECT
+			article.id												AS	article_id,
+			article.job_offer_id									AS	job_offer_id,
+			article.title											AS	title,
+			article_workplace.workplace_id							AS	workplace_id,
+			article_workplace.workplace								AS	workplace_name,
+			article_job_type.job_type_name							AS	job_type_name,
+			article_job_type.job_type_code							AS	job_type_code,
+			article_job_type.job_type_display_name					AS	job_type_display_name,
+			article.access_description								AS	access_description,
+			article.job_description									AS	jop_description,
+			article.catch_phrase									AS	catch_phrase,
+			article.read_phrase										AS	read_phrase,
+			article_joboffer_income.article_id IS NOT NULL		AS	use_joboffer_income,
+			article_joboffer_income.income_form_code				AS	joboffer_income_form_code,
+			article_joboffer_income.summary_note					AS	summary_note,
+			article_joboffer_income.detail_note						AS	detail_note,
+			article_joboffer_income.training_existence				AS	training_existence,
+			article_base_income.wage_range_type						AS	base_wage_range_type,
+			article_base_income.from_wage							AS	base_from_wage,
+			article_base_income.to_wage								AS	base_to_wage,
+			article_training_income.income_form_code				AS	training_income_form_code,
+			article_training_income.wage_range_type					AS	training_wage_range_type,
+			article_training_income.from_wage						AS	training_from_wage,
+			article_training_income.to_wage							AS	training_to_wage,
+			article_training_income.period_number					AS	training_period_number,
+			article_training_income.period_unit_type				AS	training_period_unit_type,
+			training_period_unit_type.name							AS	training_period_unit_name,
+			article_training_income.differ_according_to_proficiency	AS	training_differ_according_to_proficiency,
+			article_working_time_per_day.hours						AS	working_time_per_day_hours,
+			article_working_time_per_month.hours					AS	working_time_per_day_month,
+			article_working_time_segments.unit						AS	working_time_segments_unit,
+			article_working_time_segments.minutes					AS	working_time_segments_minutes,
+			article_training_working_time_per_day.hours		AS	training_working_time_per_day,
+			article_training_working_time_per_month.hours	AS	training_working_time_per_month,
+			article_income_text.summary_text						AS	income_summary_text,
+			article_income_text.detail_text							AS	income_detail_text,
+			article.qualification									AS	qualification,
+			article_income_input_method.income_input_method_type	AS	income_input_method_type,
+			income.income_form										AS	income_form,
+			income.income_form_code									AS	income_form_code,
+			article_income.description								AS	income_description,
+			article_cassette_income.base_wage						AS	base_wage,
+			article_cassette_income.weekend_wage					AS	weekend_wage,
+			CASE
+				WHEN article_cassette_income.admit_high_school_student IS true THEN 'POSSIBLE'
+				ELSE 'IMPOSSIBLE'
+			END														AS	admit_high_school_student,
+			article_cassette_income.difference_student_wage			AS	difference_student_wage	,
+			CASE
+				WHEN article_cassette_income.conduct_training IS true THEN 'EXIST'
+				ELSE 'NOT_EXIST'
+			END														AS	conduct_training,
+			article_cassette_income.training_period					AS	training_period,
+			training_period_unit.type								AS	obsoleted_training_period_unit_type,
+			training_period_unit.name								AS	obsoleted_training_period_unit_name,
+			article_cassette_income.difference_training_period_wage	AS	difference_training_period_wage,
+			article_cassette_income.student_training_period_wage	AS	student_training_period_wage,
+			training_period_addition.id								AS	training_period_addition_id,
+			training_period_addition.value							AS	training_period_addition_value,
+			article.id												AS	article_id,
+			traffic_expenses_type.type								AS	traffic_expenses_type,
+			traffic_expenses_type.name								AS	traffic_expenses_type_name,
+			article_traffic_expenses.traffic_expenses_limit			AS	traffic_expenses_limit,
+			article_working_time.working_day_time_description		AS	working_day_time_description,
+			article_working_time.working_day_per_week_code			AS	working_day_per_week_type_code,
+			article_working_time.working_time_morning_flag			AS	working_time_morning_flag,
+			article_working_time.working_time_day_flag				AS	working_time_day_flag,
+			article_working_time.working_time_evening_flag			AS	working_time_evening_flag,
+			article_working_time.working_time_night_flag			AS	working_time_night_flag,
+			article_adoption_number_plan.adoption_number_plan_code	AS	adoption_number_plan_code,
+			article_adoption_number_plan.adoption_number_plan		AS	adoption_number_plan_number,
+			article_adoption_number_plan.adoption_number_plan_description	AS	adoption_number_plan_description,
+			CASE
+				WHEN article.is_use_webentry IS true THEN 'USE'
+				ELSE 'DISUSE'
+			END														AS	use_webentry,
+			article.apply_method									AS	apply_method,
+			article.apply_process									AS	apply_process
+		FROM
+			advertisement_order.article
+		INNER JOIN
+			advertisement_order.advertisement_order_detail
+		ON
+			advertisement_order_detail.id = article.advertisement_order_detail_id
+		INNER JOIN
+			advertisement_order.latest_advertisement_order_detail
+		ON
+			latest_advertisement_order_detail.advertisement_order_detail_id = advertisement_order_detail.id
+		INNER JOIN
+			advertisement_order.advertisement_order
+		ON
+			advertisement_order.id = advertisement_order_detail.advertisement_order_id
+		INNER JOIN
+			advertisement_order.article_workplace
+		ON
+			article_workplace.article_id = article.id
+		INNER JOIN
+			advertisement_order.article_job_type
+		ON
+			article_job_type.article_id = article.id
+		INNER JOIN
+			advertisement_order.article_income
+		ON
+			article_income.article_id = article.id
+		INNER JOIN
+			joboffer.income
+		ON
+			income.income_form_code = article_income.income_form_code
+		INNER JOIN
+			advertisement_order.article_income_input_method
+		ON
+			article_income_input_method.article_id = article.id
+		LEFT OUTER JOIN
+			advertisement_order.article_cassette_income
+		ON
+			article_cassette_income.article_id = article.id
+		LEFT OUTER JOIN
+			joboffer.training_period_unit
+		ON
+			training_period_unit.type = article_cassette_income.training_period_unit_type
+		LEFT OUTER JOIN
+			joboffer.training_period_addition
+		ON
+			training_period_addition.id = article_cassette_income.training_period_addition_id
+		LEFT OUTER JOIN
+			advertisement_order.article_traffic_expenses
+		ON
+			article_traffic_expenses.article_id = article.id
+		LEFT OUTER JOIN
+			joboffer.traffic_expenses_type
+		ON
+			traffic_expenses_type.type = article_traffic_expenses.traffic_expenses_type
+		INNER JOIN
+			advertisement_order.article_working_time
+		ON
+			article_working_time.article_id = article.id
+
+		INNER JOIN
+			advertisement_order.article_adoption_number_plan
+		ON
+			article_adoption_number_plan.article_id = article.id
+		LEFT OUTER JOIN
+			advertisement_order.article_joboffer_income
+		ON
+			article.id = article_joboffer_income.article_id
+		LEFT OUTER JOIN
+			advertisement_order.article_base_income
+		ON
+			article_joboffer_income.article_id = article_base_income.article_id
+		LEFT OUTER JOIN
+			advertisement_order.article_training_income
+		ON
+			article_joboffer_income.article_id = article_training_income.article_id
+		LEFT OUTER JOIN
+			joboffer_income.training_period_unit_type
+		ON
+			article_training_income.period_unit_type = training_period_unit_type.type
+		LEFT OUTER JOIN
+			advertisement_order.article_working_time_per_day
+		ON
+			article_joboffer_income.article_id = article_working_time_per_day.article_id
+		LEFT OUTER JOIN
+			advertisement_order.article_working_time_per_month
+		ON
+			article_joboffer_income.article_id = article_working_time_per_month.article_id
+		LEFT OUTER JOIN
+			advertisement_order.article_working_time_segments
+		ON
+			article_joboffer_income.article_id = article_working_time_segments.article_id
+		LEFT OUTER JOIN
+			advertisement_order.article_training_working_time_per_day
+		ON
+			article_joboffer_income.article_id = article_training_working_time_per_day.article_id
+		LEFT OUTER JOIN
+			advertisement_order.article_training_working_time_per_month
+		ON
+			article_joboffer_income.article_id = article_training_working_time_per_month.article_id
+		LEFT OUTER JOIN
+			advertisement_order.article_income_text
+		ON
+			article_joboffer_income.article_id = article_income_text.article_id
+		WHERE
+			article.id = #articleId#
+	</select>
+
+	<insert id="register">
+		INSERT INTO advertisement_order.article(
+			id,
+			advertisement_order_detail_id,
+			job_offer_id,
+			title,
+			catch_phrase,
+			read_phrase,
+			qualification,
+			job_description,
+			access_description,
+			apply_method,
+			apply_process,
+			is_use_webentry
+		)
+		VALUES (
+			#article.id#,
+			#detailId#,
+			#article.jobOffer.id#,
+			#article.jobOffer.title#,
+			#article.jobOffer.job.catchPhrase.text#,
+			#article.jobOffer.job.readPhrase.text#,
+			#article.jobOffer.recruitment.qualification.text#,
+			#article.jobOffer.job.jobDescription.text#,
+			#article.jobOffer.workplace.access.text#,
+			#article.jobOffer.application.applyMethod.text#,
+			#article.jobOffer.application.applyProcess.text#,
+			#article.jobOffer.application.useWebEntry.useWebEntry#
+		)
+	</insert>
+
+	<insert id="registerAdoptionNumberPlan">
+		INSERT INTO advertisement_order.article_adoption_number_plan(
+			article_id,
+			adoption_number_plan_code,
+			<isEqual property="jobOffer.recruitment.adoptionNumberPlan.numberRequired" compareValue="true">
+			adoption_number_plan,
+			</isEqual>
+			adoption_number_plan_description
+		) VALUES (
+			#id#,
+			#jobOffer.recruitment.adoptionNumberPlan.code#,
+			<isEqual property="jobOffer.recruitment.adoptionNumberPlan.numberRequired" compareValue="true">
+			#jobOffer.recruitment.adoptionNumberPlan.number#,
+			</isEqual>
+			#jobOffer.recruitment.adoptionNumberPlan.description.text#
+		)
+	</insert>
+
+	<insert id="registerCoordinates">
+		INSERT INTO advertisement_order.article_coordinates(
+			article_id,
+			latitude,
+			longitude
+		)
+		SELECT
+			#id#,
+			latitude,
+			longitude
+		FROM
+			workplace.coordinates
+		WHERE
+			workplace_id = #jobOffer.workplace.id#
+	</insert>
+
+	<insert id="registerEmploymentFormType">
+		INSERT INTO advertisement_order.article_employment_form_type(
+			article_id,
+			employment_form_code,
+			employment_form_name
+		)
+		SELECT
+			#articleId#,
+			employment_form_code,
+			employment_form
+		FROM
+			joboffer.employment_form_type
+		WHERE
+			employment_form_code = #employmentFormCode#
+	</insert>
+
+	<insert id="registerIncome">
+		INSERT INTO advertisement_order.article_income(
+			article_id,
+			description,
+			income_form_code
+		) VALUES (
+			#id#,
+			<isEqual property="jobOffer.recruitment.income.inputMethod" compareValue="FREE_INPUT">
+			#jobOffer.recruitment.income.description.text#,
+			#jobOffer.recruitment.income.incomeForm.incomeFormCode#
+			</isEqual>
+			<isEqual property="jobOffer.recruitment.income.inputMethod" compareValue="CASSETTE">
+			'',
+			'01'
+			</isEqual>
+		)
+	</insert>
+
+	<insert id="registerIncomeInputMethod">
+		INSERT INTO advertisement_order.article_income_input_method(
+			article_id,
+			income_input_method_type
+		) VALUES (
+			#id#,
+			#jobOffer.recruitment.income.inputMethod#
+		)
+	</insert>
+
+	<insert id="registerCassetteIncome">
+		INSERT INTO advertisement_order.article_cassette_income(
+			article_id,
+			base_wage,
+			weekend_wage,
+			admit_high_school_student,
+			conduct_training,
+			training_period_addition_id,
+			<isEqual property="jobOffer.recruitment.income.cassetteIncome.highSchoolStudentWage.possibility.possible" compareValue="true">
+				only_decided_on_career,
+				difference_student_wage,
+			</isEqual>
+			<isEqual property="jobOffer.recruitment.income.cassetteIncome.training.existence.exist" compareValue="true">
+				training_period,
+				training_period_unit_type,
+				difference_training_period_wage,
+				<isEqual property="jobOffer.recruitment.income.cassetteIncome.highSchoolStudentWage.possibility.possible" compareValue="true">
+					student_training_period_wage,
+				</isEqual>
+			</isEqual>
+			created_at
+		) VALUES (
+			#id#,
+			#jobOffer.recruitment.income.cassetteIncome.baseWageInt#,
+			#jobOffer.recruitment.income.cassetteIncome.weekendWageInt#,
+			#jobOffer.recruitment.income.cassetteIncome.highSchoolStudentWage.possibility.possible#,
+			#jobOffer.recruitment.income.cassetteIncome.training.existence.exist#,
+			#jobOffer.recruitment.income.cassetteIncome.training.trainingPeriod.addition.id#,
+			<isEqual property="jobOffer.recruitment.income.cassetteIncome.highSchoolStudentWage.possibility.possible" compareValue="true">
+				#jobOffer.recruitment.income.cassetteIncome.highSchoolStudentWage.onlyDecidedOnCareer#,
+				#jobOffer.recruitment.income.cassetteIncome.highSchoolStudentWage.diffInt#,
+			</isEqual>
+			<isEqual property="jobOffer.recruitment.income.cassetteIncome.training.existence.exist" compareValue="true">
+				 #jobOffer.recruitment.income.cassetteIncome.training.trainingPeriod.numberInt#,
+				 #jobOffer.recruitment.income.cassetteIncome.training.trainingPeriod.unit.type#,
+				 #jobOffer.recruitment.income.cassetteIncome.training.wage.diffInt#,
+				<isEqual property="jobOffer.recruitment.income.cassetteIncome.highSchoolStudentWage.possibility.possible" compareValue="true">
+					#jobOffer.recruitment.income.cassetteIncome.training.wage.studentWageInt#,
+				</isEqual>
+			</isEqual>
+			now()
+		)
+	</insert>
+
+	<insert id="registerAdvertiseAddition">
+		INSERT INTO advertisement_order.article_advertise_addition(
+			article_id,
+			serial_no,
+			title,
+			description,
+			display_order
+		 ) VALUES (
+			#articleId#,
+			#serialNo#,
+			#advertiseAddition.title.text#,
+			#advertiseAddition.description.text#,
+			#displayOrder#
+		 )
+	</insert>
+
+	<insert id="registerJobAddition">
+		INSERT INTO advertisement_order.article_job_addition(
+			article_id,
+			serial_no,
+			title,
+			description,
+			display_order
+		) VALUES (
+			#articleId#,
+			#serialNo#,
+			#jobAddition.jobTitle.text#,
+			#jobAddition.jobDescription.text#,
+			#displayOrder#
+		 )
+	</insert>
+
+	<insert id="registerJobType">
+		INSERT INTO advertisement_order.article_job_type(
+			article_id,
+			job_type_code,
+			job_type_name,
+			job_type_display_name
+		)
+		SELECT
+			#id#,
+			job_type_code,
+			job_type,
+			#jobOffer.recruitment.jobTypeDescription.text#
+		FROM
+			jobtype.job_type
+		WHERE
+			job_type_code = #jobOffer.jobTypeCode#
+	</insert>
+
+	<insert id="registerMerit">
+		INSERT INTO advertisement_order.article_merit(
+			article_id,
+			merit_code,
+			merit_flag_name
+		)
+		SELECT
+			#articleId#,
+			merit_code,
+			merit_flag_name
+		FROM
+			joboffer.merit
+		WHERE
+			merit_code = #merit#
+	</insert>
+
+	<insert id="registerTreatment">
+		INSERT INTO advertisement_order.article_treatment(
+			article_id,
+			treatment_id,
+			treatment_name
+		)
+		SELECT
+			#articleId#,
+			id,
+			name
+		FROM
+			joboffer.treatment
+		WHERE
+			id = #treatment.id#
+	</insert>
+
+	<insert id="registerTrafficExponses">
+		INSERT INTO advertisement_order.article_traffic_expenses(
+			article_id,
+			<isEqual property="jobOffer.recruitment.cassetteTreatment.trafficExpenses.limitRequired" compareValue="true">
+				traffic_expenses_limit,
+			</isEqual>
+			traffic_expenses_type
+		)VALUES(
+			#id#,
+			<isEqual property="jobOffer.recruitment.cassetteTreatment.trafficExpenses.limitRequired" compareValue="true">
+			#jobOffer.recruitment.cassetteTreatment.trafficExpenses.limitInt#,
+			</isEqual>
+			#jobOffer.recruitment.cassetteTreatment.trafficExpenses.type#
+		)
+	</insert>
+
+	<insert id="registerWorkingTime">
+		INSERT INTO advertisement_order.article_working_time(
+			article_id,
+			working_time_morning_flag,
+			working_time_day_flag,
+			working_time_evening_flag,
+			working_time_night_flag,
+			working_day_per_week_code,
+			working_day_time_description
+		)
+		VALUES (
+			#id#,
+			#jobOffer.recruitment.workingTime.workingTimeMorningFlag#,
+			#jobOffer.recruitment.workingTime.workingTimeDayFlag#,
+			#jobOffer.recruitment.workingTime.workingTimeEveningFlag#,
+			#jobOffer.recruitment.workingTime.workingTimeNightFlag#,
+			#jobOffer.recruitment.workingTime.workingDayPerWeekCode#,
+			#jobOffer.recruitment.workingTime.workingDayTimeDescription.text#
+		)
+	</insert>
+
+	<insert id="registerWorkplace">
+		INSERT INTO advertisement_order.article_workplace(
+			article_id,
+			workplace_id,
+			workplace,
+			access_description,
+			customer_code,
+			company,
+			workplace_expression_code,
+			business_description,
+			workplace_description,
+			workplace_cassette_title,
+			zip_code1,
+			work_place_map_id,
+			zip_code2,
+			address,
+			search_place_map_id,
+			homepage_url,
+			pilot_number_name1,
+			area_code_number1,
+			local_code_number1,
+			subscriber_number1,
+			pilot_number_name2,
+			area_code_number2,
+			local_code_number2,
+			subscriber_number2,
+			inquiry_explanation,
+			appllication_id,
+			section_to_hire_id,
+			preview_area_code_number,
+			preview_local_code_number,
+			preview_subscriber_number,
+			email_address,
+			workplace_number,
+			address_street,
+			address_building_name,
+			priority
+		)
+		SELECT
+			#id#,
+			workplace_id,
+			workplace,
+			access_description,
+			customer_code,
+			company,
+			workplace_expression_code,
+			business_description,
+			workplace_description,
+			workplace_cassette_title,
+			zip_code1,
+			work_place_map_id,
+			zip_code2,
+			address,
+			search_place_map_id,
+			homepage_url,
+			pilot_number_name1,
+			area_code_number1,
+			local_code_number1,
+			subscriber_number1,
+			pilot_number_name2,
+			area_code_number2,
+			local_code_number2,
+			subscriber_number2,
+			inquiry_explanation,
+			appllication_id,
+			section_to_hire_id,
+			preview_area_code_number,
+			preview_local_code_number,
+			preview_subscriber_number,
+			email_address,
+			workplace_number,
+			address_street,
+			address_building_name,
+			priority
+		FROM
+			workplace.workplace
+		WHERE
+			workplace_id = #jobOffer.workplace.id#
+	</insert>
+
+	<insert id="registerWorkplaceAddition">
+		INSERT INTO advertisement_order.article_workplace_addition(
+			article_id,
+			prefecture_code,
+			prefecture_name,
+			city_code,
+			city_name
+		)
+		SELECT
+			#id#,
+			prefectures.code,
+			prefectures.name,
+			cities.code,
+			cities.name
+		FROM
+			workplace.workplace
+		INNER JOIN
+			workplace.address_of_workplace
+		ON workplace.workplace_id = address_of_workplace.workplace_id
+		INNER JOIN
+			workplace.prefectures
+		ON prefectures.code = address_of_workplace.prefecture_code
+		INNER JOIN
+			workplace.cities
+		ON cities.code = address_of_workplace.city_code
+		WHERE
+			workplace.workplace_id = #jobOffer.workplace.id#
+	</insert>
+
+	<insert id="registerWorkplaceGroup">
+		INSERT INTO advertisement_order.article_workplace_group(
+			article_id,
+			workplace_group_id,
+			"name"
+		)
+		SELECT
+			#id#,
+			workplace_groups.workplace_group_id,
+			workplace_groups.name
+		FROM
+			workplace.workplace_x_group
+		INNER JOIN
+			workplace.workplace_groups
+		ON workplace_x_group.workplace_group_id = workplace_groups.workplace_group_id
+		WHERE
+			workplace_id = #jobOffer.workplace.id#
+	</insert>
+
+	<insert id="registerStationList">
+		INSERT INTO advertisement_order.article_station
+		(
+			article_id,
+			station_code
+		)
+		SELECT
+			#id#,
+			workplace_x_station.station_code
+		FROM workplace.workplace_x_station
+		WHERE
+			workplace_x_station.workplace_id = #jobOffer.workplace.id#
+	</insert>
+	
+	<insert id="registerSectionToHire">
+		INSERT INTO advertisement_order.article_section_to_hire
+		(
+			article_id,
+			section_to_hire_id,
+			shop_number ,
+			section_to_hire_name,
+			section_to_hire_name_kana,
+			section_group_name,
+			business_model_type_name,
+			telephone_number,
+			prefecture_name,
+			city_name,
+			address_street,
+			address_building_name,
+			priority,
+			opening_status_type,
+			closed
+		)
+		SELECT
+			#id# AS article_id,
+			section_to_hire.section_to_hire_id AS section_to_hire_id,
+			COALESCE(shop_number.shop_number, ''),
+			section_to_hire.section_to_hire_name,
+			COALESCE(section_to_hire_name_kana.name_kana, ''),
+			section_groups.section_group_name,
+			COALESCE(business_model_type.name, ''),
+			COALESCE(section_to_hire_telephone_number.telephone_number, ''),
+			prefectures.name,
+			cities.name,
+			section_to_hire.address_street,
+			section_to_hire.address_building_name,
+			section_to_hire.priority,
+			COALESCE(opening_status_type.name, ''),
+			(CASE WHEN closed_section_to_hire.section_to_hire_id is null THEN false ELSE true END) as closed
+		FROM
+			hiring.section_to_hire
+		INNER JOIN
+			workplace.workplace
+		ON
+			workplace.section_to_hire_id = section_to_hire.section_to_hire_id 
+		LEFT OUTER JOIN
+			hiring.shop_number
+		ON
+			shop_number.section_to_hire_id = section_to_hire.section_to_hire_id 
+		LEFT OUTER JOIN
+			hiring.section_to_hire_name_kana
+		ON
+			section_to_hire_name_kana.section_to_hire_id = section_to_hire.section_to_hire_id 
+		INNER JOIN
+			hiring.section_groups
+		ON
+			section_groups.section_group_id = section_to_hire.section_group_id
+		LEFT OUTER JOIN
+			hiring.section_to_hire_business_model
+		ON
+			section_to_hire_business_model.section_to_hire_id = section_to_hire.section_to_hire_id 
+		LEFT OUTER JOIN
+				hiring.business_model_type
+		ON
+			business_model_type.type = section_to_hire_business_model.business_model_type
+		LEFT OUTER JOIN
+			hiring.section_to_hire_telephone_number
+		ON
+			section_to_hire_telephone_number.section_to_hire_id = section_to_hire.section_to_hire_id 
+		LEFT OUTER JOIN
+			hiring.address_of_section_to_hire
+		ON
+			section_to_hire.section_to_hire_id = address_of_section_to_hire.section_to_hire_id
+		LEFT OUTER JOIN
+			address.prefectures
+		ON
+			address_of_section_to_hire.prefecture_code = prefectures.code
+		LEFT OUTER JOIN
+			address.cities
+		ON
+			address_of_section_to_hire.city_code = cities.code
+		LEFT OUTER JOIN	
+			hiring.section_to_hire_opening_status_type
+		ON	
+			section_to_hire_opening_status_type.section_to_hire_id = address_of_section_to_hire.section_to_hire_id
+		LEFT OUTER JOIN	
+			hiring.opening_status_type
+		ON	
+			opening_status_type.type = section_to_hire_opening_status_type.opening_status_type
+		LEFT OUTER JOIN	
+			hiring.closed_section_to_hire
+		ON	
+			closed_section_to_hire.section_to_hire_id = address_of_section_to_hire.section_to_hire_id
+		WHERE
+			workplace.workplace_id = #jobOffer.workplace.id#
+	</insert>
+	
+	<select id="findConditionalIncomesById" resultMap="conditionalIncome">
+		SELECT
+			article_conditional_income.condition,
+			article_conditional_income.wage_range_type,
+			article_conditional_income.from_wage,
+			article_conditional_income.to_wage,
+			article_include_midnight.conditional_income_id IS NOT NULL as include_midnight
+		FROM
+			advertisement_order.article_conditional_income
+		INNER JOIN
+			advertisement_order.article_base_income
+			ON	article_conditional_income.article_id = article_base_income.article_id
+		LEFT OUTER JOIN
+			advertisement_order.article_include_midnight
+			ON	article_conditional_income.id = article_include_midnight.conditional_income_id
+		WHERE
+			article_conditional_income.article_id = #articleId#
+		ORDER BY
+			article_conditional_income.serial_number
+	</select>
+	
+	<insert id="insertJobOfferIncomeText">
+		INSERT INTO advertisement_order.article_income_text(
+			article_id,
+			summary_text,
+			detail_text
+		)VALUES(
+			#articleId#,
+			#jobOfferIncome.text.summaryText.value#,
+			#jobOfferIncome.text.detailText.value#
+		)
+	</insert>
+	
+	<insert id="insertJobOfferIncome">
+		INSERT INTO advertisement_order.article_joboffer_income (
+			article_id,
+			income_form_code,
+			summary_note,
+			detail_note,
+			training_existence
+		)VALUES(
+			#articleId#,
+			#jobOfferIncome.detail.incomeForm.code#,
+			#jobOfferIncome.detail.notes.summaryNote.value#,
+			#jobOfferIncome.detail.notes.detailNote.value#,
+			#jobOfferIncome.training.existence.value#
+		)
+	</insert>
+	
+	<insert id="insertBaseIncome">
+		INSERT INTO advertisement_order.article_base_income(
+			article_id,
+			wage_range_Type,
+			from_wage,
+			to_wage
+		)VALUES(
+			#articleId#,
+			#jobOfferIncome.detail.baseIncome.range.type#,
+			#jobOfferIncome.detail.baseIncome.range.from.intValue#,
+			#jobOfferIncome.detail.baseIncome.range.to.intValue#
+		)
+	</insert>
+	
+	<insert id="insertWorkingTimePerDay">
+		INSERT INTO advertisement_order.article_working_time_per_day (
+			article_id,
+			hours
+		)VALUES(
+			#articleId#,
+			#jobOfferIncome.detail.incomeForm.workingTime.hoursPerDay.floatValue#
+		)
+	</insert>
+	
+	<insert id="insertWorkingTimePerMonth">
+		INSERT INTO advertisement_order.article_working_time_per_month (
+			article_id,
+			hours
+		)VALUES(
+			#articleId#,
+			#jobOfferIncome.detail.incomeForm.workingTime.hoursPerMonth.floatValue#
+		)
+	</insert>
+	
+	<insert id="insertWorkingTimeSegments">
+		INSERT INTO advertisement_order.article_working_time_segments (
+			article_id,
+			unit,
+			minutes
+		)VALUES(
+			#articleId#,
+			#jobOfferIncome.detail.incomeForm.workingTime.workingSegment.unit.value#,
+			#jobOfferIncome.detail.incomeForm.workingTime.workingSegment.minutes.intValue#
+		)
+	</insert>
+	
+	<insert id="insertTrainingIncome">
+		INSERT INTO advertisement_order.article_training_income (
+			article_id,
+			income_form_code,
+			wage_range_type,
+			from_wage,
+			to_wage,
+			period_number,
+			period_unit_type,
+			differ_according_to_proficiency
+		)VALUES(
+			#articleId#,
+			#jobOfferIncome.training.income.incomeForm.type.code#,
+			#jobOfferIncome.training.income.range.type#,
+			#jobOfferIncome.training.income.range.from.intValue#,
+			#jobOfferIncome.training.income.range.to.intValue#,
+			#jobOfferIncome.training.period.number.integerValue#,
+			#jobOfferIncome.training.period.unit.type.value#,
+			#jobOfferIncome.training.period.differAccordingToProficiency.value#
+		)
+	</insert>
+	
+	<insert id="insertTrainingWorkingTimePerDay">
+		INSERT INTO advertisement_order.article_training_working_time_per_day (
+			article_id,
+			hours
+		)VALUES(
+			#articleId#,
+			#jobOfferIncome.training.income.incomeForm.workingTime.hoursPerDay.floatValue#
+		)
+	</insert>
+	
+	<insert id="insertTrainingWorkingTimePerMonth">
+		INSERT INTO advertisement_order.article_training_working_time_per_month (
+			article_id,
+			hours
+		)VALUES(
+			#articleId#,
+			#jobOfferIncome.training.income.incomeForm.workingTime.hoursPerMonth.floatValue#
+		)
+	</insert>
+	
+	<select id="findNextArticleConditionalIncomeId" resultClass="java.lang.Integer">
+		SELECT
+			nextval('advertisement_order.article_conditional_income_id');
+	</select>
+	
+	<insert id="insertArticleConditionalIncome">
+		INSERT INTO advertisement_order.article_conditional_income (
+			id,
+			article_id,
+			serial_number,
+			condition,
+			wage_range_type,
+			from_wage,
+			to_wage
+		)VALUES(
+			#articleConditionalIncomeId#,
+			#articleId#,
+			#serialNumber#,
+			#articleConditionalIncome.condition.value#,
+			#articleConditionalIncome.range.type#,
+			#articleConditionalIncome.range.from.intValue#,
+			#articleConditionalIncome.range.to.intValue#
+		)
+	</insert>
+	
+	<insert id="insertArticleIncludeMidnight">
+		INSERT INTO advertisement_order.article_include_midnight (
+			conditional_income_id
+		)VALUES(
+			#articleConditionalIncomeId#
+		)
+	</insert>
+
+</sqlMap>

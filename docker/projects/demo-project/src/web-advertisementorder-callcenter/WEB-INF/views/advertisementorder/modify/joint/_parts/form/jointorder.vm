@@ -1,0 +1,7 @@
+<div class="wrapsection">
+	#parse("/advertisementorder/modify/joint/_parts/form/order/joint.vm")
+	#parse("/advertisementorder/modify/joint/_parts/form/article/article.vm")
+	#parse("/advertisementorder/modify/joint/_parts/form/order/itemselect.vm")
+</div>
+#parse("/advertisementorder/modify/joint/_parts/form/action.vm")
+#token

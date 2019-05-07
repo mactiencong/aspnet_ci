@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.joboffersearch.JobOfferSearchDataAccess">
+
+	<typeAlias alias="jobOfferCriteria" type="jp.rhp.model.joboffersearch.criteria.JobOfferCriteria"/>
+
+	 <resultMap class="jp.rhp.model.joboffer.JobOffer" id="jobOfferListResult">
+		<result property="id" column="job_offer_id"/>
+		<result property="title" column="title"/>
+		<result property="workplace.id" column="workplace_id"/>
+		<result property="jobTypeName" column="job_type"/>
+		<result property="workplace.workplaceNumber" column="workplace_number"/>
+		<result property="workplace.name" column="workplace"/>
+		<result property="application.useWebEntry.type" column="use_webentry"/>
+		<result property="posting.postingStatus" column="posting_status_type"/>
+		<result property="availableMediaOrder" column="available_media_order"/>
+		<result property="recruitment.income.inputMethod" column="income_input_method_type"/>
+		<result property="webTokuRegistered" column="webtoku_registered"/>
+	 </resultMap>
+
+	 <resultMap class="jp.rhp.model.joboffer.JobOffer" id="jobOffer">
+		<result property="id" column="job_offer_id"/>
+		<result property="title" column="title"/>
+		<result property="jobTypeCode" column="job_type_code"/>
+		<result property="jobTypeName" column="job_type"/>
+		<result property="workplace.id" column="workplace_id"/>
+		<result property="workplace.name" column="workplace"/>
+		<result property="workplace.access.text" column="access_description"/>
+		<result property="workplace.workplaceNumber" column="workplace_number"/>
+		<result property="job.jobDescription.text" column="job_description"/>
+		<result property="job.catchPhrase.text" column="catch_phrase"/>
+		<result property="job.readPhrase.text" column="read_phrase"/>
+		<result property="recruitment.jobTypeDescription.text" column="job_type_description"/>
+		<result property="recruitment.income.inputMethod" column="income_input_method_type"/>
+		<result property="recruitment.income.incomeForm.incomeFormCode" column="income_form_code"/>
+		<result property="recruitment.income.description.text" column="income_description"/>
+		<result property="recruitment.qualification.text" column="qualification"/>
+		<result property="recruitment.adoptionNumberPlan.code" column="adoption_number_plan_code"/>
+		<result property="recruitment.adoptionNumberPlan.number" column="adoption_number_plan"/>
+		<result property="recruitment.adoptionNumberPlan.description.text" column="adoption_number_plan_description"/>
+		<result property="recruitment.workingTime.workingTimeMorningFlag" column="working_time_morning_flag"/>
+		<result property="recruitment.workingTime.workingTimeDayFlag" column="working_time_day_flag"/>
+		<result property="recruitment.workingTime.workingTimeEveningFlag" column="working_time_evening_flag"/>
+		<result property="recruitment.workingTime.workingTimeNightFlag" column="working_time_night_flag"/>
+		<result property="recruitment.workingTime.workingDayPerWeekCode" column="working_day_per_week_code"/>
+		<result property="recruitment.workingTime.workingDayTimeDescription.text" column="working_day_time_description"/>
+		<result property="application.applyMethod.text" column="apply_method"/>
+		<result property="application.applyProcess.text" column="apply_process"/>
+		<result property="application.useWebEntry.type" column="use_webentry"/>
+		<result property="posting.postingId" column="posting_id"/>
+		<result property="posting.postingStatus" column="postingStatus"/>
+		<result property="posting.postingStatusType" column="postingStatusType"/>
+		<result property="availableMediaOrder" column="available_media_order"/>
+		<result property="webTokuRegistered" column="webtoku_registered"/>
+	 </resultMap>
+
+	<sql id="selectForListCount">
+		SELECT
+			count(job_offer.job_offer_id)
+	</sql>
+
+	 <sql id="selectForList">
+		SELECT
+			job_offer.job_offer_id,
+			income_input_method.income_input_method_type,
+			job_offer.title,
+			job_offer.workplace_id,
+			job_offer.job_type,
+			workplace.workplace_number,
+			workplace.workplace,
+			CASE WHEN job_detail.is_use_webentry THEN 'USE' ELSE 'DISUSE' END as use_webentry,
+			posting_status_types.type AS posting_status_type,
+			CASE WHEN available_media_order.section_to_hire_id is null THEN false ELSE true END as available_media_order,
+			CASE WHEN webtoku_job_offer.id is null THEN false ELSE true END as webtoku_registered
+	 </sql>
+
+	<sql id="fromForList">
+		FROM
+			joboffer.job_offer
+		INNER JOIN
+			joboffer.job_detail
+		ON job_offer.job_offer_id = job_detail.job_offer_id
+		INNER JOIN
+			workplace.workplace
+		ON
+			workplace.workplace_id = job_offer.workplace_id
+		<isNotEqual compareValue="0" property="workplaceGroupId">
+			LEFT OUTER JOIN
+				workplace.workplace_x_group
+			ON
+				workplace_x_group.workplace_id = workplace.workplace_id
+			LEFT OUTER JOIN
+				workplace.workplace_groups
+			ON
+				workplace_groups.workplace_group_id = workplace_x_group.workplace_group_id
+		</isNotEqual>
+		INNER JOIN
+			joboffer.postings
+		ON
+			postings.job_offer_id = job_offer.job_offer_id
+		INNER JOIN
+			joboffer.posting_status
+		ON
+			posting_status.posting_id = postings.posting_id
+		INNER JOIN
+			joboffer.posting_status_types
+		ON
+			posting_status_types.type = posting_status.status_type
+		INNER JOIN
+			joboffer.income_input_method
+		ON
+			job_offer.job_offer_id = income_input_method.job_offer_id
+		LEFT OUTER JOIN
+			media_order.section_to_hire_which_available_media_order available_media_order
+		ON workplace.section_to_hire_id = available_media_order.section_to_hire_id
+		LEFT OUTER JOIN
+			joboffer_webtoku.webtoku_job_offer
+		ON webtoku_job_offer.job_offer_id = job_offer.job_offer_id
+	</sql>
+
+	<sql id="whereForList">
+		WHERE
+			NOT EXISTS
+				(
+					SELECT
+						job_offer_id
+					FROM
+						joboffer.job_offer_hidden
+					WHERE
+						job_offer_id = job_offer.job_offer_id
+				)
+	</sql>
+
+	<sql id="orderByForCriteria">
+		<dynamic prepend="ORDER BY">
+				workplace.priority,
+			<isEqual compareValue="default" property="sort.columnName" prepend=",">
+				job_offer.updated_at DESC
+			</isEqual>
+			<isEqual compareValue="offering" property="sort.columnName" prepend=",">
+				posting_status_types.transition_number DESC
+			</isEqual>
+			<isEqual compareValue="closed" property="sort.columnName" prepend=",">
+				posting_status_types.transition_number
+			</isEqual>
+			<isNotEqual compareValue="default" property="sort.columnName" prepend=",">
+				job_offer.updated_at DESC
+			</isNotEqual>
+		</dynamic>
+	</sql>
+
+	<sql id="whereForCriteria">
+		<dynamic>
+			<isNotEmpty prepend="AND" property="title">
+				job_offer.title LIKE '%' || #title# || '%'
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="jobTypeCode">
+				job_offer.job_type_code = #jobTypeCode#
+			</isNotEmpty>
+			<isNotEqual compareValue="0" prepend="AND" property="workplaceGroupId">
+				workplace_groups.workplace_group_id = #workplaceGroupId#
+			</isNotEqual>
+			<isNotEqual compareValue="0" prepend="AND" property="workplace.id">
+				job_offer.workplace_id = #workplace.id#
+			</isNotEqual>
+			<isNotEqual compareValue="ALL" prepend="AND" property="postingStatus">
+				posting_status_types.type = #postingStatus#
+			</isNotEqual>
+		</dynamic>
+	</sql>
+
+	<select id="listOfCriteria" resultMap="jobOfferListResult" parameterClass="jobOfferCriteria">
+		<include refid="selectForList"/>
+		<include refid="fromForList"/>
+		<include refid="whereForList"/>
+		<include refid="whereForCriteria"/>
+		<include refid="orderByForCriteria"/>
+		OFFSET #page.offset# LIMIT #page.limit#
+	 </select>
+
+	 <select id="countOfCriteria" resultClass="Integer" parameterClass="jobOfferCriteria">
+		<include refid="selectForListCount"/>
+		<include refid="fromForList"/>
+		<include refid="whereForList"/>
+		<include refid="whereForCriteria"/>
+	 </select>
+
+</sqlMap>

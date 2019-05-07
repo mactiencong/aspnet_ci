@@ -1,0 +1,15 @@
+<h3>原稿内容</h3>
+<div class="section">
+	#parse("/advertisementorder/modify/joint/_parts/confirm/article/jobs.vm")
+	#if(!$settings.formCustomize.messageOfSingleOrder.hide)
+	<table class="recoptable" >
+		<col width="18%" /><col width="*" />
+		<tr>
+			<th><span class="labelWithImg">申送り事項</span></th>
+			<td>
+				#escape( $editJointOrderSheet.advertisementOrder.slips.remarks.message.text )
+			</td>
+		</tr>
+	</table>
+	#end
+</div>

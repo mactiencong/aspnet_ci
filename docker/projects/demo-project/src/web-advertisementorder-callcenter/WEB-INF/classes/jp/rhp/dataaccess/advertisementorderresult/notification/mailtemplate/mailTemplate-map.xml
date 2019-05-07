@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.advertisementorderresult.notification.mailtemplate.MailTemplateDataAccess">
+
+	<resultMap class="jp.rhp.model.mail.template.MailTemplate" id="mailTemplate">
+		<result property="header.sender.name"                       column = "from_name" />
+		<result property="header.sender.mailAddress.mailAddress"    column = "from_mail_address" />
+		<result property="subject.value"                            column = "subject" />
+		<result property="message.text"                             column = "message_body" />
+	</resultMap>
+
+	<select id="findMailTemplateByType" resultMap="mailTemplate">
+		SELECT
+			mail_template.from_name,
+			mail_template.from_mail_address,
+			mail_template.subject,
+			mail_template.message_body
+		FROM
+			advertisement_order.mail_template
+		WHERE type = #value#
+	</select>
+
+</sqlMap>

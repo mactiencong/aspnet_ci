@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.advertisementorder.operationalnote.OperationalNoteDataAccess">
+
+	<insert id="register">
+		INSERT INTO advertisement_order.operational_note(
+			advertisement_order_id,
+			note
+		) VALUES (
+			#id#,
+			#slips.remarks.operationalNote.text#
+		)
+	</insert>
+
+	<update id="modify">
+		UPDATE advertisement_order.operational_note
+		SET
+			note = #slips.remarks.operationalNote.text#,
+			updated_at = now()
+		WHERE
+			advertisement_order_id = #id#
+	</update>
+
+</sqlMap>

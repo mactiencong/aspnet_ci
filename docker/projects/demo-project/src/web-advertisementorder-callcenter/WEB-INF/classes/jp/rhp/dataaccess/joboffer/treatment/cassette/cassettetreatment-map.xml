@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.joboffer.treatment.cassette.CassetteTreatmentDataAccess">
+
+	<typeAlias alias="cassetteTreatment" type="jp.rhp.model.joboffer.recruitment.treatment.cassette.CassetteTreatment" />
+	<typeAlias alias="treatment" type="jp.rhp.model.joboffer.recruitment.treatment.cassette.Treatment" />
+	<typeAlias alias="trafficExpenses" type="jp.rhp.model.joboffer.recruitment.treatment.cassette.TrafficExpenses" />
+	
+	<resultMap class="cassetteTreatment" id="cassetteTreatment" groupBy="id">
+		<result property="id" column="id"/>
+		<result property="trafficExpenses.type" column="traffic_expenses_type"/>
+		<result property="trafficExpenses.name" column="traffic_expenses_name"/>
+		<result property="trafficExpenses.limit" column="traffic_expenses_limit"/>
+		<result property="treatmentList.treatments" resultMap="jp.rhp.dataaccess.joboffer.treatment.cassette.CassetteTreatmentDataAccess.treatment"/>
+	</resultMap>
+
+	<resultMap class="treatment" id="treatment">
+		<result property="id" column="treatment_id"/>
+		<result property="name" column="treatment_name"/>
+		<result property="existence.exist" column="treatment_exist"/>
+	</resultMap>
+
+	<resultMap class="trafficExpenses" id="trafficExpenses">
+		<result property="type" column="type"/>
+		<result property="name" column="name"/>
+	</resultMap>
+	
+	<select id="getId" resultClass="int">
+		SELECT nextval('joboffer.cassette_treatment_id')
+	</select>
+
+	<select id="treatmentList" resultMap="treatment">
+		SELECT 
+			id as treatment_id,
+			name as treatment_name,
+			false as treatment_exist
+		FROM joboffer.treatment
+		ORDER BY priority
+	</select>
+	
+	<select id="findTrafficExpensesMap" resultMap="trafficExpenses">
+		SELECT 
+			type,
+			name
+		FROM joboffer.traffic_expenses_type
+		ORDER BY priority
+	</select>
+	
+	<select id="findByJobOfferId" resultMap="cassetteTreatment">
+		SELECT 
+			ct.id,
+			tet.type traffic_expenses_type,
+			tet.name traffic_expenses_name,
+			ct.traffic_expenses_limit,
+			ctxt.treatment_id IS NOT NULL as treatment_exist,
+			treatment.id treatment_id,
+			treatment.name treatment_name
+		FROM
+			joboffer.cassette_treatment ct
+			CROSS JOIN joboffer.treatment
+			LEFT OUTER JOIN joboffer.traffic_expenses_type tet
+			ON tet.type = ct.traffic_expenses_type
+			LEFT OUTER JOIN joboffer.cassette_treatment_x_treatment ctxt
+			ON ct.id = ctxt.cassette_treatment_id and treatment.id = ctxt.treatment_id
+		WHERE
+			ct.job_offer_id = #value#
+		ORDER BY treatment.priority
+	</select>
+	
+	
+	<update id="modify">
+		UPDATE 
+			joboffer.cassette_treatment
+		SET
+			job_offer_id = #jobOfferId#,
+			traffic_expenses_type = #cassetteTreatment.trafficExpenses.type#,
+			<isEqual property="cassetteTreatment.trafficExpenses.limitRequired" compareValue="true">
+				traffic_expenses_limit = #cassetteTreatment.trafficExpenses.limitInt#,
+			</isEqual>
+			updated_at = now()
+		WHERE
+			id = #cassetteTreatment.id#
+	</update>
+	
+	<insert id="registerCassetteTreatmentXTreatment">
+		INSERT INTO joboffer.cassette_treatment_x_treatment( cassette_treatment_id, treatment_id ) VALUES ( #cassetteTreatmentId#, #treatment.id#)
+	</insert>
+	
+	<delete id="deleteCassetteTreatmentXTreatment">
+		DELETE FROM joboffer.cassette_treatment_x_treatment WHERE cassette_treatment_id = #value#
+	</delete>
+
+</sqlMap>

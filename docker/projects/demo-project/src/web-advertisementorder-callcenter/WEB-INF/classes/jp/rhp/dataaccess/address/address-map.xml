@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.address.prefecture.PrefectureDataAccess">
+
+	<resultMap class="jp.rhp.model.address.prefecture.Prefecture" id="prefecture">
+		<result property="code" column="code"/>
+		<result property="name.value" column="name"/>
+	</resultMap>
+
+	<select id="prefectureOptions" resultMap="prefecture">
+		SELECT
+			code,
+			name
+		FROM
+			address.prefectures
+		ORDER BY
+			priority
+	</select>
+
+</sqlMap>

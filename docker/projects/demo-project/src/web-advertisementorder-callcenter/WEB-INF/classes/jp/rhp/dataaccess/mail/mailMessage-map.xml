@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.mail.MailMessageDataAccess">
+
+	<select id="nextId" resultClass="java.lang.Integer">
+		SELECT nextval('mail.mail_message_id')
+	</select>
+
+	<insert id="register">
+		INSERT INTO mail.mail_message
+		(
+			id,
+			from_address,
+			from_name,
+			to_address,
+			to_name,
+			reply_to_address,
+			bcc_address,
+			subject,
+			contents
+		)
+		VALUES
+		(
+			#id#,
+			#mailMessage.header.sender.mailAddress.mailAddress#,
+			#mailMessage.header.sender.name#,
+			#destination.mailAddress.mailAddress#,
+			#destination.name#,
+			<isEqual property="mailMessage.header.replyTo.empty" compareValue="true">
+			null,
+			</isEqual>
+			<isEqual property="mailMessage.header.replyTo.empty" compareValue="false">
+			#mailMessage.header.replyTo.mailAddress.mailAddress#,
+			</isEqual>
+			<isEqual property="mailMessage.header.bcc.empty" compareValue="true">
+			null,
+			</isEqual>
+			<isEqual property="mailMessage.header.bcc.empty" compareValue="false">
+			#mailMessage.header.bcc.mailAddress.mailAddress#,
+			</isEqual>
+			#mailMessage.contents.subject.value#,
+			#mailMessage.contents.message.text#
+		)
+	</insert>
+
+	<insert id="registerParameter">
+		INSERT INTO mail.message_parameter
+		(
+			mail_message_id,
+			key,
+			value
+		)
+		VALUES
+		(
+			#id#,
+			#key#,
+			#value#
+		)
+	</insert>
+
+	<insert id="registerRequest">
+		INSERT INTO mail.send_message_request
+		(
+			mail_message_id,
+			status
+		)
+		VALUES
+		(
+			#id#,
+			'NOT_YET'
+		)
+	</insert>
+
+    <insert id="insertMailMessage">
+        INSERT INTO mail.mail_message
+        (
+            id,
+            from_address,
+            to_address,
+            reply_to_address,
+            bcc_address,
+            contents,
+            subject,
+            from_name,
+            to_name
+        )
+        VALUES
+        (
+            #id#,
+            #fromAddress.mailAddress#,
+            #toAddress.mailAddress#,
+            #replyToAddress.mailAddress#,
+            #bccAddress.mailAddress#,
+            #contents#,
+            #subject#,
+            #fromName#,
+            #toName#
+        )
+    </insert>
+
+    <insert id="insertMessageParameter">
+        INSERT INTO mail.message_parameter
+        (
+            mail_message_id,
+            key,
+            value
+        )
+        VALUES
+        (
+            #mailMessageId#,
+            #key#,
+            #value#
+        )
+    </insert>
+
+    <insert id="insertSendMessageRequest">
+        INSERT INTO mail.send_message_request
+        (
+            mail_message_id,
+            status
+        )
+        VALUES
+        (
+            #id#,
+            'NOT_YET'
+        )
+    </insert>
+
+</sqlMap>

@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.messageboard.MessageBoardDataAccess">
+
+	<resultMap id="messageBoardId" class="jp.rhp.model.messageboard.MessageBoardId">
+		<result property="value"                                                   column="message_board_id"                           />
+	</resultMap>
+
+	<resultMap id="messageBoard" class="jp.rhp.model.messageboard.MessageBoard" groupBy="id.value">
+		<result property="id.value"                                                column="message_board_id"                           />
+		<result property="candidate.id.value"                                      column="candidate_id"                               />
+		<result property="candidate.name.fullName"                                 column="candidate_name"                             />
+		<result property="candidate.name.fullNameKana"                             column="candidate_name_kana"                        />
+		<result property="candidate.gender.genderId"                               column="candidate_gender"                           />
+		<result property="candidate.telephoneNumber1.telephoneNumber"              column="candidate_telephone_number1"                />
+		<result property="candidate.telephoneNumber2.telephoneNumber"              column="candidate_telephone_number2"                />
+		<result property="candidate.lineId.value"                                  column="candidate_line_id"                          />
+		<result property="candidate.sectionToHire.id.value"                        column="candidate_section_to_hire_id"               />
+		<result property="candidate.sectionToHire.name.value"                      column="candidate_section_to_hire_name"             />
+		<result property="releaseType"                                             column="message_board_release_type"                 />
+		<result property="notificationMethodType"                                  column="message_board_notification_method_type"     />
+		<result property="messageList.messages"                                                                               resultMap="jp.rhp.dataaccess.messageboard.MessageBoardDataAccess.message" />
+	</resultMap>
+
+	<resultMap id="message" class="jp.rhp.model.messageboard.message.Message">
+		<result property="id.value"                                                column="message_id"                                 />
+		<result property="body.value"                                              column="message_body"                               />
+		<result property="posterType"                                              column="poster_type"                                />
+		<result property="posterName.fullName"                                     column="poster_name"                                />
+		<result property="posterName.fullNameKana"                                 column="poster_name_kana"                           />
+		<result property="postDateTime.date"                                       column="post_datetime"                              />
+		<result property="reader.name.fullName"                                    column="reader_name"                                />
+		<result property="reader.name.fullNameKana"                                column="reader_name_kana"                           />
+		<result property="reader.readDateTime.date"                                column="read_datetime"                              />
+		<result property="latest"                                                  column="latest"                                     />
+	</resultMap>
+	
+	<resultMap id="settings" class="jp.rhp.model.messageboard.settings.MessageBoardSettings">
+		<result property="useMessageBoard"                                         column="use_message_board"                          />
+		<result property="postSmsHiringProcessMessage"                             column="post_thanks_message"                        />
+		<result property="postSnsHiringProcessMessage"                             column="post_sns_thanks_message"                    />
+		<result property="availablePostHiringProcessMessage"                       column="post_hiring_process_message"                />
+	</resultMap>
+
+	<sql id="messageBoardSql">
+		SELECT
+		    message_boards.id                    AS message_board_id
+		  , candidates.candidate_id              AS candidate_id
+		  , candidates.entry_name                AS candidate_name
+		  , candidates.entry_name_kana           AS candidate_name_kana
+		  , candidates.gender                    AS candidate_gender
+		  , candidates.telephone_number          AS candidate_telephone_number1
+		  , candidates.mobile_telephone_number   AS candidate_telephone_number2
+		  , line_ids.id                          AS candidate_line_id
+		  , section_to_hire.section_to_hire_id   AS candidate_section_to_hire_id
+		  , section_to_hire.section_to_hire_name AS candidate_section_to_hire_name
+		  , CASE WHEN
+		  		EXISTS ( SELECT 1 FROM message_board.released_message_boards WHERE message_board_id = message_boards.id )
+		  	THEN 'RELEASE' ELSE 'CLOSE' END                          AS message_board_release_type
+		  , notification_methods.notification_method_type            AS message_board_notification_method_type
+		  , messages.*
+		FROM
+		  message_board.message_boards
+		INNER JOIN
+		  message_board.notification_methods
+		  ON notification_methods.message_board_id = message_boards.id
+		INNER JOIN
+		  hiring_process.candidates
+		  ON candidates.candidate_id = message_boards.candidate_id
+		INNER JOIN
+		  hiring_process.candidates_active
+		  ON candidates_active.candidate_id = candidates.candidate_id
+		INNER JOIN
+		  hiring_process.hiring_status
+		  ON hiring_status.candidate_id = candidates.candidate_id
+		INNER JOIN
+		  hiring.section_to_hire
+		  ON section_to_hire.section_to_hire_id = hiring_status.section_to_hire_id
+		LEFT OUTER JOIN
+			line.line_ids
+			ON line_ids.candidate_id = candidates.candidate_id
+				AND EXISTS (SELECT 1 FROM line.valid_line_ids WHERE valid_line_ids.line_id = line_ids.id)
+				AND ( SELECT settings.use_line_notify FROM line.settings LIMIT 1 OFFSET 0 )
+	</sql>
+
+	<sql id="messageSql">
+		<!-- system messages -->
+		SELECT
+		    message_boards.id                  AS message_board_id
+		  , system_messages.id                 AS message_id
+		  , system_messages.message            AS message_body
+		  , 'SYSTEM'                           AS poster_type
+		  , null                               AS poster_name
+		  , null                               AS poster_name_kana
+		  , system_messages.posting_datetime   AS post_datetime
+		  , null                               AS reader_name
+		  , null                               AS reader_name_kana
+		  , read_system_messages.read_datetime AS read_datetime
+		  , false                              AS latest
+		FROM
+		  message_board.message_boards
+		INNER JOIN
+		  message_board.system_messages
+		  ON system_messages.message_board_id = message_boards.id
+		  AND message_boards.id = #value#
+		LEFT OUTER JOIN
+		  message_board.read_system_messages
+		  ON read_system_messages.system_message_id = system_messages.id
+		UNION ALL
+		<!-- recruiter messages -->
+		SELECT
+		    message_boards.id                                      AS message_board_id
+		  , recruiter_messages.id                                  AS message_id
+		  , recruiter_messages.message                             AS message_body
+		  , 'RECRUITER'                                            AS poster_type
+		  , recruiter_messages.recruiter_name                      AS poster_name
+		  , null                                                   AS poster_name_kana
+		  , recruiter_messages.posting_datetime                    AS post_datetime
+		  , null                                                   AS reader_name
+		  , null                                                   AS reader_name_kana
+		  , read_recruiter_messages.read_datetime                  AS read_datetime
+		  , latest_recruiter_messages.message_board_id IS NOT NULL AS latest
+		FROM
+		  message_board.message_boards
+		INNER JOIN
+		  message_board.recruiter_messages
+		  ON recruiter_messages.message_board_id = message_boards.id
+		  AND message_boards.id = #value#
+		LEFT OUTER JOIN
+		  message_board.latest_recruiter_messages
+		  ON  latest_recruiter_messages.message_board_id     = message_boards.id
+		  AND latest_recruiter_messages.recruiter_message_id = recruiter_messages.id
+		LEFT OUTER JOIN
+		  message_board.read_recruiter_messages
+		  ON read_recruiter_messages.recruiter_message_id = recruiter_messages.id
+		UNION ALL
+		<!-- candidate messages -->
+		SELECT
+		    message_boards.id                                      AS message_board_id
+		  , candidate_messages.id                                  AS message_id
+		  , candidate_messages.message                             AS message_body
+		  , 'CANDIDATE'                                            AS poster_type
+		  , candidates.entry_name                                  AS poster_name
+		  , candidates.entry_name_kana                             AS poster_name_kana
+		  , candidate_messages.posting_datetime                    AS post_datetime
+		  , read_candidate_messages.read_user_name                 AS reader_name
+		  , null                                                   AS reader_name_kana
+		  , read_candidate_messages.read_datetime                  AS read_datetime
+		  , latest_candidate_messages.message_board_id IS NOT NULL AS latest
+		FROM
+		  message_board.message_boards
+		INNER JOIN
+		  message_board.candidate_messages
+		  ON candidate_messages.message_board_id = message_boards.id
+		  AND message_boards.id = #value#
+		INNER JOIN
+		  hiring_process.candidates
+		  ON candidates.candidate_id = message_boards.candidate_id
+		LEFT OUTER JOIN
+		  message_board.latest_candidate_messages
+		  ON  latest_candidate_messages.message_board_id     = message_boards.id
+		  AND latest_candidate_messages.candidate_message_id = candidate_messages.id
+		LEFT OUTER JOIN
+		  message_board.read_candidate_messages
+		  ON read_candidate_messages.candidate_message_id = candidate_messages.id
+	</sql>
+
+	<select id="findById" resultMap="messageBoard" parameterClass="jp.rhp.model.messageboard.MessageBoardId">
+		<include refid="messageBoardSql" />
+		LEFT OUTER JOIN
+			( <include refid="messageSql" /> ) AS messages
+			ON messages.message_board_id = message_boards.id
+		WHERE
+			(SELECT use_message_board FROM message_board.settings LIMIT 1 OFFSET 0)
+			AND message_boards.id = #value#
+		ORDER BY
+		  messages.post_datetime DESC
+	</select>
+
+	<select id="messageBoardId" resultMap="messageBoardId" parameterClass="jp.rhp.model.messageboard.candidate.CandidateId">
+		SELECT
+		    message_boards.id  AS message_board_id
+		FROM
+		  message_board.message_boards
+		WHERE
+			(SELECT use_message_board FROM message_board.settings LIMIT 1 OFFSET 0)
+			AND message_boards.candidate_id = #value#
+	</select>
+
+	<select id="exists" resultClass="java.lang.Boolean" parameterClass="jp.rhp.model.messageboard.MessageBoardId">
+		SELECT
+			COUNT(*) &gt; 0 AS result
+		FROM
+			message_board.message_boards
+		WHERE message_boards.id = #value#
+	</select>
+
+	<insert id="registerMessageBoard">
+		INSERT INTO message_board.message_boards (
+			  id
+			, candidate_id
+		) VALUES (
+			  #id.value#
+			, #candidateId.value#
+		)
+	</insert>
+
+	<insert id="registerShortenedUrl">
+		INSERT INTO message_board.shortened_urls (
+			  message_board_id
+			, shortened_url
+		) VALUES (
+			  #id.value#
+			, #shortenedUrl.value#
+		)
+	</insert>
+
+	<insert id="registerRecruiterMessage">
+		INSERT INTO message_board.recruiter_messages (
+			  message_board_id
+			, message
+			, recruiter_name
+			, poster_id
+			, poster_name
+		) VALUES (
+			  #message.messageBoardId.value#
+			, #message.body.value#
+			, #message.recruiterName.value#
+			, #user.account.id#
+			, #user.account.person.name.value#
+		)
+	</insert>
+
+	<insert id="registerSystemMessage">
+		INSERT INTO message_board.system_messages (
+			  message_board_id
+			, message
+		) VALUES (
+			  #message.messageBoardId.value#
+			, #message.body.value#
+		)
+	</insert>
+
+	<insert id="changeNotificationMethod">
+		INSERT INTO message_board.notification_method_change_events (
+			  message_board_id
+			, notification_method_type
+			, event_user_id
+			, event_user_name
+		) VALUES (
+			  #id.value#
+			, #type#
+			, #user.account.id#
+			, #user.account.person.name.value#
+		)
+	</insert>
+
+	<insert id="releaseEvent">
+		INSERT INTO message_board.message_board_release_events (
+			  message_board_id
+			, event_type
+			, event_user_id
+			, event_user_name
+		) VALUES (
+			  #id.value#
+			, #type#
+			, #user.account.id#
+			, #user.account.person.name.value#
+		)
+	</insert>
+
+	<insert id="readCandidateMessage">
+		INSERT INTO message_board.candidate_message_status_transition (
+			  candidate_message_status_type
+			, candidate_message_id
+			, operator_id
+			, operator_name
+		)
+		SELECT
+			  #candidateMessageStatusType#
+			, candidate_messages.id
+			, #user.account.id#
+			, #user.account.person.name.value#
+		FROM
+			message_board.candidate_messages
+		WHERE
+			candidate_messages.message_board_id = #id.value#
+			AND NOT EXISTS (
+				SELECT 1 FROM message_board.read_candidate_messages
+				WHERE read_candidate_messages.candidate_message_id = candidate_messages.id
+			)
+	</insert>
+
+	<insert id="unreadCandidateMessage">
+		INSERT INTO message_board.candidate_message_status_transition (
+			  candidate_message_status_type
+			, candidate_message_id
+			, operator_id
+			, operator_name
+		)
+		SELECT
+			  #candidateMessageStatusType#
+			, candidate_messages.id
+			, #user.account.id#
+			, #user.account.person.name.value#
+		FROM
+			message_board.read_candidate_messages
+		INNER JOIN
+			message_board.candidate_messages
+			ON candidate_messages.id = read_candidate_messages.candidate_message_id
+		INNER JOIN
+			message_board.latest_candidate_messages
+			ON  latest_candidate_messages.message_board_id = #id.value#
+			AND latest_candidate_messages.candidate_message_id = #messageId.value#
+		WHERE
+			read_candidate_messages.candidate_message_id = #messageId.value#
+			AND candidate_messages.message_board_id = #id.value#
+	</insert>
+
+	<select id="enabledNotificationMethodTypes" resultClass="jp.rhp.model.messageboard.NotificationMethodType">
+		SELECT 'SMS' AS type
+		  FROM sms.settings WHERE use_sms
+		UNION ALL
+		SELECT 'LINE_NOTIFY' AS type
+		 FROM line.settings WHERE use_line_notify
+	</select>
+
+	<select id="useMessageBoard" resultClass="java.lang.Boolean">
+		SELECT use_message_board FROM message_board.settings LIMIT 1 OFFSET 0;
+	</select>
+	
+	<select id="hasMessageBoard" resultClass="java.lang.Boolean">
+		SELECT
+			count(1) > 0
+		FROM
+			message_board.message_boards
+		WHERE
+			message_boards.candidate_id = #value#
+	</select>
+	
+	<select id="settings" resultMap="settings">
+		SELECT
+			settings.use_message_board,
+			settings.post_thanks_message,
+			settings.post_sns_thanks_message,
+			auto_create_message_board_settings.post_hiring_process_message
+		FROM
+			message_board.settings,
+			message_board.auto_create_message_board_settings
+		WHERE
+			settings.id = 1
+		AND
+			auto_create_message_board_settings.id = 1
+	</select>
+	
+	<select id="findCandidateIdBy" resultClass="java.lang.Integer">
+		SELECT
+			candidate_id
+		FROM
+			message_board.message_boards
+		WHERE
+			id = #value#
+	</select>
+</sqlMap>

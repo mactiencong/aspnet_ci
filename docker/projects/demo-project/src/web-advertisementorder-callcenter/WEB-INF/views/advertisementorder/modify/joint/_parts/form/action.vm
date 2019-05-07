@@ -1,0 +1,12 @@
+<div class="actionArea">
+	<div class="btns employ">
+		<p class="return">
+			<a href="$link.relativeAndCompany("/advertisementorder/detail/$!{editJointOrderSheet.advertisementOrder.id}")"><img src="$link.contextPath/images/btnCancel.gif" alt="詳細に戻る" class="return rollover" /></a>
+		</p>
+		<p class="revise">
+			<a name="-" class="btnConf noDialog">
+				<input type="image" src="$link.contextPath/images/btnConfirm.gif" width="268" height="39" alt="確認する" class="rollover" />
+			</a>
+		</p>
+	</div>
+</div>

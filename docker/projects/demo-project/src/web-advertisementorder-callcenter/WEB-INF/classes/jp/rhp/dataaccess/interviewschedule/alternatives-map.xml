@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.interviewschedule.AlternativesDataAccess">
+
+	<typeAlias alias="alternatives" type="jp.rhp.model.interviewschedule.booking.alternatives.Alternatives" />
+
+	<resultMap class="alternatives" id="alternatives">
+		<result property="id" column="id"/>
+		<result property="candidateId" column="candidate_id"/>
+		<result property="type" column="type"/>
+		<result property="sizeLimit" column="size_limit"/>
+		<result property="dayLimit" column="day_limit"/>
+		<result property="request.dateStamp.date" column="request_date"/>
+		<result property="request.key" column="request_key"/>
+		<result property="request.enable" column="request_enable"/>
+		<result property="user.account.id" column="user_id"/>
+		<result property="user.account.credential.role.type" column="role"/>
+	</resultMap>
+
+	<select id="getID" resultClass="java.lang.Long">
+		SELECT nextval( 'interview_schedule.alternative_id' )
+	</select>
+
+	<insert id="save">
+		INSERT INTO interview_schedule.alternatives(
+			id,
+			candidate_id,
+			"type",
+			size_limit,
+			day_limit,
+			request_date,
+			request_key,
+			request_enable,
+			user_id
+		) VALUES (
+			#id#,
+			#candidateId#,
+			#type#,
+			CASE
+				WHEN #type# = 'size' THEN
+					#sizeLimitNumber#
+				ELSE
+					NULL
+			END,
+			CASE
+				WHEN #type# = 'date' THEN
+					to_date( #dayLimit#, 'YYYY/MM/DD')
+				ELSE
+					NULL
+			END,
+			#request.dateStamp.date#,
+			#request.key#,
+			#request.enable#,
+			( SELECT user_id FROM account.entry_callcenter_user )
+		)
+	</insert>
+
+	<update id="disableRequest">
+		UPDATE
+			interview_schedule.alternatives
+		SET
+			request_enable = 'DISABLE',
+			updated_at = now()
+		WHERE
+				candidate_id = #candidateId#
+			AND request_enable = 'ENABLE'
+	</update>
+
+	<select id="findByID" resultMap="alternatives">
+		SELECT
+			alternatives.id,
+			alternatives.candidate_id,
+			alternatives."type",
+			alternatives.size_limit,
+			alternatives.day_limit,
+			alternatives.request_date,
+			alternatives.request_key,
+			alternatives.request_enable,
+			user_roles.user_id,
+			user_roles.role
+		FROM
+			interview_schedule.alternatives
+			INNER JOIN
+				account.user_roles
+			ON
+				alternatives.user_id = user_roles.user_id
+		WHERE
+				alternatives.id = #alternativeID#
+	</select>
+
+	<select id="findByIdAndKey" resultMap="alternatives">
+		SELECT
+			alternatives.id,
+			alternatives.candidate_id,
+			alternatives."type",
+			alternatives.size_limit,
+			alternatives.day_limit,
+			alternatives.request_date,
+			alternatives.request_key,
+			alternatives.request_enable,
+			user_roles.user_id,
+			user_roles.role
+		FROM
+			interview_schedule.alternatives
+			INNER JOIN
+				account.user_roles
+			ON
+				alternatives.user_id = user_roles.user_id
+		WHERE
+				id = #alternativesID#
+			AND request_key = #requestKey#
+	</select>
+
+	<select id="getCandidateId" resultClass="java.lang.Integer">
+		SELECT count(*)
+		FROM interview_schedule.alternatives
+		WHERE candidate_id = #candidateId#
+	</select>
+
+</sqlMap>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.joboffer.settings.JobOfferSettingsDataAccess">
+
+	<typeAlias alias="jobOfferSettings" type="jp.rhp.model.joboffer.settings.JobOfferSettings" />
+
+	<resultMap class="jobOfferSettings" id="jobOfferSettings">
+		<result property="incomeInputMethod.onlyCassetteIncome" column="only_cassette_income"/>
+		<result property="incomeInputMethod.defaultInputMethod" column="default_income_input_method"/>
+		<result property="useCassetteTreatment.use" column="use_cassette_treatment"/>
+		<result property="useWebToku.use" column="use_webtoku"/>
+    </resultMap>
+
+	<select id="jobOfferSettings" resultMap="jobOfferSettings">
+		SELECT 
+			only_cassette_income,
+			settings.default_income_input_method,
+			use_cassette_treatment,
+			use_webtoku
+		FROM joboffer.settings
+	</select>
+
+</sqlMap>

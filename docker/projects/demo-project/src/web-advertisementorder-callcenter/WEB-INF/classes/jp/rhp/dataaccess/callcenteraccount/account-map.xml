@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.callcenteraccount.CallcenterAccountDataAccess">
+
+	<resultMap id="account" class="jp.rhp.model.callcenteraccount.Account">
+		<result property="id" column="user_id" />
+		<result property="person.name.value" column="full_name" />
+		<result property="person.mailAddress.mailAddress.mailAddress" column="user_mail_address" />
+		<result property="person.mailAddress.status" column="user_mail_address_status_type" />
+		<result property="credential.loginUserId.id" column="login_user_id" />
+		<result property="credential.accountAvailability.status" column="availability_status_type" />
+		<result property="credential.accountAvailability.term.from.dateStamp" column="from_date" />
+		<result property="credential.accountAvailability.term.to.dateStamp" column="to_date" />
+		<result property="credential.role.type" column="role" />
+		<result property="credential.password.value" column="user_password" />
+		<result property="credential.password.status" column="user_password_status_type" />
+		<result property="credential.password.modifiedDatetime.timeStamp" column="user_password_update_datetime" />
+		<result property="lastLoginDateTime.timeStamp" column="user_registration_datetime" />
+	</resultMap>
+
+	<select id="findUsersById" resultMap="account">
+		SELECT
+			users.user_id,
+			users.login_user_id,
+			users.full_name,
+			users.availability_status_type,
+			users.from_date,
+			users.to_date,
+			convert_from(decrypt(users.user_password, decode('PA-rec-log', 'escape'), 'bf'),'UTF8') as user_password,
+			users.user_password_status_type,
+			users.user_password_update_datetime,
+			users.role,
+			users.user_mail_address,
+			users.user_mail_address_status_type,
+			users.user_registration_datetime
+		FROM
+			account.active_users AS users
+		WHERE
+			users.user_id = #id#
+	</select>
+
+    <select id="sameCallcenterAccountList" resultMap="account">
+        SELECT
+            users.user_id,
+            users.login_user_id,
+            users.full_name,
+            users.availability_status_type,
+            users.from_date,
+            users.to_date,
+            convert_from(decrypt(users.user_password, decode('PA-rec-log', 'escape'), 'bf'),'UTF8') as user_password,
+            users.user_password_status_type,
+            users.user_password_update_datetime,
+            users.role,
+            users.user_mail_address,
+            users.user_mail_address_status_type,
+            users.user_registration_datetime,
+            user_x_callcenter.callcenter_id
+        FROM
+            account.active_users AS users
+        INNER JOIN
+            account.user_x_callcenter
+        ON users.user_id = user_x_callcenter.user_id
+        WHERE
+            user_x_callcenter.callcenter_id IN
+            (
+                SELECT
+                    login_user_callcenter.id
+                FROM
+                    account.user_x_callcenter AS login_user_x_callcenter
+                INNER JOIN
+                    callcenter.contract_company AS login_user_contract_company
+                ON  login_user_contract_company.callcenter_id = login_user_x_callcenter.callcenter_id
+                INNER JOIN
+                    callcenter.callcenter AS login_user_callcenter
+                ON  login_user_x_callcenter.callcenter_id = login_user_callcenter.id
+                WHERE
+                        login_user_x_callcenter.user_id = #userId#
+                    AND login_user_contract_company.company_id = #companyId#
+                    AND login_user_callcenter.callcenter_type = 'ADVERTISEMENT_ORDER_CALLCENTER'
+            )
+        ORDER BY
+            users.user_id
+    </select>
+
+	<select id="listAll" resultMap="account">
+		SELECT
+			users.user_id,
+			users.login_user_id,
+			users.full_name,
+			users.availability_status_type,
+			users.from_date,
+			users.to_date,
+			convert_from(decrypt(users.user_password, decode('PA-rec-log', 'escape'), 'bf'),'UTF8') as user_password,
+			users.user_password_status_type,
+			users.user_password_update_datetime,
+			users.role,
+			users.user_mail_address,
+			users.user_mail_address_status_type,
+			users.user_registration_datetime
+		FROM
+			account.active_users AS users
+	</select>
+
+</sqlMap>

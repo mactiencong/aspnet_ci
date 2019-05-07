@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.directentry.sectiontohire.joboffer.WebDomainDataAccess">
+
+	<resultMap id="WebDomain" class="jp.rhp.model.directentry.sectiontohire.joboffer.WebDomain">
+		<result property="webDomain"     column="domain"/>
+	</resultMap>
+
+	<select id="selectWebDomain" resultMap="WebDomain">
+		SELECT
+			domain
+		FROM
+			company.web_domain
+		WHERE
+			company_id = #companyId#
+		ORDER BY
+			updated_at DESC
+		LIMIT 1 OFFSET 0
+	</select>
+</sqlMap>

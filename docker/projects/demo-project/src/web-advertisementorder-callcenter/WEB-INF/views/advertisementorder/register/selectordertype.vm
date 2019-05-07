@@ -1,0 +1,59 @@
+#recopHtml()
+<head>
+#recopHead('新規発注登録｜発注管理')
+#css("$link.contextPath/css/advertisementorder/advertisementorder.css")
+#javascript("$link.contextPath/js/commons/lengthchecker.js")
+#javascript("$link.contextPath/js/advertisementorder/register.js")
+#javascript("$link.contextPath/js/advertisementorder/cassette.js")
+<script type="text/javascript">
+	$(document).ready(function(){
+		$.orderForm
+		({
+			itemPopupUrl             : "$link.relativeAndCompany("/advertisementorder/popup/item")",
+			jobOfferPopupUrl         : "$link.relativeAndCompany("/advertisementorder/popup/joboffer")"
+		});
+		recop.settings.urlFindWorkplace        = '$link.relativeAndCompany("/advertisementorder/register/findWorkplace")';
+		recop.settings.urlSelectArticle        = '$link.relativeAndCompany("/advertisementorder/register/selectArticle")';
+		recop.settings.urlAddJobAddition       = '$link.relativeAndCompany("/advertisementorder/register/addJobAddition")'
+		recop.settings.urlRemoveJobAddition    = '$link.relativeAndCompany("/advertisementorder/register/removeJobAddition")'
+		recop.settings.urlAddAdvertiseAddition       = '$link.relativeAndCompany("/advertisementorder/register/addAdvertiseAddition")'
+		recop.settings.urlRemoveAdvertiseAddition    = '$link.relativeAndCompany("/advertisementorder/register/removeAdvertiseAddition")'
+	});
+</script>
+</head>
+<body>
+#recopHeader()
+<hr />
+<div  id="container">
+	<div class="pannel">
+		<div class="inner">
+			<div class="content">
+				<div class="ttlBlock" style="position:relative; width:100%;">
+					<h2 class="employ">新規発注登録</h2>
+					<div style="position:absolute; right:0; top:5px;">
+						<a href="$link.relativeAndCompany("/advertisementorder/history")"><img src="$link.contextPath/images/btnAdvertisementOrderHistory.png" alt="過去の発注をみる" class="rollover" /></a>
+					</div>
+					<!-- //ttlBlock -->
+				</div>
+				<div class="clrFix"></div>
+				<div>
+					<div class="wrapsection">
+						<h3>発注種別選択</h3>
+						<div class="section">
+							<div>発注の種別を選択してください。</div>
+							<div style="margin:20px auto; width:800px;">
+								<a href="$link.relativeAndCompany("/advertisementorder/register/single")" class="typeSelectBtn">通常発注</a><a href="$link.relativeAndCompany("/advertisementorder/register/joint")" class="typeSelectBtn">合同発注</a>
+								<div class="clrFix"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div><!-- //content -->
+		</div><!-- //inner -->
+	</div><!-- //pannel -->
+</div><!-- //container -->
+
+#recopFooter()
+
+</body>
+</html>

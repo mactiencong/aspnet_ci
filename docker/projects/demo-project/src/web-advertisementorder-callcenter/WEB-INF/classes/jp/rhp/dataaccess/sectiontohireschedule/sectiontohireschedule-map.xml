@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.sectiontohireschedule.SectionToHireCalenderDataAccess">
+
+	<typeAlias alias="sectionToHireEvent" type="jp.rhp.model.sectiontohireschedule.calender.SectionToHireEvent" />
+
+	<resultMap class="sectionToHireEvent" id="sectionToHireEvent">
+		<result property="id" column="id" />
+		<result property="type" column="type" />
+		<result property="title" column="title" />
+		<result property="text" column="text" />
+		<result property="color" column="color" />
+		<result property="start_date" column="start_datetime" />
+		<result property="end_date" column="end_datetime" />
+		<result property="comment" column="comment" />
+	</resultMap>
+
+	<sql id="scheduleRange">
+		<isNotEmpty property="from"><isNotEmpty property="to">
+		<![CDATA[
+			AND date_trunc('minute', schedule.start_datetime) >= date_trunc( 'minute', to_timestamp(#fromDate#, 'YYYY-MM-DD HH24:MI:SS'))
+			AND date_trunc('minute', schedule.end_datetime) <= date_trunc( 'minute', to_timestamp(#toDate#, 'YYYY-MM-DD HH24:MI:SS'))
+		]]>
+		</isNotEmpty></isNotEmpty>
+	</sql>
+
+
+	<select id="getId" resultClass="Integer">
+		SELECT NEXTVAL('hiring.section_to_hire_schedule_id')
+	</select>
+
+	<select id="sectionToHireEvent" resultMap="sectionToHireEvent">
+		SELECT
+			schedule.schedule_type as type,
+			schedule.schedule_type || schedule.id as id,
+			schedule.title,
+			schedule.title as text,
+			schedule.color,
+			schedule.start_datetime,
+			schedule.end_datetime,
+			schedule.comment
+		FROM
+			hiring.schedule
+		WHERE
+				schedule.id = #serialId#
+			AND schedule.schedule_type = #type#
+	</select>
+
+	<select id="findByCriteria" resultMap="sectionToHireEvent">
+		SELECT
+			schedule.schedule_type as type,
+			schedule.schedule_type || schedule.id as id,
+			schedule.title,
+			schedule.title as text,
+			schedule.color,
+			schedule.start_datetime,
+			schedule.end_datetime,
+			schedule.comment
+		FROM
+			hiring.schedule
+			LEFT OUTER JOIN
+				hiring_process.candidates_delete
+				ON
+					schedule.schedule_type = 'candidate'
+					AND schedule.id = candidates_delete.candidate_id
+		WHERE
+			schedule.section_to_hire_id =#sectionToHireId#
+			AND candidates_delete.candidate_id IS NULL
+			<include refid="scheduleRange"/>
+		ORDER BY
+			schedule.start_datetime,
+			schedule.end_datetime,
+			schedule.schedule_type,
+			schedule.id
+	</select>
+
+	<select id="findIntervieDateTimeByCriteria" resultMap="sectionToHireEvent">
+		SELECT
+			schedule.schedule_type as type,
+			schedule.schedule_type || schedule.id as id,
+			schedule.title,
+			schedule.title as text,
+			schedule.color,
+			schedule.start_datetime,
+			schedule.end_datetime,
+			schedule.comment
+		FROM
+			hiring.schedule
+			LEFT OUTER JOIN
+				hiring_process.candidates_delete
+				ON
+					schedule.schedule_type = 'candidate'
+					AND schedule.id = candidates_delete.candidate_id
+		WHERE
+			schedule.section_to_hire_id =#sectionToHireId#
+			AND schedule.schedule_type = 'candidate'
+			AND candidates_delete.candidate_id IS NULL
+			<include refid="scheduleRange"/>
+		ORDER BY
+			schedule.start_datetime,
+			schedule.end_datetime,
+			schedule.schedule_type,
+			schedule.id
+	</select>
+
+	<select id="findBySectionToHireIdAndDate" resultMap="sectionToHireEvent">
+		SELECT
+			schedule.schedule_type as type,
+			schedule.schedule_type || schedule.id as id,
+			schedule.title,
+			schedule.title as text,
+			schedule.color,
+			schedule.start_datetime,
+			schedule.end_datetime,
+			schedule.comment
+		FROM
+			hiring.schedule
+			LEFT OUTER JOIN
+				hiring_process.candidates_delete
+				ON
+					schedule.schedule_type = 'candidate'
+					AND schedule.id = candidates_delete.candidate_id
+		WHERE
+			schedule.section_to_hire_id =#sectionToHireId#
+			AND candidates_delete.candidate_id IS NULL
+		<![CDATA[
+			AND date_trunc( 'day' , schedule.start_datetime ) = #date#
+		]]>
+		ORDER BY
+			schedule.start_datetime,
+			schedule.end_datetime,
+			schedule.schedule_type,
+			schedule.id
+	</select>
+
+	<insert id="register">
+		INSERT INTO
+			hiring.section_to_hire_schedule
+		(
+			section_to_hire_schedule_id,
+			section_to_hire_id,
+			title,
+			color,
+			start_datetime,
+			end_datetime
+		)
+		values
+		(
+			#newId#,
+			#sectionToHire.id#,
+			#event.text#,
+			#event.color#,
+			#event.startDate.date#,
+			#event.endDate.date#
+		)
+	</insert>
+
+	<insert id="registerInterviewDatetime">
+		INSERT INTO
+			hiring_process.interview_datetime
+		(
+			candidate_id,
+			start_datetime,
+			end_datetime
+		)
+		VALUES
+		(
+			#candidate.id#,
+			#event.startDate.date#,
+			#event.endDate.date#
+		)
+	</insert>
+
+	<update id="modify">
+		UPDATE
+			hiring.section_to_hire_schedule
+		SET
+			title = #event.text#,
+			color = #event.color#,
+			start_datetime = #event.startDate.date#,
+			end_datetime = #event.endDate.date#,
+			updated_at = now()
+		WHERE
+			section_to_hire_schedule_id = #event.serialId#
+	</update>
+
+	<update id="modiyInterviewDatetime">
+		UPDATE
+			hiring_process.interview_datetime
+		SET
+			start_datetime = #event.startDate.date#,
+			end_datetime = #event.endDate.date#,
+			updated_at = now()
+		WHERE
+			candidate_id = #event.serialId#
+	</update>
+
+	<delete id="delete">
+		DELETE FROM
+			hiring.section_to_hire_schedule
+		WHERE
+			section_to_hire_schedule_id = #event.serialId#
+	</delete>
+
+	<delete id="deleteInterviewDatetime">
+		DELETE FROM
+			hiring_process.interview_datetime
+		WHERE
+			candidate_id = #event.serialId#
+	</delete>
+
+	<select id="isNotSendInterviewScheduleNoticeMailEntryCallcenterUserChange" resultClass="java.lang.Boolean">
+    	SELECT
+			CASE WHEN
+				configurations.value = 'true'
+			THEN
+				false
+			WHEN
+				configurations.value = 'false'
+			THEN
+				true
+			ELSE
+				null
+			END
+
+		FROM
+			employer.configurations
+		WHERE
+			configurations.key = 'send_interview_schedule_notice_mail_entry_callcenter_user_change'
+    </select>
+
+</sqlMap>

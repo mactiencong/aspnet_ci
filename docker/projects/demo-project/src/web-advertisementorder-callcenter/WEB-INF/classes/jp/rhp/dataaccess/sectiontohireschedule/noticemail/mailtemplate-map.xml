@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.sectiontohireschedule.noticemail.MailTemplateDataAccess">
+
+	<typeAlias alias="interviewDateScheduleNoticeMailTemplate" type="jp.rhp.model.mail.template.MailTemplate" />
+
+	<resultMap class="interviewDateScheduleNoticeMailTemplate" id="interviewDateScheduleNoticeMailTemplate">
+		<result property="header.sender.mailAddress.mailAddress"    column = "from_address" />
+		<result property="subject.value"                            column = "subject" />
+		<result property="message.text"                             column = "message_body" />
+	</resultMap>
+
+	<sql id="select">
+		SELECT
+			interview_schedule_notice_mail_template.subject,
+			interview_schedule_notice_mail_template.message_body,
+			interview_schedule_notice_mail_template.from_address
+		FROM
+			hiring_process.interview_schedule_notice_mail_template
+	</sql>
+
+	<select id="findById" parameterClass="java.lang.Integer" resultMap="interviewDateScheduleNoticeMailTemplate">
+		<include refid="select"/>
+		WHERE interview_schedule_notice_mail_template.id = #value#
+	</select>
+</sqlMap>

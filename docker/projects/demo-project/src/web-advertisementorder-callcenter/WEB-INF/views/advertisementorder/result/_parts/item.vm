@@ -1,0 +1,94 @@
+<h3>商品</h3>
+
+<div class="section">
+	<table class="recoptable #if($!{advertisementOrderDetail.status.canceled}) canceled #end" >
+		<col width="18%" /><col width="32%" /><col width="18%" /><col width="32%" />
+		<tr>
+			<th>
+				媒体
+			</th>
+			<td>
+				#escape($!{item.media.name.value})
+			</td>
+			<th>
+				版（エリア）
+			</th>
+			<td>
+				#escape($!{item.plan.issue.area.name.value})
+			</td>
+		</tr>
+		<tr>
+			<th>
+				プラン
+			</th>
+			<td>
+				#escape($!{item.plan.issue.size.value})
+			</td>
+			<th>
+				価格（税別）
+			</th>
+			<td>
+			#set( $price = $!{item.plan.price} )
+				$text.priceFormat($!{price.value})円
+			</td>
+		</tr>
+	</table>
+	#if( $!advertisementOrder.type.joint )
+	<table class="recoptable" >
+		<col width="18%" /><col width="*" />
+		<tr>
+			<th>
+				商品按分価格
+			</th>
+			<td>
+				<table summary="layout" class="innerTable regular">
+					<col width="80%"/><col width="*"/>
+					<tbody>
+						#foreach($costPerSectionToHire in $costPerSectionToHireList.costPerSectionToHires)
+						<tr style="border-bottom:1px dashed #ccc">
+							<th>#escape($costPerSectionToHire.sectionToHire.name)</th>
+							<td  class="equipartitionPrice" >$text.priceFormat($costPerSectionToHire.cost.value)&nbsp;円</td>
+						</tr>
+						#end
+					</tbody>
+				</table>
+			</td>
+		</tr>
+	</table>
+	#end
+	#if(!$settings.formCustomize.publishImage.hide || !$settings.formCustomize.publishingDate.hide)
+	<table class="recoptable" >
+		<col width="18%" /><col width="*" />
+		#if(!$settings.formCustomize.publishImage.hide )
+		<tr>
+			<th>
+				写真掲載
+			</th>
+			<td>
+				#if( ${advertisementOrder.slips.detail.demand.image.publish} )
+					<div>
+						あり&nbsp;&nbsp;&nbsp;&nbsp;写真ID&nbsp;&nbsp;#escape(${advertisementOrder.slips.detail.demand.image.name})
+					</div>
+				#else
+					なし
+				#end
+			</td>
+		</tr>
+		#end
+		#if( !$settings.formCustomize.publishingDate.hide)
+		<tr>
+			<th>
+				掲載希望日
+			</th>
+			<td>
+				#if( ${advertisementOrder.slips.detail.demand.publishingDate.partedDate.notEmpty} )
+					$date.format('yyyy年MM月dd日 (E)',$!{advertisementOrder.slips.detail.demand.publishingDate.partedDate.date})<br />
+				#else
+					最短の掲載日で手配致します。
+				#end
+			</td>
+		</tr>
+		#end
+	</table>
+	#end
+</div>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.advertisementorderresult.AdvertisementOrderResultDataAccess">
+
+	<resultMap class="jp.rhp.model.advertisementorderresult.AdvertisementOrderResult" id="advertisementOrderResult" groupBy="id" >
+		<result property="id"																column="id" />
+		<result property="issue.publicationDate.date"										column="publication_date" />
+		<result property="issue.article.flatPlan.value"										column="flatplan" />
+		<result property="issue.article.articleFileList.files"								resultMap="jp.rhp.dataaccess.advertisementorderresult.AdvertisementOrderResultDataAccess.articleFile" />
+		<result property="memo.text"														column="memo" />
+		<result property="issue.article.articleFileList.confirmation.confirmed"				column="confirmed" />
+		<result property="issue.article.articleFileList.confirmation.confirmedDateTime.timeStamp.timeStamp" column="confirmed_at" />
+	</resultMap>
+
+	<resultMap class="jp.rhp.model.advertisementorderresult.articlefile.File" id="articleFile" >
+		<result property="serialNumber"																column="serial_number" />
+		<result property="name.value"																column="file_label" />
+	</resultMap>
+
+	<select id="nextId" resultClass="java.lang.Integer">
+		SELECT nextval ( 'advertisement_order.advertisement_order_result_id' )
+	</select>
+
+	<select id="prototypeAdvertisementOrderResultByAdvertisementOrderId" resultMap="advertisementOrderResult">
+		SELECT
+			advertisement_order_result.id							AS	id,
+			advertisement_order_result.publication_date				AS	publication_date,
+			advertisement_order_result.flatplan						AS	flatplan,
+			advertisement_order_result.memo							AS	memo,
+			dummy_article_file.serial_number						AS	serial_number,
+			coalesce( published_article_file.file_label, '' )		AS	file_label,
+			CASE
+				WHEN article_file_confirmation.confirmed IS null THEN false
+				ELSE article_file_confirmation.confirmed
+			END AS	confirmed,
+			article_file_confirmation.confirmed_at
+		FROM
+			advertisement_order.advertisement_order_result
+			INNER JOIN (
+				SELECT
+					1		AS serial_number,
+					''		AS file_label
+				UNION SELECT
+					2		AS serial_number,
+					''		AS file_label
+				UNION SELECT
+					3		AS serial_number,
+					''		AS file_label
+				) AS dummy_article_file
+			ON
+				true
+			LEFT OUTER JOIN
+				advertisement_order.published_article_file
+			ON
+				advertisement_order_result.id = published_article_file.advertisement_order_result_id
+				AND dummy_article_file.serial_number = published_article_file.serial_number
+			LEFT OUTER JOIN
+				advertisement_order.article_file_confirmation
+			ON
+				published_article_file.advertisement_order_result_id = article_file_confirmation.advertisement_order_result_id
+		WHERE
+			advertisement_order_result.advertisement_order_id = #advertisementOrderId#
+		ORDER BY
+			dummy_article_file.serial_number
+	</select>
+
+	<select id="findByAdvertisementOrderId" resultMap="advertisementOrderResult" parameterClass="java.lang.Integer">
+		SELECT
+			advertisement_order_result.id				AS	id,
+			advertisement_order_result.publication_date	AS	publication_date,
+			advertisement_order_result.flatplan			AS	flatplan,
+			advertisement_order_result.memo				AS	memo,
+			published_article_file.serial_number		AS	serial_number,
+			published_article_file.file_label			AS	file_label,
+			CASE
+				WHEN article_file_confirmation.confirmed IS null THEN false
+				ELSE article_file_confirmation.confirmed
+			END AS	confirmed,
+			article_file_confirmation.confirmed_at
+		FROM
+			advertisement_order.advertisement_order_result
+		LEFT OUTER JOIN
+			advertisement_order.published_article_file
+		ON
+			published_article_file.advertisement_order_result_id = advertisement_order_result.id
+		LEFT OUTER JOIN
+			advertisement_order.article_file_confirmation
+		ON
+			advertisement_order_result.id = article_file_confirmation.advertisement_order_result_id
+		WHERE
+			advertisement_order_result.advertisement_order_id = #advertisementOrderId#
+		ORDER BY
+			published_article_file.serial_number
+	</select>
+
+	<select id="beforeOrderedDate" resultClass="java.lang.Boolean">
+	<![CDATA[
+		SELECT
+			date_trunc( 'day', advertisement_order.order_datetime ) > #publicationDate#
+		FROM
+			advertisement_order.advertisement_order
+		WHERE
+			id = #advertisementOrderId#
+	]]>
+	</select>
+
+	<select id="hasNotArticleFile" resultClass="java.lang.Boolean">
+		SELECT
+			count(1) = 0 AS has_not_article_file
+		FROM
+			advertisement_order.published_article_file
+		WHERE
+			advertisement_order_result_id = #advertisementOrderResultId#
+			AND serial_number = #serialNumber#
+	</select>
+
+	<insert id="registerAdvertisementOrderResult">
+		INSERT INTO advertisement_order.advertisement_order_result (
+			id,
+			advertisement_order_id,
+			publication_date,
+			flatplan,
+			memo,
+			registered_datetime,
+			modified_datetime
+		) VALUES (
+			#advertisementOrderResult.id#,
+			#advertisementOrderId#,
+			#advertisementOrderResult.issue.publicationDate.date#,
+			#advertisementOrderResult.issue.article.flatPlan.value#,
+			#advertisementOrderResult.memo.text#,
+			now(),
+			now()
+		)
+	</insert>
+
+	<update id="modifyAdvertisementOrderResult" parameterClass="jp.rhp.model.advertisementorderresult.AdvertisementOrderResult">
+		UPDATE
+			advertisement_order.advertisement_order_result
+		SET
+			publication_date = #issue.publicationDate.date#,
+			flatplan = #issue.article.flatPlan.value#,
+			memo = #memo.text#,
+			modified_datetime = now(),
+			updated_at = now()
+		WHERE
+			id = #id#
+	</update>
+
+</sqlMap>

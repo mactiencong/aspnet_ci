@@ -1,0 +1,30 @@
+<div class="section">
+	<h4>案件情報</h4>
+	<table class="recoptable" summary="案件情報">
+		<col width="18%" /><col width="*" />
+		<tr>
+			<th>案件名</th>
+			<td>
+				#escape( $!articleForPreview.jobOffer.title )
+			</td>
+		</tr>
+		<tr>
+			<th>原稿掲載店舗 </th>
+			<td>
+				#escape( $!articleForPreview.jobOffer.workplace.name )
+			</td>
+		</tr>
+		<tr>
+			<th>原稿掲載職種 </th>
+			<td>
+				#escape( $!articleForPreview.jobOffer.jobTypeName )
+			</td>
+		</tr>
+		<tr>
+			<th>アクセス</th>
+			<td>
+				#escape( $!articleForPreview.jobOffer.workplace.access.text )
+			</td>
+		</tr>
+	</table>
+</div>

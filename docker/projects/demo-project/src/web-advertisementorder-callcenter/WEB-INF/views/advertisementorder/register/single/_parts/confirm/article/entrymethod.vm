@@ -1,0 +1,22 @@
+<h4>応募方法</h4>
+<table class="recoptable" summary="案件情報">
+	<col width="18%" /><col width="*" />
+	<tr>
+		<th>WEB応募の利用可否</th>
+		<td>
+			#escape($newSingleOrderSheet.article.jobOffer.application.useWebEntry.name)
+		</td>
+	</tr>
+	<tr>
+		<th>応募方法</th>
+		<td>
+			#escape($newSingleOrderSheet.article.jobOffer.application.applyMethod.textAsInput)
+		</td>
+	</tr>
+	<tr>
+		<th>応募後のプロセス</th>
+		<td>
+			#escape($newSingleOrderSheet.article.jobOffer.application.applyProcess.textAsInput)
+		</td>
+	</tr>
+</table>

@@ -1,0 +1,8 @@
+<div class="detailTitle">
+	<h2>#escape(${sectionToHire.name})</h2>
+	<p class="return">
+		<a href='$link.relativeAndCompany("/sectiontohire/schedule/bookingstatus")'>
+			<img src="$link.contextPath/images/btnGoList02.png" alt="一覧に戻る" class="rollover" />
+		</a>
+	</p>
+</div>

@@ -1,0 +1,26 @@
+#if( $!{article.jobOffer.recruitment.jobOfferIncome.use()} )
+	<div>#escape( $!{article.jobOffer.recruitment.jobOfferIncome.text.detailText.value} )
+#else
+#set($articleIncome =  $!{article.jobOffer.recruitment.income} )
+
+#if( $!{articleIncome.cassette} )
+#set($cassetteIncome = $!{articleIncome.cassetteIncome} )
+	<div>
+		時給 #escape($text.priceFormat($!{cassetteIncome.baseWage}))円 以上 ／ 土日祝日 #escape($text.priceFormat($!{cassetteIncome.weekendWage}))円 以上
+		#if(${cassetteIncome.highSchoolStudentWage.possibility.possible})
+		</br>
+		※高校生 -#escape($text.priceFormat($!{cassetteIncome.highSchoolStudentWage.diff}))円&nbsp;(&nbsp;$text.priceFormat($!{cassetteIncome.calcStudentWage})円&nbsp;)
+		#end
+		#if(${cassetteIncome.training.existence.exist})
+			</br>
+			研修期間（#escape($!{cassetteIncome.training.trainingPeriod.number}) #escape($!{cassetteIncome.training.trainingPeriod.unit.name}) #escape($!{cassetteIncome.training.trainingPeriod.addition.value}))
+			時給 -#escape($text.priceFormat($!{cassetteIncome.training.wage.diff}))円&nbsp;(&nbsp;#escape($text.priceFormat($!{cassetteIncome.calcTrainingWage}))&nbsp;円&nbsp;)</br>
+			#if(${cassetteIncome.highSchoolStudentWage.possibility.possible})
+				※高校生研修時給 #escape($text.priceFormat($!{cassetteIncome.training.wage.studentWage})) 円
+			#end
+		#end
+	</div>
+#else
+	#escape($!{articleIncome.description.text})
+#end
+#end

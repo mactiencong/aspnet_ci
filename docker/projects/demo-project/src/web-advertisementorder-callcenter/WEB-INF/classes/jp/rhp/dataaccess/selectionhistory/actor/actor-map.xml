@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.selectionhistory.actor.ActorDataAccess">
+
+	<resultMap class="jp.rhp.model.selectionhistory.actor.Actor" id="actor">
+		<result property="callcenterUserId" column="callcenter_user_id" />
+		<result property="name" column="name" />
+	</resultMap>
+	
+	<select id="listOfEntryCallcenter" resultMap="actor">
+		SELECT
+			users.user_id		AS callcenter_user_id,
+			users.full_name		AS name
+		FROM
+			account.active_users as users
+		WHERE
+			EXISTS (
+				SELECT
+					target_callcenter.user_id
+				FROM
+					account.user_x_callcenter AS target_callcenter
+				WHERE
+					EXISTS (
+						SELECT
+							callcenter.id
+						FROM
+							callcenter.callcenter
+							INNER JOIN
+								callcenter.contract_company
+								ON
+									callcenter.id = contract_company.callcenter_id
+							INNER JOIN
+								account.user_x_callcenter
+								ON
+									callcenter.id = user_x_callcenter.callcenter_id
+						WHERE
+							callcenter.callcenter_type = 'ENTRY_CALLCENTER'
+							AND contract_company.company_id = #companyId#
+							AND user_x_callcenter.user_id = #loginUserId#
+							AND callcenter.id = target_callcenter.callcenter_id
+						)
+					AND target_callcenter.user_id = users.user_id
+			)
+			AND NOT EXISTS (
+				SELECT
+					system_management_user.user_id
+				FROM
+					account.system_management_user
+				WHERE
+					system_management_user.user_id = users.user_id
+				)
+		;
+	</select>
+
+	<select id="findByCallcenterUserId" resultMap="actor">
+		SELECT
+			users.user_id		AS callcenter_user_id,
+			users.full_name		AS name
+		FROM
+			account.active_users as users
+		WHERE
+			user_id = #callcenterUserId#
+	</select>
+
+</sqlMap>

@@ -1,0 +1,819 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.selectionhistory.SelectionHistoryDataAccess">
+
+	<resultMap class="jp.rhp.model.selectionhistory.SelectionEvent" id="selectionEvent">
+		<result property="id" column="id" />
+		<result property="status.eventType" column="selection_event_type" />
+		<result property="status.selectionStatus.name" column="selection_status_name" />
+		<result property="contents.datetime.datetime" column="selection_datetime" />
+		<result property="contents.description.text" column="description" />
+		<result property="contents.actor.name" column="actor_name" />
+		<result property="contents.actor.type" column="actor_type" />
+		
+		<result property="callcenterReception.type.type" column="reception_type" />
+		<result property="callcenterReception.type.name" column="reception_name" />
+		<result property="callcenterReception.situation.contactPerson.contactPersonType" column="contact_person_type" />
+		<result property="callcenterReception.situation.contactPerson.directionType" column="direction_type" />
+		<result property="callcenterReception.situation.methodType" column="contact_method_type" />
+		
+		<result property="escalation.id" column="escalation_id" />
+		<result property="escalation.status" column="escalation_status" />
+		<result property="escalation.response.id" column="escalation_response_id" />
+		<result property="escalation.response.timeStamp.timeStamp" column="responded_datetime" />
+		<result property="escalation.response.text" column="response_description" />
+		<result property="escalation.response.responseUserName" column="reception_customer_support_user_name" />
+		<result property="escalation.process.description" column="escalation_process_description" />
+	</resultMap>
+	
+	<resultMap class="jp.rhp.model.selectionhistory.SelectionEvent" id="latestSelectionEvent">
+		<result property="id" column="id" />
+		<result property="status.eventType" column="selection_event_type" />
+		<result property="status.selectionStatus.name" column="selection_status_name" />
+		<result property="contents.datetime.datetime" column="selection_datetime" />
+		<result property="contents.description.text" column="description" />
+		<result property="contents.actor.name" column="actor_name" />
+		<result property="contents.actor.type" column="actor_type" />
+		
+		<result property="callcenterReception.type.type" column="reception_type" />
+		<result property="callcenterReception.type.name" column="reception_name" />
+		<result property="callcenterReception.situation.contactPerson.contactPersonType" column="contact_person_type" />
+		<result property="callcenterReception.situation.contactPerson.directionType" column="direction_type" />
+		<result property="callcenterReception.situation.methodType" column="contact_method_type" />
+	</resultMap>
+	
+	<resultMap class="jp.rhp.model.selectionhistory.SelectionEvent" id="prototypeForModify">
+		<result property="id" column="id" />
+		<result property="status.eventType" column="selection_event_type" />
+		<result property="contents.datetime.datetime" column="selection_datetime" />
+		<result property="contents.description.text" column="description" />
+		<result property="contents.actor.type" column="actor_type" />
+		<result property="contents.actor.callcenterUserId" column="callcenter_user_id" />
+		<result property="contents.actor.name" column="callcenter_user_name" />
+		<result property="callcenterReception.type.type" column="reception_type" />
+		<result property="callcenterReception.situation.contactPerson.contactPersonType" column="contact_person_type" />
+		<result property="callcenterReception.situation.contactPerson.directionType" column="direction_type" />
+		<result property="callcenterReception.situation.methodType" column="contact_method_type" />
+		<result property="escalation.id" column="escalation_id" />
+		<result property="escalation.process.description" column="escalation_process_description" />
+	</resultMap>
+
+	<select id="nextId" resultClass="java.lang.Integer">
+		SELECT nextval ( 'selection_history.selection_history_id' )
+	</select>
+	
+	<select id="nextEscalationId" resultClass="java.lang.Integer">
+		SELECT nextval( 'selection_history.escalation_id' )
+	</select>
+
+	<select id="findEscalationIdBySelectionEventId"  resultClass="java.lang.Integer">
+		SELECT
+			escalation_x_selection_history.escalation_id
+		FROM
+			selection_history.escalation_x_selection_history
+		WHERE
+			escalation_x_selection_history.selection_history_id	 = #selectionEventId#
+	</select>
+	
+	<select id="prototypeForModify" resultMap="prototypeForModify">
+		SELECT
+			selection_history.id,
+			selection_history.selection_event_type,
+			selection_history.selection_datetime,
+			selection_history.description,
+			'ENTRY_CALLCENTER' as actor_type,
+			selection_callcenter_user.callcenter_user_id,
+			selection_callcenter_user.callcenter_user_name,
+			callcenter_reception_status.contact_person_type,
+			callcenter_reception_status.direction_type,
+			callcenter_reception_status.reception_type,
+			callcenter_reception_status.contact_method_type,
+			escalation.id as escalation_id,
+			coalesce( reply_escalation.description, '' )	as escalation_process_description
+		FROM
+			selection_history.selection_history
+		LEFT OUTER JOIN
+			selection_history.selection_user
+		ON
+			selection_history.id = selection_user.selection_history_id
+		INNER JOIN
+			account.users
+		ON
+			users.user_id  =selection_user.user_id
+		LEFT OUTER JOIN
+			selection_history.selection_callcenter_user
+		ON
+			selection_callcenter_user.selection_history_id = selection_history.id
+		LEFT OUTER JOIN
+			selection_history.callcenter_reception_status
+		ON
+			callcenter_reception_status.selection_history_id = selection_history.id
+		LEFT OUTER JOIN
+			selection_history.reception_type
+		ON
+			reception_type.type = callcenter_reception_status.reception_type
+		LEFT OUTER JOIN
+			selection_history.escalation_x_selection_history
+		ON
+			escalation_x_selection_history.selection_history_id = selection_history.id
+		LEFT OUTER JOIN
+			selection_history.escalation
+		ON
+			escalation.id = escalation_x_selection_history.escalation_id
+		LEFT OUTER JOIN
+			selection_history.reply_escalation
+		ON
+			reply_escalation.escalation_id = escalation.id
+		WHERE
+			selection_history.id = #selectionEventId#
+		AND NOT EXISTS(
+			SELECT
+				deleted_selection_history.selection_history_id
+			FROM
+				selection_history.deleted_selection_history
+			WHERE
+				deleted_selection_history.selection_history_id = selection_history.id
+		);
+	</select>
+
+	<select id="listByCandidateId" resultMap="selectionEvent" parameterClass="java.lang.Integer">
+		SELECT
+			selection_history.id,
+			selection_history.selection_event_type,
+			selection_history.selection_datetime,
+			selection_history.description,
+			CASE WHEN
+				selection_callcenter_user.callcenter_user_name
+			IS NOT
+				null
+			THEN
+				selection_callcenter_user.callcenter_user_name
+			WHEN
+				selection_user.user_name
+			IS NULL
+			THEN
+				'-'
+			ELSE
+				selection_user.user_name
+			END														as actor_name,
+			selection_statuses.selection_status_name,
+			CASE WHEN
+				selection_callcenter_user.callcenter_user_id
+			IS NOT NULL
+			THEN
+				'ENTRY_CALLCENTER'
+			WHEN
+				selection_user.user_id
+			IS NULL
+			THEN
+				'UNKNOWN'
+			ELSE
+				selection_user.user_role
+			END 													as actor_type,
+			callcenter_reception_status.id,
+			callcenter_reception_status.contact_person_type,
+			callcenter_reception_status.direction_type,
+			callcenter_reception_status.reception_type,
+			reception_type.name 									as reception_name,
+			callcenter_reception_status.contact_method_type,
+			escalation.id											as escalation_id,
+			CASE WHEN
+				completed_escalation.escalation_id
+			IS NOT NULL
+			THEN
+				'COMPLETED'
+			WHEN
+				active_escalation_response.id
+			IS NOT NULL
+			THEN
+				'RESPONDED'
+			ELSE
+				'NO_RESPONSE'
+			END														as escalation_status,
+			active_escalation_response.id							as escalation_response_id,
+			active_escalation_response.responded_datetime,
+			active_escalation_response.description as response_description,
+			active_escalation_response.reception_customer_support_user_id,
+			active_escalation_response.reception_customer_support_user_name,
+			coalesce( reply_escalation.description, '' )			as escalation_process_description
+		FROM
+			selection_history.selection_history
+		LEFT OUTER JOIN
+			selection_history.selection_user
+		ON
+			selection_history.id = selection_user.selection_history_id
+		INNER JOIN
+			hiring_process.selection_statuses
+		ON
+			selection_statuses.selection_status_id = selection_history.selection_status_id
+		LEFT OUTER JOIN
+			selection_history.selection_callcenter_user
+		ON
+			selection_callcenter_user.selection_history_id = selection_history.id
+		LEFT OUTER JOIN
+			selection_history.callcenter_reception_status
+		ON
+			callcenter_reception_status.selection_history_id = selection_history.id
+		LEFT OUTER JOIN
+			selection_history.reception_type
+		ON
+			reception_type.type = callcenter_reception_status.reception_type
+		LEFT OUTER JOIN
+			selection_history.escalation_x_selection_history
+		ON
+			escalation_x_selection_history.selection_history_id = selection_history.id
+		LEFT OUTER JOIN
+			selection_history.escalation
+		ON
+			escalation.id = escalation_x_selection_history.escalation_id
+		LEFT OUTER JOIN
+			selection_history.completed_escalation
+		ON
+			completed_escalation.escalation_id = escalation.id
+		LEFT OUTER JOIN
+			selection_history.reply_escalation
+		ON
+			reply_escalation.escalation_id = escalation.id
+		LEFT OUTER JOIN
+			(
+				SELECT
+					escalation_response.id,
+					escalation_response.escalation_id,
+					escalation_response.responded_datetime,
+					escalation_response.description,
+					escalation_response.reception_customer_support_user_id,
+					escalation_response.reception_customer_support_user_name
+				FROM
+					selection_history.escalation_response
+				INNER JOIN
+					selection_history.latest_escalation_response
+				ON
+					latest_escalation_response.escalation_response_id = escalation_response.id
+				WHERE
+					NOT EXISTS(
+						SELECT
+							1
+						FROM
+							selection_history.deleted_escalation_response
+						WHERE
+							deleted_escalation_response.escalation_response_id = escalation_response.id
+					)
+					
+			) as active_escalation_response
+		ON
+			active_escalation_response.escalation_id = escalation.id
+		WHERE
+			selection_history.candidate_id = #candidateId#
+		AND NOT EXISTS(
+			SELECT
+				deleted_selection_history.selection_history_id
+			FROM
+				selection_history.deleted_selection_history
+			WHERE
+				deleted_selection_history.selection_history_id = selection_history.id
+		)
+		ORDER BY
+			to_char( selection_history.selection_datetime,  'YYYY-MM-DD HH24:MI') DESC, selection_history.id DESC
+		;
+	</select>
+	
+	<select id="findById" resultMap="selectionEvent" parameterClass="java.lang.Integer">
+		SELECT
+			selection_history.id,
+			selection_history.selection_event_type,
+			selection_history.selection_datetime,
+			selection_history.description,
+			CASE WHEN
+				selection_callcenter_user.callcenter_user_name
+			IS NOT
+				null
+			THEN
+				selection_callcenter_user.callcenter_user_name
+			WHEN
+				selection_user.user_name
+			IS NULL
+			THEN
+				'-'
+			ELSE
+				selection_user.user_name
+			END														as actor_name,
+			selection_statuses.selection_status_name,
+			CASE 
+			WHEN
+				selection_callcenter_user.callcenter_user_id
+			IS NOT NULL
+			THEN
+				'ENTRY_CALLCENTER'
+			WHEN
+				selection_user.user_id
+			IS NULL
+			THEN
+				'UNKNOWN'
+			ELSE
+				selection_user.user_role
+			END 													as actor_type,
+			callcenter_reception_status.id,
+			callcenter_reception_status.contact_person_type,
+			callcenter_reception_status.direction_type,
+			callcenter_reception_status.reception_type,
+			reception_type.name 									as reception_name,
+			callcenter_reception_status.contact_method_type,
+			escalation.id										as escalation_id,
+			CASE WHEN
+				completed_escalation.escalation_id
+			IS NOT NULL
+			THEN
+				'COMPLETED'
+			WHEN
+				active_escalation_response.id
+			IS NOT NULL
+			THEN
+				'RESPONDED'
+			ELSE
+				'NO_RESPONSE'
+			END														as escalation_status,
+			active_escalation_response.id												as escalation_response_id,
+			active_escalation_response.responded_datetime,
+			active_escalation_response.description as response_description,
+			active_escalation_response.reception_customer_support_user_id,
+			active_escalation_response.reception_customer_support_user_name,
+			coalesce( reply_escalation.description, '' )			as escalation_process_description
+		FROM
+			selection_history.selection_history
+		LEFT OUTER JOIN
+			selection_history.selection_user
+		ON
+			selection_history.id = selection_user.selection_history_id
+		INNER JOIN
+			hiring_process.selection_statuses
+		ON
+			selection_statuses.selection_status_id = selection_history.selection_status_id
+		LEFT OUTER JOIN
+			selection_history.selection_callcenter_user
+		ON
+			selection_callcenter_user.selection_history_id = selection_history.id
+		LEFT OUTER JOIN
+			selection_history.callcenter_reception_status
+		ON
+			callcenter_reception_status.selection_history_id = selection_history.id
+		LEFT OUTER JOIN
+			selection_history.reception_type
+		ON
+			reception_type.type = callcenter_reception_status.reception_type
+		LEFT OUTER JOIN
+			selection_history.escalation_x_selection_history
+		ON
+			escalation_x_selection_history.selection_history_id = selection_history.id
+		LEFT OUTER JOIN
+			selection_history.escalation
+		ON
+			escalation.id = escalation_x_selection_history.escalation_id
+		LEFT OUTER JOIN
+			selection_history.completed_escalation
+		ON
+			completed_escalation.escalation_id = escalation.id
+		LEFT OUTER JOIN
+			selection_history.reply_escalation
+		ON
+			reply_escalation.escalation_id = escalation.id
+		LEFT OUTER JOIN
+			(
+				SELECT
+					escalation_response.id,
+					escalation_response.escalation_id,
+					escalation_response.responded_datetime,
+					escalation_response.description,
+					escalation_response.reception_customer_support_user_id,
+					escalation_response.reception_customer_support_user_name
+				FROM
+					selection_history.escalation_response
+				INNER JOIN
+					selection_history.latest_escalation_response
+				ON
+					latest_escalation_response.escalation_response_id = escalation_response.id
+				WHERE
+					NOT EXISTS(
+						SELECT
+							1
+						FROM
+							selection_history.deleted_escalation_response
+						WHERE
+							deleted_escalation_response.escalation_response_id = escalation_response.id
+					)
+					
+			) as active_escalation_response
+		ON
+			active_escalation_response.escalation_id = escalation.id
+		WHERE
+			selection_history.id = #selectionEventId#
+		AND NOT EXISTS(
+			SELECT
+				deleted_selection_history.selection_history_id
+			FROM
+				selection_history.deleted_selection_history
+			WHERE
+				deleted_selection_history.selection_history_id = selection_history.id
+		);
+	</select>
+	
+	<select id="findLatestByCandidateId" resultMap="latestSelectionEvent" parameterClass="java.lang.Integer">
+		SELECT
+			selection_history.id,
+			selection_history.selection_event_type,
+			selection_history.selection_datetime,
+			selection_history.description,
+			CASE WHEN
+				selection_callcenter_user.callcenter_user_name
+			IS NOT
+				null
+			THEN
+				selection_callcenter_user.callcenter_user_name
+			WHEN
+				selection_user.user_name
+			IS NULL
+			THEN
+				'-'
+			ELSE
+				selection_user.user_name
+			END														as actor_name,
+			selection_statuses.selection_status_name,
+			CASE WHEN
+				selection_callcenter_user.callcenter_user_id
+			IS NOT NULL
+			THEN
+				'ENTRY_CALLCENTER'
+			WHEN
+				selection_user.user_id
+			IS NULL
+			THEN
+				'UNKNOWN'
+			ELSE
+				selection_user.user_role
+			END 													as actor_type,
+			callcenter_reception_status.id,
+			callcenter_reception_status.contact_person_type,
+			callcenter_reception_status.direction_type,
+			callcenter_reception_status.reception_type,
+			reception_type.name 									as reception_name,
+			callcenter_reception_status.contact_method_type
+		FROM
+			selection_history.selection_history
+		LEFT OUTER JOIN
+			selection_history.selection_user
+		ON
+			selection_history.id = selection_user.selection_history_id
+		INNER JOIN
+			hiring_process.selection_statuses
+		ON
+			selection_statuses.selection_status_id = selection_history.selection_status_id
+		LEFT OUTER JOIN
+			selection_history.selection_callcenter_user
+		ON
+			selection_callcenter_user.selection_history_id = selection_history.id
+		LEFT OUTER JOIN
+			selection_history.callcenter_reception_status
+		ON
+			callcenter_reception_status.selection_history_id = selection_history.id
+		LEFT OUTER JOIN
+			selection_history.reception_type
+		ON
+			reception_type.type = callcenter_reception_status.reception_type
+		INNER JOIN
+			selection_history.latest_callcenter_reception_status_of_candidate
+		ON
+			latest_callcenter_reception_status_of_candidate.callcenter_reception_status_id = callcenter_reception_status.id
+		WHERE
+			selection_history.candidate_id = #candidateId#
+		AND NOT EXISTS(
+			SELECT
+				deleted_selection_history.selection_history_id
+			FROM
+				selection_history.deleted_selection_history
+			WHERE
+				deleted_selection_history.selection_history_id = selection_history.id
+		);
+	</select>
+
+    <select id="escalationResponseEntryCount" resultClass="java.lang.Integer">
+		SELECT
+			count(DISTINCT escalation.id)
+		FROM
+			selection_history.selection_history
+		INNER JOIN
+			selection_history.escalation_x_selection_history
+		ON
+			escalation_x_selection_history.selection_history_id = selection_history.id
+		INNER JOIN
+			selection_history.escalation
+		ON
+			escalation.id = escalation_x_selection_history.escalation_id
+		INNER JOIN
+			selection_history.latest_escalation_response
+		ON
+			latest_escalation_response.escalation_id = escalation.id
+		WHERE
+			NOT EXISTS(
+				SELECT
+					deleted_selection_history.selection_history_id
+				FROM
+					selection_history.deleted_selection_history
+				WHERE
+					deleted_selection_history.selection_history_id = selection_history.id
+			)
+			AND NOT EXISTS(
+				SELECT
+					completed_escalation.escalation_id
+				FROM
+					selection_history.completed_escalation
+				WHERE
+					completed_escalation.escalation_id  = escalation.id
+			)
+			AND selection_history.candidate_id = #candidateId#
+		;
+	</select>
+
+	<insert id="registerSelectionHistory">
+		INSERT INTO 
+			selection_history.selection_history
+			( 
+				id, 
+				candidate_id, 
+				selection_event_type,
+				<isEqual property="selectionEvent.contents.datetime.validDate" compareValue="true">
+					selection_datetime,
+				</isEqual>
+				description, 
+				selection_status_id
+			) VALUES (
+				#selectionEvent.id#,
+				#candidateId#, 
+				#selectionEvent.status.eventType#, 
+				<isEqual property="selectionEvent.contents.datetime.validDate" compareValue="true">
+					#selectionEvent.contents.datetime.datetime#,
+				</isEqual>
+				#selectionEvent.contents.description.text#, 
+				(
+				SELECT 
+					hiring_status.selection_status_id
+				FROM
+					hiring_process.hiring_status
+				WHERE
+					hiring_status.candidate_id = #candidateId#
+				)
+			);
+	</insert>
+	
+	<insert id="registerSelectionUser">
+			INSERT INTO 
+				selection_history.selection_user
+				( 
+					selection_history_id, 
+					user_id, 
+					user_name,
+					user_role
+				) 
+			SELECT
+				#id#,
+				users.user_id,
+				users.full_name,
+				user_roles.role
+			FROM
+				account.users
+			INNER JOIN
+				account.entry_callcenter_user
+			ON 
+				users.user_id = entry_callcenter_user.user_id
+			INNER JOIN
+				account.user_roles
+			ON
+				users.user_id = user_roles.user_id
+	</insert>
+	
+	<insert id="retisterSelectionCallcenterUser">
+		INSERT INTO 
+			selection_history.selection_callcenter_user(
+				selection_history_id, 
+				callcenter_user_id, 
+				callcenter_user_name
+			)VALUES (
+				#id#, 
+				#contents.actor.callcenterUserId#,
+				#contents.actor.name#
+			);
+	</insert>
+	
+	<insert id="registerOutgoingMail">
+		INSERT INTO 
+			selection_history.outgoing_mail
+		(
+			selection_history_id,
+			mail_message_id
+		) VALUES (
+			#selectionEvent.id#,
+			#mailMessageId#
+		);
+	</insert>
+	
+	<insert id="registerCallcenterReceptionStatus">
+		INSERT INTO 
+			selection_history.callcenter_reception_status( 
+				id, 
+				selection_history_id, 
+				contact_person_type, 
+				direction_type, 
+				reception_type, 
+				contact_method_type
+			) VALUES (
+				(
+					SELECT nextval ( 'selection_history.callcenter_reception_status_id' )
+				), 
+				#id#, 
+				#callcenterReception.situation.contactPerson.contactPersonType#, 
+				#callcenterReception.situation.contactPerson.directionType#, 
+				#callcenterReception.type.type#, 
+				#callcenterReception.situation.methodType#
+			);
+	</insert>
+	
+	<insert id="registerCallcenterReceptionRegistrant">
+		INSERT INTO 
+			selection_history.callcenter_reception_registrant( 
+				callcenter_reception_status_id, 
+				callcenter_user_id, 
+				callcenter_user_name
+			)VALUES (
+				(
+					SELECT
+						callcenter_reception_status.id
+					FROM
+						selection_history.callcenter_reception_status
+					WHERE
+						callcenter_reception_status.selection_history_id = #selectionEvent.id#
+				), 
+				#loginUser.account.id#,
+				#loginUser.account.person.name.value#
+			);
+	</insert>
+	
+	<insert id="registerEscalation">
+		INSERT INTO selection_history.escalation(
+			id
+		) VALUES (
+			#escalationId#
+		);
+	</insert>
+	
+	<insert id="escalationXSelectionHistory">
+		INSERT INTO 
+			selection_history.escalation_x_selection_history(
+				selection_history_id, 
+				escalation_id, 
+				reception_callcenter_user_id, 
+				reception_callcenter_user_name
+			) VALUES (
+				#selectionEvent.id#, 
+				#escalationId#,
+				#selectionEvent.contents.actor.callcenterUserId#,
+				#selectionEvent.contents.actor.name#
+			);
+	</insert>
+	
+	<select id="findDeletedSelectionHistoryById" resultClass="java.lang.Integer">
+		SELECT 
+			deleted_selection_history.selection_history_id
+		FROM 
+			selection_history.deleted_selection_history
+		WHERE
+			deleted_selection_history.selection_history_id = #selectionEventId#
+	</select>
+	
+	<select id="findCompletedSelectionHistoryById" resultClass="java.lang.Integer">
+		SELECT
+			selection_history.id
+		FROM
+			selection_history.selection_history
+		INNER JOIN
+			selection_history.escalation_x_selection_history
+		ON
+			escalation_x_selection_history.selection_history_id = selection_history.id
+		INNER JOIN
+			selection_history.escalation
+		ON
+			escalation.id = escalation_x_selection_history.escalation_id
+		INNER JOIN
+			selection_history.completed_escalation
+		ON
+			completed_escalation.escalation_id = escalation.id
+		WHERE
+			selection_history.id = #selectionEventId#
+		;
+	</select>
+	
+	<select id="findOperatedCallcenterById" resultClass="java.lang.Integer" >
+		SELECT 
+			selection_history.id
+		FROM 
+			selection_history.selection_history
+		WHERE
+			selection_history.id = #selectionEventId#
+		AND
+			selection_history.selection_event_type = 'OPERATED_CALLCENTER'
+		;
+	</select>
+	
+	<select id="findEscalationById" resultClass="java.lang.Integer" >
+		SELECT 
+			selection_history.id
+		FROM 
+			selection_history.selection_history
+		WHERE
+			selection_history.id = #selectionEventId#
+		AND
+			selection_history.selection_event_type = 'ESCALATION'
+		;
+	</select>
+	
+	<insert id="registerDeletedSelectionHistory">
+		INSERT INTO 
+			selection_history.deleted_selection_history
+		(
+			selection_history_id
+ 		) VALUES (
+ 			#selectionEventId#
+ 		);
+	</insert>
+	
+	<insert id="registerSelectionHistoryDeleteCallcenterUser">
+		INSERT INTO
+			selection_history.selection_history_delete_callcenter_user
+		(
+			selection_history_id,
+			callcenter_user_id,
+			user_name
+		) VALUES (
+			#selectionEventId#,
+			#loginUser.account.id#,
+			#loginUser.account.person.name.value#
+		);
+		
+	</insert>
+	
+	<delete id="deleteLatestCallcenterReceptionStatus">
+		DELETE FROM 
+			selection_history.latest_callcenter_reception_status_of_candidate
+		WHERE
+			latest_callcenter_reception_status_of_candidate.candidate_id = #candidateId#
+	</delete>
+	
+	<insert id="registerEscalationCompleteEvent">
+		INSERT INTO 
+			selection_history.escalation_complete_event
+		(
+			escalation_id, 
+			callcenter_user_id, 
+			callcenter_user_name
+		) VALUES (
+			#escalationId#,
+			#loginUser.account.id#,
+			#loginUser.account.person.name.value#
+		);
+	</insert>
+	
+	<select id="findLatestCallcenterReceptionStatusId" resultClass="java.lang.Integer" >
+		SELECT
+			callcenter_reception_status.id
+		FROM
+			selection_history.callcenter_reception_status
+			INNER JOIN
+				selection_history.selection_history
+				ON
+					callcenter_reception_status.selection_history_id = selection_history.id
+		WHERE
+			selection_history.candidate_id = #candidateId#
+			AND NOT EXISTS (
+				SELECT
+					deleted_selection_history.selection_history_id
+				FROM
+					selection_history.deleted_selection_history
+				WHERE
+					deleted_selection_history.selection_history_id = selection_history.id
+				)
+		ORDER BY
+			selection_history.selection_datetime DESC
+		LIMIT
+			1
+		;
+	</select>
+	
+	<insert id="registerLatestCallcenterReceptionStatus">
+		INSERT INTO selection_history.latest_callcenter_reception_status_of_candidate(
+			candidate_id,
+			callcenter_reception_status_id
+		) VALUES (
+			#candidateId#,
+			#latestCallcenterReceptionStatusId#
+		);
+	</insert>
+	
+</sqlMap>

@@ -1,7 +1,0 @@
-2019-05-04_09:06:03.99872 == Sinatra (v2.0.5) has taken the stage on 9168 for development with backup from Puma
-2019-05-04_09:06:03.99883 Puma starting in single mode...
-2019-05-04_09:06:03.99884 * Version 3.12.0 (ruby 2.5.3-p105), codename: Llamas in Pajamas
-2019-05-04_09:06:03.99885 * Min threads: 0, max threads: 16
-2019-05-04_09:06:03.99885 * Environment: development
-2019-05-04_09:06:03.99893 * Listening on tcp://localhost:9168
-2019-05-04_09:06:03.99916 Use Ctrl-C to stop

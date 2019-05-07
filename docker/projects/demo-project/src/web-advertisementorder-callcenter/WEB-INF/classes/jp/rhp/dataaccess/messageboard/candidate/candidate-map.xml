@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.messageboard.candidate.CandidateDataAccess">
+
+	<resultMap id="candidate" class="jp.rhp.model.messageboard.candidate.Candidate" >
+		<result property="id.value"							column="candidate_id"/>
+		<result property="name.fullName"					column="entry_name"/>
+		<result property="name.fullNameKana"				column="entry_name_kana"/>
+		<result property="telephoneNumber1.telephoneNumber" column="telephone_number"/>
+		<result property="telephoneNumber2.telephoneNumber" column="mobile_telephone_number"/>
+		<result property="lineId.value"						column="line_id"/>
+		<result property="sectionToHire.id.value"			column="section_to_hire_id"/>
+		<result property="sectionToHire.name.value"			column="section_to_hire_name"/>
+	</resultMap>
+	
+	<sql id="find">
+		SELECT
+			candidates.candidate_id,
+			candidates.entry_name,
+			candidates.entry_name_kana,
+			candidates.telephone_number,
+			candidates.mobile_telephone_number,
+			line_ids.id AS line_id,
+			section_to_hire.section_to_hire_id,
+			section_to_hire.section_to_hire_name
+		FROM
+			hiring_process.candidates
+		INNER JOIN
+			hiring_process.candidates_active
+			ON candidates_active.candidate_id = candidates.candidate_id
+		INNER JOIN
+			hiring_process.hiring_status
+			ON hiring_status.candidate_id = candidates.candidate_id
+		INNER JOIN
+			hiring.section_to_hire
+			ON section_to_hire.section_to_hire_id = hiring_status.section_to_hire_id
+		LEFT OUTER JOIN
+			line.line_ids
+			ON line_ids.candidate_id = candidates.candidate_id
+		AND EXISTS(
+			SELECT
+				1
+			FROM
+				line.valid_line_ids
+			WHERE
+				valid_line_ids.line_id = line_ids.id
+		)
+		AND (
+			SELECT
+				settings.use_line_notify
+			FROM
+				line.settings
+			LIMIT 1 OFFSET 0
+		)
+		WHERE
+			candidates.candidate_id = #value#
+	</sql>
+	
+	<select id="findBy" parameterClass="java.lang.Integer" resultMap="candidate">
+		<include refid="find"/>
+	</select>
+	
+	<select id="findList" parameterClass="java.lang.Integer" resultMap="candidate">
+		<include refid="find"/>
+	</select>
+
+    <select id="isImportedEntry" resultClass="java.lang.Boolean">
+        SELECT
+            CASE WHEN COUNT(*) > 0 THEN true ELSE false END
+        FROM
+            entry.imported_entries
+        WHERE
+            candidate_id = #value#
+    </select>
+
+    <select id="isDirectEntry" resultClass="java.lang.Boolean">
+        SELECT
+            CASE WHEN COUNT(*) > 0 THEN true ELSE false END
+        FROM
+            entry.direct_entries
+        WHERE
+            candidate_id = #value#
+    </select>
+</sqlMap>

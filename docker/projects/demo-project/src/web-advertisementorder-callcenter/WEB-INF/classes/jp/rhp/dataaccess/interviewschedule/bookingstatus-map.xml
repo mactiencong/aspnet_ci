@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.interviewschedule.BookingStatusDataAccess">
+
+	<typeAlias alias="bookingStatus" type="jp.rhp.model.interviewschedule.interview.Interview" />
+
+	<resultMap class="bookingStatus" id="bookingStatus">
+		<result property="id" column="id"/>
+		<result property="sectionToHireId" column="section_to_hire_id"/>
+		<result property="frame.dateAndTime.date" column="interview_date"/>
+		<result property="frame.dateAndTime.timeRange.from" column="from_interview_time"/>
+		<result property="frame.dateAndTime.timeRange.to" column="to_interview_time"/>
+		<result property="frame.capacity.value" column="capacity"/>
+		<result property="detail.remarks.memo" column="memo"/>
+		<result property="detail.remarks.color" column="color"/>
+ 		<result property="frame.capacity.booked" column="booked"/>
+ 		<result property="openStatus" column="posting_status"/>
+		<result property="detail.interviewPlace.name.value" column="interview_place_name" />
+		<result property="detail.interviewPlace.detail.location.address.prefecture.code" column="prefecture_code" />
+		<result property="detail.interviewPlace.detail.location.address.prefecture.name.value" column="prefecture_name" />
+		<result property="detail.interviewPlace.detail.location.address.city.municipality.name.value" column="municipality" />
+		<result property="detail.interviewPlace.detail.location.address.city.street.name.value" column="street_name" />
+		<result property="detail.interviewPlace.detail.location.address.city.street.buildingName.value" column="building_name" />
+		<result property="detail.interviewPlace.detail.contact.telephoneNumber.telephoneNumber" column="phone_number" />
+		<result property="detail.interviewPlace.detail.location.coordinate.latitude.value" column="latitude" />
+		<result property="detail.interviewPlace.detail.location.coordinate.longitude.value" column="longitude" />
+	</resultMap>
+
+	<sql id="interviewBooked">
+		SELECT
+			COUNT(1)
+		FROM
+			interview_schedule.bookings
+		WHERE
+				interview_id = interviews.id
+			AND NOT EXISTS (
+				SELECT
+					candidate_id
+				FROM
+					hiring_process.candidates_delete
+				WHERE
+					candidate_id = bookings.candidate_id
+			)
+	</sql>
+	
+	<sql id="filteringByCriteria">
+		WHERE
+				section_to_hire_id = #sectionToHire.id#
+		<dynamic>
+			<isNotEmpty property="interviewDateRange.start" prepend="AND">
+				date_trunc( 'day' , interview_date ) >= to_timestamp( #interviewDateRange.start#, 'YYYY/MM/DD' )
+			</isNotEmpty>
+			<isNotEmpty property="interviewDateRange.end" prepend="AND">
+			<![CDATA[
+				date_trunc( 'day' , interview_date ) <= to_timestamp( #interviewDateRange.end#, 'YYYY/MM/DD' )
+			]]>
+			</isNotEmpty>
+			<isEqual property="bookingOnly" compareValue="true" prepend="AND">
+				( <include refid="interviewBooked"/> ) > 0
+			</isEqual>
+			<isNotEmpty property="memo" prepend="AND">
+				memo LIKE '%' || #memo# || '%'
+			</isNotEmpty>
+		</dynamic>
+	</sql>
+
+	<select id="listByCriteria" resultMap="bookingStatus">
+		SELECT 
+			id,
+			section_to_hire_id,
+			to_char(interview_date,'YYYY/MM/DD') as interview_date,
+			from_interview_time,
+			to_interview_time,
+			capacity,
+			memo,
+			color,
+			( <include refid="interviewBooked"/> ) as booked,
+			interview_posting_status.posting_status,
+			COALESCE(interview_place.name,'') as interview_place_name,
+			COALESCE(interview_place.prefecture_code,'') as prefecture_code,
+			COALESCE(prefectures.name,'') as prefecture_name,
+			COALESCE(interview_place.municipality,'') as municipality,
+			COALESCE(interview_place.street_name,'') as street_name,
+			COALESCE(interview_place.building_name,'') as building_name,
+			COALESCE(interview_place.phone_number,'') as phone_number,
+			COALESCE(interview_place.latitude,'') as latitude,
+			COALESCE(interview_place.longitude,'') as longitude
+		FROM
+			interview_schedule.interviews
+		INNER JOIN 
+			interview_schedule.interview_posting_status
+		ON interviews.id = interview_posting_status.interview_id
+		LEFT OUTER JOIN 
+			interview_schedule.interview_place
+		ON interviews.id = interview_place.interview_id
+		LEFT OUTER JOIN
+			address.prefectures
+		ON interview_place.prefecture_code = prefectures.code
+		<include refid="filteringByCriteria"/>
+		ORDER BY
+			interview_date,
+			from_interview_time,
+			to_interview_time
+		LIMIT #page.limit# OFFSET #page.offset#
+	</select>
+
+	<select id="countByCriteria" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(1)
+		FROM
+			interview_schedule.interviews
+		<include refid="filteringByCriteria"/>
+	</select>
+</sqlMap>

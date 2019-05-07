@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.applicant.entry.CurrentEmploymentTypeDataAccess">
+
+	<resultMap class="jp.rhp.model.applicant.entry.CurrentEmploymentType" id="currentEmployementType">
+		<result property="id" column="current_employment_type_id"/>
+		<result property="currentEmploymentType" column="current_employment_type_name"/>
+	</resultMap>
+
+	<select id="idAndNames" resultMap="currentEmployementType">
+		SELECT
+			current_employment_type_id,
+			current_employment_type_name
+		FROM
+			entry.current_employment_type
+		WHERE
+			is_show = #value#
+		ORDER BY
+			display_order
+	</select>
+
+	<select id="findById" resultMap="currentEmployementType">
+		SELECT
+			current_employment_type_id,
+			current_employment_type_name
+		FROM
+			entry.current_employment_type
+		WHERE
+			current_employment_type_id = #value#
+	</select>
+
+</sqlMap>

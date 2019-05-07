@@ -1,0 +1,90 @@
+<form action="javascript:void(0);" method="POST" class="searchForm"  >
+	<div class="employPannel">
+		<div class="inner">
+			<div class="defaultSearchCond">
+				<table summary="検索条件1" class="regular">
+					<col width="15%" /><col width="35%" /><col width="15%" /><col width="35%" />
+					<tr>
+						<th>発注番号</th>
+						<td>
+							#formInput("${criteriaPath}.contents.advertisementOrderId.value" 'class="regular bg"' )
+							#errorMessages("${criteriaPath}.contents.advertisementOrderId.value")
+						</td>
+						<th>原稿掲載店舗</th>
+						<td class="shopCassette" style="padding-bottom:7px !important;">
+							<p id="_workplace">
+								#parse("/advertisementorder/history/list/search/_parts/selectWorkplace.vm")
+							</p>
+							<input type="text" name="workplaceFreeword" class="shopRefiner" autocomplete="off" placeholder="店舗名を入力" />
+							<a href="javascript:void(0);" class="mg refineShop"><img src="$link.contextPath/images/btnRefine.png" width="70" height="25" alt="絞り込む"  class="rollover" /></a><a href="javascript:void(0);" id="workplaceReset" class="refineShopCancel"><img src="$link.contextPath/images/btnClearShop.gif" width="63" height="25" alt="入力をリセット" /></a><br />
+							<span class="shopRfineSubTxt" style="font-size:93%;"></span><span class="shopRfineErr" style="font-size:93%; color:#F00;"></span>
+							#errorMessages("${criteriaPath}.contents.workplaceId.value")
+						</td>
+					</tr>
+					<tr>
+						<th>発注依頼日</th>
+						<td>
+							#formInput("${criteriaPath}.contents.orderedDate.range.from.dateStamp" 'class="regular bg calender" style="width:100px;"' 'orderedDateFrom')～
+							#formInput("${criteriaPath}.contents.orderedDate.range.to.dateStamp" 'class="regular bg calender" style="width:100px;"' 'orderedDateTo')
+							#errorMessages("${criteriaPath}.contents.orderedDate.*")
+						</td>
+						<th>発行日</th>
+						<td>
+							#formInput("${criteriaPath}.contents.publicationDate.range.from.dateStamp" 'class="regular bg calender" style="width:100px;"' 'publicationDateFrom')～
+							#formInput("${criteriaPath}.contents.publicationDate.range.to.dateStamp" 'class="regular bg calender" style="width:100px;"' 'publicationDateTo')
+							#errorMessages("${criteriaPath}.contents.publicationDate.*")
+						</td>
+					</tr>
+					<tr>
+						<th>媒体</th>
+						<td>
+							#formSingleSelect( "${criteriaPath}.contents.mediaCode.value" $mediaOptions 'class="regular" style="width:200px; margin-right:40px;"' )
+							#errorMessages("${criteriaPath}.contents.mediaCode.value")
+						</td>
+						<th>版（エリア）</th>
+						<td>
+							#formInput("${criteriaPath}.contents.mediaAreaName.value" 'class="regular bg"')
+						</td>
+					</tr>
+					<tr>
+						<th>媒体種別</th>
+						<td>
+							#formSingleSelect( "${criteriaPath}.contents.mediaTypeName.value" $mediaTypeOptions 'class="regular" style="width:250px; margin-right:40px;"' )
+						</td>
+						<th>請求元</th>
+						<td>
+							#formSingleSelect( "${criteriaPath}.contents.biller.value" $billerOptions 'class="regular" style="width:250px; margin-right:40px;"' )
+						</td>
+					</tr>
+					<tr>
+						<th>媒体の種類</th>
+						<td colspan="3">
+							#formCheckBoxes( "${criteriaPath}.contents.mediaCategoryList.selected", $mediaCategoryOptions, $criteria.contents.mediaCategoryList.selected, 'mediaCategoryCheckBox', 5)
+						</td>
+					</tr>
+					<tr>
+						<th>掲載情報</th>
+						<td>
+							#formRadioButton( "${criteriaPath}.contents.resultStatus" $resultStatusOptions '&nbsp;&nbsp;' '' 0 )
+						</td>
+						<th>キャンセル</th>
+						<td>
+							#formRadioButton( "${criteriaPath}.contents.cancelStatus" $cancelStatusOptions '&nbsp;&nbsp;' '' 0 )
+						</td>
+					</tr>
+					<tr>
+						<th>発注状態</th>
+						<td colspan="3">
+							#formCheckBoxes( "${criteriaPath}.contents.orderStatusList.selected", ${orderStatusOptions}, $criteria.contents.orderStatusList.selected, 'orderStatusCheckBox', 4)
+						</td>
+					</tr>
+				</table>
+			</div>
+			<!--[if lte IE 7.0]><div style="clear:both; height:1px; width:100%;"></div><![endif]-->
+			<div class="controls">
+				<p class="reset"><a href='$link.relativeAndCompany("/advertisementorder/history/reset")'><img src="$link.contextPath/images/btnResetCond.gif" width="101" height="25" alt="条件をリセット" class="rollover" /></a></p>
+				<p class="submit"><input type="image" id="search" name="search" src="$link.contextPath/images/btnSearch01.gif" width="268" height="39" alt="検索する" class="rollover" /></p>
+			</div>
+		<!-- //inner --></div>
+	<!-- //employPannel --></div>
+</form>

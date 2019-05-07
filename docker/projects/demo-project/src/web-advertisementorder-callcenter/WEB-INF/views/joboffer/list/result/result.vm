@@ -1,0 +1,74 @@
+<script type="text/javascript">
+$(document).ready(function(){
+    settingJobPreview();
+});
+
+var numberOfExecution = 0;
+function jobofferExport( number )
+{
+    if ( number == 1 ) // at 1st.
+    {
+        $( ".csv.export" ).toggle();
+        $('#exportRequest').submit();
+    }
+}
+</script>
+<div class="listHeader">
+    #if(!$auth.user.configurations.useJobOfferCassetteInput)
+    <ul class="batch csv">
+        <li class="csv export" #if(${joboffers.allCount} == 0) style="display: block;" #else style="display: none;" #end>
+            <img src="$link.contextPath/images/btnBatchExportDead.gif" width="164" height="42" alt="一括ファイル出力" class="button exportButton" />
+            <div class="link"><a href='$link.relativeAndCompany("/joboffer/export/list")'>一括ファイル出力リクエスト一覧</a></div>
+        </li>
+        <li class="csv export" #if(${joboffers.allCount} == 0) style="display: none;" #else style="display: block;" #end>
+            <a href="javascript: jobofferExport( ++ numberOfExecution );" class="export_event"><img src="$link.contextPath/images/btnBatchExport.gif" width="164" height="42" alt="一括ファイル出力" class="rollover button exportButton" /></a>
+            <div class="link"><a href='$link.relativeAndCompany("/joboffer/export/list")'>一括ファイル出力リクエスト一覧</a></div>
+        </li>
+        <li class="csv" style="top: 20px;">
+            <a href='$link.relativeAndCompany("/joboffer/import")'>
+                <img src="$link.contextPath/images/btnFileImport.gif" width="90" height="42" alt="ファイル取り込み" class="rollover" />
+            </a>
+        </li>
+    </ul>
+    #end
+
+    #page( $jobOfferCriteria.page "/joboffer/list/paging" )
+    #formSingleSelect( 'jobOfferCriteria.page.limit' ${jobOfferCriteria.page.perPages} 'tabindex="25" class="regular w070"' 'perPage' )
+<!-- //listHeader --></div>
+
+<table summary="求人案件リスト" class="recoplist">
+    <col width="23%" /><col width="23%" /><col width="23%" /><col width="12%" /><col width="*" />
+    <tr class="header">
+        <th>原稿掲載店舗</th>
+        <th>案件名</th>
+        <th>原稿掲載職種<a href="#"></a></th>
+        <th>公開状態</th>
+        <th>&nbsp;</th>
+    </tr>
+    #foreach($joboffer in $joboffers.jobOffers)
+        <tr id="_line${joboffer.id}">
+            #parse( "/joboffer/list/result/line.vm" )
+        </tr>
+    #end
+</table>
+
+<div class="listFooter bottom">
+    #if(!$auth.user.configurations.useJobOfferCassetteInput)
+    <ul class="batch csv">
+        <li class="csv export" #if(${joboffers.allCount} == 0) style="display: block;" #else style="display: none;" #end>
+            <img src="$link.contextPath/images/btnBatchExportDead.gif" width="164" height="42" alt="一括ファイル出力" class="button exportButton" />
+        </li>
+        <li class="csv export" #if(${joboffers.allCount} == 0) style="display: none;" #else style="display: block;" #end>
+            <a href="javascript: jobofferExport( ++ numberOfExecution );" class="export_event"><img src="$link.contextPath/images/btnBatchExport.gif" width="164" height="42" alt="一括ファイル出力" class="rollover button exportButton" /></a>
+        </li>
+        <li class="link">
+            <a href='$link.relativeAndCompany("/joboffer/export/list")'>一括ファイル出力リクエスト一覧</a>
+        </li>
+    </ul>
+    #end
+
+    #page( $jobOfferCriteria.page "/joboffer/list/paging" )
+    #formSingleSelect( 'jobOfferCriteria.page.limit' ${jobOfferCriteria.page.perPages} 'tabindex="25" class="regular w070"' 'perPage' )
+</div>
+<!-- //listFooter -->
+

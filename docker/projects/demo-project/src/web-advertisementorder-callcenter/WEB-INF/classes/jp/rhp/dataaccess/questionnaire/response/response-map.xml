@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.questionnaire.response.ResponseDataAccess">
+
+    <typeAlias alias="response" type="jp.rhp.model.questionnaire.response.Response" />
+    <typeAlias alias="answer" type="jp.rhp.model.questionnaire.response.Answer" />
+
+    <resultMap class="response" id="response" groupBy="id">
+        <result property="id" column="id"/>
+        <result property="questionnaireId" column="questionnaireId"/>
+        <result property="answers" resultMap="jp.rhp.dataaccess.questionnaire.response.ResponseDataAccess.answer"/>
+    </resultMap>
+
+    <resultMap class="answer" id="answer" groupBy="id,answerId">
+        <result property="id" column="answerId"/>
+        <result property="values" resultMap="jp.rhp.dataaccess.questionnaire.response.ResponseDataAccess.valueList"/>
+        <result property="questionNumbering" column="question_numbering"/>
+        <result property="responseId" column="id"/>
+    </resultMap>
+
+    <resultMap class="java.lang.String" id="valueList">
+        <result property="" column="value"/>
+    </resultMap>
+
+    <sql id="selectDefaultResponseCore">
+    <![CDATA[
+       select
+           responses.id as id,
+           responses.questionnaire as questionnaireId,
+           answers.id as answerId,
+           answer_values.value as value,
+           answers.question_numbering as question_numbering
+       from
+           questionnaire.responses 
+    ]]>
+    </sql>
+
+    <sql id="joinAnswers">
+    <![CDATA[
+        left outer join questionnaire.answers answers on
+        (
+            answers.response = responses.id
+        )
+    ]]>
+    </sql>
+
+    <sql id="joinAnswerValues">
+    <![CDATA[
+        left outer join questionnaire.answer_values answer_values on
+        (
+            answer_values.answer = answers.id
+        )
+    ]]>
+    </sql>
+
+    <sql id="whereOfDefaultResponse">
+    <![CDATA[
+        where responses.questionnaire = #id#
+    ]]>
+    </sql>
+
+    <sql id="orderByDefaultResponseCore">
+    <![CDATA[
+        order by
+          answers.question_numbering,
+          answer_values.id
+    ]]>
+    </sql>
+
+    <select id="getId" resultClass="long">
+        select nextval('questionnaire.responses_id')
+    </select>
+
+    <select id="getAnswerId" resultClass="long">
+        select nextval('questionnaire.answers_id')
+    </select>
+
+    <select id="findAnswerOfDefaultById" resultMap="response">
+       <include refid="selectDefaultResponseCore"/>
+        <include refid="joinAnswers"/>
+        <include refid="joinAnswerValues"/>
+        <include refid="whereOfDefaultResponse"/>
+        <include refid="orderByDefaultResponseCore"/>
+    </select>
+
+    <insert id="register" parameterClass="response">
+        insert into questionnaire.responses
+        ( id, questionnaire )
+        values
+        ( #id#, #questionnaireId# )
+    </insert>
+
+    <insert id="registerAnswer" parameterClass="answer">
+        insert into questionnaire.answers
+        ( id, question_numbering, response )
+        values
+        ( #id#, #questionNumbering#, #responseId# )
+    </insert>
+
+    <insert id="registerAnswerValue" parameterClass="map">
+        insert into questionnaire.answer_values
+        ( value, answer )
+        values
+        ( #value#, #answerId# )
+    </insert>
+
+</sqlMap>

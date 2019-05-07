@@ -1,0 +1,24 @@
+#recopHtml()
+<head>
+	#recopHead('予約状況詳細')
+	<link href="$link.contextPath/css/schedule/bookingstatus.css" rel="stylesheet" type="text/css" />
+	<link href="$link.contextPath/css/entry/preview/preview.css" rel="stylesheet" type="text/css" />
+</head>
+<body id="bidSchedule">
+#recopHeader()
+<hr />
+
+<div id="container">
+<div class="pannel">
+<div class="inner">
+<div class="content">
+	#parse('schedule/interviewframe/bookingstatus/detail/contents/title.vm')
+	#parse('schedule/interviewframe/bookingstatus/detail/contents/status.vm')
+	#parse('schedule/interviewframe/bookingstatus/detail/contents/candidates.vm')
+</div>
+</div>
+</div>
+	#recopFooter()
+</div>
+</body>
+</html>

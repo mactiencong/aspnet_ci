@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.sectiontohire.operationalinfomation.OperationalInfomationDataAccess">
+	
+	<resultMap class="jp.rhp.model.sectiontohire.operationalinfomation.OperationalInfomation" id="operationalInfomation">
+		<result property="key"				column="type"/>
+		<result property="isHide"			column="is_hide"/>
+	</resultMap>
+	
+
+	<select id="listOf" resultMap="operationalInfomation">
+		SELECT
+			callcenter_display_memo_type		AS type,
+			is_hide								AS is_hide
+		FROM hiring.callcenter_display_memo_settings
+	</select>
+</sqlMap>

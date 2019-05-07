@@ -1,0 +1,64 @@
+<h4>募集要項</h4>
+<table class="recoptable" summary="募集要項">
+	<col width="18%" /><col width="*" />
+	<tr>
+		<th>雇用形態</th>
+		<td>
+			#foreach($code in $editSingleOrderSheet.article.jobOffer.recruitment.employmentFormList.selected)
+				$!{employmentFormTypeList.getName($code)}&nbsp;
+			#end
+		</td>
+	</tr>
+	<tr>
+		<th>原稿掲載職種表示名称</th>
+		<td>
+			#escape($editSingleOrderSheet.article.jobOffer.recruitment.jobTypeDescription.text)
+		</td>
+	</tr>
+	<tr>
+		<th>資格</th>
+		<td >
+			#escape($editSingleOrderSheet.article.jobOffer.recruitment.qualification.text)
+		</td>
+	</tr>
+	#parse("/advertisementorder/modify/single/_parts/confirm/article/income.vm")
+	#parse("/advertisementorder/modify/single/_parts/confirm/article/treatment.vm")
+	<tr>
+		<th>勤務曜日・時間</th>
+		<td>
+			#escape($!{editSingleOrderSheet.article.jobOffer.recruitment.workingTime.workingDayTimeDescription.text})
+		</td>
+	</tr>
+	<tr>
+		<th>週あたり最低勤務日数</th>
+		<td>#escape( ${wrokingDayPerWeekCodeTypeList.getName( $editSingleOrderSheet.article.jobOffer.recruitment.workingTime.workingDayPerWeekCode )} )</td>
+	</tr>
+	<tr>
+		<th>勤務時間帯</th>
+		<td>
+			${editSingleOrderSheet.article.jobOffer.recruitment.workingTime.workingTimeMorningName}
+			${editSingleOrderSheet.article.jobOffer.recruitment.workingTime.workingTimeDayName}
+			${editSingleOrderSheet.article.jobOffer.recruitment.workingTime.workingTimeEveningName}
+			${editSingleOrderSheet.article.jobOffer.recruitment.workingTime.workingTimeNightName}
+		</td>
+	</tr>
+	<tr>
+		<th>採用予定人数</th>
+		<td>
+		    #if($editSingleOrderSheet.article.jobOffer.recruitment.adoptionNumberPlan.code == '99')
+		        #if($editSingleOrderSheet.article.jobOffer.recruitment.adoptionNumberPlan.number != '')
+		            $!{editSingleOrderSheet.article.jobOffer.recruitment.adoptionNumberPlan.number}名
+                #end
+			#else
+                $!{adoptionNumberPlanList.getName($editSingleOrderSheet.article.jobOffer.recruitment.adoptionNumberPlan.code)}
+			#end
+		</td>
+	</tr>
+	<tr>
+		<th>採用予定人数本文</th>
+		<td>
+			#escape($!{editSingleOrderSheet.article.jobOffer.recruitment.adoptionNumberPlan.description.text})
+		</td>
+	</tr>
+	#parse("/advertisementorder/modify/single/_parts/confirm/article/recruitment_addition.vm")
+</table>

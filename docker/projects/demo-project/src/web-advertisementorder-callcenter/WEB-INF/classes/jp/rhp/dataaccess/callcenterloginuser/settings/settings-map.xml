@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.callcenterloginuser.settings.LoginCallcenterUserSettingsDataAccess">
+
+	<resultMap id="settings" class="jp.rhp.model.callcenterloginuser.settings.Settings">
+		<result property="passwordEffectiveDays" column="password_effective_days" />
+		<result property="passwordChangeAnnounceDays" column="password_change_announce_days" />
+		<result property="temporaryPasswordEffectiveDays" column="temporary_password_effective_days" />
+	</resultMap>
+
+	<select id="findSettings" resultMap="settings">
+		SELECT
+			password_effective_days,
+			temporary_password_effective_days,
+			password_change_announce_days
+		FROM
+			employer.security_configurations
+	</select>
+
+</sqlMap>

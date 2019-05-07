@@ -1,0 +1,96 @@
+#recopHtml()
+<head>
+	#recopHead('求人案件管理')
+	#css("$link.contextPath/css/joboffer/joboffer.css")
+	#javascript("$link.contextPath/js/joboffer/list.js")
+	<script type="text/javascript">
+		$(function(){
+			$("#perPage").live("change", function(){
+				changePerPage('$link.relativeAndCompany("/joboffer/list/changePerPage")', $(this).val());
+			});
+			$("#workplace\\.freeword").live("keypress", function( event ) {
+				if( event.which === 13 && $(this).val() != ""){
+					workplaceSearch('$link.relativeAndCompany("/joboffer/list/findWorkplace")', $(this).val());
+					return false;
+				}
+			});
+			$("#workplaceSearch").live("click", function(){
+				workplaceSearch('$link.relativeAndCompany("/joboffer/list/findWorkplace")', $("#workplace\\.freeword").val());
+			});
+			$("#workplaceReset").live("click", function(){
+				$("#workplace\\.freeword").val("")
+				workplaceSearch('$link.relativeAndCompany("/joboffer/list/findWorkplace")', $("#workplace\\.freeword").val());
+			});
+			$("tr.shopCasette,tr.shopCassette").inputFormDefault({searchBtn:"#workplaceSearch"});
+		});
+
+		function postingOpen( id )
+		{
+			changePostingStatus('$link.relativeAndCompany("/joboffer/list/changePostingStatus")', id, true);
+		}
+
+		function postingClose( id )
+		{
+			changePostingStatus('$link.relativeAndCompany("/joboffer/list/changePostingStatus")', id, false);
+		}
+
+	</script>
+	<style type="text/css">
+		tr a.addShop {display:none;}
+		tr.now a.addShop {display:inline-block;}
+		tr.shopCasette td,tr.shopCassette td{padding:8px 8px 8px 8px;}
+		tr.shopCasette td div,tr.shopCassette td div{background:#ebebeb; border-top:1px #ccc solid; display:block; margin:0 -8px; padding:5px 12px 4px 8px; text-align:right; margin-top:8px; display:none;}
+		tr.shopCasette td span,tr.shopCassette td span{display:block;}
+		tr.shopCasette td input,tr.shopCassette td input{margin-right:2px;}
+		tr.shopCasette td a.mg,tr.shopCassette td a.mg{display:inline-block; margin:0 2px 0 0;}
+		tr.now td{padding:8px 8px 0 8px !important;}
+		tr.now td div {display:block !important;}
+		tr.lasttr a.addShop {display:none !important;}
+		tr.added a.delShop {display:inline-block !important;}
+		tr.added  th img {display:none;}
+	</style>
+</head>
+<body id="bidCase">
+	#recopHeader()
+	<hr />
+	<div  id="container">
+		<div class="pannel">
+			<div class="inner">
+				<div class="content">
+					<div class="ttlBlock" style="position:relative; width:100%;">
+						<h2 class="joboffer">求人案件管理</h2>
+					</div><!-- //ttlBlock -->
+					<form action='$link.relativeAndCompany("/joboffer/list")' method="POST">
+						#parse('/joboffer/list/search/criteria.vm')
+						<div class="listFunction nb">
+							<ul>
+								<li class="newRegLong">
+									#if($settings.useWebToku.use)
+										#if($auth.user.role.HR)
+											<a href='$link.relativeAndCompany("/joboffer/webtoku/settings")'><img src="$link.contextPath/images/btnWebTokuSettings.png" height="33" alt="WEB得掲載設定" class="rollover" style="margin-right:3px;"/></a>
+										#end
+										#if($auth.user.role.jobsAdmin)
+											<a href='$link.relativeAndCompany("/joboffer/webtoku/settings")'><img src="$link.contextPath/images/btnWebTokuSettings.png" height="33" alt="WEB得掲載設定" class="rollover" style="margin-right:3px;"/></a>
+										#end
+									#end
+									<a href='$link.relativeAndCompany("/joboffer/register")'><img src="$link.contextPath/images/btnRegistNew.gif" width="152" height="33" alt="新規登録" class="rollover" /></a>
+								</li>
+							</ul>
+						<!-- //listFunction --></div>
+						<div id="_result">
+							#parse('/joboffer/list/result/result.vm')
+						</div>
+						#csrfToken()
+					</form>
+					<form id="exportRequest" action='$link.relativeAndCompany("/joboffer/export/request")' method="POST">
+						#csrfToken()
+					</form>
+					</div>
+				 <!-- //content --></div>
+			<!-- //inner --></div>
+		<!-- //pannel --></div>
+	<!-- //container --></div>
+
+	#recopFooter()
+</body>
+</html>

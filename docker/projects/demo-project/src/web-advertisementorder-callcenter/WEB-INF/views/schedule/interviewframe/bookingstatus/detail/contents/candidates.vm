@@ -1,0 +1,20 @@
+<h3>面接枠毎予約状況詳細</h3>
+<table summary="面接枠毎予約状況詳細" class="list booking">
+	<col width="24%"/>
+	<col width="16%"/>
+	<col width="16%"/>
+	<col width="22%"/>
+	<col width="22%"/>
+	<thead>
+		<th>氏名</th>
+		<th>応募日時</th>
+		<th>予約日時</th>
+		<th>媒体</th>
+		<th>職種</th>
+	</thead>
+	<tbody>
+		#foreach( $each in $bookings )
+			#parse("schedule/interviewframe/bookingstatus/detail/contents/candidate.vm")
+		#end
+	</tbody>
+</table>

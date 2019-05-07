@@ -1,0 +1,22 @@
+#if($!minimumWage.empty)
+	<span class="chk">各都道府県の最低賃金に従ってご入力下さい</span><br />
+	<div class="note">
+		<div class="minimumWageAttention">注：</div>
+		<div class="minimumWageMessage caution">高校生時給や研修期間であっても最低賃金法は適用されます</div>
+		<div style="clear:both; height:0px; padding:0;"></div>
+		<div class="minimumWageAttention">&nbsp;</div>
+		<div class="minimumWageMessage medium">特定の産業・職業に係わる特定産業別賃金は<a href="./minimum_wage.html" target="_blank" class="refineShopCancel">厚生労働省HP</a>をご確認下さい</div>
+		<div style="clear:both; height:0px; padding:0;"></div>
+	</div>
+#else
+	<span class="chk">$!minimumWage.prefectureの最低賃金：&nbsp;<span class="chk alertText"id="minimumWageVal">$!minimumWage.wage</span>&nbsp;円</span><br />
+	<div class="note">
+		<div class="minimumWageAttention">注：</div>
+		<div class="minimumWageMessage caution">高校生時給や研修期間であっても最低賃金法は適用されます</div>
+		<div style="clear:both; height:0px; padding:0;"></div>
+		<div class="minimumWageAttention">&nbsp;</div>
+		<div class="minimumWageMessage medium">特定の産業・職業に係わる特定産業別賃金は<a href="./minimum_wage.html" target="_blank" class="refineShopCancel">厚生労働省HP</a>をご確認下さい</div>
+		<div style="clear:both; height:0px; padding:0;"></div>
+	</div>
+#end
+<br />

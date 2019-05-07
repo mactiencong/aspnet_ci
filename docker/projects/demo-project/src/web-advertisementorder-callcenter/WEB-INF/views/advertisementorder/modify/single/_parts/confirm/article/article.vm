@@ -1,0 +1,18 @@
+<h3>原稿内容</h3>
+<div class="section">
+	#parse("/advertisementorder/modify/single/_parts/confirm/article/summary.vm")
+	#parse("/advertisementorder/modify/single/_parts/confirm/article/job.vm")
+	#parse("/advertisementorder/modify/single/_parts/confirm/article/recruitment.vm")
+	#parse("/advertisementorder/modify/single/_parts/confirm/article/entrymethod.vm")
+	#if(!$settings.formCustomize.messageOfSingleOrder.hide)
+		<table class="recoptable" >
+			<col width="18%" /><col width="*" />
+			<tr>
+				<th><span class="labelWithImg">申送り事項</span></th>
+				<td>
+					#escape( $editSingleOrderSheet.advertisementOrder.slips.remarks.message.text )
+				</td>
+			</tr>
+		</table>
+	#end
+</div>

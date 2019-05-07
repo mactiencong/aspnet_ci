@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.hiringprocess.mediaaddinformation.MediaAddInformationDataAccess">
+
+	<typeAlias alias="mediaAddInformation" type="jp.rhp.model.hiringprocess.mediaaddinformation.MediaAddInformation" />
+
+	<resultMap class="mediaAddInformation" id="mediaAddInformation">
+		<result property="item.title.text" column="add_information_title"/>
+		<result property="item.description.text" column="add_information_value"/>
+	</resultMap>
+
+	<select id="listByCandidateId" resultMap="mediaAddInformation">
+		SELECT
+			add_information_title
+			, add_information_value
+		FROM
+			other_media.media_add_information
+		WHERE
+			candidate_id = #candidateId#
+		ORDER BY
+			media_id
+			, media_key_value
+			, add_information_id
+	</select>
+
+</sqlMap>

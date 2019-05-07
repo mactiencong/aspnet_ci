@@ -1,0 +1,73 @@
+<h3>商品</h3>
+<div class="section">
+	#springBind("editJointOrderSheet.item.id")
+	#if($settings.externalContents.mediaGuideLink.isNotEmpty())
+		<div class="mediaGuide"><a href="$settings.externalContents.mediaGuideLink.url" target="_blank">$settings.externalContents.mediaGuideLink.label</a></div>
+	#end
+	<div class="inputSubBox #if(${status.error}) error#end">
+		<div class="boxtitle">
+			<h5>商品選択</h5>
+			<img src="$link.contextPath/images/icnRequired.gif" width="25" height="13" alt="必須" class="requiredMark" />
+		</div>
+		#errorMessages( "editJointOrderSheet.item.id" )
+		<div id="itemValue">
+			#parse("/advertisementorder/modify/joint/_parts/form/order/item.vm")
+		</div>
+		<div style="width:100%; text-align:center; margin-bottom:10px;">
+			<div style="width:400px;margin:0 auto;">
+			<a name="itemSelect" href="" id="itemSelectBtn" class="itemSelect"  >
+				<img src="$link.contextPath/images/btnItemSearch.png" class="rollover" alt="商品検索"/>
+			</a>
+			</div>
+		</div>
+	</div>
+	
+	#if(!$settings.formCustomize.publishImage.hide)
+		<span class="warn">※写真掲載については「あり」を選択しても、プランによって掲載できない場合がございます。</span>
+	#end
+	#if(!$settings.formCustomize.publishImage.hide || !$settings.formCustomize.publishingDate.hide)
+	<table class="recoptable" >
+		<col width="18%" /><col width="*" />
+		#if(!$settings.formCustomize.publishImage.hide)
+		<tr>
+			<th><span class="labelWithImg">写真掲載</span></th>
+			<td class="input">
+				#formRadioButton( 'editJointOrderSheet.advertisementOrder.slips.detail.demand.image.publishType' $editJointOrderSheet.advertisementOrder.slips.detail.demand.image.publishType.options '&nbsp;&nbsp;' 'class="image"' 0 )
+				<span class="imageOn">
+					&nbsp;&nbsp;
+					<span>
+						写真ID&nbsp;
+						#springFormSingleSelect('editJointOrderSheet.advertisementOrder.slips.detail.demand.image.id' $imageOptions 'class="regular bg"')
+					</span>
+					#if($settings.externalContents.publishImageLink.isNotEmpty())
+						<span style="font-size: 12px;"><a href="$settings.externalContents.publishImageLink.url" target="_blank">$settings.externalContents.publishImageLink.label</a></span>
+					#end
+					#errorMessages("editJointOrderSheet.advertisementOrder.slips.detail.demand.image.id")
+				</span>
+				<div>#escape( $settings.formCustomize.publishImage.description )</div>
+			</td>
+		</tr>
+		#end
+		#if(!$settings.formCustomize.publishingDate.hide)
+		<tr>
+			<th><span class="labelWithImg">掲載希望日</span></th>
+			<td class="input">
+				#formInput( "editJointOrderSheet.advertisementOrder.slips.detail.demand.publishingDate.year" ' class="regular bg" style="width:65px;"')年
+				#formSingleSelect( 'editJointOrderSheet.advertisementOrder.slips.detail.demand.publishingDate.month' $editJointOrderSheet.advertisementOrder.slips.detail.demand.publishingDate.partedDate.month.options ' class="regular" style="width:50px;"')月
+				#formSingleSelect( 'editJointOrderSheet.advertisementOrder.slips.detail.demand.publishingDate.day' $editJointOrderSheet.advertisementOrder.slips.detail.demand.publishingDate.partedDate.day.options ' class="regular" style="width:50px;"')日
+
+				#errorMessages("editJointOrderSheet.advertisementOrder.slips.detail.demand.publishingDate")
+				<div>
+					<ul style="font-weight:bold;">
+						<li>①未入力の場合は、最短の掲載日で手配致します。</li>
+						<li>②媒体の発行スケジュールにより、ご希望に添えない場合は翌号の掲載となります。</li>
+						<li>③安全に入稿作業を行うために掲載希望日1週間前を目安に余裕をもってご発注下さい。</li>
+					</ul>
+				</div>
+				<div>#escape( $settings.formCustomize.publishingDate.description )</div>
+			</td>
+		</tr>
+		#end
+	</table>
+	#end
+</div>

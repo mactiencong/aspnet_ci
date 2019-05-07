@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.questionnaire.QuestionnaireDataAccess">
+
+    <typeAlias alias="questionnaire" type="jp.rhp.model.questionnaire.Questionnaire" />
+    <typeAlias alias="question" type="jp.rhp.model.questionnaire.Question" />
+    <typeAlias alias="option" type="jp.rhp.model.questionnaire.Option" />
+    <typeAlias alias="validateType" type="jp.rhp.model.questionnaire.validate.ValidateType" />
+
+    <resultMap class="questionnaire" id="questionnaireList">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
+    <resultMap class="questionnaire" id="questionnaire" groupBy="id">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="questions.questions" resultMap="jp.rhp.dataaccess.questionnaire.QuestionnaireDataAccess.question"/>
+    </resultMap>
+
+    <resultMap class="question" id="question" groupBy="id,questionId">
+        <result property="id" column="questionId"/>
+        <result property="name" column="questionName"/>
+        <result property="description" column="description"/>
+        <result property="guideMessage" column="guideMessage"/>
+        <result property="multiple" column="multiple"/>
+        <result property="display" column="display"/>
+        <result property="questionType.select" column="questionType"/>
+        <result property="numbering" column="numbering"/>
+        <result property="options.options" resultMap="jp.rhp.dataaccess.questionnaire.QuestionnaireDataAccess.option"/>
+        <result property="validateTypes.validateTypes" resultMap="jp.rhp.dataaccess.questionnaire.QuestionnaireDataAccess.validateType"/>
+        <result property="questionnaireId" column="id"/>
+    </resultMap>
+
+    <resultMap class="option" id="option" groupBy="key">
+        <result property="key" column="key"/>
+        <result property="value" column="value"/>
+        <result property="priority" column="priority"/>
+    </resultMap>
+
+    <resultMap class="validateType" id="validateType" groupBy="key">
+        <result property="key" column="validateType"/>
+        <result property="value" column="questionValidatesValue"/>
+    </resultMap>
+
+    <sql id="selectQuestionnaireListCore">
+        select
+            questionnaires.id as id,
+            questionnaires.name as name
+        from
+            questionnaire.questionnaires questionnaires
+    </sql>
+
+    <sql id="selectQuestionnaireCore">
+    <![CDATA[
+        select
+            questionnaires.id as id,
+            questionnaires.name as name,
+            questions.id as questionId,
+            questions.name as questionName,
+            questions.description as description,
+            questions.guide_message as guideMessage,
+            questions.multiple as multiple,
+            questions.display as display,
+            questions.question_type as questionType,
+            questions.numbering as numbering,
+            options.id as optionId,
+            options.key as key,
+            options.value as value,
+            options.priority as priority,
+            question_validates.id as questionValidatesId,
+            question_validates.value as questionValidatesValue,
+            question_validates.validate_type as validateType
+        from
+            questionnaire.questionnaires questionnaires
+    ]]>
+    </sql>
+
+    <sql id="leftOuterJoinQuestions">
+    <![CDATA[
+        left outer join questionnaire.questions questions on
+        (
+            questions.questionnaire = questionnaires.id
+        )
+    ]]>
+    </sql>
+
+    <sql id="leftOuterJoinOptions">
+    <![CDATA[
+        left outer join questionnaire.options options on
+        (
+            options.question = questions.id
+        )
+    ]]>
+    </sql>
+
+    <sql id="leftOuterQuestionValidates">
+    <![CDATA[
+        left outer join questionnaire.question_validates question_validates on
+        (
+            question_validates.question = questions.id
+        )
+    ]]>
+    </sql>
+
+    <sql id="whereOfQuestionnaires">
+        where questionnaires.id = #id#
+    </sql>
+
+    <sql id="orderByQuestionnaireListCore">
+    <![CDATA[
+        order by questionnaires.name
+    ]]>
+    </sql>
+
+    <sql id="orderByQuestionnaireCore">
+    <![CDATA[
+        order by questions.numbering, options.priority, question_validates.action_order
+    ]]>
+    </sql>
+
+    <select id="getId" resultClass="long">
+        select nextval('questionnaire.questionnaires_id')
+    </select>
+
+    <select id="listAll" resultMap="questionnaireList">
+        <include refid="selectQuestionnaireListCore"/>
+        <include refid="orderByQuestionnaireListCore"/>
+    </select>
+
+    <select id="findById" resultMap="questionnaire">
+        <include refid="selectQuestionnaireCore"/>
+        <include refid="leftOuterJoinQuestions"/>
+        <include refid="leftOuterJoinOptions"/>
+        <include refid="leftOuterQuestionValidates"/>
+        <include refid="whereOfQuestionnaires"/>
+        <include refid="orderByQuestionnaireCore"/>
+    </select>
+
+    <sql id="selectEntriedQuestionnaireIds">
+        select distinct
+          entried_quectionnaire_ids.questionnaire_id
+        from
+          (
+            <include refid="selectWebEntriedQuestionnaireIds" />
+            union
+            <include refid="selectDirectEntriedQuestionnaireId" />
+          ) entried_quectionnaire_ids
+    </sql>
+
+    <sql id="selectWebEntriedQuestionnaireIds">
+    <![CDATA[
+        select
+          job_offer_questionnaire.questionnaire_id
+        from
+          joboffer.job_offer_questionnaire
+          inner join
+            entry.web_entries
+            on job_offer_questionnaire.job_offer_id = web_entries.job_offer_id
+    ]]>
+    </sql>
+
+    <sql id="selectDirectEntriedQuestionnaireId">
+    <![CDATA[
+        select
+          direct_entry_questionnaire.questionnaire_id
+        from
+          entry.direct_entry_questionnaire
+        where
+          ( select count(1) from entry.direct_entries ) > 0
+    ]]>
+    </sql>
+
+    <select id="getEntriedQuestionnaireIds" resultClass="long">
+        <include refid="selectEntriedQuestionnaireIds" />
+    </select>
+
+    <select id="getEntriedById" resultClass="long">
+        <include refid="selectEntriedQuestionnaireIds" />
+        where
+          entried_quectionnaire_ids.questionnaire_id = #id#
+    </select>
+
+    <insert id="register" parameterClass="questionnaire">
+        insert into questionnaire.questionnaires
+        ( id, name )
+        values
+        ( #id#, #name# )
+    </insert>
+
+    <delete id="delete">
+        delete from
+          questionnaire.questionnaires
+        where
+          id = #id#
+    </delete>
+</sqlMap>

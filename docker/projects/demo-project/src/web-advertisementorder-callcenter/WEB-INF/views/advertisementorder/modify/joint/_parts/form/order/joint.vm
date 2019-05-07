@@ -1,0 +1,82 @@
+<h3>発注概要</h3>
+<div class="section">
+	<table class="recoptable" >
+		<col width="18%" /><col width="32%" /><col width="18%" /><col width="32%" />
+		<tr>
+			<th>発注番号</th>
+			<td>#escape($!{editJointOrderSheet.advertisementOrder.id})</td>
+			<th>発注依頼日時</th>
+			<td>
+			$date.format('yyyy/MM/dd(E) HH:mm',$!{editJointOrderSheet.advertisementOrder.orderDateTime.timeStamp.date})
+			</td>
+		</tr>
+		<tr>
+			<th>発注種別</th>
+			<td>
+				#escape($editJointOrderSheet.advertisementOrder.type.label())
+			</td>
+			<th>発注状態</th>
+			<td>
+				#escape($!{editJointOrderSheet.advertisementOrder.status.orderStatus.name.value})
+			</td>
+		</tr>
+		<tr>
+			<th>登録者名</th>
+			<td>#escape($!{editJointOrderSheet.advertisementOrder.slips.detail.source.registrant.name.value})</td>
+			<th>登録者メールアドレス</th>
+			<td>#escape($!{editJointOrderSheet.advertisementOrder.slips.detail.source.registrant.contact.mailAddress.mailAddress})</td>
+		</tr>
+	</table>
+	<table class="recoptable" >
+		<col width="18%" /><col width="32%" /><col width="18%" /><col width="32%" />
+		<tr>
+			<th #if(!$settings.formCustomize.faxNumber.hide) rowspan="2" #end><span class="labelWithImg">申込者名</span>#required('class="needIcon"')</th>
+			<td #if(!$settings.formCustomize.faxNumber.hide) rowspan="2" #end class="input">
+				#formInput("editJointOrderSheet.advertisementOrder.slips.detail.source.orderer.name.value" 'class="regular bg"')
+				#errorMessages("editJointOrderSheet.advertisementOrder.slips.detail.source.orderer.name.value")
+			</td>
+			<th><span class="labelWithImg">緊急連絡先</span>#required('class="needIcon"')</th>
+			<td class="input">
+				#formInput("editJointOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.phoneNumber.areaCode" 'class="regular bg" style="width:50px;"')
+				 - #formInput("editJointOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.phoneNumber.localOffeceNumber" 'class="regular bg" style="width:50px;"')
+				 - #formInput("editJointOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.phoneNumber.number" 'class="regular bg" style="width:50px;"')
+				#errorMessages("editJointOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.phoneNumber")
+				#errorMessages("editJointOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.phoneNumber.*")
+			</td>
+		</tr>
+		#if(!$settings.formCustomize.faxNumber.hide)
+		<tr>
+			<th><span class="labelWithImg">FAX番号</span>#requiredCustom( $settings.formCustomize.faxNumber.required, 'class="needIcon"')</th>
+				<td class="input">
+					#formInput("editJointOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.faxNumber.areaCode" 'class="regular bg" style="width:50px;"')
+					 - #formInput("editJointOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.faxNumber.localOffeceNumber" 'class="regular bg" style="width:50px;"')
+					 - #formInput("editJointOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.faxNumber.subscriberNumber" 'class="regular bg" style="width:50px;"')
+					#errorMessages("editJointOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.faxNumber")
+					#errorMessages("editJointOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.faxNumber.*")
+					<div>#escape( $settings.formCustomize.faxNumber.description )</div>
+				</td>
+			</tr>
+		#end
+	</table>
+	#if($settings.function.useArticleConfirmation)
+    	<table class="recoptable">
+    		<col width="18%" /><col width="32%" /><col width="*" />
+    		<tr>
+    			<th>
+    				<span class="labelWithImg">原稿確認</span>
+    			</th>
+    			<td class="input articleConfirm">
+    				#formRadioButton( 'editJointOrderSheet.advertisementOrder.slips.remarks.articleConfirmation' $editJointOrderSheet.advertisementOrder.slips.remarks.articleConfirmation.radioOprions() '&nbsp;&nbsp;' '' '' '' 0 )
+    			</td>
+				<td class="input">
+    				<span class="warn">
+    					#escape( $settings.formCustomize.articleConfirmation.description )
+    				</span>
+        		</td>
+    		</tr>
+        </table>
+	#end
+	<div id="operationalNote"> 
+		#parse("/advertisementorder/modify/joint/_parts/form/order/operationalnote.vm")
+	</div>
+</div>

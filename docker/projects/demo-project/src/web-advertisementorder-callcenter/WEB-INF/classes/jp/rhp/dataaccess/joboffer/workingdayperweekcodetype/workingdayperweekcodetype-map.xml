@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.joboffer.workingdayperweekcodetype.WorkingDayPerWeekCodeTypeDataAccess">
+
+	<typeAlias alias="workingDayPerWeekCodeType" type="jp.rhp.model.joboffer.recruitment.workingdayperweekcodetype.WorkingDayPerWeekCodeType" />
+
+	<resultMap class="workingDayPerWeekCodeType" id="workingDayPerWeekCodeType">
+		<result property="code" column="code"/>
+		<result property="name" column="name"/>
+	</resultMap>
+
+	<sql id="select">
+		SELECT
+			working_day_per_week_code_type.code,
+			working_day_per_week_code_type.name
+		FROM
+			joboffer.working_day_per_week_code_type
+	</sql>
+
+	<select id="listAll" resultMap="workingDayPerWeekCodeType">
+		<include refid="select"/>
+		ORDER BY
+			working_day_per_week_code_type.code
+	</select>
+
+</sqlMap>

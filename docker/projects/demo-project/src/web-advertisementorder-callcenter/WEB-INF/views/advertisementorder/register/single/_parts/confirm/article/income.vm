@@ -1,0 +1,85 @@
+#if( $!{newSingleOrderSheet.article.jobOffer.recruitment.jobOfferIncome.use()} )
+<tr>
+	<th>給与</th>
+	<td>#escape( $!{newSingleOrderSheet.article.jobOffer.recruitment.jobOfferIncome.text.detailText.value})</td>
+<tr>
+#else
+#if($!{newSingleOrderSheet.article.jobOffer.recruitment.income.cassette})
+#set( $cassetteIncome = $!{newSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome} )
+<tr>
+	<th>給与</th>
+	<td>
+		<table summary="layout" class="innerTable regular">
+			<col width="40%"/><col width="*"/>
+			<tr>
+				<td>給与形態</td>
+				<td>時給（01）</td>
+			</tr>
+			<tr>
+				<td>基本時給(平日時給)</td>
+				<td>
+					$text.priceFormat($!{cassetteIncome.baseWage}) 円
+				</td>
+			</tr>
+			<tr>
+				<td>土日時給</td>
+				<td>
+					$text.priceFormat($!{cassetteIncome.weekendWage}) 円
+				</td>
+			</tr>
+			<tr>
+				<td>高校生可否</td>
+				<td >#set($isStudentPossible = $!{cassetteIncome.highSchoolStudentWage.possibility.possible})
+					#if($!isStudentPossible)可 #else 不可 #end&nbsp;
+				</td>
+			</tr>
+			#if($!isStudentPossible)
+			<tr>
+				<td class="hssObj">高校生時給(マイナス入力)</td>
+				<td class="hssObj">
+					-#escape($text.priceFormat($!{cassetteIncome.highSchoolStudentWage.diff}))円&nbsp;(&nbsp;$text.priceFormat($!{cassetteIncome.calcStudentWage})円&nbsp;)
+				</td>
+			</tr>
+			#end
+			<tr>
+				<td>研修有無</td>
+				<td>#set($isTrainigExist = $!{cassetteIncome.training.existence.exist})
+					#if($!isTrainigExist)有り #else 無し #end&nbsp;
+				</td>
+			</tr>
+			#if($!isTrainigExist)
+			<tr>
+				<td class="tngObj">研修期間</td>
+				<td class="tngObj">
+					$!{cassetteIncome.training.trainingPeriod.number} $trainingPeriodUnitMap.get($!{cassetteIncome.training.trainingPeriod.unit.type}) $trainingPeriodAdditionMap.get($!{cassetteIncome.training.trainingPeriod.addition.id})
+				</td>
+			</tr>
+			<tr>
+				<td class="tngObj">研修時給(マイナス入力)</td>
+				<td class="tngObj">
+					-#escape($text.priceFormat($!{cassetteIncome.training.wage.diff}))円&nbsp;(&nbsp;$text.priceFormat($!{cassetteIncome.calcTrainingWage})円&nbsp;)
+				</td>
+			</tr>
+			#end
+			#if($isTrainigExist && $!isStudentPossible)
+			<tr>
+				<td class="hsstngObj">高校生研修時給</td>
+				<td class="hsstngObj last">
+					$text.priceFormat($!{cassetteIncome.training.wage.studentWage}) 円
+				</td>
+			</tr>
+			#end
+		</table>
+	</td>
+</tr>
+#else<tr>
+	<th>給与</th>
+	<td>
+		<div style="margin-bottom:10px;">
+			給与形態：<span style="margin-left:5px;">$!{incomeFormList.getName($newSingleOrderSheet.article.jobOffer.recruitment.income.incomeForm.incomeFormCode)}</span>
+		</div>
+		#escape($!{newSingleOrderSheet.article.jobOffer.recruitment.income.description.text})
+	</td>
+</tr>
+#end
+#end

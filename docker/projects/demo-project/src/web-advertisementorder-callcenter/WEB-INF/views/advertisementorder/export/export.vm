@@ -1,0 +1,50 @@
+#recopHtml()
+<head>
+	#recopHead('発注データ出力')
+	#javascript("$link.contextPath/js/jquery.ui.datepicker2.js")
+	#javascript("$link.contextPath/js/jquery.mousewheel.js")
+	#javascript("$link.contextPath/js/commons/timespin.js")
+	#javascript("$link.contextPath/js/si.files.js")
+	#javascript("$link.contextPath/js/advertisementorder/export.js")
+<script type="text/javascript">
+	$(document).ready(function(){
+		recop.settings.urlCalendarIconImage = '$link.contextPath/images/icnCalendar2.gif';
+		recop.settings.urlBaseImage         = '$link.contextPath/images/';
+		recop.settings.urlReload            = '$link.relativeAndCompany("/advertisementorder/export/reload")';
+		recop.settings.urlChangePerPage     = '$link.relativeAndCompany("/advertisementorder/export/changePerPage")';
+		$.advertisementOrderExport();
+	});
+</script>
+</head>
+
+<body>
+#recopHeader()
+<hr />
+
+<div id="container">
+<div class="pannel">
+<div class="inner">
+<div class="content">
+<div class="ttlBlock">
+	<h2 class="export">発注データ出力</h2>
+	<div style="position:absolute; right:110px; top:8px;">
+		<a href="$link.relativeAndCompany("/advertisementorder/history/list")"><img src="$link.contextPath/images/btnGoList02.png" alt="一覧に戻る" class="return rollover" /></a>
+	</div>
+</div><!-- //ttlBlock -->
+
+#parse( "/advertisementorder/export/_parts/form.vm" )
+<div class="section usrInf">
+	<div id="_result">
+		#parse( "/advertisementorder/export/_parts/result.vm" )
+	</div>
+	<div class="registBtn">
+		<a href='$link.relativeAndCompany("/advertisementorder/history/list")' class="return compact ctr"><img src="$link.contextPath/images/btnGoList02.png" alt="一覧に戻る" width="90" height="33" class="rollover" /></a>
+	</div>
+</div>
+</div><!-- //content -->
+</div><!-- //inner -->
+</div><!-- //pannel -->
+</div><!-- //container -->
+#recopFooter()
+</body>
+</html>

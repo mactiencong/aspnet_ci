@@ -1,0 +1,62 @@
+<h3>発注概要</h3>
+<div class="section">
+	<div class="modeSelect">
+		<ul class="richRadio">
+			<li class="left" id="singleOrderBtn">通常発注</li>
+			<li class="right selected">合同発注</li>
+		</ul>
+		<div class="clrFix"></div>
+	</div>
+	<table class="recoptable" >
+		<col width="18%" /><col width="32%" /><col width="18%" /><col width="32%" />
+		<tr>
+			<th #if(!$settings.formCustomize.faxNumber.hide)rowspan="2"#end><span class="labelWithImg">申込者名</span>#required('class="needIcon"')</th>
+			<td #if(!$settings.formCustomize.faxNumber.hide)rowspan="2"#end class="input">
+				#formInput("newJointOrderSheet.advertisementOrder.slips.detail.source.orderer.name.value" 'class="regular bg"')
+				#errorMessages("newJointOrderSheet.advertisementOrder.slips.detail.source.orderer.name.value")
+			</td>
+			<th><span class="labelWithImg">緊急連絡先</span>#required('class="needIcon"')</th>
+			<td class="input">
+				#formInput("newJointOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.phoneNumber.areaCode" 'class="regular bg" style="width:50px;"')
+				 - #formInput("newJointOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.phoneNumber.localOffeceNumber" 'class="regular bg" style="width:50px;"')
+				 - #formInput("newJointOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.phoneNumber.number" 'class="regular bg" style="width:50px;"')
+				#errorMessages("newJointOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.phoneNumber")
+				#errorMessages("newJointOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.phoneNumber.*")
+			</td>
+		</tr>
+	#if(!$settings.formCustomize.faxNumber.hide)
+		<tr>
+			<th><span class="labelWithImg">FAX番号</span>#requiredCustom( $settings.formCustomize.faxNumber.required, 'class="needIcon"')</th>
+			<td class="input">
+				#formInput("newJointOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.faxNumber.areaCode" 'class="regular bg" style="width:50px;"')
+				 - #formInput("newJointOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.faxNumber.localOffeceNumber" 'class="regular bg" style="width:50px;"')
+				 - #formInput("newJointOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.faxNumber.subscriberNumber" 'class="regular bg" style="width:50px;"')
+				#errorMessages("newJointOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.faxNumber")
+				#errorMessages("newJointOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.faxNumber.*")
+				<div>#escape( $settings.formCustomize.faxNumber.description )</div>
+			</td>
+		</tr>
+	#end
+	</table>
+	#if($settings.function.useArticleConfirmation)
+    	<table class="recoptable">
+    		<col width="18%" /><col width="32%" /><col width="*" />
+    		<tr>
+    			<th>
+    				<span class="labelWithImg">原稿確認</span>
+    			</th>
+    			<td class="input articleConfirm">
+    				#formRadioButton( 'newJointOrderSheet.advertisementOrder.slips.remarks.articleConfirmation' $newJointOrderSheet.advertisementOrder.slips.remarks.articleConfirmation.radioOprions() '&nbsp;&nbsp;' '' '' '' 0 )
+    			</td>
+    			<td class="input">
+    				<span class="warn">
+    					#escape( $settings.formCustomize.articleConfirmation.description )
+    				</span>
+        		</td>
+    		</tr>
+        </table>
+	#end
+	<div id="operationalNote">
+		#parse("/advertisementorder/register/joint/_parts/form/order/operationalnote.vm")
+	</div>
+</div>

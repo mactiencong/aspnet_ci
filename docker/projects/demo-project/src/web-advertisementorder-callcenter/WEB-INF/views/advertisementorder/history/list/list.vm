@@ -1,0 +1,58 @@
+#recopHtml()
+<head>
+#recopHead('発注履歴｜発注管理')
+
+#css("$link.contextPath/css/advertisementorder/advertisementorder.css")
+#javascript("$link.contextPath/js/advertisementorder/history.js")
+#javascript("$link.contextPath/js/jquery.ui.datepicker2.js")
+<script type="text/javascript">
+	$(document).ready(function(){
+		recop.settings.urlCalendarIconImage = '$link.contextPath/images/icnCalendar2.gif';
+		recop.settings.urlFindWorkplace     = '$link.relativeAndCompany("/advertisementorder/history/findworkplace")';
+		recop.settings.urlSearch            = '$link.relativeAndCompany("/advertisementorder/history/search")';
+		recop.settings.urlReload            = '$link.relativeAndCompany("/advertisementorder/history/list")';
+		recop.settings.urlChangePerPage     = '$link.relativeAndCompany("/advertisementorder/history/changePerPage")';
+		recop.settings.urlSort              = '$link.relativeAndCompany("/advertisementorder/history/sort")';
+		recop.settings.urlChangeStatus      = '$link.relativeAndCompany("/advertisementorder/history/changeorderstatus")';
+		recop.settings.urlMassSelectionStatusModify = "$link.relativeAndCompany("/advertisementorder/status/bulkChange")";
+		$.advertisementOrderHistory();
+	});
+</script>
+
+#set( $criteria = $listingAdvertisementOrderCriteria )
+#set( $criteriaPath = 'listingAdvertisementOrderCriteria' )
+</head>
+<body>
+#recopHeader()
+<hr />
+<div  id="container">
+<div class="pannel">
+<div class="inner">
+<div class="content">
+	<div class="ttlBlock" style="position:relative; width:100%;">
+		<h2 class="employ">発注履歴</h2>
+		<div style="position:absolute; right:0; top:5px;">
+			<a href="$link.relativeAndCompany("/advertisementorder/register")"><img src="$link.contextPath/images/btnNewOrder.png" alt="新しく発注する" class="rollover" /></a>
+		</div>
+	</div><!-- //ttlBlock -->
+	<div style="clear:both;"></div>
+	<div id="_searchCriteria">
+		#parse("/advertisementorder/history/list/search/search.vm")
+	</div>
+	<div id="_result">
+		#parse("/advertisementorder/history/list/result/result.vm")
+	</div>
+	<div>
+		<form id="tokenManagement" name="tokenManagement" action="#" method="post">
+			#csrfToken()
+		</form>
+	</div>
+</div><!-- //content -->
+</div><!-- //inner -->
+</div><!-- //pannel -->
+</div><!-- //container -->
+
+#recopFooter()
+
+</body>
+</html>

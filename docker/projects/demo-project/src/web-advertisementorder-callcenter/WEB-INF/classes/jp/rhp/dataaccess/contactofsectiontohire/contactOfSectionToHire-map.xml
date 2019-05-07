@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.contactofsectiontohire.ContactOfSectionToHireDataaccess">
+
+	<resultMap class="jp.rhp.model.contactofsectiontohire.ContactOfSectionToHire" id="contactOfSectionToHire" groupBy="sectionToHire.id" >
+		<result property="sectionToHire.id" 										column="section_to_hire_id"/>
+		<result property="sectionToHire.name" 										column="section_to_hire_name"/>
+		<result property="sectionToHire.groupId" 									column="section_group_id"/>
+		<result property="sectionToHire.nameKana.value" 							column="name_kana"/>
+		<result property="sectionToHire.shopNumber.value"							column="replace_shop_number"/>
+		<result property="sectionToHire.businessModelType.name"						column="business_model_name"/>
+		<result property="sectionToHire.status.openingStatusType.name"				column="opening_status_name"/>
+		<result property="sectionToHire.contact.telephoneNumber.telephoneNumber" 	column="telephone_number"/>
+		<result property="sectionToHire.address.street.text" 						column="address_street"/>
+		<result property="sectionToHire.address.buildingName.text"					column="address_building_name"/>
+		<result property="shopUserList.list" 										resultMap="jp.rhp.dataaccess.contactofsectiontohire.ContactOfSectionToHireDataaccess.shopUser" />
+		<result property="sectionToHire.callCenterMemo.text"						column="callcenter_memo"/>
+		<result property="sectionToHire.sectionToHireMemo"							column="section_to_hire_memo"/>
+	</resultMap>
+
+	<resultMap class="jp.rhp.model.contactofsectiontohire.shopuser.ShopUser" id="shopUser" >
+		<result property="id" 													column="user_id"/>
+		<result property="name.value" 											column="full_name" />
+		<result property="mailAddress.mailAddress"								column="user_mail_address"/>
+	</resultMap>
+	
+	<select id="listOfCriteria" resultMap="contactOfSectionToHire" parameterClass="jp.rhp.model.contactofsectiontohire.criteria.ContactOfSectionToHireCriteria">
+        WITH tbl_data AS (
+            SELECT 
+                active_users.user_id,
+                active_users.full_name,
+                active_users.user_mail_address,
+                section_to_hire.section_to_hire_id,
+                section_to_hire.section_to_hire_name,
+                section_to_hire.section_group_id,
+                section_to_hire.address_street,
+                section_to_hire.address_building_name,
+                section_to_hire.priority,
+                section_to_hire_name_kana.name_kana,
+                business_model_type.name AS business_model_name,
+                opening_status_type.name AS opening_status_name,
+                CASE shop_number.shop_number
+                WHEN '' THEN
+                    NULL
+                ELSE
+                    shop_number.shop_number
+                END AS replace_shop_number,
+                section_to_hire_telephone_number.telephone_number,
+                callcenter_memo.memo AS callcenter_memo,
+                section_to_hire_memo_latest.memo AS section_to_hire_memo
+            FROM
+                hiring.section_to_hire
+            LEFT JOIN
+                hiring.latest_callcenter_memo
+            ON
+                latest_callcenter_memo.section_to_hire_id = section_to_hire.section_to_hire_id
+            LEFT JOIN
+                hiring.callcenter_memo
+            ON
+                latest_callcenter_memo.callcenter_memo_id = callcenter_memo.id
+            LEFT JOIN
+                hiring.section_to_hire_memo_latest
+            ON
+                section_to_hire_memo_latest.section_to_hire_id = section_to_hire.section_to_hire_id
+            LEFT OUTER JOIN
+                hiring.shop_number
+            ON
+                shop_number.section_to_hire_id = section_to_hire.section_to_hire_id
+            LEFT OUTER JOIN
+                hiring.section_to_hire_name_kana
+            ON
+                section_to_hire_name_kana.section_to_hire_id = section_to_hire.section_to_hire_id
+            LEFT OUTER JOIN
+                hiring.section_to_hire_name_kana_for_search
+            ON
+                section_to_hire_name_kana_for_search.section_to_hire_id = section_to_hire.section_to_hire_id
+            LEFT OUTER JOIN
+                hiring.callcenter_memo_for_search
+            ON
+                 callcenter_memo_for_search.section_to_hire_id = section_to_hire.section_to_hire_id
+            LEFT OUTER JOIN
+                hiring.section_to_hire_telephone_number
+            ON
+                section_to_hire_telephone_number.section_to_hire_id = section_to_hire.section_to_hire_id
+            LEFT OUTER JOIN
+                hiring.section_to_hire_business_model
+            ON
+                section_to_hire_business_model.section_to_hire_id = section_to_hire.section_to_hire_id
+            LEFT OUTER JOIN
+                hiring.business_model_type
+            ON
+                business_model_type.type = section_to_hire_business_model.business_model_type
+            LEFT OUTER JOIN
+                hiring.section_to_hire_opening_status_type
+            ON
+                section_to_hire_opening_status_type.section_to_hire_id = section_to_hire.section_to_hire_id
+            LEFT OUTER JOIN
+                hiring.opening_status_type
+            ON
+                opening_status_type.type = section_to_hire_opening_status_type.opening_status_type
+            LEFT OUTER JOIN
+                account.user_x_section_to_hire
+            ON
+                user_x_section_to_hire.section_to_hire_id = section_to_hire.section_to_hire_id
+            LEFT OUTER JOIN
+                account.active_users
+            ON
+                active_users.user_id = user_x_section_to_hire.user_id
+            AND
+                active_users.role IN (
+                    SELECT
+                        roles.role 
+                    FROM 
+                        account.roles
+                    WHERE 
+                        roles.role 
+                    IN 
+                        ('SHOP','HIRING_SHOP')
+                    )
+            <isNotEmpty property="condition.freeWord.value">
+            <iterate property="condition.freeWordList.list" >
+                JOIN
+                    ( SELECT public.han2zenkana( regexp_replace(#condition.freeWordList.list[].value#, '([%_])', E'\\\\\\1', 'g' ) ) as key ) as $condition.freeWordList.list[].index$ on true
+            </iterate>
+            </isNotEmpty>
+            WHERE
+                <![CDATA[
+                    section_to_hire.section_to_hire_id  <> 0
+                ]]>
+            <isNotEmpty property="condition.freeWord.value">
+            <iterate property="condition.freeWordList.list" >
+            <isNotEmpty property="condition.freeWordList.list[].value" prepend="AND">
+                (
+                        section_to_hire.section_to_hire_name
+                    LIKE
+                        '%' || regexp_replace( #condition.freeWordList.list[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+                    OR
+                        section_to_hire_name_kana_for_search.name_kana
+                    LIKE
+                        '%' || $condition.freeWordList.list[].index$.key || '%'
+                    OR
+                        shop_number.shop_number
+                    LIKE
+                        '%' || regexp_replace( #condition.freeWordList.list[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+                    OR
+                        replace( section_to_hire_telephone_number.telephone_number, '-', '' )
+                    LIKE
+                        '%' || replace( regexp_replace( #condition.freeWordList.list[].value#, '([%_])', E'\\\\\\1', 'g' ), '-', '' ) || '%'
+                    OR
+                        active_users.full_name
+                    LIKE
+                        '%' || regexp_replace( #condition.freeWordList.list[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+                    OR
+                        active_users.user_mail_address
+                    LIKE
+                        '%' || regexp_replace( #condition.freeWordList.list[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+                    <isEqual property="isDisplayCallcenterMemo" compareValue="true">
+                    OR
+                        callcenter_memo_for_search.memo
+                    LIKE
+                        '%' || $condition.freeWordList.list[].index$.key || '%'
+                    </isEqual>
+                    <isEqual property="isDisplaySectionToHireMemo" compareValue="true">
+                    OR
+                        section_to_hire_memo_latest.memo
+                    LIKE
+                        '%' || regexp_replace( #condition.freeWordList.list[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+                    </isEqual>
+                    )
+            </isNotEmpty>
+            </iterate>
+            </isNotEmpty>
+            ) 
+            SELECT * 
+            FROM
+                tbl_data 
+            INNER JOIN 
+                (SELECT DISTINCT 
+                ON 
+                    (replace_shop_number,priority,section_to_hire_id) section_to_hire_id
+                FROM
+                    tbl_data 
+                ORDER BY
+                    replace_shop_number,priority 
+                OFFSET #page.offset# LIMIT #page.limit#
+                )
+                tbl_data2 ON tbl_data.section_to_hire_id = tbl_data2.section_to_hire_id
+            ORDER BY
+                tbl_data.replace_shop_number, tbl_data.priority, tbl_data.user_id
+    </select>
+
+    <select id="countOfCriteria" resultClass="java.lang.Integer" parameterClass="jp.rhp.model.contactofsectiontohire.criteria.ContactOfSectionToHireCriteria">
+        SELECT
+            COUNT( DISTINCT section_to_hire.section_to_hire_id )
+        FROM
+            hiring.section_to_hire
+        LEFT JOIN
+            hiring.latest_callcenter_memo
+        ON
+            latest_callcenter_memo.section_to_hire_id = section_to_hire.section_to_hire_id
+        LEFT JOIN
+            hiring.callcenter_memo
+        ON
+            latest_callcenter_memo.callcenter_memo_id = callcenter_memo.id
+        LEFT JOIN
+            hiring.section_to_hire_memo_latest
+        ON
+            section_to_hire_memo_latest.section_to_hire_id = section_to_hire.section_to_hire_id
+        LEFT OUTER JOIN
+            hiring.shop_number
+        ON
+            shop_number.section_to_hire_id = section_to_hire.section_to_hire_id
+        LEFT OUTER JOIN
+            hiring.section_to_hire_name_kana
+        ON
+            section_to_hire_name_kana.section_to_hire_id = section_to_hire.section_to_hire_id
+        LEFT OUTER JOIN
+            hiring.section_to_hire_name_kana_for_search
+        ON
+            section_to_hire_name_kana_for_search.section_to_hire_id = section_to_hire.section_to_hire_id
+        LEFT OUTER JOIN
+            hiring.callcenter_memo_for_search
+        ON
+            callcenter_memo_for_search.section_to_hire_id = section_to_hire.section_to_hire_id
+        LEFT OUTER JOIN
+            hiring.section_to_hire_telephone_number
+        ON
+            section_to_hire_telephone_number.section_to_hire_id = section_to_hire.section_to_hire_id
+        LEFT OUTER JOIN
+            hiring.section_to_hire_business_model
+        ON
+            section_to_hire_business_model.section_to_hire_id = section_to_hire.section_to_hire_id
+        LEFT OUTER JOIN
+            hiring.business_model_type
+        ON
+            business_model_type.type = section_to_hire_business_model.business_model_type
+        LEFT OUTER JOIN
+            hiring.section_to_hire_opening_status_type
+        ON
+            section_to_hire_opening_status_type.section_to_hire_id = section_to_hire.section_to_hire_id
+        LEFT OUTER JOIN
+            hiring.opening_status_type
+        ON
+            opening_status_type.type = section_to_hire_opening_status_type.opening_status_type
+        LEFT OUTER JOIN
+            account.user_x_section_to_hire
+        ON
+            user_x_section_to_hire.section_to_hire_id = section_to_hire.section_to_hire_id
+        LEFT OUTER JOIN
+            account.active_users
+        ON
+            active_users.user_id = user_x_section_to_hire.user_id
+            AND
+            active_users.role IN (
+                SELECT
+                    roles.role 
+                FROM 
+                    account.roles
+                WHERE 
+                    roles.role 
+                IN 
+                    ('SHOP','HIRING_SHOP')
+            )
+        <isNotEmpty property="condition.freeWord.value">
+        <iterate property="condition.freeWordList.list" >
+            JOIN
+                ( SELECT public.han2zenkana( regexp_replace(#condition.freeWordList.list[].value#, '([%_])', E'\\\\\\1', 'g' ) ) as key ) as $condition.freeWordList.list[].index$ on true
+        </iterate>
+        </isNotEmpty>
+            WHERE
+                <![CDATA[
+                    section_to_hire.section_to_hire_id  <> 0
+                ]]>
+                <isNotEmpty property="condition.freeWord.value">
+                <iterate property="condition.freeWordList.list" >
+                <isNotEmpty property="condition.freeWordList.list[].value" prepend="AND">
+                (
+                    section_to_hire.section_to_hire_name
+                LIKE
+                    '%' || regexp_replace( #condition.freeWordList.list[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+                OR
+                    section_to_hire_name_kana_for_search.name_kana
+                LIKE
+                    '%' || $condition.freeWordList.list[].index$.key || '%'
+                OR
+                    shop_number.shop_number
+                LIKE
+                    '%' || regexp_replace( #condition.freeWordList.list[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+                OR
+                    replace( section_to_hire_telephone_number.telephone_number, '-', '' )
+                LIKE
+                    '%' || replace( regexp_replace( #condition.freeWordList.list[].value#, '([%_])', E'\\\\\\1', 'g' ), '-', '' ) || '%'
+                OR
+                    active_users.full_name
+                LIKE
+                    '%' || regexp_replace( #condition.freeWordList.list[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+                OR
+                    active_users.user_mail_address
+                LIKE
+                    '%' || regexp_replace( #condition.freeWordList.list[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+                <isEqual property="isDisplayCallcenterMemo" compareValue="true">
+                OR
+                    callcenter_memo_for_search.memo
+                LIKE
+                    '%' || $condition.freeWordList.list[].index$.key || '%'
+                </isEqual>
+                <isEqual property="isDisplaySectionToHireMemo" compareValue="true">
+                OR
+                    section_to_hire_memo_latest.memo
+                LIKE
+                    '%' || regexp_replace( #condition.freeWordList.list[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+                </isEqual>
+                )
+                </isNotEmpty>
+                </iterate>
+                </isNotEmpty>
+    </select>
+
+	<select id="nextCallcenterMemoId" resultClass="java.lang.Integer">
+		SELECT nextval ( 'hiring.callcenter_memo_id' )
+	</select>
+
+	<insert id="insertCallcenterMemo">
+		INSERT INTO
+			hiring.callcenter_memo
+			(
+				id,
+				section_to_hire_id,
+				memo
+			)
+		VALUES 
+		(
+			#callcenterMemoId#,
+			#sectionToHireId#,
+			#memo#
+		)
+	</insert>
+
+	<insert id="insertCallcenterMemoEditUser">
+		INSERT INTO
+			hiring.callcenter_memo_edit_user
+			(
+				callcenter_memo_id,
+				callcenter_user_id,
+				user_name
+			)
+		VALUES
+		(
+			#callcenterMemoId#,
+			#callcenterUserId#,
+			#userName#
+		)
+	</insert>
+
+</sqlMap>

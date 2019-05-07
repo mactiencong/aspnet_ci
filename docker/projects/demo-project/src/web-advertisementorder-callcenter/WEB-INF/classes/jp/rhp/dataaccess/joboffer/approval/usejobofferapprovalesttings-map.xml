@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.joboffer.approval.settings.UseJobOfferApprovalSettingDataAccess">
+	
+	<resultMap class="jp.rhp.model.joboffer.approval.settings.UseJobOfferApprovalSetting" id="UseJobOfferApprovalSetting">
+		<result property="use" column="use"/>
+	</resultMap>
+	
+	<select id="findUseJobOfferApprovalSettinng" resultMap="UseJobOfferApprovalSetting">
+		SELECT
+			job_offer_approval_use_settings.use
+		FROM
+			joboffer_approval.job_offer_approval_use_settings
+	</select>
+
+</sqlMap>

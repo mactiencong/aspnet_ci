@@ -1,0 +1,15 @@
+#if(${interviewPlaceOptions.size()}>0)
+	<div style="margin-bottom:15px;text-align:right;">
+		<form name="loadInterviewPlaceTemplateForm" id="loadInterviewPlaceTemplateForm">
+			<span>過去に登録した面接会場を読み込む</span>
+			<select id="id" name="id" class="regular bg placeInput">
+				#foreach( $item in ${interviewPlaceOptions.entrySet()} )
+					<option value="${item.key}">#escape(${item.value})</option>
+				#end
+			</select>
+			<input type="button" value="読み込む" style="padding:3px;" id="loadInterviewPlaceTemplate"/>
+		</form>
+	</div>
+#else
+<!-- -->
+#end

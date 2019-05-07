@@ -1,0 +1,88 @@
+<tr>
+	<th class="a-lt">給与</th>
+		<td #if($hasError) class="input err" #end>
+		<table summary="layout" class="innerTable" id="inputIncome" style="width:100%">
+			<tr>
+				<td>
+					#if($!{newSingleOrderSheet.article.jobOffer.recruitment.jobOfferIncome.use()})
+						<div class="jobDetailText">#escape($!{newSingleOrderSheet.article.jobOffer.recruitment.jobOfferIncome.text.detailText.value})
+					#else
+					<table class="innerTable regular" style="width:100%;">
+						<col width="25%" /><col width="*" />
+						<tbody>
+							#if( $!{newSingleOrderSheet.article.jobOffer.recruitment.income.cassette})
+								<tr>
+									<th>給与形態</th>
+									<td>#escape($!{incomeFormList.getName( $!{newSingleOrderSheet.article.jobOffer.recruitment.income.incomeForm.incomeFormCode} )})</td>
+								</tr>
+								<tr>
+									<th>基本時給(平日時給)</th>
+									<td>#escape( $text.priceFormat( $!{newSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.baseWage} ) )&nbsp;円
+								</tr>
+								<tr>
+									<th>土日時給</th>
+									<td>#escape( $text.priceFormat( $!{newSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.weekendWage} ) )&nbsp;円
+								</tr>
+								<tr>
+									<th>高校生可否</th>
+									<td>
+										#if( $!{newSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.highSchoolStudentWage.possibility.possible} )
+											可
+										#else
+											不可
+										#end
+										&nbsp;
+									</td>
+								</tr>
+								#if( ${newSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.highSchoolStudentWage.possibility.possible})
+									<tr>
+										<th>高校生時給(マイナス入力)</th>
+										<td>-#escape($text.priceFormat( $!{newSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.highSchoolStudentWage.diff} ))&nbsp;円&nbsp;(&nbsp;$text.priceFormat( $!{newSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.calcStudentWage} )&nbsp;円&nbsp;)
+									</tr>
+								#end
+								<tr>
+									<th>研修有無</th>
+									<td>
+										#if( $!{newSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.training.existence.exist} )
+											有り
+										#else
+											無し
+										#end
+										&nbsp;
+									</td>
+								</tr>
+								#if($!{newSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.training.existence.exist} )
+									<tr>
+										<th>研修期間</th>
+										<td>#escape( $!{newSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.training.trainingPeriod.number} ) #escape( $!{newSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.training.trainingPeriod.unit.name} ) #escape( $!{newSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.training.trainingPeriod.addition.value} )</td>
+									</tr>
+									<tr>
+										<th>研修時給(マイナス入力)</th>
+										<td>-#escape($text.priceFormat( $!{newSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.training.wage.diff} ))&nbsp;円&nbsp;(&nbsp;#escape($text.priceFormat( $!{newSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.calcTrainingWage} ))&nbsp;円&nbsp;)</td>
+									</tr>
+									#if( $!{newSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.highSchoolStudentWage.possibility.possible} )
+										<tr>
+											<th>高校生研修時給</th>
+											<td>#escape( $text.priceFormat($!{newSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.training.wage.studentWage} ))&nbsp;円</td>
+										</tr>
+									#end
+								#end
+							#else
+								<tr>
+									<td>
+										<div style="martin-bottom:10px;">
+											給与形態：<span style="margin-left:5px;">#escape( $!{incomeFormList.getName( $!{newSingleOrderSheet.article.jobOffer.recruitment.income.incomeForm.incomeFormCode} )})</span>
+										</div>
+										#escape( $!{newSingleOrderSheet.article.jobOffer.recruitment.income.description.text} )
+									</td>
+								</tr>
+							#end
+						</tbody>
+					</table>
+					#end
+				</td>
+			</tr>
+		</table>
+		#if($hasError) <p class="err">「給与」が最低賃金より低く設定されています。</p> #end
+	</td>
+</tr>

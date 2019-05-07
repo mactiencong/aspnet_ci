@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.sectiontohire.memo.SectionToHireMemoDataAccess">
+
+	<typeAlias alias="sectionToHireMemo" type="jp.rhp.model.sectiontohire.memo.SectionToHireMemo" />
+
+	<resultMap class="sectionToHireMemo" id="sectionToHireMemo">
+		<result property="sectionToHire.id" column="section_to_hire_id"/>
+		<result property="text" column="memo"/>
+	</resultMap>
+
+	<select id="findBySectionToHireId" resultMap="sectionToHireMemo">
+		SELECT
+			section_to_hire_id,
+			memo
+		FROM
+			hiring.section_to_hire_memo_latest
+		WHERE
+			section_to_hire_id = #value#
+	</select>
+
+	<insert id="register">
+		INSERT INTO
+		hiring.section_to_hire_memo
+		( section_to_hire_id, memo )
+		VALUES
+		( #sectionToHire.id#, #text#)
+	</insert>
+</sqlMap>

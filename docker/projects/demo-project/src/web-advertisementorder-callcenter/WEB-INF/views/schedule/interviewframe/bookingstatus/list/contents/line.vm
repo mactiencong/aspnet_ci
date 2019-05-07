@@ -1,0 +1,34 @@
+#set( $when = $interview.frame.dateAndTime )
+<td class="date">$!when.dateAsText()</td>
+<td class="time">$!when.timeRange.asText()</td>
+<td class="booking label">
+	#if( ${interview.overBooking()} )
+	<img class="overbooking" src="$link.contextPath/images/icnRecopWarn_Minimum.gif" alt="予約超過" />
+	#end
+	#if( $interview.hasBooking() )<a href="$link.relativeAndCompany("/sectiontohire/schedule/bookingstatus/${interview.id}")">#end
+	$!interview.frame.capacity.booked
+	/$!interview.frame.capacity.value 名
+	#if( $interview.hasBooking() )</a>#end
+</td>
+<td>#escape(${interview.detail.interviewPlace.name.value})</td>
+<td>
+	#if($interview.detail.remarks.memo == '')&nbsp;#end
+	#escape($interview.detail.remarks.memo)
+</td>
+#if($!{configulation.useBookingForWebEntry})
+<td class="label">
+	#if($interview.openStatus == 'OPEN')
+		<a href="$link.relativeAndCompany("/sectiontohire/schedule/bookingstatus/close/${interview.id}")" onclick="return false;" class="statusChange"><img src="$link.contextPath/images/btnSelectDisclose.gif" width="89" height="28" alt="公開中" /></a>
+	#else
+		<a href="$link.relativeAndCompany("/sectiontohire/schedule/bookingstatus/open/${interview.id}")" onclick="return false;" class="statusChange"><img src="$link.contextPath/images/btnSelectClose.gif" width="89" height="28" alt="非公開" /></a>
+	#end
+</td>
+#end
+<td class="function last">
+	#if( $interview.hasBooking() )
+	<img src="$link.contextPath/images/btnDeleteDisabled.gif" alt="削除" />
+	#else
+	<a href='$link.relativeAndCompany("/sectiontohire/schedule/bookingstatus/delete/${interview.id}")'></a>
+	<a href='#delete' name="delete" class="delete"><img src="$link.contextPath/images/btnDelete.gif" alt="削除" class="rollover" /></a>
+	#end
+</td>

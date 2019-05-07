@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.advertisementorder.notification.parameter.AdvertisementOrderParameterDataAccess">
+
+	<resultMap class="jp.rhp.model.advertisementorder.notification.parameter.AdvertisementOrderParameter" id="advertisementOrderParameter">
+		<result property="number.value"                 column = "advertisemnt_order_id" />
+		<result property="workplace.value"              column = "workplace_name" />
+		<result property="orderType.value"              column = "order_type" />
+		<result property="media.value"                  column = "media_name" />
+		<result property="area.value"                   column = "area_name" />
+		<result property="size.value"                   column = "size" />
+		<result property="price.value"                  column = "price" />
+		<result property="message.value"                column = "message" />
+	</resultMap>
+
+	<select id="findByAdvertisementOrder" resultMap="advertisementOrderParameter">
+		SELECT
+			advertisement_order.id                          	AS advertisemnt_order_id,
+			advertisement_order_type.name                   	AS order_type,
+			array_to_string(
+				array_agg(article_workplace.workplace),','
+			)                                               	AS workplace_name,
+			media.name                                      	AS media_name,
+			area.name                                       	AS area_name,
+			item.size                                       	AS size,
+			to_char( price_of_item.price, 'FM9,999,999,999' )	AS price,
+			advertisement_order_detail.message              	AS message
+		FROM
+			advertisement_order.advertisement_order
+		INNER JOIN
+			advertisement_order.advertisement_order_type
+		ON advertisement_order.type = advertisement_order_type.type
+		INNER JOIN
+			advertisement_order.latest_advertisement_order_detail
+		ON advertisement_order.id = latest_advertisement_order_detail.advertisement_order_id
+		INNER JOIN
+			advertisement_order.advertisement_order_detail
+		ON advertisement_order_detail.id = latest_advertisement_order_detail.advertisement_order_detail_id
+		INNER JOIN
+			advertisement_order.ordered_item
+		ON ordered_item.advertisement_order_detail_id = latest_advertisement_order_detail.advertisement_order_detail_id
+		INNER JOIN
+			advertisement_order_master.item
+		ON item.id = ordered_item.item_id
+		INNER JOIN
+			advertisement_order_master.price_of_item
+		ON price_of_item.item_id = item.id
+		INNER JOIN
+			advertisement_order_master.area
+		ON area.id = item.area_id
+		INNER JOIN
+			advertisement_order_master.media
+		ON media.id = area.media_id
+		INNER JOIN
+			advertisement_order.article
+		ON article.advertisement_order_detail_id = advertisement_order_detail.id
+		INNER JOIN
+			advertisement_order.article_workplace
+		ON article_workplace.article_id = article.id
+		WHERE
+			advertisement_order.id = #id#
+		GROUP BY
+			advertisement_order.id ,
+			advertisement_order_type.name ,
+			media.name ,
+			area.name ,
+			item.size ,
+			price_of_item.price ,
+			advertisement_order_detail.message
+	</select>
+
+</sqlMap>

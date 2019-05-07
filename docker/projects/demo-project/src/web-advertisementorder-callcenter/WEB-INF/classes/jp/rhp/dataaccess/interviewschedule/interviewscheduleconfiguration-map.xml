@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap
+	namespace="jp.rhp.dataaccess.interviewschedule.InterviewScheduleConfigurationDataAccess">
+
+	<typeAlias alias="alternativesConfiguration" type="jp.rhp.model.interviewschedule.configuration.alternatives.AlternativesConfiguration" />
+	<typeAlias alias="jobFindConfiguration" type="jp.rhp.model.interviewschedule.configuration.jobfind.JobFindConfiguration" />
+	<typeAlias alias="interviewScheduleConfiguration" type="jp.rhp.model.interviewschedule.configuration.InterviewScheduleConfigulation" />
+
+	<resultMap class="alternativesConfiguration" id="alternativesConfiguration">
+		<result property="sizeLimit.defaultValue" column="default_frame_size_limit" />
+		<result property="sizeLimit.maxValue" column="max_size_limit" />
+		<result property="dayLimit.defaultValue" column="default_day_limit" />
+		<result property="dayLimit.maxValue" column="max_day_limit" />
+		<result property="interviewBookingUrl.format" column="interview_booking_url_format_for_mail" />
+	</resultMap>
+
+	<resultMap class="jobFindConfiguration" id="jobFindConfiguration">
+		<result property="webEntry.entryRuleAtFullyBooked" column="entry_rule_at_fully_booked" />
+		<result property="webEntry.interviewPlaceMapUrl.format" column="interview_place_map_url_format_for_mail" />
+		<result property="alternatives.sizeLimit.number" column="max_view_size" />
+	</resultMap>
+
+    <resultMap class="interviewScheduleConfiguration" id="interviewScheduleConfiguration">
+        <result property="defaultInterviewCapacity" column="default_interview_capacity"/>
+        <result property="useBookingForWebEntry" column="use_booking_for_web_entry"/>
+    </resultMap>
+    
+    <resultMap class="jp.rhp.model.interviewschedule.configuration.ReservationDeadline" id="reservationDeadlineMap">
+    	<result property="use" column="use_reservation_deadline_hours"/>
+    	<result property="hours" column="reservation_deadline_hours"/>
+    </resultMap>
+
+	<select id="isSendBookingMailFromCandidateToShopUser" resultClass="java.lang.Boolean">
+		SELECT
+			is_send_booking_mail_from_candidate_to_shop_user
+		FROM
+			interview_schedule.configurations
+	</select>
+
+	<select id="isSendInterviewRegisterMail" resultClass="java.lang.Boolean">
+		SELECT
+			is_send_interview_register_mail
+		FROM
+			interview_schedule.configurations
+	</select>
+
+	<select id="useInterviewFrame" resultClass="java.lang.Boolean">
+		SELECT
+			CASE WHEN count(*) > 0 THEN true ELSE false END
+		FROM
+			hiring.interview_booking_method
+		WHERE
+			interview_booking_method_type = 'InterviewFrame'
+	</select>
+
+	<select id="interviewBookingInvitationMailLimitDayCount" resultClass="java.lang.Integer">
+		SELECT
+			interview_booking_invitation_mail_limit_day_count
+		FROM
+			interview_schedule.configurations
+	</select>
+
+	<select id="alternativesConfiguration" resultMap="alternativesConfiguration">
+		SELECT
+			default_frame_size_limit,
+			max_size_limit,
+			default_day_limit,
+			max_day_limit,
+			interview_booking_url_format_for_mail
+		FROM
+			interview_schedule.settings_for_alternatives
+	</select>
+
+	<select id="jobFindConfiguration" resultMap="jobFindConfiguration">
+		SELECT
+			entry_rule_at_fully_booked,
+			interview_place_map_url_format_for_mail,
+			max_view_size
+		FROM
+			interview_schedule.settings_for_jobfind
+	</select>
+
+	<select id="interviewScheduleConfigulation" resultMap="interviewScheduleConfiguration">
+		SELECT
+			configurations.default_interview_capacity,
+			interview_booking_method.use_booking_for_web_entry
+		FROM
+			interview_schedule.configurations
+			,hiring.interview_booking_method
+		WHERE
+			section_to_hire_id = #id#
+    </select>
+    
+    <select id="isNotSendInterviewScheduleNoticeMailEntryCallcenterUserChange" resultClass="java.lang.Boolean">
+    	SELECT
+			CASE WHEN
+				configurations.value = 'true'
+			THEN
+				false
+			WHEN
+				configurations.value = 'false'
+			THEN
+				true
+			ELSE
+				null
+			END
+				
+		FROM
+			employer.configurations
+		WHERE
+			configurations.key = 'send_interview_schedule_notice_mail_entry_callcenter_user_change'
+    </select>
+	
+	<select id="findReservationDeadline" resultMap="reservationDeadlineMap">
+		SELECT
+			configurations.use_reservation_deadline_hours,
+			configurations.reservation_deadline_hours
+		FROM
+			interview_schedule.configurations
+	</select>
+</sqlMap>

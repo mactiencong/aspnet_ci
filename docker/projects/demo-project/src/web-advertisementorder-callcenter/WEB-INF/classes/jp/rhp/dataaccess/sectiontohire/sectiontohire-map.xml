@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.sectiontohire.SectionToHireDataAccess">
+
+	<resultMap class="jp.rhp.model.sectiontohire.SectionToHire" id="sectionToHireMaster">
+		<result property="id" column="section_to_hire_id"/>
+		<result property="name" column="section_to_hire_name"/>
+		<result property="groupId" column="section_group_id"/>
+		<result property="priority" column="priority"/>
+		<result property="interviewBookingMethod" column="interview_booking_method_type" />
+		<result property="fnxContact.candidate.available" column="fnx_candidate_available"/>
+		<result property="fnxContact.candidate.faxNumber.telephoneNumber" column="fnx_candidate_fax_number"/>
+	</resultMap>
+
+	<resultMap class="jp.rhp.model.sectiontohire.address.Prefecture" id="prefecture">
+		<result property="code" column="prefecture_code" />
+		<result property="name" column="prefecture_name" />
+	</resultMap>
+
+	<resultMap class="jp.rhp.model.sectiontohire.address.City" id="city">
+		<result property="code" column="city_code" />
+		<result property="name" column="city_name" />
+	</resultMap>
+
+	<select id="getId" resultClass="Integer">
+		SELECT nextval('hiring.section_to_hire_id')
+	</select>
+
+	<sql id="select">
+		SELECT
+			section_to_hire.section_to_hire_id,
+			section_to_hire.section_to_hire_name,
+			section_to_hire.section_group_id,
+			section_to_hire.priority,
+			interview_booking_method.interview_booking_method_type,
+			settings.available AS fnx_candidate_available,
+			coalesce( section_to_hire_fnx_fax_number.fax_number, '' ) AS fnx_candidate_fax_number
+	</sql>
+
+	<sql id="orderBy">
+		ORDER BY
+			section_to_hire.priority
+	</sql>
+
+	<select id="listAll" resultMap="sectionToHireMaster">
+		<include refid="select"/>
+		FROM
+			hiring.section_to_hire
+		INNER JOIN hiring.interview_booking_method
+		ON( section_to_hire.section_to_hire_id = interview_booking_method.section_to_hire_id )
+		INNER JOIN
+			cooperation_fnx_candidate.settings
+		ON
+			true
+		LEFT OUTER JOIN
+			cooperation_fnx_candidate.section_to_hire_fnx_fax_number
+		ON
+			section_to_hire.section_to_hire_id = section_to_hire_fnx_fax_number.section_to_hire_id
+		WHERE
+			NOT EXISTS
+			(
+				SELECT
+					section_to_hire_id
+				FROM
+					hiring.multiple_section_to_hire_interview
+				WHERE
+					multiple_section_to_hire_interview.section_to_hire_id = section_to_hire.section_to_hire_id
+			)
+		<include refid="orderBy"/>
+	</select>
+
+	<select id="listByFreeword" resultMap="sectionToHireMaster">
+		<include refid="select"/>
+		FROM
+			hiring.section_to_hire
+		INNER JOIN hiring.interview_booking_method
+		ON( section_to_hire.section_to_hire_id = interview_booking_method.section_to_hire_id )
+		INNER JOIN
+			cooperation_fnx_candidate.settings
+		ON
+			true
+		LEFT OUTER JOIN
+			cooperation_fnx_candidate.section_to_hire_fnx_fax_number
+		ON
+			section_to_hire.section_to_hire_id = section_to_hire_fnx_fax_number.section_to_hire_id
+		WHERE
+			section_to_hire.section_to_hire_name LIKE '%'|| #freeword# || '%'
+			AND NOT EXISTS
+			(
+				SELECT
+					section_to_hire_id
+				FROM
+					hiring.multiple_section_to_hire_interview
+				WHERE
+					multiple_section_to_hire_interview.section_to_hire_id = section_to_hire.section_to_hire_id
+			)
+		<include refid="orderBy"/>
+	</select>
+
+	<select id="findById" resultMap="sectionToHireMaster">
+		<include refid="select"/>
+		FROM
+			hiring.section_to_hire
+		INNER JOIN hiring.interview_booking_method
+		ON( section_to_hire.section_to_hire_id = interview_booking_method.section_to_hire_id )
+		INNER JOIN
+			cooperation_fnx_candidate.settings
+		ON
+			true
+		LEFT OUTER JOIN
+			cooperation_fnx_candidate.section_to_hire_fnx_fax_number
+		ON
+			section_to_hire.section_to_hire_id = section_to_hire_fnx_fax_number.section_to_hire_id
+		WHERE
+			section_to_hire.section_to_hire_id = #sectionToHireId#
+	</select>
+
+	<select id="findByWorkplaceId" resultMap="sectionToHireMaster">
+		<include refid="select"/>
+		FROM
+			hiring.section_to_hire
+		INNER JOIN hiring.interview_booking_method
+		ON( section_to_hire.section_to_hire_id = interview_booking_method.section_to_hire_id )
+		INNER JOIN workplace.workplace
+		ON( workplace.section_to_hire_id = section_to_hire.section_to_hire_id )
+		CROSS JOIN
+		cooperation_fnx_candidate.settings
+		LEFT OUTER JOIN
+			cooperation_fnx_candidate.section_to_hire_fnx_fax_number
+		ON
+			section_to_hire.section_to_hire_id = section_to_hire_fnx_fax_number.section_to_hire_id
+		WHERE
+			workplace.workplace_id = #value#
+	</select>
+
+	<select id="findByMinId" resultMap="sectionToHireMaster">
+		<include refid="select"/>
+		<![CDATA[
+		FROM
+			hiring.section_to_hire
+		INNER JOIN hiring.interview_booking_method
+		ON( section_to_hire.section_to_hire_id = interview_booking_method.section_to_hire_id )
+		INNER JOIN
+			cooperation_fnx_candidate.settings
+		ON
+			true
+		LEFT OUTER JOIN
+			cooperation_fnx_candidate.section_to_hire_fnx_fax_number
+		ON
+			section_to_hire.section_to_hire_id = section_to_hire_fnx_fax_number.section_to_hire_id
+		WHERE
+			section_to_hire.section_to_hire_id =
+				( SELECT MIN(section_to_hire_id)
+				  FROM hiring.section_to_hire
+				  WHERE section_to_hire_id <> 0
+				)
+		]]>
+	</select>
+
+	<select id="findByJobOfferId" resultMap="sectionToHireMaster">
+		<include refid="select"/>
+		FROM
+			joboffer.job_offer
+		INNER JOIN
+			workplace.workplace
+		ON
+			job_offer.workplace_id = workplace.workplace_id
+		INNER JOIN
+			hiring.section_to_hire
+		ON
+			workplace.section_to_hire_id = section_to_hire.section_to_hire_id
+		INNER JOIN hiring.interview_booking_method
+		ON( section_to_hire.section_to_hire_id = interview_booking_method.section_to_hire_id )
+		INNER JOIN
+			cooperation_fnx_candidate.settings
+		ON
+			true
+		LEFT OUTER JOIN
+			cooperation_fnx_candidate.section_to_hire_fnx_fax_number
+		ON
+			section_to_hire.section_to_hire_id = section_to_hire_fnx_fax_number.section_to_hire_id
+		WHERE
+			job_offer.job_offer_id = #value#
+	</select>
+
+	<select id="findByCandidateId" resultMap="sectionToHireMaster">
+		<include refid="select"/>
+		FROM
+			hiring_process.candidates
+		INNER JOIN
+			hiring_process.hiring_status
+		ON
+			hiring_status.candidate_id = candidates.candidate_id
+		INNER JOIN
+			hiring.section_to_hire
+		ON
+			hiring_status.section_to_hire_id = section_to_hire.section_to_hire_id
+		INNER JOIN hiring.interview_booking_method
+		ON
+			section_to_hire.section_to_hire_id = interview_booking_method.section_to_hire_id
+		INNER JOIN
+			cooperation_fnx_candidate.settings
+		ON
+			true
+		LEFT OUTER JOIN
+			cooperation_fnx_candidate.section_to_hire_fnx_fax_number
+		ON
+			section_to_hire.section_to_hire_id = section_to_hire_fnx_fax_number.section_to_hire_id
+		WHERE
+			candidates.candidate_id = #value#
+	</select>
+
+	<insert id="register" parameterClass="jp.rhp.model.sectiontohire.SectionToHire">
+		INSERT INTO
+			hiring.section_to_hire
+		(
+			section_to_hire_id,
+			section_to_hire_name,
+			section_group_id,
+			address_street,
+			address_building_name,
+			priority
+		)
+		VALUES
+		(
+			#id#,
+			#name#,
+			#groupId#,
+			#address.street.text#,
+			#address.buildingName.text#,
+			#priority#
+		)
+	</insert>
+
+	<update id="modify" parameterClass="jp.rhp.model.sectiontohire.SectionToHire">
+		UPDATE
+			hiring.section_to_hire
+		SET
+			section_to_hire_name = #name#,
+			section_group_id = #groupId#,
+			address_street = #address.street.text#,
+			address_building_name = #address.buildingName.text#,
+			priority = #priority#,
+			updated_at = now()
+		WHERE
+			section_to_hire_id = #id#
+	</update>
+
+	<update id="modifyName">
+		UPDATE
+			hiring.section_to_hire
+		SET
+			section_to_hire_name = #sectionToHireName#,
+			updated_at = now()
+		WHERE
+			section_to_hire_id = #sectionToHireId#
+	</update>
+
+	<delete id="deleteExceptDefault">
+		DELETE FROM hiring.section_to_hire WHERE section_to_hire_id != 0
+	</delete>
+
+	<select id="getMaxId" resultClass="Integer">
+		SELECT MAX(section_to_hire_id) FROM hiring.section_to_hire
+	</select>
+
+	<select id="setSequenceVal">
+		SELECT SETVAL( 'hiring.section_to_hire_id' , #value# );
+	</select>
+
+	<delete id="deleteCandidateEntryNotificationMailTarget">
+		DELETE FROM hiring_process.candidate_entry_notification_mail_target;
+	</delete>
+	
+	<select id="checkMultipleSectionBy" resultClass="java.lang.Boolean">
+		SELECT
+			CASE
+				WHEN section_to_hire_id IS NOT NULL THEN 'TRUE'
+				ELSE 'FALSE'
+			END
+		FROM
+			hiring.section_to_hire
+		WHERE
+			section_to_hire_id = (
+				SELECT
+					section_to_hire.section_to_hire_id
+				FROM
+					hiring.section_to_hire
+				INNER JOIN
+					hiring.multiple_section_to_hire_interview
+					ON section_to_hire.section_to_hire_id = multiple_section_to_hire_interview.section_to_hire_id
+				INNER JOIN
+					hiring.multiple_section_to_hire_interview_x_section_to_hire
+					ON multiple_section_to_hire_interview.multiple_section_to_hire_interview_id = multiple_section_to_hire_interview_x_section_to_hire.multiple_section_to_hire_interview_id
+				WHERE
+					multiple_section_to_hire_interview_x_section_to_hire.section_to_hire_id = #sectionToHireId#
+					AND multiple_section_to_hire_interview.section_to_hire_id = #interviewSectionToHireId#
+			)OR section_to_hire_id = (
+				SELECT
+					section_to_hire_id
+				FROM
+					hiring.shared_multiple_section_to_hire_interview
+				INNER JOIN
+					hiring.multiple_section_to_hire_interview
+					ON shared_multiple_section_to_hire_interview.multiple_section_to_hire_interview_id = multiple_section_to_hire_interview.multiple_section_to_hire_interview_id
+				WHERE
+					section_to_hire_id = #interviewSectionToHireId#
+			)
+	</select>
+</sqlMap>

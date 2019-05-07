@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.advertisementorder.item.ItemDataAccess">
+
+	<resultMap class="jp.rhp.model.advertisementorder.item.Item" id="item" >
+    	<result property="id" 											column="id"/>
+    	<result property="media.id" 									column="media_id"/>
+    	<result property="media.name.value" 							column="media_name"/>
+    	<result property="plan.price.value" 							column="price"/>
+    	<result property="plan.issue.area.id" 							column="area_id"/>
+    	<result property="plan.issue.area.name.value"					column="area_name"/>
+    	<result property="plan.issue.size.value" 						column="size"/>
+    </resultMap>
+
+	<select id="findById" parameterClass="java.util.HashMap"  resultMap="item" >
+		SELECT
+			item.id              AS id,
+			media.id             AS media_id,
+			media.name           AS media_name,
+			price_of_item.price  AS price,
+			area.id              AS area_id,
+			area.name            AS area_name,
+			item.size            AS size
+
+		FROM
+			advertisement_order_master.item
+		INNER JOIN
+			advertisement_order_master.price_of_item
+		ON item.id = price_of_item.item_id
+		INNER JOIN
+			advertisement_order_master.area
+		ON item.area_id = area.id
+		INNER JOIN
+			advertisement_order_master.media
+		ON area.media_id = media.id
+		INNER JOIN
+			advertisement_order_master.media_company
+		ON	media_company.code = media.media_company_code
+		WHERE item.id = #id#
+		<isEqual property="mediaCompanyList.mediaCompanies.empty" compareValue="false" prepend="AND">
+			media_company.code IN
+			<iterate property="mediaCompanyList.mediaCompanies" open="(" close=")" conjunction=",">
+				#mediaCompanyList.mediaCompanies[].code#
+			</iterate>
+		</isEqual>
+	</select>
+
+</sqlMap>

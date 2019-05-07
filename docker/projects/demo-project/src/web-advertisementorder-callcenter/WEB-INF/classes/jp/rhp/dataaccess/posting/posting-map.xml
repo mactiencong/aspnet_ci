@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.posting.PostingDataAccess">
+
+	<typeAlias alias="posting" type="jp.rhp.model.posting.Posting" />
+
+	<resultMap class="posting" id="posting">
+		<result property="id" column="posting_id"/>
+		<result property="jobOfferId" column="job_offer_id"/>
+		<result property="postingStatus.status" column="status_type"/>
+	</resultMap>
+
+	<sql id="selectPostingCore">
+		SELECT
+			postings.posting_id,
+			postings.job_offer_id,
+			status.status_type,
+			workplace.workplace
+		FROM
+			joboffer.postings postings
+			INNER JOIN joboffer.posting_status status ON
+			(
+				status.posting_id = postings.posting_id
+			)
+			INNER JOIN joboffer.job_offer joboffer ON
+			(
+				joboffer.job_offer_id = postings.job_offer_id
+			)
+			INNER JOIN workplace.workplace workplace ON
+			(
+				workplace.workplace_id = joboffer.workplace_id
+			)
+	</sql>
+
+	<sql id="whereFindById">
+		WHERE
+			postings.posting_id = #value#
+	</sql>
+
+	<sql id="orderBy">
+		ORDER BY
+			postings.job_offer_id, postings.posting_id
+	</sql>
+
+	<select id="getId" resultClass="int">
+		SELECT nextval('joboffer.posting_id')
+	</select>
+
+	<select id="findByJobOfferId" resultMap="posting">
+		SELECT
+			postings.posting_id,
+			postings.job_offer_id,
+			posting_status.status_type
+		FROM
+			joboffer.postings
+		INNER JOIN
+			joboffer.posting_status
+		ON
+			postings.posting_id = posting_status.posting_id
+		WHERE
+			postings.job_offer_id =#value#
+	</select>
+
+	<insert id="register" parameterClass="posting">
+	<![CDATA[
+		INSERT INTO joboffer.postings(
+			posting_id,
+			job_offer_id
+			)
+		VALUES (
+			#id#,
+			#jobOfferId#
+			)
+	]]>
+	</insert>
+
+	<insert id="registerPostingStatus" parameterClass="posting">
+	<![CDATA[
+		INSERT INTO joboffer.posting_status(
+			posting_id,
+			status_type
+			)
+		VALUES (
+			#id#,
+			#postingStatus.status#
+			)
+	]]>
+	</insert>
+
+</sqlMap>

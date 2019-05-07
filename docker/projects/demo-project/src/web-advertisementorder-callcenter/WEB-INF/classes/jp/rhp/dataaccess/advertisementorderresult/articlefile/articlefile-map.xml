@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.advertisementorderresult.articlefile.ArticleFileDataAccess">
+
+	<resultMap id="articleFile" class="jp.rhp.model.advertisementorderresult.articlefile.ArticleFile">
+		<result property="advertisementOrderResultId"	column="advertisement_order_result_id" />
+		<result property="serialNumber"					column="serial_number" />
+		<result property="path"							column="file_path" />
+		<result property="uploadFile.name"				column="file_label" />
+	</resultMap>
+
+	<select id="findArticleFileRootDirectoryPath" resultClass="java.lang.String">
+		SELECT
+			publication_article_file_directory_path
+		FROM
+			advertisement_order.settings
+	</select>
+
+	<select id="findArticleFileByAdvertisementOrderIdAndSerialNumber" resultMap="articleFile">
+		SELECT
+			advertisement_order_result.id			AS advertisement_order_result_id,
+			published_article_file.serial_number	AS serial_number,
+			published_article_file.file_path		AS file_path,
+			published_article_file.file_label		AS file_label
+		FROM
+			advertisement_order.advertisement_order_result
+			INNER JOIN
+				advertisement_order.published_article_file
+			ON
+				advertisement_order_result.id = published_article_file.advertisement_order_result_id
+		WHERE
+			advertisement_order_result.advertisement_order_id = #advertisementOrderId#
+			AND published_article_file.serial_number = #serialNumber#
+	</select>
+
+	<select id="listOfArticleFileByAdvertisementOrderId" resultMap="articleFile">
+		SELECT
+			advertisement_order_result.id			AS advertisement_order_result_id,
+			published_article_file.serial_number	AS serial_number,
+			published_article_file.file_path		AS file_path,
+			published_article_file.file_label		AS file_label
+		FROM
+			advertisement_order.advertisement_order_result
+			INNER JOIN
+				advertisement_order.published_article_file
+			ON
+				advertisement_order_result.id = published_article_file.advertisement_order_result_id
+		WHERE
+			advertisement_order_result.advertisement_order_id = #advertisementOrderId#
+	</select>
+
+	<insert id="registerArticleFile" parameterClass="jp.rhp.model.advertisementorderresult.articlefile.ArticleFile">
+		INSERT INTO advertisement_order.published_article_file (
+			advertisement_order_result_id,
+			serial_number,
+			file_path,
+			file_label
+		) VALUES (
+			#advertisementOrderResultId#,
+			#serialNumber#,
+			#path#,
+			#uploadFile.name#
+		)
+	</insert>
+
+	<delete id="removeArticleFile" parameterClass="jp.rhp.model.advertisementorderresult.articlefile.ArticleFile">
+		DELETE FROM
+			advertisement_order.published_article_file
+		WHERE
+			advertisement_order_result_id = #advertisementOrderResultId#
+			AND serial_number = #serialNumber#
+	</delete>
+
+</sqlMap>

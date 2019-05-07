@@ -1,0 +1,24 @@
+<div class="section">
+	<h4>応募方法</h4>
+	<table class="recoptable" summary="案件情報">
+		<col width="18%" /><col width="*" />
+		<tr>
+			<th>WEB応募の利用可否</th>
+			<td>
+				#escape($!{articleForPreview.jobOffer.application.useWebEntry.name})
+			</td>
+		</tr>
+		<tr>
+			<th>応募方法</th>
+			<td>
+				#escape($!{articleForPreview.jobOffer.application.applyMethod.text})
+			</td>
+		</tr>
+		<tr>
+			<th>応募後のプロセス</th>
+			<td>
+				#escape($!{articleForPreview.jobOffer.application.applyProcess.text})
+			</td>
+		</tr>
+	</table>
+</div>

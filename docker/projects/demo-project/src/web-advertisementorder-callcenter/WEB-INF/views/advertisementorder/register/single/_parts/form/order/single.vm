@@ -1,0 +1,91 @@
+<h3>発注概要</h3>
+<div class="section">
+	<div class="modeSelect" style="float:left;">
+		<ul class="richRadio">
+			<li class="left selected">通常発注</li>
+			<li class="right" id="jointOrderBtn">合同発注</li>
+		</ul>
+		<div style="clear:both"></div>
+	</div>
+	<div style="float:right; width:50%;">
+		<div style="clear:both"><!--  --></div>
+		<table class="recoptable">
+			<col width="30%" /><col width="*" />
+			<tr>
+				<th>原稿掲載店舗#required('class="needIcon"')</th>
+				<td class="input">
+					#set( $editable = !${newSingleOrderSheet.article.jobOfferSelected} && ${newSingleOrderSheet.item.empty})
+					<div class="selectWorkplace" #if(!$editable) style="display:none;"#end>
+						<span id="_workplace">
+							#parse("/advertisementorder/register/single/_parts/form/order/workplace.vm")
+						</span>
+						<input type="text" name="freeword" class="shopRefiner" autocomplete="off" placeholder="店舗名を入力" />
+						<a href="javascript:void(0);" class="mg refineShop"><img src="$link.contextPath/images/btnRefine.png" width="70" height="25" alt="絞り込む"  class="rollover" /></a><a href="javascript:void(0);" id="workplaceReset" class="refineShopCancel"><img src="$link.contextPath/images/btnClearShop.gif" width="63" height="25" alt="入力をリセット" /></a>
+						<br />
+						<span class="shopRfineSubTxt" style="font-size:93%;"></span><span class="shopRfineErr" style="font-size:93%; color:#F00;"></span>
+					</div>
+					<div class="selectedWorkplace" style="margin-top:3px; #if($editable)display:none;#end">
+						<span style="float:left;">#escape(${newSingleOrderSheet.article.jobOffer.workplace.name})</span>
+						<a name="editWorkplace" id="editWorkplace" ><img src="$link.contextPath/images/btnEdit01.gif" class="rollover" style="float:right;"/></a>
+					</div>
+					<div style="clear:both">
+						<!--  -->#errorMessages("newSingleOrderSheet.article.jobOffer.workplace.id")
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div style="clear:both"></div>
+	<table class="recoptable" >
+		<col width="18%" /><col width="32%" /><col width="18%" /><col width="32%" />
+		<tr>
+			<th #if(!$settings.formCustomize.faxNumber.hide)rowspan="2"#end><span class="labelWithImg">申込者名</span>#required('class="needIcon"')</th>
+			<td #if(!$settings.formCustomize.faxNumber.hide)rowspan="2"#end class="input">
+				#formInput("newSingleOrderSheet.advertisementOrder.slips.detail.source.orderer.name.value" 'class="regular bg"')
+				#errorMessages("newSingleOrderSheet.advertisementOrder.slips.detail.source.orderer.name.value")
+			</td>
+			<th><span class="labelWithImg">緊急連絡先</span>#required('class="needIcon"')</th>
+			<td class="input">
+				#formInput("newSingleOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.phoneNumber.areaCode" 'class="regular bg" style="width:50px;"')
+				 - #formInput("newSingleOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.phoneNumber.localOffeceNumber" 'class="regular bg" style="width:50px;"')
+				 - #formInput("newSingleOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.phoneNumber.number" 'class="regular bg" style="width:50px;"')
+				#errorMessages("newSingleOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.phoneNumber")
+				#errorMessages("newSingleOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.phoneNumber.*")
+			 </td>
+		</tr>
+	#if(!$settings.formCustomize.faxNumber.hide)
+		<tr>
+			<th><span class="labelWithImg">FAX番号</span>#requiredCustom( $settings.formCustomize.faxNumber.required, 'class="needIcon"')</th>
+			<td class="input">
+				#formInput("newSingleOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.faxNumber.areaCode" 'class="regular bg" style="width:50px;"')
+				 - #formInput("newSingleOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.faxNumber.localOffeceNumber" 'class="regular bg" style="width:50px;"')
+				 - #formInput("newSingleOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.faxNumber.subscriberNumber" 'class="regular bg" style="width:50px;"')
+				#errorMessages("newSingleOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.faxNumber")
+				#errorMessages("newSingleOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.faxNumber.*")
+				<div>#escape( $settings.formCustomize.faxNumber.description )</div>
+			</td>
+		</tr>
+	#end
+	</table>
+	#if($settings.function.useArticleConfirmation)
+    	<table class="recoptable">
+    		<col width="18%" /><col width="32%" /><col width="*" />
+    		<tr>
+        		<th>
+        			<span class="labelWithImg">原稿確認</span>
+        		</th>
+        		<td class="input articleConfirm">
+        			#formRadioButton( 'newSingleOrderSheet.advertisementOrder.slips.remarks.articleConfirmation' $newSingleOrderSheet.advertisementOrder.slips.remarks.articleConfirmation.radioOprions() '&nbsp;&nbsp;' '' '' '' 0 )
+        		</td>
+        		<td class="input">
+    				<span class="warn">
+    					#escape( $settings.formCustomize.articleConfirmation.description )
+    				</span>
+        		</td>
+			</tr>
+        </table>
+	#end
+	<div id="operationalNote">
+		#parse("/advertisementorder/register/single/_parts/form/order/operationalnote.vm")
+	</div>
+</div>

@@ -1,0 +1,34 @@
+<div class="criteria_left">
+	<form id="sectionToHireSelect" name="sectionToHireSelect" action='$link.relativeAndCompany("/sectiontohire/schedule/sectionchange")' method="POST">
+		<table class="regular" summary="店舗">
+			<tr class="shopCasette" id="search">
+				<th>店舗選択</th>
+				<td style="vertical-align:top;">
+					#formSingleSelect( 'scheduleCriteria.sectionToHire.id' ${sectionToHireList.map} 'class="regular sectionToHires"' )
+					<input type="submit" name="shopSearch" id="shopSearch" value="選択する" />
+					<br />
+					<input type="text" name="shopRfine" class="shopRefiner suggest" value="店舗名を入力" />
+					<a href="#" class="mg refineShop"><img src="$link.contextPath/images/btnRefine.gif" width="70" height="25" alt="絞り込む" class="rollover"/></a>
+					<a href="#" class="refineShopCancel"><img src="$link.contextPath/images/btnClearShop.gif" width="63" height="25" alt="入力をリセット" /></a>
+					<br />
+					<span class="shopRfineSubTxt" style="font-size:93%;"></span><span class="shopRfineErr" style="font-size:93%; color:#F00;"></span>
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+<div class="criteria_right">
+	<form id="memoEdit" name="memoEdit" action='$link.relativeAndCompany("/sectiontohire/schedule/memo")' method="POST">
+		<table class="regular" summary="スケジュールメモ">
+			<tbody>
+				<tr>
+					<td class="inputMemoArea">
+						<div id="inputMemo">
+							#parse( "/schedule/freeschedule/scheduler/_parts/memo.vm" )
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>

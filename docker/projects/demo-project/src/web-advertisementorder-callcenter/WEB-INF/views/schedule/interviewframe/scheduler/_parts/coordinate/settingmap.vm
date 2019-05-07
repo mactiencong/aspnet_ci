@@ -1,0 +1,43 @@
+#recopHtml()
+<head>
+	#recopHead('座標設定')
+	
+	<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
+	#javascript("$link.contextPath/js/schedule/interviewframe/coordinate.js")
+	#javascript("$link.contextPath/js/commons/map.js")
+	
+	<script type="text/javascript" charset="utf-8">
+	<!--
+		var googleMaps;
+		$(document).ready(function(){
+			// Map読み取り
+			googleMaps = $("div#map_canvas").createGoogleMaps({
+				latitude: $!{latitude},
+				longitude: $!{longitude},
+				zoom:18
+			});
+		});
+	//-->
+	</script>
+
+</head>
+<body style="background:#ffffff;">
+<div style="height:50px;">
+<div><span style="margin-right:5px;font-weight:bold;">住所</span><input type="text" class="regular bg w250" id="mapAddress" /><input type="button" value="住所で検索" style="padding:3px;" onclick="javascript:googleMaps.searchFromAddress({address:$('#mapAddress').val()})"/><span style="margin-left:5px;"><a name="addressSet" onclick="$.coordinateSetting.setAddress();">会場住所をセット</a></span></div>
+<input type="hidden" id="interviewPlaceAddress" value="#escape($!{address})" />
+<div class="errorMsg" style="color:#e53500;"></div>
+</div>
+<div style="border:1px solid #000;width:520px; height:350px; padding:2px;">
+<div id="map_canvas" style="width:520px; height:350px"></div>
+</div>
+<div style="width:520px; margin-top:5px;">
+	<table class="recoptable">
+		<col width="15%" /><col width="35%" /><col width="15%" /><col width="35%" />
+		<tr>
+			<th>緯度</th><td><span id="show_lat"></span></td>
+			<th>経度</th><td><span id="show_lng"></span></td>
+		</tr>
+	</table>
+</div>
+</body>
+</html>

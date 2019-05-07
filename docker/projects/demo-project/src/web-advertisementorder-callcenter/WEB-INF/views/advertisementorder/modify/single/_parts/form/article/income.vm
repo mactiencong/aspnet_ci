@@ -1,0 +1,113 @@
+<tr>
+	<th class="a-lt">給与</th>
+	#if( $!{editSingleOrderSheet.article.jobOffer.recruitment.jobOfferIncome.use()} )
+		<td
+			#springBind('editSingleOrderSheet.article.jobOffer.recruitment.jobOfferIncome')
+			#foreach($error in ${status.errorMessages}) class="input err" #end
+			#springBind('editSingleOrderSheet.article.jobOffer.recruitment.jobOfferIncome.*')
+			#foreach($error in ${status.errorMessages}) class="input err" #end
+		>
+	#else
+		<td
+			#springBind('editSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome')
+			#foreach($error in ${status.errorMessages}) class="input err" #end
+			#springBind('editSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.*')
+			#foreach($error in ${status.errorMessages}) class="input err" #end
+		>
+	#end
+		<table summary="layout" class="innerTable" id="inputIncome" style="width:100%">
+			<tr>
+				<td>
+					#if( $!{editSingleOrderSheet.article.jobOffer.recruitment.jobOfferIncome.use()} )
+						<div class="jobDetailText">#escape( $!{editSingleOrderSheet.article.jobOffer.recruitment.jobOfferIncome.text.detailText.value} )</div>
+					#else
+						<table class="cassette" style="width:100%;">
+							<col width="25%" /><col width="*" />
+							#if( $!{editSingleOrderSheet.article.jobOffer.recruitment.income.cassette} )
+								<tr>
+									<th><label>給与形態</label></th>
+									<td>
+										#escape( $!{incomeFormList.getName( $!{editSingleOrderSheet.article.jobOffer.recruitment.income.incomeForm.incomeFormCode} )})
+									</td>
+								</tr>
+								<tr>
+									<th><label>基本時給(平日時給)</label></th>
+									<td>
+										#escape( $text.priceFormat( $!{editSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.baseWage} ) )&nbsp;円
+									</td>
+								</tr>
+								<tr>
+									<th><label>土日時給</label></th>
+									<td>
+										#escape( $text.priceFormat( $!{editSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.weekendWage} ) )&nbsp;円
+									</td>
+								</tr>
+								<tr>
+									<th><label>高校生可否</label></th>
+									<td>
+										#if( $!{editSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.highSchoolStudentWage.possibility.possible} )
+											可
+										#else
+											不可
+										#end
+										&nbsp;
+									</td>
+								</tr>
+								#if( ${editSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.highSchoolStudentWage.possibility.possible})
+									<tr>
+										<th><label>高校生時給(マイナス入力)</label></th>
+										<td>
+											-#escape($text.priceFormat( $!{editSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.highSchoolStudentWage.diff} ))&nbsp;円&nbsp;(&nbsp;$text.priceFormat( $!{editSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.calcStudentWage} )&nbsp;円&nbsp;)
+										</td>
+									</tr>
+								#end
+								<tr>
+									<th><label>研修有無</label></th>
+									<td>
+										#if( $!{editSingleOrderSheet.article.recruitment.income.cassetteIncome.training.existence.exist} )
+											有り
+										#else
+											無し
+										#end
+									</td>
+								</tr>
+								#if($!{editSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.training.existence.exist} )
+									<tr>
+										<th><label>研修期間</label></th>
+										<td>
+											#escape( $!{editSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.training.trainingPeriod.number} ) #escape( $!{editSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.training.trainingPeriod.unit.name} ) #escape( $!{editSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.training.trainingPeriod.addition.value} )
+										</td>
+									</tr>
+									<tr>
+										<th><label>研修時給(マイナス入力)</label></th>
+										<td>
+											-#escape( $text.priceFormat( $!{editSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.training.wage.diff} ))&nbsp;円&nbsp;(&nbsp;#escape( $text.priceFormat( $!{editSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.calcTrainingWage} ))&nbsp;円&nbsp;)
+										</td>
+									</tr>
+									#if( $!{editSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.highSchoolStudentWage.possibility.possible} )
+										<tr>
+											<th><label>高校生研修時給</label></th>
+											<td>
+												#escape( $text.priceFormat( $!{editSingleOrderSheet.article.jobOffer.recruitment.income.cassetteIncome.training.wage.studentWage} ))&nbsp;円
+											</td>
+										</tr>
+									#end
+								#end
+							#else
+								<tr>
+									<td>
+										<div style="margin-bottom:10px;">
+											給与形態：<span style="margin-left:5px;">#escape( $!{incomeFormList.getName( $!{editSingleOrderSheet.article.jobOffer.recruitment.income.incomeForm.incomeFormCode} )} )</span>
+										</div>
+										#escape( $!{editSingleOrderSheet.article.jobOffer.recruitment.income.description.text} )
+									</td>
+								</tr>
+							#end
+						</table>
+					#end
+				</td>
+			</tr>
+		</table>
+		#if($hasError) <p class="err">「給与」が最低賃金より低く設定されています。</p> #end
+	</td>
+</tr>

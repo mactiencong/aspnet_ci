@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.selectionstatus.SelectionStatusDataAccess">
+
+	<resultMap class="jp.rhp.model.selectionstatus.SelectionStatus" id="SelectionStatusMaster">
+		<result property="id" column="selection_status_id"/>
+		<result property="name" column="selection_status_name"/>
+		<result property="type" column="display_type" />
+		<result property="closedSelection" column="is_closed_selection"/>
+	</resultMap>
+
+	<select id="findById" resultMap="SelectionStatusMaster" parameterClass="java.lang.Integer">
+		SELECT
+			selection_status_id,
+			selection_status_name,
+			display_type,
+			is_closed_selection
+		FROM
+			hiring_process.selection_statuses
+		WHERE
+			show = true AND selection_status_id = #value#
+	</select>
+
+	<select id="listAll" resultMap="SelectionStatusMaster">
+		SELECT
+			selection_status_id,
+			selection_status_name,
+			display_type,
+			is_closed_selection
+		FROM
+			hiring_process.selection_statuses
+		WHERE
+			show = true
+		ORDER BY
+			priority
+	</select>
+
+</sqlMap>

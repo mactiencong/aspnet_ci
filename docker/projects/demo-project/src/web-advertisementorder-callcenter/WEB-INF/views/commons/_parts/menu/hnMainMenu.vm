@@ -1,0 +1,3 @@
+<li id="hnOrder">
+	<a href='$link.relativeAndCompany("/advertisementorder/")'>媒体発注管理</a>
+</li>

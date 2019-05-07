@@ -1,0 +1,69 @@
+
+#set( $editable = ${newJointOrderSheet.item.empty})
+#springBind("newJointOrderSheet")
+<div class="inputSubBox #if(${status.error}) error#end">
+	<div class="boxtitle">
+		<h5>原稿選択</h5>
+		<img src="$link.contextPath/images/icnRequired.gif" width="25" height="13" alt="必須" class="requiredMark" />
+		<div class="selectArticleBtn">
+			<a name="jobOfferSelectBtn" id="jobOfferSelectBtn"#if(!$editable)style=" display:none;"#end><img src="$link.contextPath/images/btnSelectArticle.png" class="rollover" alt="原稿を選択する" /></a>
+			<a name="editJobOffer" id="editJobOffer"#if($editable)style=" display:none;"#end><img src="$link.contextPath/images/btnEdit01.gif" class="rollover" style="float:right;"/></a>
+		</div>
+	</div>
+	<div>
+		#errorMessages("newJointOrderSheet")
+
+		#set($hasError = false )
+		#foreach( $article in $newJointOrderSheet.articleList.articles )
+			#springBind("newJointOrderSheet.articleList.articles[$foreach.index].jobOffer.*")
+			#if( ${status.errorMessages.size()} > 0 )
+				#set($hasError = true )
+			#end
+		#end
+		#if($hasError) <p class="err">選択している「原稿」の内容に入力エラーがあります。</p>#end
+
+		#if($newJointOrderSheet.articleList.articles.empty)
+			<div class="jobOfferNoSelect" style="margin-bottom:30px; margin-left:30px;">原稿が選択されていません。</div>
+		#else
+			<div class="jobOfferInformation" >
+				<table class="recoplist">
+					<col width="5%"/><col width="20%" /><col width="25%" /><col width="*" /><col width="8%"/>
+					<tr class="header">
+						<th rowspan="2">原稿No.</th>
+						<th rowspan="2">案件名</th>
+						<th>原稿掲載店舗</th>
+						<th rowspan="2">給与</th>
+						<th rowspan="2">&nbsp;</th>
+					</tr>
+					<tr class="header">
+						<th>原稿掲載職種</th>
+					</tr>
+
+					#foreach( $article in $newJointOrderSheet.articleList.articles )
+						#springBind("newJointOrderSheet.articleList.articles[$foreach.index].jobOffer.*")
+						#set( $hasError = ${status.errorMessages.size()} > 0 )
+						#set( $articleNo = $foreach.index + 1 )
+						<tr #if($hasError) class="error" #end>
+							<td rowspan="2">#escape( $articleNo )</td>
+							<td rowspan="2">#escape( $article.jobOffer.title )</td>
+							<td class="rowsup">#escape( $article.jobOffer.workplace.name )</td>
+							<td rowspan="2">#parse("/advertisementorder/register/joint/_parts/form/article/income.vm")</td>
+							<td rowspan="2" class="last function">
+								<div><a href="#articlePreview$articleNo" rel="article" class="viewArticle"><img src="$link.contextPath/images/btnDetail.png" class="rollover" alt="詳細" /></a></div>
+								#if($editable)<div><a name="removeArticle" class="removeArticleBtn" onclick="removeArticle( $foreach.index )"><img src="$link.contextPath/images/btnDelete.gif" class="rollover" alt="削除" /></a></div>#end
+							</td>
+							<input type="hidden" class="workplaceIds" value="$article.jobOffer.workplace.id" />
+						</tr>
+						<tr #if($hasError) class="error" #end>
+							<td>#escape( $article.jobOffer.jobTypeName )</td>
+						</tr>
+					#end
+				</table>
+				#set( $advertisementOrderId = $newJointOrderSheet.advertisementOrder.id)
+				#set( $articleListForPreview = $newJointOrderSheet.articleList )
+				#set( $jobOfferSettings = $newJointOrderSheet.jobOfferSettings )
+				#parse( "/advertisementorder/_commonparts/articlepreview/articlepreview.vm" )
+			</div>
+		#end
+	</div>
+</div>

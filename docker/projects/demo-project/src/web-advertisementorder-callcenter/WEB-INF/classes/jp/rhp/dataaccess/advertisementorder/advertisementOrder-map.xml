@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.advertisementorder.AdvertisementOrderDataAccess">
+
+	<!-- TODO resultMapの'slips.detail.item.plan.content.demand.image.number'の部分はimageクラスのモデルの修正が決まったら同時に修正をする -->
+
+    <resultMap class="jp.rhp.model.advertisementorder.AdvertisementOrder" id="advertisementOrder" >
+		<result property="id" 																		column="order_id"/>
+		<result property="status.canceled" 															column="order_canceled" />
+    	<result property="status.orderStatus.type" 													column="order_status_type" />
+    	<result property="status.orderStatus.name.value" 											column="order_status_type_name" />
+    	<result property="orderDateTime.timeStamp.timeStamp" 										column="order_date" />
+    	<result property="type" 																	column="order_type" />
+    	<result property="slips.remarks.message.text" 												column="message" />
+    	<result property="slips.remarks.operationalNote.text"										column="operational_note" />
+    	<result property="slips.detail.source.orderer.name.value"									column="orderer_name" />
+    	<result property="slips.detail.source.orderer.contact.phoneNumber.telephoneNumber"			column="orderer_telephone_number" />
+    	<result property="slips.detail.source.orderer.contact.faxNumber.faxNumber"					column="fax_number" />
+    	<result property="slips.detail.source.registrant.name.value"								column="registrant_name" />
+    	<result property="slips.detail.source.registrant.contact.mailAddress.mailAddress"			column="registrant_mail_address" />
+		<result property="slips.detail.demand.image.id"												column="image_id" />
+		<result property="slips.detail.demand.image.name"											column="image_name" />
+		<result property="slips.detail.demand.image.publishType"									column="publish_image" />
+		<result property="slips.detail.demand.publisingDate.partedDate.date"						column="demand_publishing_date" />
+		<result property="slips.remarks.articleConfirmation"										column="article_confirmation" />
+    </resultMap>
+
+	<resultMap class="jp.rhp.model.advertisementorder.item.Item" id="item">
+    	<result property="id"																		column="item_id" />
+    	<result property="media.name.value"															column="media_name" />
+    	<result property="plan.issue.area.name.value"												column="area_name" />
+    	<result property="plan.issue.size.value"													column="size" />
+    	<result property="plan.price.value"															column="price" />
+    </resultMap>
+
+    <resultMap class="jp.rhp.model.advertisementorder.orderer.Orderer" id="orderer">
+    	<result property="name.value"									column="orderer_name" />
+    	<result property="contact.phoneNumber.telephoneNumber"			column="orderer_telephone_number" />
+    	<result property="contact.faxNumber.faxNumber"					column="fax_number" />
+    </resultMap>
+
+	<select id="nextId" resultClass="java.lang.Integer">
+		SELECT nextval ( 'advertisement_order.advertisement_order_id' )
+	</select>
+
+	<select id="nextDetailId" resultClass="java.lang.Integer">
+		SELECT nextval ( 'advertisement_order.advertisement_order_detail_id' )
+	</select>
+
+	<select id="findById" parameterClass="java.util.HashMap"  resultMap="advertisementOrder">
+		SELECT
+			CASE
+				WHEN canceled_advertisement_order.advertisement_order_id IS null THEN false
+				ELSE true
+			END AS	order_canceled,
+			order_status_type.type								AS	order_status_type,
+			order_status_type.name								AS	order_status_type_name,
+			advertisement_order.id								AS	order_id,
+			advertisement_order.order_datetime					AS	order_date,
+			advertisement_order.type							AS	order_type,
+			advertisement_order_detail.orderer_name				AS	orderer_name,
+			advertisement_order_detail.orderer_telephone_number	AS	orderer_telephone_number,
+			advertisement_order_detail.fax_number				AS	fax_number,
+			advertisement_order_detail.message					AS	message,
+			operational_note.note								AS	operational_note,
+			registrant.user_name								AS	registrant_name,
+			registrant.mail_address								AS	registrant_mail_address,
+			item.id												AS	item_id,
+			media.name											AS	media_name,
+			area.name											AS	area_name,
+			item.size											AS	size,
+			price_of_item.price									AS	price,
+			CASE
+				WHEN ordered_item.publish_image IS true THEN 'PUBLISH'
+				ELSE 'NOT_PUBLISH'
+			END AS	publish_image,
+			image.id											AS	image_id,
+			image.name											AS	image_name,
+			ordered_item.demand_publishing_date					AS	demand_publishing_date,
+			CASE
+				WHEN published_article_file_confirmation_policy.necessary IS true THEN 'NECESSARY'
+				WHEN published_article_file_confirmation_policy.necessary IS false THEN 'UNNESESSARY'
+				ELSE 'NOT_SET'
+			END AS article_confirmation
+		FROM
+			advertisement_order.advertisement_order
+		INNER JOIN
+			advertisement_order.order_status
+		ON
+			advertisement_order.id = order_status.advertisement_order_id
+		INNER JOIN
+			advertisement_order.order_status_type
+		ON
+			order_status.order_status_type = order_status_type.type
+		INNER JOIN
+			advertisement_order.latest_advertisement_order_detail
+		ON
+			advertisement_order.id = latest_advertisement_order_detail.advertisement_order_id
+		INNER JOIN
+			advertisement_order.advertisement_order_detail
+		ON
+			advertisement_order_detail.id = latest_advertisement_order_detail.advertisement_order_detail_id
+		INNER JOIN
+			advertisement_order.ordered_item
+		ON
+			ordered_item.advertisement_order_detail_id = latest_advertisement_order_detail.advertisement_order_detail_id
+		INNER JOIN
+			advertisement_order_master.item
+		ON
+			item.id = ordered_item.item_id
+		INNER JOIN
+			advertisement_order_master.price_of_item
+		ON
+			price_of_item.item_id = item.id
+		INNER JOIN
+			advertisement_order_master.area
+		ON
+			area.id = item.area_id
+		INNER JOIN
+			advertisement_order_master.media
+		ON
+			media.id = area.media_id
+		INNER JOIN
+			advertisement_order.operational_note
+		ON
+			operational_note.advertisement_order_id = advertisement_order.id
+		INNER JOIN
+			advertisement_order.registrant
+		ON registrant.advertisement_order_id = advertisement_order.id
+		INNER JOIN
+			account.users
+		ON
+			users.user_id = registrant.user_id
+		INNER JOIN
+			account.user_mail_addresses
+		ON
+			user_mail_addresses.user_id = users.user_id
+		INNER JOIN
+			advertisement_order.available_for_callcenter
+		ON
+			advertisement_order.id = available_for_callcenter.advertisement_order_id
+		LEFT OUTER JOIN
+			advertisement_order.canceled_advertisement_order
+		ON
+			canceled_advertisement_order.advertisement_order_id = advertisement_order.id
+		LEFT OUTER JOIN
+			advertisement_order.ordered_image
+		ON
+			ordered_image.advertisement_order_detail_id = ordered_item.advertisement_order_detail_id
+		LEFT OUTER JOIN
+			advertisement_order.image
+		ON
+			image.id = ordered_image.image_id
+		LEFT OUTER JOIN
+			advertisement_order.use_image
+		ON
+			use_image.image_id = image.id
+		INNER JOIN
+			advertisement_order_master.media_company
+		ON
+			media_company.code = media.media_company_code
+		LEFT OUTER JOIN
+			advertisement_order.published_article_file_confirmation_policy
+		ON
+			advertisement_order_detail.id = published_article_file_confirmation_policy.advertisement_order_detail_id
+		WHERE
+			advertisement_order.id = #id#
+		<isEqual property="mediaCompanyList.mediaCompanies.empty" compareValue="false" prepend="AND">
+			media_company.code IN
+			<iterate property="mediaCompanyList.mediaCompanies" open="(" close=")" conjunction=",">
+				#mediaCompanyList.mediaCompanies[].code#
+			</iterate>
+		</isEqual>
+	</select>
+
+	<select id="findItemById"  parameterClass="java.util.HashMap" resultMap="item">
+		SELECT
+			item.id												AS	item_id,
+			media.name											AS	media_name,
+			area.name											AS	area_name,
+			item.size											AS	size,
+			price_of_item.price									AS	price
+		FROM
+			advertisement_order.advertisement_order
+		INNER JOIN
+			advertisement_order.latest_advertisement_order_detail
+		ON
+			advertisement_order.id = latest_advertisement_order_detail.advertisement_order_id
+		INNER JOIN
+			advertisement_order.advertisement_order_detail
+		ON
+			advertisement_order_detail.id = latest_advertisement_order_detail.advertisement_order_detail_id
+		INNER JOIN
+			advertisement_order.ordered_item
+		ON
+			ordered_item.advertisement_order_detail_id = advertisement_order_detail.id
+		INNER JOIN
+			advertisement_order_master.item
+		ON
+			item.id = ordered_item.item_id
+		INNER JOIN
+			advertisement_order_master.price_of_item
+		ON
+			price_of_item.item_id = item.id
+		INNER JOIN
+			advertisement_order_master.area
+		ON
+			area.id = item.area_id
+		INNER JOIN
+			advertisement_order_master.media
+		ON
+			media.id = area.media_id
+		INNER JOIN
+			advertisement_order_master.media_company
+		ON
+			media_company.code = media.media_company_code
+		WHERE
+			advertisement_order.id = #id#
+		<isEqual property="mediaCompanyList.mediaCompanies.empty" compareValue="false" prepend="AND">
+			media_company.code IN
+			<iterate property="mediaCompanyList.mediaCompanies" open="(" close=")" conjunction=",">
+				#mediaCompanyList.mediaCompanies[].code#
+			</iterate>
+		</isEqual>
+	</select>
+	
+	<select id="isCanceled"  resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			advertisement_order.canceled_advertisement_order
+		WHERE
+			canceled_advertisement_order.advertisement_order_id = #advertisementOrderId#
+	</select>
+	
+	<select id="isPublished"  resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			advertisement_order.advertisement_order_result
+		WHERE
+			advertisement_order_result.advertisement_order_id = #advertisementOrderId#
+	</select>
+
+	<insert id="cancel"  parameterClass="java.util.HashMap">
+		INSERT INTO advertisement_order.advertisement_order_cancel_event
+			(
+				advertisement_order_id,
+				user_id,
+				user_name)
+    		VALUES
+			(
+				#advertisementOrder.id#,
+				#advertisementOrderCenterAccount.companyAccount.id#,
+				#loginEventUser.account.person.name.value#
+			);
+	</insert>
+
+	<select id="findDefaultOrderer" resultMap="orderer">
+		SELECT
+			default_orderer_per_user.orderer_name				AS	orderer_name,
+			default_orderer_per_user.orderer_telephone_number	AS	orderer_telephone_number,
+			default_orderer_per_user.fax_number					AS	fax_number
+		FROM
+			advertisement_order.default_orderer_per_user
+		WHERE
+			default_orderer_per_user.user_id = #userId#
+	</select>
+
+	<select id="invalidOrderStatusType" resultClass="java.lang.Boolean">
+		SELECT
+			count(1) = 0 AS invalid
+		FROM
+			advertisement_order.order_status_type
+		WHERE
+			type = #orderStatusType#
+	</select>
+
+	<insert id="register" >
+		INSERT INTO advertisement_order.advertisement_order(
+			id,
+			type,
+			order_datetime
+		) VALUES (
+			#id#,
+			#type#,
+			now()
+		)
+	</insert>
+
+	<insert id="registerRegistant" >
+		INSERT INTO advertisement_order.registrant
+		(
+			advertisement_order_id,
+			user_id,
+			user_name,
+			mail_address
+		)
+		SELECT
+			#id#,
+			users.user_id,
+			#slips.detail.source.registrant.name.value#,
+			user_mail_addresses.user_mail_address
+		FROM
+			account.users
+		INNER JOIN
+			account.user_mail_addresses
+		ON
+			user_mail_addresses.user_id = users.user_id
+		WHERE
+			users.user_id = #slips.detail.source.registrant.id#
+	</insert>
+
+	<insert id="registerDetail">
+		INSERT INTO advertisement_order.advertisement_order_detail(
+			id,
+			advertisement_order_id,
+			orderer_name,
+			orderer_telephone_number,
+			fax_number,
+			message
+		) VALUES (
+			#detailId#,
+			#advertisementOrder.id#,
+			#advertisementOrder.slips.detail.source.orderer.name.value#,
+			#advertisementOrder.slips.detail.source.orderer.contact.phoneNumber.telephoneNumber#,
+			#advertisementOrder.slips.detail.source.orderer.contact.faxNumber.faxNumber#,
+			#advertisementOrder.slips.remarks.message.text#
+		)
+	</insert>
+
+	<insert id="registerDetailRegistant" >
+		INSERT INTO advertisement_order.detail_registrant(
+			advertisement_order_detail_id,
+			user_id,
+			user_name,
+			mail_address
+		)
+		SELECT
+			#detailId# as advertisement_order_detail_id,
+			users.user_id,
+			#loginEventUser.account.person.name.value# as user_name,
+			user_mail_addresses.user_mail_address
+		FROM
+			account.users
+		INNER JOIN
+			account.user_mail_addresses
+		ON
+			user_mail_addresses.user_id = users.user_id
+		INNER JOIN
+			account.advertisement_order_callcenter_user
+		ON
+			advertisement_order_callcenter_user.user_id = users.user_id
+		;
+	</insert>
+
+	<insert id="registerOrderedItem">
+		INSERT INTO advertisement_order.ordered_item(
+			advertisement_order_detail_id,
+			item_id,
+			demand_publishing_date,
+			publish_image
+		) VALUES (
+			#detailId#,
+			#item.id#,
+			#advertisementOrder.slips.detail.demand.publisingDate.partedDate.date#,
+			#advertisementOrder.slips.detail.demand.image.publish#
+		)
+	</insert>
+
+	<insert id="registerOrderedImage">
+		INSERT INTO advertisement_order.ordered_image(
+			advertisement_order_detail_id,
+			image_id
+		)
+		SELECT
+			#detailId#,
+			#advertisementOrder.slips.detail.demand.image.id#
+		WHERE
+			#advertisementOrder.slips.detail.demand.image.publish#
+	</insert>
+
+	<insert id="registerOrderStatusChangeEvent">
+		INSERT INTO advertisement_order.order_status_change_event(
+			advertisement_order_id,
+			order_status_type,
+			user_id,
+			user_name
+		) VALUES (
+			#advertisementOrderId#,
+			#orderStatus.type#,
+			#advertisementOrderCenterAccount.companyAccount.id#,
+			#loginEventUser.account.person.name.value#
+		)
+	</insert>
+
+	<insert id="registerLatestDetail">
+		INSERT INTO advertisement_order.latest_advertisement_order_detail(
+			advertisement_order_id,
+			advertisement_order_detail_id,
+			modified_datetime
+		) VALUES (
+			#advertisementOrder.id#,
+			#detailId#,
+			now()
+		)
+	</insert>
+
+	<delete id="deleteDefaultOrderer">
+		DELETE FROM
+			advertisement_order.default_orderer_per_user
+		WHERE
+			user_id = #id#;
+	</delete>
+
+	<insert id="insertDefaultOrderer">
+		INSERT INTO
+			advertisement_order.default_orderer_per_user
+			(
+				user_id,
+				orderer_name,
+				orderer_telephone_number,
+				fax_number
+			)
+			VALUES
+			(
+				#loginEventUser.id#,
+				#advertisementOrder.slips.detail.source.orderer.name.value#,
+				#advertisementOrder.slips.detail.source.orderer.contact.phoneNumber.telephoneNumber#,
+				#advertisementOrder.slips.detail.source.orderer.contact.faxNumber.faxNumber#
+			)
+	</insert>
+	
+	<insert id="insertArticleFileConfirmationPolicy">
+		INSERT INTO
+			advertisement_order.published_article_file_confirmation_policy
+			(
+				advertisement_order_detail_id,
+				necessary
+			)
+			VALUES
+			(
+				#detailId#,
+				#advertisementOrder.slips.remarks.articleConfirmation.necessary#
+			)
+	</insert>
+
+	<update id="modifyLatestDetail">
+		UPDATE advertisement_order.latest_advertisement_order_detail
+		SET
+			advertisement_order_detail_id= #detailId#
+		WHERE
+			advertisement_order_id = #advertisementOrder.id#
+	</update>
+	
+	<insert id="insertAvailableForCallcenter" >
+		INSERT INTO
+			advertisement_order.available_for_callcenter
+		VALUES
+		(
+			#id#
+		)
+	</insert>
+</sqlMap>

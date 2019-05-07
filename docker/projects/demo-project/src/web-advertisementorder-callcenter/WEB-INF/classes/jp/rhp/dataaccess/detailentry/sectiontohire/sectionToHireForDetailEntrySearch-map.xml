@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.detailentry.sectiontohire.SectionToHireForDetailEntrySearchDataAccess">
+
+     <resultMap class="jp.rhp.model.detailentry.search.sectiontohire.SectionToHireForDetailEntrySearch" id="sectionToHireForDetailEntrySearch">
+        <result property="sectionToHire.id"												column="section_to_hire_id"/>
+        <result property="sectionToHire.name"											column="section_to_hire_name"/>
+        <result property="sectionToHire.nameKana.value"									column="section_to_hire_name_kana"/>
+        <result property="sectionToHire.groupId"										column="section_group_id"/>
+        <result property="sectionToHire.shopNumber.value"								column="shop_number"/>
+        <result property="sectionToHire.contact.telephoneNumber.telephoneNumber"		column="telephone_number"/>
+        <result property="sectionToHire.status.closed"									column="closed"/>
+        <result property="sectionToHire.status.openingStatusType.type"					column="opening_status_type"/>
+        <result property="sectionToHire.status.openingStatusType.name"					column="opening_status_name"/>
+        <result property="sectionToHire.businessModelType.type"							column="business_model_type"/>
+        <result property="sectionToHire.businessModelType.name"							column="business_model_name"/>
+        <result property="workplace.id"													column="workplace_id"/>
+        <result property="workplace.name"												column="workplace_name"/>
+        <result property="workplace.address.kana"										column="workplace_address_kana"/>
+        <result property="workplace.address.prefecture.code"							column="workplace_prefecture_code"/>
+        <result property="workplace.address.city.code"									column="workplace_city_code"/>
+        <result property="workplace.address.prefecture.name"							column="workplace_prefecture_name"/>
+        <result property="workplace.address.city.name"									column="workplace_city_name"/>
+        <result property="workplace.address.street.text"								column="workplace_address_street"/>
+        <result property="workplace.address.buildingName.text"							column="workplace_address_building_name"/>
+        <result property="sectionToHire.callCenterMemo.text"							column="callcenter_memo"/>
+        <result property="sectionToHireMemo.text"										column="section_to_hire_memo"/>
+	</resultMap>
+
+	<resultMap class="jp.rhp.model.sectiontohire.status.OpeningStatusType" id="openingStatusType">
+		<result property="type"					column="opening_status_type"/>
+		<result property="name"					column="opening_status_name"/>
+	</resultMap>
+	
+	<resultMap class="jp.rhp.model.sectiontohire.businessmodeltype.BusinessModelType" id="businessModelType">
+		<result property="type"					column="business_model_type"/>
+		<result property="name"					column="business_model_name"/>
+	</resultMap>
+
+	<select id="countOfCriteria" resultClass="java.lang.Integer" >
+		SELECT
+			count(*) AS count
+		FROM
+			hiring.section_to_hire
+		INNER JOIN
+			hiring.interview_booking_method
+			ON section_to_hire.section_to_hire_id = interview_booking_method.section_to_hire_id
+		LEFT OUTER JOIN
+			workplace.workplace
+			ON workplace.section_to_hire_id = section_to_hire.section_to_hire_id
+		LEFT OUTER JOIN
+			(SELECT
+				workplace_x_zone.workplace_id
+				, prefectures.code
+				, prefectures.name
+				, prefectures.name_kana
+			FROM
+				workplace.workplace_x_zone
+				INNER JOIN
+					area.zones
+				ON
+					workplace_x_zone.zone_id = zones.zone_id
+				INNER JOIN
+					address.prefectures
+				ON
+					zones.code = prefectures.code) AS prefectures
+			ON
+				workplace.workplace_id = prefectures.workplace_id
+		LEFT OUTER JOIN
+			(SELECT
+				workplace_x_zone.workplace_id
+				, cities.code
+				, cities.name
+				, cities.name_kana
+			FROM
+				workplace.workplace_x_zone
+			INNER JOIN
+				area.zones
+			ON
+				workplace_x_zone.zone_id = zones.zone_id
+			INNER JOIN
+				address.cities
+			ON
+				zones.code = cities.code
+			) AS cities
+		ON
+			workplace.workplace_id = cities.workplace_id
+		LEFT OUTER JOIN
+			cooperation_fnx_candidate.section_to_hire_fnx_fax_number
+			ON section_to_hire.section_to_hire_id = section_to_hire_fnx_fax_number.section_to_hire_id
+		LEFT OUTER JOIN
+			hiring.section_to_hire_name_kana
+			ON section_to_hire.section_to_hire_id = section_to_hire_name_kana.section_to_hire_id
+		LEFT OUTER JOIN
+			hiring.section_to_hire_telephone_number
+			ON section_to_hire.section_to_hire_id = section_to_hire_telephone_number.section_to_hire_id
+		LEFT OUTER JOIN
+			hiring.shop_number
+			ON section_to_hire.section_to_hire_id = shop_number.section_to_hire_id
+		LEFT OUTER JOIN
+			hiring.section_to_hire_business_model
+			ON section_to_hire.section_to_hire_id = section_to_hire_business_model.section_to_hire_id
+		LEFT OUTER JOIN
+			hiring.business_model_type
+			ON business_model_type.type = section_to_hire_business_model.business_model_type
+		LEFT OUTER JOIN
+			hiring.section_to_hire_opening_status_type
+			ON section_to_hire.section_to_hire_id = section_to_hire_opening_status_type.section_to_hire_id
+		LEFT OUTER JOIN
+			hiring.opening_status_type
+			ON opening_status_type.type = section_to_hire_opening_status_type.opening_status_type
+		LEFT OUTER JOIN
+			hiring.closed_section_to_hire
+			ON section_to_hire.section_to_hire_id = closed_section_to_hire.section_to_hire_id
+		LEFT OUTER JOIN
+			hiring.latest_callcenter_memo
+			ON section_to_hire.section_to_hire_id = latest_callcenter_memo.section_to_hire_id
+		LEFT OUTER JOIN
+			hiring.callcenter_memo
+			ON latest_callcenter_memo.callcenter_memo_id = callcenter_memo.id
+		LEFT OUTER JOIN
+			hiring.section_to_hire_memo_latest
+			ON section_to_hire.section_to_hire_id = section_to_hire_memo_latest.section_to_hire_id
+        LEFT OUTER JOIN
+            hiring.section_to_hire_name_kana_for_search
+        ON
+            section_to_hire_name_kana_for_search.section_to_hire_id = section_to_hire.section_to_hire_id
+        LEFT OUTER JOIN
+            hiring.callcenter_memo_for_search
+        ON
+            callcenter_memo_for_search.section_to_hire_id = section_to_hire.section_to_hire_id
+        <isNotEmpty property="freeword.words">
+            <iterate property="freeword.listSubWord" >
+                JOIN
+                     ( SELECT public.han2zenkana( regexp_replace(#freeword.listSubWord[].value#, '([%_])', E'\\\\\\1', 'g' ) ) as key ) as $freeword.listSubWord[].index$ on true
+            </iterate>
+        </isNotEmpty>
+        CROSS JOIN
+            cooperation_fnx_candidate.settings
+        <dynamic prepend="WHERE">
+			<isNotEmpty property="openingStatusType.type" prepend="AND">
+				opening_status_type.type = #openingStatusType.type#
+			</isNotEmpty>
+			<isEqual property="businessModelTypeList.notEmpty" compareValue="true" prepend="AND">
+				business_model_type.type IN
+				<iterate property="businessModelTypeList.selected" open="(" close=")" conjunction=",">
+					#businessModelTypeList.selected[]#
+				</iterate>
+			</isEqual>
+            <isNotEmpty property="freeword.words">
+			<iterate property="freeword.listSubWord" prepend="AND" conjunction="AND">
+				(
+					   section_to_hire.section_to_hire_name	                        LIKE '%' || regexp_replace( #freeword.listSubWord[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+                    OR section_to_hire_name_kana_for_search.name_kana               LIKE '%' || $freeword.listSubWord[].index$.key || '%'
+                    OR shop_number.shop_number                                      LIKE '%' || regexp_replace( #freeword.listSubWord[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+                    OR workplace.workplace                                          LIKE '%' || regexp_replace( #freeword.listSubWord[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+                    OR workplace.address                                            LIKE '%' || regexp_replace(#freeword.listSubWord[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+                    OR cities.name_kana                                             LIKE '%' || regexp_replace( #freeword.listSubWord[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+                    OR prefectures.name_kana                                        LIKE '%' || regexp_replace( #freeword.listSubWord[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+                    OR replace( section_to_hire_telephone_number.telephone_number, '-', '' )
+                        LIKE '%' || replace( regexp_replace( #freeword.listSubWord[].value#, '([%_])', E'\\\\\\1', 'g' ), '-', '' ) || '%'
+					<isEqual property="isDisplayCallcenterMemo" compareValue="true">
+					OR callcenter_memo_for_search.memo											LIKE '%' || $freeword.listSubWord[].index$.key || '%'
+					</isEqual>
+					<isEqual property="isDisplaySectionToHireMemo" compareValue="true">
+					OR section_to_hire_memo_latest.memo								LIKE '%' || regexp_replace( #freeword.listSubWord[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+					</isEqual>
+				)
+			</iterate>
+            </isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="listOfCriteria" resultMap="sectionToHireForDetailEntrySearch">
+		SELECT
+			section_to_hire.section_to_hire_id											AS section_to_hire_id,
+			section_to_hire.section_to_hire_name										AS section_to_hire_name,
+			coalesce( section_to_hire_name_kana.name_kana, '' )							AS section_to_hire_name_kana,
+			section_to_hire.section_group_id											AS section_group_id,
+			coalesce( shop_number.shop_number, '' )										AS shop_number,
+			coalesce( section_to_hire_telephone_number.telephone_number, '' )			AS telephone_number,
+			workplace.workplace_id														AS workplace_id,
+			prefectures.code															AS workplace_prefecture_code,
+			prefectures.name															AS workplace_prefecture_name,
+			cities.code																	AS workplace_city_code,
+			cities.name																	AS workplace_city_name,
+			workplace.address_street													AS workplace_address_street,
+			workplace.address_building_name												AS workplace_address_building_name,
+			prefectures.name_kana||cities.name_kana										AS workplace_address_kana,
+			coalesce( opening_status_type.type, '' )									AS opening_status_type,
+			coalesce( opening_status_type.name, '' )									AS opening_status_name,
+			coalesce( business_model_type.type, '' )									AS business_model_type,
+			coalesce( business_model_type.name, '' )									AS business_model_name,
+			CASE
+				WHEN closed_section_to_hire.section_to_hire_id IS NULL THEN false
+				ELSE true
+			END																		AS closed,
+			coalesce( workplace.workplace, '' )											AS workplace_name,
+			coalesce( callcenter_memo.memo, '' )										AS callcenter_memo,
+			coalesce( section_to_hire_memo_latest.memo, '' )							AS section_to_hire_memo
+		FROM
+			hiring.section_to_hire
+		INNER JOIN
+			hiring.interview_booking_method
+			ON section_to_hire.section_to_hire_id = interview_booking_method.section_to_hire_id
+		LEFT OUTER JOIN
+			workplace.workplace
+			ON workplace.section_to_hire_id = section_to_hire.section_to_hire_id
+		LEFT OUTER JOIN
+			(SELECT
+				 workplace_x_zone.workplace_id
+				, prefectures.code
+				, prefectures.name
+				, prefectures.name_kana
+			FROM
+				workplace.workplace_x_zone
+				INNER JOIN
+					area.zones
+				ON
+					workplace_x_zone.zone_id = zones.zone_id
+				INNER JOIN
+					address.prefectures
+				ON
+					zones.code = prefectures.code) AS prefectures
+			ON
+				workplace.workplace_id = prefectures.workplace_id
+		LEFT OUTER JOIN
+			(SELECT
+				workplace_x_zone.workplace_id
+				, cities.code
+				, cities.name
+				, cities.name_kana
+			FROM
+				workplace.workplace_x_zone
+			INNER JOIN
+				area.zones
+			ON
+				workplace_x_zone.zone_id = zones.zone_id
+			INNER JOIN
+				address.cities
+			ON
+				zones.code = cities.code
+			) AS cities
+		ON
+			workplace.workplace_id = cities.workplace_id
+		LEFT OUTER JOIN
+			cooperation_fnx_candidate.section_to_hire_fnx_fax_number
+			ON section_to_hire.section_to_hire_id = section_to_hire_fnx_fax_number.section_to_hire_id
+		LEFT OUTER JOIN
+			hiring.section_to_hire_name_kana
+			ON section_to_hire.section_to_hire_id = section_to_hire_name_kana.section_to_hire_id
+		LEFT OUTER JOIN
+			hiring.section_to_hire_telephone_number
+			ON section_to_hire.section_to_hire_id = section_to_hire_telephone_number.section_to_hire_id
+		LEFT OUTER JOIN
+			hiring.shop_number
+			ON section_to_hire.section_to_hire_id = shop_number.section_to_hire_id
+		LEFT OUTER JOIN
+			hiring.section_to_hire_business_model
+			ON section_to_hire.section_to_hire_id = section_to_hire_business_model.section_to_hire_id
+		LEFT OUTER JOIN
+			hiring.business_model_type
+			ON business_model_type.type = section_to_hire_business_model.business_model_type
+		LEFT OUTER JOIN
+			hiring.section_to_hire_opening_status_type
+			ON section_to_hire.section_to_hire_id = section_to_hire_opening_status_type.section_to_hire_id
+		LEFT OUTER JOIN
+			hiring.opening_status_type
+			ON opening_status_type.type = section_to_hire_opening_status_type.opening_status_type
+		LEFT OUTER JOIN
+			hiring.closed_section_to_hire
+			ON section_to_hire.section_to_hire_id = closed_section_to_hire.section_to_hire_id
+		LEFT OUTER JOIN
+			hiring.latest_callcenter_memo
+			ON section_to_hire.section_to_hire_id = latest_callcenter_memo.section_to_hire_id
+		LEFT OUTER JOIN
+			hiring.callcenter_memo
+			ON latest_callcenter_memo.callcenter_memo_id = callcenter_memo.id
+		LEFT OUTER JOIN
+			hiring.section_to_hire_memo_latest
+			ON section_to_hire.section_to_hire_id = section_to_hire_memo_latest.section_to_hire_id
+        LEFT OUTER JOIN
+            hiring.section_to_hire_name_kana_for_search
+        ON
+            section_to_hire_name_kana_for_search.section_to_hire_id = section_to_hire.section_to_hire_id
+        LEFT OUTER JOIN
+            hiring.callcenter_memo_for_search
+        ON
+            callcenter_memo_for_search.section_to_hire_id = section_to_hire.section_to_hire_id
+        <isNotEmpty property="freeword.words">
+            <iterate property="freeword.listSubWord" >
+                JOIN
+                     ( SELECT public.han2zenkana( regexp_replace(#freeword.listSubWord[].value#, '([%_])', E'\\\\\\1', 'g' ) ) as key ) as $freeword.listSubWord[].index$ on true
+            </iterate>
+        </isNotEmpty>
+        CROSS JOIN
+            cooperation_fnx_candidate.settings
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="openingStatusType.type" prepend="AND">
+				opening_status_type.type = #openingStatusType.type#
+			</isNotEmpty>
+			<isEqual property="businessModelTypeList.notEmpty" compareValue="true" prepend="AND">
+				business_model_type.type IN
+				<iterate property="businessModelTypeList.selected" open="(" close=")" conjunction=",">
+					#businessModelTypeList.selected[]#
+				</iterate>
+			</isEqual>
+            <isNotEmpty property="freeword.words">
+			<iterate property="freeword.listSubWord" prepend="AND" conjunction="AND">
+				(
+					   section_to_hire.section_to_hire_name                         LIKE '%' || regexp_replace( #freeword.listSubWord[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+					OR section_to_hire_name_kana_for_search.name_kana                          LIKE '%' || $freeword.listSubWord[].index$.key || '%'
+					OR shop_number.shop_number                                      LIKE '%' || regexp_replace( #freeword.listSubWord[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+					OR workplace.workplace                                          LIKE '%' || regexp_replace( #freeword.listSubWord[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+					OR workplace.address                                            LIKE '%' || regexp_replace(#freeword.listSubWord[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+					OR cities.name_kana                                             LIKE '%' || regexp_replace( #freeword.listSubWord[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+					OR prefectures.name_kana                                        LIKE '%' || '%' || regexp_replace( #freeword.listSubWord[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+					OR replace( section_to_hire_telephone_number.telephone_number, '-', '' )
+                        LIKE '%' || replace( regexp_replace( #freeword.listSubWord[].value#, '([%_])', E'\\\\\\1', 'g' ), '-', '' ) || '%'
+					<isEqual property="isDisplayCallcenterMemo" compareValue="true">
+                    OR callcenter_memo_for_search.memo                              LIKE '%' || $freeword.listSubWord[].index$.key || '%'
+					</isEqual>
+					<isEqual property="isDisplaySectionToHireMemo" compareValue="true">
+					OR section_to_hire_memo_latest.memo								LIKE '%' || regexp_replace( #freeword.listSubWord[].value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+					</isEqual>
+				)
+			</iterate>
+            </isNotEmpty>
+		</dynamic>
+		ORDER BY
+			(section_to_hire.section_to_hire_id = 0 ) DESC,
+			(shop_number.shop_number is null OR shop_number.shop_number = ''),
+			coalesce(shop_number.shop_number, ''),
+			(section_to_hire_name_kana.name_kana is null OR section_to_hire_name_kana.name_kana = ''),
+			coalesce(section_to_hire_name_kana.name_kana, ''),
+			section_to_hire.section_to_hire_id
+		LIMIT #page.limit# OFFSET #page.offset#
+	</select>
+    <select id="findByWorkplaceId" resultMap="sectionToHireForDetailEntrySearch" >
+        SELECT
+            section_to_hire.section_to_hire_id                                            AS section_to_hire_id,
+            section_to_hire.section_to_hire_name                                        AS section_to_hire_name,
+            coalesce( section_to_hire_name_kana.name_kana, '' )                            AS section_to_hire_name_kana,
+            section_to_hire.section_group_id                                            AS section_group_id,
+            coalesce( shop_number.shop_number, '' )                                         AS shop_number,
+            coalesce( section_to_hire_telephone_number.telephone_number, '' )            AS telephone_number,
+            workplace.workplace_id                                                        AS workplace_id,
+            prefectures.code                                                             AS workplace_prefecture_code,
+            prefectures.name                                                                AS workplace_prefecture_name,
+            cities.code                                                                    AS workplace_city_code,
+            cities.name                                                                    AS workplace_city_name,
+            workplace.address_street                                                    AS workplace_address_street,
+            workplace.address_building_name                                                AS workplace_address_building_name,
+            prefectures.name_kana||cities.name_kana                                        AS workplace_address_kana,
+            COALESCE(count_of_job_offer.cnt, 0)                                            AS count_of_job_offer,
+            coalesce( opening_status_type.type, '' )                                    AS opening_status_type,
+            coalesce( opening_status_type.name, '' )                                    AS opening_status_name,
+            coalesce( business_model_type.type, '' )                                    AS business_model_type,
+            coalesce( business_model_type.name, '' )                                    AS business_model_name,
+            CASE
+                WHEN closed_section_to_hire.section_to_hire_id IS NULL THEN false
+                ELSE true
+            END                                                                         AS closed,
+            coalesce( workplace.workplace, '' )                                            AS workplace_name,
+            coalesce( callcenter_memo.memo, '' )                                        AS callcenter_memo,
+            coalesce( section_to_hire_memo_latest.memo, '' )                                    AS section_to_hire_memo
+            
+        FROM
+            hiring.section_to_hire
+        INNER JOIN
+            hiring.interview_booking_method
+            ON section_to_hire.section_to_hire_id = interview_booking_method.section_to_hire_id
+        LEFT OUTER JOIN
+            workplace.workplace
+            ON workplace.section_to_hire_id = section_to_hire.section_to_hire_id
+        LEFT OUTER JOIN
+            (SELECT
+                 workplace_x_zone.workplace_id
+                , prefectures.code
+                , prefectures.name
+                , prefectures.name_kana
+            FROM
+                 workplace.workplace_x_zone
+                INNER JOIN
+                    area.zones
+                ON
+                    workplace_x_zone.zone_id = zones.zone_id
+                INNER JOIN
+                    address.prefectures
+                ON
+                    zones.code = prefectures.code) AS prefectures
+            ON
+                workplace.workplace_id = prefectures.workplace_id
+        LEFT OUTER JOIN
+            (SELECT
+                workplace_x_zone.workplace_id
+                , cities.code
+                , cities.name
+                , cities.name_kana
+            FROM
+                workplace.workplace_x_zone
+            INNER JOIN
+                area.zones
+            ON
+                workplace_x_zone.zone_id = zones.zone_id
+            INNER JOIN
+                address.cities
+            ON
+                zones.code = cities.code
+            ) AS cities
+        ON
+            workplace.workplace_id = cities.workplace_id
+        LEFT OUTER JOIN
+            cooperation_fnx_candidate.section_to_hire_fnx_fax_number
+            ON section_to_hire.section_to_hire_id = section_to_hire_fnx_fax_number.section_to_hire_id
+        LEFT OUTER JOIN
+            hiring.section_to_hire_name_kana
+            ON section_to_hire.section_to_hire_id = section_to_hire_name_kana.section_to_hire_id
+        LEFT OUTER JOIN
+            hiring.section_to_hire_telephone_number
+            ON section_to_hire.section_to_hire_id = section_to_hire_telephone_number.section_to_hire_id
+        LEFT OUTER JOIN
+            hiring.shop_number
+            ON section_to_hire.section_to_hire_id = shop_number.section_to_hire_id
+        LEFT OUTER JOIN
+            hiring.section_to_hire_business_model
+            ON section_to_hire.section_to_hire_id = section_to_hire_business_model.section_to_hire_id
+        LEFT OUTER JOIN
+            hiring.business_model_type
+            ON business_model_type.type = section_to_hire_business_model.business_model_type
+        LEFT OUTER JOIN
+            hiring.section_to_hire_opening_status_type
+            ON section_to_hire.section_to_hire_id = section_to_hire_opening_status_type.section_to_hire_id
+        LEFT OUTER JOIN
+            hiring.opening_status_type
+            ON opening_status_type.type = section_to_hire_opening_status_type.opening_status_type
+        LEFT OUTER JOIN
+            hiring.closed_section_to_hire
+            ON section_to_hire.section_to_hire_id = closed_section_to_hire.section_to_hire_id
+        LEFT OUTER JOIN
+            hiring.latest_callcenter_memo
+            ON section_to_hire.section_to_hire_id = latest_callcenter_memo.section_to_hire_id
+        LEFT OUTER JOIN
+            hiring.callcenter_memo
+            ON latest_callcenter_memo.callcenter_memo_id = callcenter_memo.id
+        LEFT OUTER JOIN
+            hiring.section_to_hire_memo_latest
+            ON section_to_hire.section_to_hire_id = section_to_hire_memo_latest.section_to_hire_id
+        CROSS JOIN
+            cooperation_fnx_candidate.settings
+        WHERE
+            workplace.workplace_id = #workplaceId#
+    </select>
+	<select id="openingStatusTypeList" resultMap="openingStatusType">
+		SELECT
+			type			AS opening_status_type,
+			name			AS opening_status_name
+		FROM
+			hiring.opening_status_type
+		ORDER BY
+			priority
+	</select>
+	
+	<select id="businessModelTypeList" resultMap="businessModelType">
+		SELECT
+			type			AS business_model_type,
+			name			AS business_model_name
+		FROM
+			hiring.business_model_type
+		ORDER BY
+			priority
+	</select>
+</sqlMap>

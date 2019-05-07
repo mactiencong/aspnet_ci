@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.advertisementorder.popup.item.ItemPopupDataAccess">
+
+	<typeAlias alias="itemPopupSearchCriteria" type="jp.rhp.model.advertisementorder.popup.item.criteria.ItemPopupSearchCriteria" />
+
+	<resultMap id="item" class="jp.rhp.model.advertisementorder.item.Item">
+		<result property="id"                                          column="item_id"             />
+		<result property="media.name.value"                            column="media_name"          />
+		<result property="plan.issue.area.name.value"                  column="area_name"           />
+		<result property="plan.issue.size.value"                       column="size"                />
+		<result property="plan.price.value"                            column="price"               />
+	</resultMap>
+
+	<resultMap id="media" class="jp.rhp.model.advertisementorder.media.Media">
+		<result property="id"                                          column="media_id"            />
+		<result property="name.value"                                  column="media_name"          />
+	</resultMap>
+
+	<resultMap id="area" class="jp.rhp.model.advertisementorder.area.Area">
+		<result property="id"                                          column="area_id"             />
+		<result property="name.value"                                  column="area_name"           />
+	</resultMap>
+
+	<select id="count" parameterClass="java.util.HashMap" resultClass="java.lang.Integer" >
+		SELECT
+			count( distinct item.id )
+		FROM
+			advertisement_order_master.media
+		INNER JOIN advertisement_order_master.latest_media
+			ON latest_media.media_id = media.id
+		INNER JOIN advertisement_order_master.active_media
+			ON active_media.media_code = latest_media.media_code
+		INNER JOIN advertisement_order_master.use_media
+			ON use_media.media_code = latest_media.media_code
+		INNER JOIN advertisement_order_master.area
+			ON area.media_id = media.id
+		INNER JOIN advertisement_order_master.latest_area
+			ON latest_area.area_id = area.id
+		INNER JOIN advertisement_order_master.active_area
+			ON active_area.area_code = latest_area.area_code
+		INNER JOIN advertisement_order_master.use_area
+			ON use_area.area_code = latest_area.area_code
+		INNER JOIN advertisement_order_master.item
+			ON item.area_id = area.id
+		INNER JOIN advertisement_order_master.price_of_item
+			ON price_of_item.item_id = item.id
+		INNER JOIN advertisement_order_master.latest_item
+			ON latest_item.item_id = item.id
+		INNER JOIN advertisement_order_master.active_item
+			ON active_item.item_code = latest_item.item_code
+		INNER JOIN advertisement_order_master.use_item
+			ON use_item.item_code = latest_item.item_code
+		INNER JOIN advertisement_order_master.media_company
+			ON media_company.code = media.media_company_code
+		INNER JOIN advertisement_order_master.media_type
+			ON media_type.type = media.media_type
+		INNER JOIN advertisement_order_master.media_type_x_media_category
+			ON media_type_x_media_category.media_type = media_type.type
+		WHERE
+			<iterate property="criteria.workplace.ids" conjunction="AND">
+			(
+				EXISTS(
+					SELECT
+						area_x_section_to_hire.area_code
+					FROM
+						advertisement_order_master.area_x_section_to_hire
+					INNER JOIN
+						hiring.section_to_hire
+					ON
+						section_to_hire.section_to_hire_id = area_x_section_to_hire.section_to_hire_id
+					INNER JOIN
+						workplace.workplace
+					ON
+						workplace.section_to_hire_id = section_to_hire.section_to_hire_id
+					WHERE
+						area.code = area_x_section_to_hire.area_code
+					AND
+						workplace.workplace_id = #criteria.workplace.ids[]#
+				) OR (
+					EXISTS (
+						SELECT
+							area_x_business_model_type.area_id
+						FROM
+							advertisement_order_master.area_x_business_model_type
+						INNER JOIN
+							hiring.section_to_hire_business_model
+						ON
+							section_to_hire_business_model.business_model_type = area_x_business_model_type.business_model_type
+						INNER JOIN
+							workplace.workplace
+						ON
+							workplace.section_to_hire_id = section_to_hire_business_model.section_to_hire_id
+						WHERE
+							workplace.workplace_id = #criteria.workplace.ids[]#
+						AND
+							area_x_business_model_type.area_id = area.id
+
+					) AND (
+						EXISTS (
+							SELECT
+								area_x_prefectures.area_id
+							FROM
+								advertisement_order_master.area_x_prefectures
+							INNER JOIN
+								workplace.address_of_workplace
+							ON
+								address_of_workplace.prefecture_code = area_x_prefectures.prefecture_code
+							WHERE
+								area_x_prefectures.area_id = area.id
+							AND
+								address_of_workplace.workplace_id = #criteria.workplace.ids[]#
+						) OR EXISTS (
+							SELECT
+								area_x_cities.area_id
+							FROM
+								advertisement_order_master.area_x_cities
+							INNER JOIN
+								workplace.address_of_workplace
+							ON
+								address_of_workplace.city_code = area_x_cities.city_code
+							WHERE
+								area.id = area_x_cities.area_id
+							AND
+								address_of_workplace.workplace_id = #criteria.workplace.ids[]#
+						)
+					)
+				)
+			)
+			</iterate>
+			<isEqual property="criteria.media.empty" compareValue="false" prepend="AND">
+				media.id = #criteria.media.idToInt#
+			</isEqual>
+			<isEqual property="criteria.area.empty" compareValue="false" prepend="AND">
+				area.name LIKE '%' || regexp_replace( #criteria.area.name#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+			</isEqual>
+			<isEqual property="criteria.item.empty" compareValue="false" prepend="AND">
+				item.size LIKE '%' || regexp_replace( #criteria.item.size#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+			</isEqual>
+			<isEqual property="mediaCompanyList.mediaCompanies.empty" compareValue="false" prepend="AND">
+				media_company.code IN
+				<iterate property="mediaCompanyList.mediaCompanies" open="(" close=")" conjunction=",">
+					#mediaCompanyList.mediaCompanies[].code#
+				</iterate>
+			</isEqual>
+			<isEqual property="criteria.mediaTypeName.notEmpty" compareValue="true" prepend="AND">
+				media.media_type = #criteria.mediaTypeName.value#
+			</isEqual>
+			<isEqual property="criteria.mediaCategoryList.notEmpty" compareValue="true" prepend="AND">
+				media_type_x_media_category.media_category_id IN
+				<iterate property="criteria.mediaCategoryList.selected" open="(" close=")" conjunction=",">
+					#criteria.mediaCategoryList.selected[]#
+				</iterate>
+			</isEqual>
+	</select>
+
+	<select id="items" parameterClass="java.util.HashMap" resultMap="item">
+		SELECT
+			DISTINCT
+			media.id                   AS media_id,
+			media.code                 AS media_code,
+			media.name                 AS media_name,
+			area.id                    AS area_id,
+			area.name                  AS area_name,
+			item.id                    AS item_id,
+			item.size                  AS size,
+			price_of_item.price        AS price,
+			media.priority,
+			substring( media.code, 2 ) as substring_media_code,
+			area.priority,
+			substring( area.code, 8 ) as substring_area_code,
+			item.priority,
+			substring( item.code, 14 )as substring_item_code
+		FROM
+			advertisement_order_master.media
+		INNER JOIN advertisement_order_master.latest_media
+			ON latest_media.media_id = media.id
+		INNER JOIN advertisement_order_master.active_media
+			ON active_media.media_code = latest_media.media_code
+		INNER JOIN advertisement_order_master.use_media
+			ON use_media.media_code = latest_media.media_code
+		INNER JOIN advertisement_order_master.area
+			ON area.media_id = media.id
+		INNER JOIN advertisement_order_master.latest_area
+			ON latest_area.area_id = area.id
+		INNER JOIN advertisement_order_master.active_area
+			ON active_area.area_code = latest_area.area_code
+		INNER JOIN advertisement_order_master.use_area
+			ON use_area.area_code = latest_area.area_code
+		INNER JOIN advertisement_order_master.item
+			ON item.area_id = area.id
+		INNER JOIN advertisement_order_master.price_of_item
+			ON price_of_item.item_id = item.id
+		INNER JOIN advertisement_order_master.latest_item
+			ON latest_item.item_id = item.id
+		INNER JOIN advertisement_order_master.active_item
+			ON active_item.item_code = latest_item.item_code
+		INNER JOIN advertisement_order_master.use_item
+			ON use_item.item_code = latest_item.item_code
+		INNER JOIN advertisement_order_master.media_company
+			ON media_company.code = media.media_company_code
+		INNER JOIN advertisement_order_master.media_type
+			ON media_type.type = media.media_type
+		INNER JOIN advertisement_order_master.media_type_x_media_category
+			ON media_type_x_media_category.media_type = media_type.type
+		WHERE
+			<iterate property="criteria.workplace.ids" conjunction="AND">
+			(
+				EXISTS(
+					SELECT
+						area_x_section_to_hire.area_code
+					FROM
+						advertisement_order_master.area_x_section_to_hire
+					INNER JOIN
+						hiring.section_to_hire
+					ON
+						section_to_hire.section_to_hire_id = area_x_section_to_hire.section_to_hire_id
+					INNER JOIN
+						workplace.workplace
+					ON
+						workplace.section_to_hire_id = section_to_hire.section_to_hire_id
+					WHERE
+						area.code = area_x_section_to_hire.area_code
+					AND
+						workplace.workplace_id = #criteria.workplace.ids[]#
+				) OR (
+					EXISTS (
+						SELECT
+							area_x_business_model_type.area_id
+						FROM
+							advertisement_order_master.area_x_business_model_type
+						INNER JOIN
+							hiring.section_to_hire_business_model
+						ON
+							section_to_hire_business_model.business_model_type = area_x_business_model_type.business_model_type
+						INNER JOIN
+							workplace.workplace
+						ON
+							workplace.section_to_hire_id = section_to_hire_business_model.section_to_hire_id
+						WHERE
+							workplace.workplace_id = #criteria.workplace.ids[]#
+						AND
+							area_x_business_model_type.area_id = area.id
+
+					) AND (
+						EXISTS (
+							SELECT
+								area_x_prefectures.area_id
+							FROM
+								advertisement_order_master.area_x_prefectures
+							INNER JOIN
+								workplace.address_of_workplace
+							ON
+								address_of_workplace.prefecture_code = area_x_prefectures.prefecture_code
+							WHERE
+								area_x_prefectures.area_id = area.id
+							AND
+								address_of_workplace.workplace_id = #criteria.workplace.ids[]#
+						) OR EXISTS (
+							SELECT
+								area_x_cities.area_id
+							FROM
+								advertisement_order_master.area_x_cities
+							INNER JOIN
+								workplace.address_of_workplace
+							ON
+								address_of_workplace.city_code = area_x_cities.city_code
+							WHERE
+								area.id = area_x_cities.area_id
+							AND
+								address_of_workplace.workplace_id = #criteria.workplace.ids[]#
+						)
+					)
+				)
+			)
+			</iterate>
+			<isEqual property="criteria.media.empty" compareValue="false" prepend="AND">
+				media.id = #criteria.media.idToInt#
+			</isEqual>
+			<isEqual property="criteria.area.empty" compareValue="false" prepend="AND">
+				area.name LIKE '%' || regexp_replace( #criteria.area.name#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+			</isEqual>
+			<isEqual property="criteria.item.empty" compareValue="false" prepend="AND">
+				item.size LIKE '%' || regexp_replace( #criteria.item.size#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+			</isEqual>
+			<isEqual property="mediaCompanyList.mediaCompanies.empty" compareValue="false" prepend="AND">
+				media_company.code IN
+				<iterate property="mediaCompanyList.mediaCompanies" open="(" close=")" conjunction=",">
+					#mediaCompanyList.mediaCompanies[].code#
+				</iterate>
+			</isEqual>
+			<isEqual property="criteria.mediaTypeName.notEmpty" compareValue="true" prepend="AND">
+				media.media_type = #criteria.mediaTypeName.value#
+			</isEqual>
+			<isEqual property="criteria.mediaCategoryList.notEmpty" compareValue="true" prepend="AND">
+				media_type_x_media_category.media_category_id IN
+				<iterate property="criteria.mediaCategoryList.selected" open="(" close=")" conjunction=",">
+					#criteria.mediaCategoryList.selected[]#
+				</iterate>
+			</isEqual>
+		ORDER BY
+			media.priority,
+			substring_media_code,
+			area.priority,
+			substring_area_code,
+			item.priority,
+			substring_item_code
+		LIMIT #criteria.page.limit# OFFSET #criteria.page.offset#
+	</select>
+
+	<select id="medias" parameterClass="java.util.HashMap"  resultMap="media">
+		SELECT
+			DISTINCT
+			media.id                   AS media_id,
+			media.code                 AS media_code,
+			media.name                 AS media_name,
+			media.priority
+		FROM
+			advertisement_order_master.media
+		INNER JOIN advertisement_order_master.latest_media
+			ON latest_media.media_id = media.id
+		INNER JOIN advertisement_order_master.active_media
+			ON active_media.media_code = latest_media.media_code
+		INNER JOIN advertisement_order_master.use_media
+			ON use_media.media_code = latest_media.media_code
+		INNER JOIN advertisement_order_master.area
+			ON area.media_id = media.id
+		INNER JOIN advertisement_order_master.latest_area
+			ON latest_area.area_id = area.id
+		INNER JOIN advertisement_order_master.active_area
+			ON active_area.area_code = latest_area.area_code
+		INNER JOIN advertisement_order_master.use_area
+			ON use_area.area_code = latest_area.area_code
+		INNER JOIN advertisement_order_master.media_company
+			ON media_company.code = media.media_company_code
+		WHERE
+			EXISTS (
+				SELECT
+					item.area_id
+				FROM
+					advertisement_order_master.item
+					INNER JOIN
+						advertisement_order_master.latest_item
+					ON
+						item.id = latest_item.item_id
+					INNER JOIN
+						advertisement_order_master.active_item
+					ON
+						latest_item.item_code = active_item.item_code
+					INNER JOIN
+						advertisement_order_master.use_item
+					ON
+						latest_item.item_code = use_item.item_code
+				WHERE
+					area.id = item.area_id
+			)
+			<iterate property="criteria.workplace.ids" conjunction="AND" prepend="AND">
+			(
+				EXISTS(
+					SELECT
+						area_x_section_to_hire.area_code
+					FROM
+						advertisement_order_master.area_x_section_to_hire
+					INNER JOIN
+						hiring.section_to_hire
+					ON
+						section_to_hire.section_to_hire_id = area_x_section_to_hire.section_to_hire_id
+					INNER JOIN
+						workplace.workplace
+					ON
+						workplace.section_to_hire_id = section_to_hire.section_to_hire_id
+					WHERE
+						area.code = area_x_section_to_hire.area_code
+					AND
+						workplace.workplace_id = #criteria.workplace.ids[]#
+				) OR (
+					EXISTS (
+						SELECT
+							area_x_business_model_type.area_id
+						FROM
+							advertisement_order_master.area_x_business_model_type
+						INNER JOIN
+							hiring.section_to_hire_business_model
+						ON
+							section_to_hire_business_model.business_model_type = area_x_business_model_type.business_model_type
+						INNER JOIN
+							workplace.workplace
+						ON
+							workplace.section_to_hire_id = section_to_hire_business_model.section_to_hire_id
+						WHERE
+							workplace.workplace_id = #criteria.workplace.ids[]#
+						AND
+							area_x_business_model_type.area_id = area.id
+
+					) AND (
+						EXISTS (
+							SELECT
+								area_x_prefectures.area_id
+							FROM
+								advertisement_order_master.area_x_prefectures
+							INNER JOIN
+								workplace.address_of_workplace
+							ON
+								address_of_workplace.prefecture_code = area_x_prefectures.prefecture_code
+							WHERE
+								area_x_prefectures.area_id = area.id
+							AND
+								address_of_workplace.workplace_id = #criteria.workplace.ids[]#
+						) OR EXISTS (
+							SELECT
+								area_x_cities.area_id
+							FROM
+								advertisement_order_master.area_x_cities
+							INNER JOIN
+								workplace.address_of_workplace
+							ON
+								address_of_workplace.city_code = area_x_cities.city_code
+							WHERE
+								area.id = area_x_cities.area_id
+							AND
+								address_of_workplace.workplace_id = #criteria.workplace.ids[]#
+						)
+					)
+				)
+			)
+			</iterate>
+			<isEqual property="mediaCompanyList.mediaCompanies.empty" compareValue="false" prepend="AND">
+				media_company.code IN
+				<iterate property="mediaCompanyList.mediaCompanies" open="(" close=")" conjunction=",">
+					#mediaCompanyList.mediaCompanies[].code#
+				</iterate>
+			</isEqual>
+		ORDER BY media.priority
+	</select>
+
+</sqlMap>

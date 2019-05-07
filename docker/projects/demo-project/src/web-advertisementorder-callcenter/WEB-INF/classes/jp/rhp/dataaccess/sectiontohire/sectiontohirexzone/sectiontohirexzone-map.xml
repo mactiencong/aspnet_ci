@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.sectiontohire.sectiontohirexzone.SectionToHireXZoneDataAccess">
+
+	<typeAlias alias="sectionToHireXZone" type="jp.rhp.model.sectiontohire.sectiontohirexzone.SectionToHireXZone" />
+
+	<insert id="register" parameterClass="sectionToHireXZone">
+		INSERT INTO
+			hiring.section_to_hire_x_zone
+		(
+			section_to_hire_id,
+			zone_id
+		)
+		VALUES
+		(
+			#sectionToHireId#,
+			#zoneId#
+		)
+	</insert>
+
+	<delete id="delete" parameterClass="java.lang.Integer">
+		DELETE FROM
+			hiring.section_to_hire_x_zone
+		WHERE
+			section_to_hire_id = #value#
+	</delete>
+</sqlMap>

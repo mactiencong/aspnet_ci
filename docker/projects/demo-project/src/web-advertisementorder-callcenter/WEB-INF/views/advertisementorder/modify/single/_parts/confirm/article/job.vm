@@ -1,0 +1,31 @@
+<h4>仕事情報</h4>
+<table class="recoptable" summary="仕事情報">
+	<col width="18%" /><col width="*" />
+	<tr>
+		<th>仕事内容</th>
+		<td>
+			#escape($editSingleOrderSheet.article.jobOffer.job.jobDescription.textAsInput)
+		</td>
+	</tr>
+	<tr>
+		<th>キャッチ</th>
+		<td>
+			#escape($editSingleOrderSheet.article.jobOffer.job.catchPhrase.textAsInput)
+		</td>
+	</tr>
+	<tr>
+		<th>リード</th>
+		<td>
+			#escape($editSingleOrderSheet.article.jobOffer.job.readPhrase.textAsInput)
+		</td>
+	</tr>
+	<tr>
+		<th>メリット</th>
+		<td>
+			#foreach($meritCode in $editSingleOrderSheet.article.jobOffer.job.meritIndexList.selected)
+				$!{meritList.getName($meritCode)}&nbsp;
+			#end
+		</td>
+	</tr>
+	#parse("/advertisementorder/modify/single/_parts/confirm/article/job_addition.vm")
+</table>

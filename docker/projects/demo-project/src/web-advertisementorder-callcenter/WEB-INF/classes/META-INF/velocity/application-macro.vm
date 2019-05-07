@@ -1,0 +1,475 @@
+############################################
+## [共通] htmlタグの出力
+############################################
+#macro( recopHtml )
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--[if lt IE 7 ]><html lang="ja" class="ie6"><![endif]-->
+<!--[if IE 7 ]><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja" class="ie7"><![endif]-->
+<!--[if IE 8 ]><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja" class="ie8"><![endif]-->
+<!--[if IE 9 ]><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja" class="ie9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html lang="ja"><!--<![endif]-->
+#end
+
+#macro( endRecopHtml )
+</html>
+#end
+
+############################################
+## [共通] headタグの中身の出力
+##
+##  title : title内で表示させる文字列
+##  description : meta name="description"内で表示させる文字列
+##  keywords : meta name="keyword"内で表示させる文字列
+############################################
+#macro( recopHead $title $description $keywords )
+#setversion("201905060451")
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Cache-Control" content="no-store" />
+<meta http-equiv="Cache-Control" content="no-cache" />
+<meta http-equiv="Expires" content="-1" />
+<meta name="format-detection" content="telephone=no"/>
+#if( $title == '' )
+<title>リクオプ</title>
+#else
+<title>$esc.html($title)｜リクオプ</title>
+#end
+
+#css("$link.contextPath/css/root.css")
+#css("$link.contextPath/css/commons/app.css")
+#javascript("$link.contextPath/js/jquery.js")
+#javascript("$link.contextPath/js/jqueryRecOp.js")
+#javascript("$link.contextPath/js/commons/recop.js")
+#javascript("$link.contextPath/js/commons/app.js")
+#javascript("$link.contextPath/js/commons/cookie.js")
+#javascript("$link.contextPath/js/commons/releasenotes.js")
+<!--[if lte IE 6.0]>
+#javascript("$link.contextPath/js/DD_belatedPNG.js")
+<style type="text/css">body{behavior:url("$link.contextPath/css/csshover3.htc");}</style>
+<![endif]-->
+<!-- fancy box for modal window -->
+#javascript("$link.contextPath/js/lib/fancybox/jquery.fancybox-1.3.4.pack.js")
+#css("$link.contextPath/js/lib/fancybox/jquery.fancybox-1.3.4.css")
+
+#css("$link.contextPath/css/jqueryRecOp.css")
+#javascript("$link.contextPath/js/jquery.ui.core.js")
+<script type="text/javascript" charset="utf-8">
+	recop.settings.session_check_url = "$link.relative("sessionCheck")";
+</script>
+#end
+
+############################################
+## ページヘッダーの出力
+############################################
+#macro( recopHeader )
+#parse("/commons/header.vm")
+#end
+
+############################################
+## ページヘッダー(メニューなし)の出力
+############################################
+#macro( recopHeaderWithoutMenu )
+  <div id="header">
+    <div class="inner">
+        #parse("/commons/_parts/application_logo.vm")
+        <ul>
+			#parse("/commons/_parts/menu/hnLogout.vm")
+		</ul>
+        #parse("/commons/_parts/password_effectivity.vm")
+		#parse("/commons/_parts/account.vm")
+    </div>
+  <!-- //header --></div>
+#end
+
+############################################
+## ページヘッダー(画像のみ)の出力
+############################################
+#macro( recopHeaderOfLogoOnly )
+  <div id="header">
+    <div class="inner">
+        #parse("/commons/_parts/application_logo.vm")
+    </div>
+  <!-- //header --></div>
+#end
+
+############################################
+## css呼び出し
+############################################
+#macro( css $href )
+<link href="$href?#version" rel="stylesheet" type="text/css" media="all" />
+#end
+
+############################################
+## javascript呼び出し
+############################################
+#macro( javascript $src )
+<script src="$src?#version" type="text/javascript"></script>
+#end
+
+############################################
+## フッター情報一元管理 用マクロ
+############################################
+#macro( recopFooter )
+#parse("/commons/footer.vm")
+#end
+
+############################################
+##  指定のオブジェクトのエラーを表示するマクロ
+##
+##   path : Spring Macroで使用するobjectのパス
+############################################
+#macro( errorMessages $path )
+#springBind( $path )
+#foreach( $error in ${status.errorMessages} )
+<p class="err">${error}</p>
+#end
+#end
+
+############################################
+## エスケープ
+############################################
+#macro( escape $value )
+#if( $value )#nlTobr($esc.html($value))#end
+#end
+
+############################################
+## 改行→<br />
+############################################
+#macro( nlTobr $value )$!{value.replaceAll("\r\n|\r|\n","<br/>")}#end
+
+############################################
+## シングルテキスト表示マクロ
+## VALUE, ID別名指定対応版
+############################################
+#macro( formInput $path $attribute $paramId $paramValue )
+#springBind($path)
+#getId( $status $paramId )
+#getValue( $status $paramValue )
+<input type="text" name="${status.expression}" id="${id}" value="${value}" $!attribute />
+#end
+
+############################################
+## ファイル表示マクロ
+## VALUE, ID別名指定対応版
+############################################
+#macro( formFile $path $attribute $paramId $paramValue )
+#springBind($path)
+#getId( $status $paramId )
+#getValue( $status $paramValue )
+<input type="file" name="${status.expression}" id="${id}" value="${value}" $!attribute />
+#end
+
+############################################
+## マルチテキスト(文字数制限付)表示マクロ
+############################################
+#macro( formLimitedTextarea $path $paramValue $lineLength $columnSize  $additionalClass )
+#springBind($path)
+#getValue( $status $paramValue )
+#set($gridOuter = "")
+#set($gridOuterBottom = "")
+#set($gridInner = "")
+#set($textareaWidth = ($lineLength+4)*12+17)
+#set($textareaHeight = ($columnSize+1)*18)
+#set($textGridHeight = $textareaHeight+15)
+#foreach( $index in [ 1..$lineLength ])
+	#set($gridOuter = "$gridOuter　")
+	#set($gridOuterBottom = "$gridOuterBottom■")
+	#if($index%5 == 0) #set($gridInner = "$gridInner■")
+	#else #set($gridInner = "$gridInner□") #end
+#end
+#set($gridOuter = "$gridOuter■■■■")
+#set($gridOuterBottom = "$gridOuterBottom■■■■")
+
+#set($gridWidth = $textareaWidth+20)
+<div class="wrapTextGrid">
+<div class="textGrid" style="width:${gridWidth}px; height:${textGridHeight}px;">
+<textarea name="${status.expression}" id="${status.expression}" class="grid input $additionalClass" style="width:${textareaWidth}px; height:${textareaHeight}px;">
+$value</textarea>
+<textarea name="alert" class="grid alert noCheck" tabindex="-1" style="width:${textareaWidth}px; height:${textareaHeight}px;">#foreach($index in [ 1..$columnSize])$gridOuter
+#end
+$gridOuterBottom</textarea>
+<textarea name="grid" class="grid base noCheck" tabindex="-1" style="width:${textareaWidth}px; height:${textareaHeight}px;">#foreach($index in [ 2..$columnSize])$gridInner
+#end
+$gridInner</textarea>
+</div>
+#set($heafLength = $lineLength*2)
+<div class="textGridInfo">
+<span class="alertText">全角${lineLength}文字/半角${heafLength}文字×${columnSize}行以内</span><br />
+<span class="alertText lfComment">■</span><span class="note lfComment">部分に文字が重ならないように調整してください</span>
+</div>
+</div>
+#end
+
+############################################
+## 画像ボタン表示マクロ
+############################################
+#macro( formImageButton $imageUrl $paramName $attribute $paramId )
+#set( $isAvaivalId = $paramId && $paramId != '')
+<input type="image" name="$paramName" #if($isAvaivalId) id="$paramId" #else id="$paramName" #end src="$imageUrl" $!attribute />
+#end
+
+############################################
+## 単一選択プルダウン表示マクロ
+## VALUE, ID別名指定対応版
+############################################
+#macro( formSingleSelect $path $options $attribute $paramId $paramValue )
+#springBind($path)
+#getId( $status $paramId )
+#getValue( $status $paramValue )
+<select name="${status.expression}" id="$id" $!attribute>
+#foreach( $item in ${options.entrySet()} )
+<option value="${item.key}" #if( ${item.key} == ${value} ) selected #end>$esc.html(${item.value})</option>
+#end
+</select>
+#end
+
+############################################
+## ラジオボタン表示マクロ
+##
+## VALUE, ID別名指定対応版
+############################################
+#macro( formRadioButton $path $options $separator $attribute $linespacing )
+#springBind($path)
+#set( $strAttribute = $attribute )
+#set( $strLinespacing = $linespacing )
+#set( $isValidEmpty = $validEmpty )
+#foreach( $item in ${options.entrySet()} )
+	<label><input type="radio" name="${status.expression}" value="${item.key}" #if( ${item.key} == ${status.value} ) checked #end $strAttribute/> #escape( ${item.value} )</label>
+	#if( $strLinespacing > 0 && ($foreach.index + 1) % $strLinespacing == 0) <br/> #else $separator #end
+#end
+#end
+
+############################################
+## チェックボックス表示マクロ
+## VALUE, ID別名指定対応版
+############################################
+#macro( formCheckBox $path $attribute $paramValue $suffix $labelAttributes $paramId )
+#set( $strSuffix = '' )
+#set( $strSuffix = $suffix )
+#springBind($path)
+#getValue( $status $paramValue )
+<label $!labelAttributes >
+	<input type="checkbox" name="${status.expression}" value="$value" #if( ${status.value} == $value ) checked="checked" #end $!attribute />$strSuffix
+</label>
+<input type="hidden" name="_${status.expression}" value="on"/>
+#end
+############################################
+## チェックボックス表示マクロ
+## VALUEがboolean
+############################################
+#macro( formBooleanCheckBox $path $attribute )
+#springBind($path)
+	<input type="checkbox" name="${status.expression}" #if( ${status.value} == true ) checked="checked" #end value="true" $!attribute />
+<input type="hidden" name="_${status.expression}" value="on"/>
+#end
+
+############################################
+## チェックボックス表示マクロ
+## VALUEがboolean
+############################################
+#macro( formCheckBoxes $path $options $values $class $linespacing )
+#springBind($path)
+#foreach($option in $options.keySet())
+#if($option != 'UNKNOWN')
+	<label class="$class">
+	<input type="checkbox" name="${status.expression}" id="${status.expression}_${foreach.count}" value="${option}"
+	#foreach($item in $values)
+		#if($item == $option) checked="checked" #end
+	#end
+	>
+	#escape( ${options.get($option)} )
+	</label>
+	#if( $linespacing > 0 && ($foreach.index + 1) % $linespacing == 0)<br/>#end
+#end
+#end
+<input type="hidden" name="_${status.expression}" value="on"/>
+#end
+
+############################################
+## マルチテキスト表示マクロ
+## VALUE, ID別名指定対応版
+############################################
+#macro( formTextarea $path $attribute $paramId $paramValue )
+#springBind($path)
+#getId( $status $paramId )
+#getValue( $status $paramValue )
+<textarea name="${status.expression}" id="$id" $!attribute>
+$!value</textarea>
+#end
+
+############################################
+## 文字列を省略して表示するマクロ
+############################################
+#macro( abbreviation $str $length )
+#set( $val = '' )
+#set( $val = $str )
+
+#if( $val && $val.length() > $length )
+$esc.html( "${val.substring( 0, $length )}..." )
+#else
+$esc.html( $val )
+#end
+#end
+
+####
+## エラー項目にclassを設定する
+####
+#macro( errorClass $path )
+#springBind($path)
+#if(${status.error}) class="input err" #else class="input" #end
+#end
+
+############################################
+## HiddenInput
+## value値を引数で指定できるように拡張
+############################################
+#macro( formHiddenInput $path $value $attributes )
+#springBind($path)
+<input type="hidden" name="${status.expression}" id="${status.expression}" value="$esc.html($value)" $attributes />
+#end
+
+############################################
+## 一覧ページング(非同期)
+############################################
+#macro( page $page $path )
+#if($page.count != 0)
+<ul class="pager">
+#if($page.current > 1 )
+	<li class="prev"><a href="javascript:paging('$link.relativeAndCompany("$path")', '$page.prev');">前へ</a></li>
+#end
+#foreach( $count in [$page.startPage..$page.endPage])
+	#if($page.isCurrent($count))
+	<li>$count</li>
+	#else
+	<li><a href="javascript:paging('$link.relativeAndCompany("$path")', '$count');">$count</a></li>
+	#end
+#end
+#if($page.current != $page.pageSize )
+	<li class="next"><a href="javascript:paging('$link.relativeAndCompany("$path")', '$page.next');">次へ</a></li>
+#end
+</ul>
+#end
+
+#end
+
+############################################
+## 一覧ページング
+############################################
+#macro( pageLink $page $path )
+#if($page.count != 0)
+<ul class="pager">
+#if($page.current > 1 )
+	<li class="prev"><a href="$link.relativeAndCompany("$path")/$page.prev">前へ</a></li>
+#end
+#foreach( $count in [$page.startPage..$page.endPage])
+	#if($page.isCurrent($count))
+	<li>$count</li>
+	#else
+	<li><a href="$link.relativeAndCompany("$path")/$count">$count</a></li>
+	#end
+#end
+#if($page.current != $page.pageSize )
+	<li class="next"><a href="$link.relativeAndCompany("$path")/$page.next">次へ</a></li>
+#end
+</ul>
+#end
+#end
+
+############################################
+## 必須マーク
+############################################
+#macro( required $attribute )
+#set( $attributeStr = '' )
+#set( $attributeStr = $attribute )
+<img src="$link.contextPath/images/icnRequired.gif" width="25" height="13" alt="必須" $attributeStr />
+#end
+
+############################################
+## 必須マーク（フォーム）
+############################################
+#macro( requiredCustom $isRequired, $attribute )
+#if( $isRequired )
+#set( $attributeStr = '' )
+#set( $attributeStr = $attribute )
+<img src="$link.contextPath/images/icnRequired.gif" width="25" height="13" alt="必須" $attributeStr />
+#end
+#end
+
+############################################
+## リクオプダイアログ(標準)
+############################################
+#macro( recopDialog $title $id $bodyViewPath $buttonViewPath )
+<div id="$id">
+#recopDialogBody( $title $bodyViewPath $buttonViewPath "reguler" )
+</div>
+#end
+
+############################################
+## リクオプダイアログ(大)
+############################################
+#macro( recopDialogWide $title $id $bodyViewPath $buttonViewPath )
+<div id="$id">
+#recopDialogBody( $title $bodyViewPath $buttonViewPath "wide" )
+</div>
+#end
+
+#macro( recopDialogBody $title $bodyViewPath $buttonViewPath $size )
+<div class="recopDialog $size">
+	<div class="title"><strong>$title</strong></div>
+	<div class="body">
+		#parse($bodyViewPath)
+	</div>
+	<div class="buttons">
+		#parse($buttonViewPath)
+	</div>
+</div>
+#end
+
+############################################
+## Hidden(トークン用)
+############################################
+## タブブラウザ対応用 token
+#macro( token )
+<input type="hidden" id="requestToken" name="requestToken" value="$!requestToken" class="noCheck" />
+#end
+
+## CSRF対策用 token
+#macro( csrfToken )
+<input type="hidden" id="csrfToken" name="csrfToken" value="$!csrfToken" class="noCheck" />
+#end
+
+############################################
+## private マクロ
+############################################
+##
+## ID、VALUEの取得
+##
+#macro( getId $status $paramId )
+#set( $id = '' )
+#if( $paramId && $paramId != '' )
+	#set( $id = $paramId )
+#else
+	#set( $id = ${status.expression} )
+#end
+#end
+
+#macro( getValue $status $paramValue )
+#set( $value = '' )
+#if( $paramValue && $paramValue != '' )
+	#set( $value = $paramValue )
+#else
+	#set( $value = ${status.value} )
+#end
+#end
+
+##
+## staticファイルバージョン取得
+##
+#macro( version )$!{version}#end
+
+##
+## staticファイルバージョン設定
+##
+#macro( setversion $val )
+#set($version = $val)
+#end

@@ -1,6 +1,0 @@
-# Logfile created on 2019-05-04 07:44:35 +0000 by logger.rb/61378
-May 04, 2019 07:44: User "Administrator" (admin@example.com) was created
-May 04, 2019 07:49: Successful Login: username=root ip=192.168.16.88 method=standard admin=true
-May 04, 2019 07:50: Successful Login: username=root ip=192.168.16.166 method=standard admin=true
-May 04, 2019 07:50: Administrator created a new project "Administrator / Demo Project"
-May 04, 2019 09:51: Administrator created a new project "Administrator / Demo Resource"

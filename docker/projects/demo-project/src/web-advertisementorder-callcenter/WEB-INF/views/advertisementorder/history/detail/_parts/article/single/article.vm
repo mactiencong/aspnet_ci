@@ -1,0 +1,22 @@
+<h3>原稿内容</h3>
+#if(!$settings.formCustomize.messageOfSingleOrder.hide)
+	<div class="section">
+	<table class="recoptable" >
+		<col width="18%" /><col width="*" />
+		<tr>
+			<th>
+				申送り事項
+			</th>
+			<td>
+				#escape($!{advertisementOrderDetail.slips.remarks.message.text})
+			</td>
+		</tr>
+	</table>
+	</div>
+#end
+#foreach($singleArticle in $!{articleList.articles})
+	#parse("/advertisementorder/history/detail/_parts/article/single/summary.vm")
+	#parse("/advertisementorder/history/detail/_parts/article/single/job.vm")
+	#parse("/advertisementorder/history/detail/_parts/article/single/recruitment.vm")
+	#parse("/advertisementorder/history/detail/_parts/article/single/entrymethod.vm")
+#end

@@ -1,0 +1,74 @@
+<h3>商品</h3>
+<div class="section">
+	#if($!{advertisementOrderDetail.status.canceled})<div><span class="warn">※この発注はキャンセルされました。</span></div>#end
+	<table class="recoptable" >
+		<col width="18%" /><col width="32%" /><col width="18%" /><col width="32%" />
+		<tr>
+			<th>
+				媒体
+			</th>
+			<td>
+				#escape($!{item.media.name.value})
+			</td>
+			<th>
+				版（エリア）
+			</th>
+			<td>
+				#escape($!{item.plan.issue.area.name.value})
+			</td>
+		</tr>
+		<tr>
+			<th>
+				プラン
+			</th>
+			<td>
+				#escape($!{item.plan.issue.size.value})
+			</td>
+			<th>
+				価格（税別）
+			</th>
+			<td>
+			#set( $price = $!{item.plan.price} )
+				$text.priceFormat($!{price.value}) 円
+			</td>
+		</tr>
+	</table>
+	#if( $!advertisementOrderDetail.type.joint )
+		#parse("/advertisementorder/history/detail/_parts/item/costpersectiontohire.vm")
+	#end
+	#if(!$settings.formCustomize.publishImage.hide || !$settings.formCustomize.publishingDate.hide)
+	<table class="recoptable" >
+		<col width="18%" /><col width="*" />
+		#if(!$settings.formCustomize.publishImage.hide )
+		<tr>
+			<th>
+				写真掲載
+			</th>
+			<td>
+				#if( ${advertisementOrderDetail.slips.detail.demand.image.publish} )
+					<div>
+						あり&nbsp;&nbsp;&nbsp;&nbsp;写真ID&nbsp;&nbsp;#escape($!{advertisementOrderDetail.slips.detail.demand.image.name})
+					</div>
+				#else
+					なし
+				#end
+			</td>
+		</tr>
+		#end
+		#if( !$settings.formCustomize.publishingDate.hide )
+		<tr>
+			<th>
+				掲載希望日
+			</th>
+			<td>
+				#if( ${advertisementOrderDetail.slips.detail.demand.publishingDate.partedDate.notEmpty} )
+					$date.format('yyyy年MM月dd日 (E)',$!{advertisementOrderDetail.slips.detail.demand.publishingDate.partedDate.date})<br />
+				#else
+					最短の掲載日で手配致します。
+				#end
+			</td>
+		</tr>
+		#end
+	</table>
+	#end
+</div>

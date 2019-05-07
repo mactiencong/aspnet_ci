@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.company.CompanyForAdvertisementOrderCallcenterDataAccess">
+
+    <resultMap class="jp.rhp.model.company.Company" id="company" >
+		<result property="id" 																		column="id"/>
+		<result property="name" 																	column="name" />
+    </resultMap>
+
+	<select id="findById" resultMap="company">
+		SELECT
+			id,
+			view_name_for_advertisement_order_callcenter AS name
+		FROM
+			company.company
+		WHERE
+			company.id = #value#
+	</select>
+
+	<select id="listOfLoginEventUser" resultMap="company">
+		SELECT
+			company.id,
+			company.view_name_for_advertisement_order_callcenter AS name
+		FROM
+			company.company
+		WHERE
+			EXISTS
+			(
+				 SELECT
+					target_company.id
+				FROM
+					company.company AS target_company
+				INNER JOIN
+					callcenter.contract_company
+				ON contract_company.company_id = target_company.id
+				INNER JOIN
+					callcenter.callcenter
+				ON contract_company.callcenter_id = callcenter.id
+				INNER JOIN
+					account.user_x_callcenter
+				ON callcenter.id = user_x_callcenter.callcenter_id
+				WHERE
+					callcenter.callcenter_type = 'ADVERTISEMENT_ORDER_CALLCENTER'
+					AND user_x_callcenter.user_id = #account.id#
+					AND target_company.id = company.id
+			)
+		ORDER BY
+			company.id
+	</select>
+
+	<select id="checkAuthority" resultClass="boolean">
+		SELECT
+			CASE WHEN count(*) > 0 THEN true ELSE false END
+		FROM
+			company.company
+		INNER JOIN
+			callcenter.contract_company
+		ON contract_company.company_id = company.id
+		INNER JOIN
+			callcenter.callcenter
+		ON contract_company.callcenter_id = callcenter.id
+		INNER JOIN
+			account.user_x_callcenter
+		ON callcenter.id = user_x_callcenter.callcenter_id
+		WHERE
+			callcenter.callcenter_type = 'ADVERTISEMENT_ORDER_CALLCENTER'
+			AND user_x_callcenter.user_id = #userId#
+			AND company.id = #companyId#
+	</select>
+
+</sqlMap>

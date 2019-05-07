@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap
+	namespace="jp.rhp.dataaccess.interviewschedule.InterviewPropagationDataAccess">
+
+	<typeAlias alias="propagation" type="jp.rhp.model.interviewschedule.interviewsetting.propagation.Propagation" />
+
+	<resultMap class="propagation" id="propagation">
+		<result property="generationID" column="generation_id" />
+		<result property="type" column="type" />
+		<result property="specification.dateRange.start" column="specification_start" />
+		<result property="specification.dateRange.end" column="specification_end" />
+		<result property="specification.specifiedDaysOfWeek.weekDaysText" column="days_of_week" />
+	</resultMap>
+
+	<select id="getID" resultClass="java.lang.Long">
+		SELECT nextval('interview_schedule.generation_id')
+	</select>
+
+	<select id="findGeneraionIDByInterviewId" resultClass="java.lang.Long">
+		SELECT generation_id FROM interview_schedule.interview_generations WHERE interview_id = #interviewID#
+	</select>
+
+	<select id="findByGanarationID" resultMap="propagation">
+		SELECT 
+			generation_id,
+			type,
+			specification_start,
+			specification_end,
+			days_of_week
+		FROM interview_schedule.propagations
+		WHERE generation_id = #generationID#
+	</select>
+
+	<select id="isObsoleted" resultClass="java.lang.Boolean" >
+		SELECT CASE WHEN count(*) = 0 THEN false ELSE true END FROM interview_schedule.obsoleted_generations WHERE generation_id = #generationID# ;
+	</select>
+
+	<insert id="save" parameterClass="propagation">
+		INSERT INTO interview_schedule.propagations(
+			generation_id,
+			"type",
+			specification_start,
+			specification_end,
+			days_of_week
+		) 
+		VALUES ( 
+			#generationID#,
+			#type#,
+			to_date(#specification.dateRange.start#, 'yyyy-mm-dd'),
+			to_date(#specification.dateRange.end#, 'yyyy-mm-dd'),
+			#specification.specifiedDaysOfWeek.weekDaysText#
+		);
+	</insert>
+
+	<insert id="saveInterviewGenerations">
+		INSERT INTO interview_schedule.interview_generations(
+			interview_id,
+			generation_id
+		)
+		VALUES ( 
+			#interviewID#,
+			#generationID#
+		);
+	</insert>
+
+	<insert id="obsolete">
+		INSERT INTO interview_schedule.obsoleted_generations (
+			generation_id
+		)
+		VALUES ( 
+			#generationID#
+		)
+	</insert>
+
+	<delete id="deleteByGenerationID">
+		DELETE FROM interview_schedule.interviews WHERE id IN( SELECT interview_id FROM interview_schedule.interview_generations WHERE generation_id = #generationID# )
+	</delete>
+
+</sqlMap>

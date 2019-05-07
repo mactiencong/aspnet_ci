@@ -1,0 +1,11 @@
+
+<table class="recoptable" >
+	<col width="18%" /><col width="*" />
+	<tr>
+		<th><span class="labelWithImg">センター備考</span></th>
+		<td class="input">
+				#formTextarea("newSingleOrderSheet.advertisementOrder.slips.remarks.operationalNote.text", 'class="regular bg operationalNote" rows="7"')
+				#errorMessages("newSingleOrderSheet.advertisementOrder.slips.remarks.operationalNote.text")
+		 </td>
+	</tr>
+</table>

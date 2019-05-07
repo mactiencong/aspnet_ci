@@ -1,0 +1,62 @@
+#recopHtml()
+<head>
+    #recopHead('')
+</head>
+<body id="bidAppl">
+  #recopHeaderOfLogoOnly
+  <hr />
+  <div  id="container">
+    <div class="pannel">
+      <div class="inner login">
+        <div class="content">
+          <noscript>
+            <div class="msg">
+              <p class="err">リクオプ&reg;をご利用いただくためにはJavascriptが有効になっている必要があります。</p>
+            </div>
+          </noscript>
+          <form method="POST" name="recopLogin" action="$link.relative('/login')">
+            <table summary="ログイン" class="regular login">
+              <tr>
+                <th scope="row"><label for="usrID">ユーザーID</label></th>
+                <td><input type="text" name="j_username" value="#escape($!loginForm.username)" id="usrID" class="regular" autocomplete="off" /></td>
+              </tr>
+              <tr>
+                <th scope="row"><label for="passwd">パスワード</label></th>
+                <td><input type="password" name="j_password" id="passwd" class="regular" /></td>
+              </tr>
+            </table>
+            <div class="msg">
+            #if( $loginForm.loginFailed )
+            <!--if error -->
+              #if ( $loginForm.loginLocked && $loginForm.allEntered && !$loginForm.expiryPassword )
+                <p class="err">アカウントがロックされています。</p>
+              #end
+              #if ( !$loginForm.expiryPassword && $loginForm.allEntered && !$loginForm.loginLocked )
+                <p class="err">ユーザーIDまたはパスワードが誤っています。</p>
+              #end
+              #if ( $loginForm.expiryPassword && $loginForm.allEntered )
+                <p class="err">パスワードの有効期限が切れています。管理者に連絡して、仮パスワードを再発行してください。</p>
+              #end
+              #if ( $loginForm.usernameEmpty )
+                <p class="err">ユーザ名を入力して下さい。</p>
+              #end
+              #if ( $loginForm.passwordEmpty )
+                <p class="err">パスワードを入力して下さい。</p>
+              #end
+            <!-- end if -->
+            #end
+            </div>
+            <p class="btnSpace"><input type="image" src="$link.contextPath/images/btnLogin.gif" alt="ログイン" class="rollover" /></p>
+            <p class="a-ct">当サービスはSSL暗号技術によりお客様の情報を保護しております。</p>
+            #parse("/info/recopServiceCenter.vm")
+          </form>
+        <!-- //content -->
+        </div>
+      <!-- //inner -->
+      </div>
+    <!-- //pannel -->
+    </div>
+  </div>
+  #recopFooter()
+</body>
+</html>

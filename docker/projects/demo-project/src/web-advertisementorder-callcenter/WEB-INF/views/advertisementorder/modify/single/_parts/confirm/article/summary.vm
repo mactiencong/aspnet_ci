@@ -1,0 +1,26 @@
+
+<div class="articleHeader">
+	<h4>案件情報</h4>
+</div>
+<div class="clrFix"></div>
+<table class="recoptable" summary="案件情報">
+	<col width="18%" /><col width="*" />
+	<tr>
+		<th>案件名</th>
+		<td>
+			#escape($editSingleOrderSheet.article.jobOffer.title)
+		</td>
+	</tr>
+	<tr>
+		<th>原稿掲載職種</th>
+		<td>
+			#escape($jobTypeList.getName($editSingleOrderSheet.article.jobOffer.jobTypeCode))
+		</td>
+	</tr>
+	<tr>
+		<th>アクセス</th>
+		<td>
+			#escape($editSingleOrderSheet.article.jobOffer.workplace.access.textAsInput)
+		</td>
+	</tr>
+</table>

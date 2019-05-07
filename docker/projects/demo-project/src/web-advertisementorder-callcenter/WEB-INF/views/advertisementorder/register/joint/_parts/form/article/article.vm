@@ -1,0 +1,20 @@
+<h3>原稿内容</h3>
+<div class="section">
+	<div id="jointArticle">
+		#parse("/advertisementorder/register/joint/_parts/form/article/jobs.vm")
+	</div>
+
+	#if(!$settings.formCustomize.messageOfJointOrder.hide)
+	<table class="recoptable" >
+		<col width="18%" /><col width="*" />
+		<tr>
+			<th><span class="labelWithImg">申送り事項#requiredCustom( $settings.formCustomize.messageOfJointOrder.required, 'class="needIcon"')</span></th>
+			<td class="input">
+				#formTextarea("newJointOrderSheet.advertisementOrder.slips.remarks.message.text", 'class="regular bg remarksMessageBox" rows="7" cols="100"')
+				#errorMessages("newJointOrderSheet.advertisementOrder.slips.remarks.message.text")
+				<div>#escape( $settings.formCustomize.messageOfJointOrder.description )</div>
+			</td>
+		</tr>
+	</table>
+	#end
+</div>

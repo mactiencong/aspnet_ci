@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.advertisementorder.settings.AdvertisementOrderFormSettingsDataAccess">
+
+    <resultMap class="jp.rhp.model.advertisementorder.settings.customize.SettingOfColumn" id="settingOfColumn">
+		<result property="columnType" column="advertisement_order_form_column_type"/>
+		<result property="hide" column="is_hide"/>
+		<result property="required" column="is_required"/>
+		<result property="description" column="description"/>
+    </resultMap>
+
+    <resultMap class="jp.rhp.model.advertisementorder.settings.ExternalContents" id="externalContents">
+		<result property="publishImageLink.url" column="publish_image_url"/>
+		<result property="publishImageLink.label" column="publish_image_link_label"/>
+		<result property="mediaGuideLink.url" column="media_guide_url"/>
+		<result property="mediaGuideLink.label" column="media_guide_link_label"/>
+    </resultMap>
+
+	<resultMap class="jp.rhp.model.advertisementorder.settings.Function" id="function">
+    	<result property="useArticleConfirmation" column="use_article_confirmation"/>
+    </resultMap>
+
+	<select id="settingOfColumnList" resultMap="settingOfColumn">
+		SELECT
+			advertisement_order_form_column_type,
+			is_hide,
+			is_required,
+			description
+		FROM
+			advertisement_order.advertisement_order_form_customize
+	</select>
+
+	<select id="findExternalContents" resultMap="externalContents">
+		SELECT 
+			publish_image_url, 
+			publish_image_link_label,
+			media_guide_url,
+			media_guide_link_label
+		  FROM
+			 advertisement_order.settings;
+	</select>
+	
+	<select id="useArticleConfirmation" resultMap="function">
+		SELECT 
+			use_article_confirmation
+		FROM
+			 advertisement_order.settings;
+	</select>
+</sqlMap>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root>
+<root>
+<status>${result.status}</status>
+#foreach($response in $result.responseList.responses)
+<body key="${response.key}"><![CDATA[#parse(${response.path})]]></body>
+#end
+</root>

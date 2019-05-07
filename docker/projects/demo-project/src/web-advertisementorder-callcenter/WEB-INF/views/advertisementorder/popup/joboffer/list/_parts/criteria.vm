@@ -1,0 +1,38 @@
+#if($jobOfferPopupSearchCriteria.searchType.allSection)
+<form action="$link.relativeAndCompany("/advertisementorder/popup/joboffer/listing")" method="POST">
+	<table class="recoptable">
+		<tr>
+			<th>原稿掲載店舗分類</th>
+			<td>
+				#springFormSingleSelect('jobOfferPopupSearchCriteria.workplaceGroup.id' $workplaceGroupList.map 'class="regular"')
+			</td>
+		</tr>
+		<tr>
+			<th>原稿掲載店舗名</th>
+			<td>
+				#formInput( 'jobOfferPopupSearchCriteria.workplace.name' 'class="regular bg" style="width:350px;"' )
+			</td>
+		</tr>
+		<tr>
+			<th>原稿掲載職種</th>
+			<td>
+				#springFormSingleSelect('jobOfferPopupSearchCriteria.jobType.code' $jobTypeList.map 'class="regular"')
+			</td>
+		</tr>
+		<tr>
+			<th>公開状態</th>
+			<td>
+				#formRadioButton('jobOfferPopupSearchCriteria.postingStatus' $jobOfferPopupSearchCriteria.postingStatus.options()  '&nbsp;&nbsp;&nbsp;' '' 0 )
+			</td>
+		</tr>
+	</table>
+	<div class="actionArea">
+		<div class="searchBtn">
+			<input type="image" src="$link.contextPath/images/btnArticleSearch.png" class="rollover" />
+		</div>
+		<div class="resetBtn">
+			<a href="$link.relativeAndCompany("/advertisementorder/popup/joboffer")">条件をリセット</a>
+		</div>
+	</div>
+</form>
+#end

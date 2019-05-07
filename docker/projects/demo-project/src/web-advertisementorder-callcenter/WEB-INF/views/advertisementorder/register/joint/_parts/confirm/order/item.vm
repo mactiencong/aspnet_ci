@@ -1,0 +1,71 @@
+<h3>商品</h3>
+<div class="section">
+	<table class="recoptable" summary="商品情報">
+		<col width="18%" /><col width="32%" /><col width="18%" /><col width="32%" />
+		<tr>
+			<th>
+				<div class="title"><span>媒体</span></div>
+			</th>
+			<td>
+				<span class="mediaNameView">#escape($newJointOrderSheet.item.media.name.value)</span>
+			</td>
+			<th>
+				<div class="title"><span>版（エリア）</span></div>
+			</th>
+			<td>
+				<span class="orderAreaView">#escape($newJointOrderSheet.item.plan.issue.area.name.value)</span>
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<div class="title"><span>プラン</span></div>
+			</th>
+			<td>
+				<span class="sizeView">#escape($newJointOrderSheet.item.plan.issue.size.value)</span>
+			</td>
+			<th>
+				<div class="title"><span>価格（税別）</span></div>
+			</th>
+			<td>
+				<span class="priceView itemPriceFormat">#escape($text.priceFormat($newJointOrderSheet.item.plan.price.value)) 円</span>
+			</td>
+		</tr>
+	</table>
+	#if(!$settings.formCustomize.publishImage.hide || !$settings.formCustomize.publishingDate.hide)
+	<table class="recoptable" >
+		<col width="18%" /><col width="*" />
+		#if(!$settings.formCustomize.publishImage.hide)
+		<tr>
+			<th>写真掲載</th>
+			<td>
+				#if($newJointOrderSheet.advertisementOrder.slips.detail.demand.image.publish)
+					<div>
+						あり<span style="display:inline-box; margin-left:16px;margin-right:8px;">写真ID</span><span>#escape($imageOptions.get($newJointOrderSheet.advertisementOrder.slips.detail.demand.image.id))</span>
+					</div>
+					<span class="warn">※写真掲載については「あり」を選択しても、プランによって掲載できない場合がございます。</span>
+				#else
+					なし
+				#end
+			</td>
+		</tr>
+		#end
+		#if( !$settings.formCustomize.publishingDate.hide)
+		<tr>
+			<th>掲載希望日</th>
+			<td>
+				#set( $dateOfPublication = $newJointOrderSheet.advertisementOrder.slips.detail.demand.publishingDate.partedDate )
+				#if(!$dateOfPublication.empty)
+					$date.format('yyyy年MM月dd日 (E)', $dateOfPublication.toDate() )<br />
+					<span class="warn">※ 媒体の発行スケジュールにより、ご希望日に添えない場合は翌号の掲載となります。</span>
+					<br />
+					<span class="warn">※ 安全に入稿作業を行うために掲載希望日１週間前を目安に余裕を持ってご発注下さい。</span>
+
+				#else
+					最短の掲載日で手配致します。
+				#end
+			</td>
+		</tr>
+		#end
+	</table>
+	#end
+</div>

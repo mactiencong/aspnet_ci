@@ -1,0 +1,93 @@
+#recopHtml()
+<head>
+	#recopHead('面接日時設定')
+
+	<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
+	#css("$link.contextPath/css/jqueryRecOp.css")
+	#css("$link.contextPath/js/lib/dhtmlxscheduler/dhtmlxscheduler_recop.css")
+	#css("$link.contextPath/css/schedule/interviewframe/schedule.css")
+
+	#javascript("$link.contextPath/js/jquery.ui.datepicker2.js")
+	#javascript("$link.contextPath/js/schedule/memo.js")
+	#javascript("$link.contextPath/js/lib/dhtmlxscheduler/dhtmlxscheduler.js")
+	#javascript("$link.contextPath/js/lib/easydrag/easydrag.js")
+	#javascript("$link.contextPath/js/schedule/interviewframe/repeat.js")
+	#javascript("$link.contextPath/js/schedule/interviewframe/interviewplace.js")
+	#javascript("$link.contextPath/js/schedule/interviewframe/coordinate.js")
+	#javascript("$link.contextPath/js/schedule/interviewframe/schedule.js")
+	#javascript("$link.contextPath/js/schedule/interviewframe/locale.js")
+	#javascript("$link.contextPath/js/schedule/interviewframe/validate.js")
+	#javascript("$link.contextPath/js/commons/sectiontohire.js")
+	#javascript("$link.contextPath/js/commons/dateUtil.js")
+	#javascript("$link.contextPath/js/commons/map.js")
+	<script type="text/javascript" charset="utf-8">
+		<!--
+		function init() {
+			//----------------------------------------------------------
+			// 画面設定
+			//----------------------------------------------------------
+			var sectionToHireId = ${scheduleCriteria.sectionToHireId};
+
+			// 時間の範囲指定
+			scheduler.config.time_step = ${scheduleConfiguration.stepTime};
+			scheduler.config.first_hour = ${scheduleConfiguration.firstHour};
+			scheduler.config.last_hour = ${scheduleConfiguration.lastHour};
+
+			scheduler.config.default_capacity = "${interviewScheduleConfigulation.defaultInterviewCapacity}"; //定員デフォルト値
+			scheduler.config.use_booking_for_web_enry = ${interviewScheduleConfigulation.useBookingForWebEntry}; //採用ホームページでの予約可否
+
+			scheduler.config.event_load_url = '$link.relativeAndCompany("/sectiontohire/schedule/interviewframe/load").query("?sectionToHireId=")$!{scheduleCriteria.sectionToHire.id}'; //読み込みURL
+			scheduler.config.event_action_url = '$link.relativeAndCompany("/sectiontohire/schedule/interviewframe/action").query("?sectionToHire.id=")$!{scheduleCriteria.sectionToHire.id}&csrfToken=$!{csrfToken}'; //アクションURL
+			scheduler.config.event_error_url = "$link.relative('/errors/500')"; //エラーURL
+			scheduler.config.session_check_url = "$link.relative('/sessionCheck')"; //SessionチェックURL
+			scheduler.config.interview_place_map_url = '$link.relativeAndCompany("/sectiontohire/schedule/interviewframe/map")'; //地図プレビューURL
+			scheduler.config.interview_place_template_set_url ='$link.relativeAndCompany("/sectiontohire/schedule/interviewframe/interviewplace/template")'; //面接会場テンプレートセットURL
+			scheduler.config.interview_place_template_selectbox_url =  '$link.relativeAndCompany("/sectiontohire/schedule/interviewframe/interviewplace/template/selectbox").query("?id=")$!{scheduleCriteria.sectionToHire.id}'; //面接会場テンプレートセレクトエリア表示URL
+			scheduler.config.interview_place_default_url =  '$link.relativeAndCompany("/sectiontohire/schedule/interviewframe/interviewplace/default").query("?id=")$!{scheduleCriteria.sectionToHire.id}'; //デフォルト面接会場取得URL
+
+			scheduler.config.cal_icn_url = "$link.contextPath/images/icnCalendar2.gif"; //日付入力補助用アイコンURL
+			scheduler.config.repeat_icn_url = "$link.contextPath/images/repeat.png"; //繰り返し設定アイコンURL
+			scheduler.config.closed_icn_url = "$link.contextPath/images/icnInterviewClose.png"; //非公開アイコンURL
+			scheduler.config.open_icn_url = "$link.contextPath/images/icnInterviewOpen.png"; //非公開アイコンURL
+
+			schedulerInitialize()
+		}
+		settings.memo_url ='$link.relativeAndCompany("/sectiontohire/schedule/memo/edit")'; //メモ編集URL
+		recop.settings.mappreview_url = "$link.relativeAndCompany("/sectiontohire/schedule/interviewframe/interviewplace/map")" //地図プレビューURL
+		recop.settings.mapsettings_url = "$link.relativeAndCompany("/sectiontohire/schedule/interviewframe/coordinate/map")" //座標設定地図URL
+		$(document).ready(function(){
+			// 店舗絞り込み
+			$("tr.shopCasette,tr.shopCassette").formWordSearch({
+				defWord:"店舗名を入力",
+				emptyErrMsg:"店舗名を入力してください。"
+			});
+		});
+		//-->
+	</script>
+
+</head>
+<body id="bidSchedule" onload="init();">
+#recopHeader()
+<hr />
+<div id="container">
+<div class="pannel">
+<div class="inner">
+<div class="content">
+	#parse('schedule/interviewframe/scheduler/_parts/title.vm')
+	#parse('schedule/interviewframe/scheduler/_parts/controller.vm')
+	#parse('schedule/interviewframe/scheduler/_parts/container.vm')
+	<div style="display:none;">
+		#parse("/schedule/interviewframe/scheduler/_parts/repeat.vm")
+	</div>
+	<div style="display:none;">
+		#parse("/schedule/interviewframe/scheduler/_parts/interviewplace.vm")
+	</div>
+	<a href="$link.relativeAndCompany("/sectiontohire/schedule/interviewframe/coordinate")" class="place coordinate" rel="place"></a>
+	<a href="$link.relativeAndCompany("/sectiontohire/schedule/interviewframe/interviewplace")" class="previewmap" rel="place_prev" id="interviewPreviewBtn"></a>
+</div>
+</div>
+</div>
+	#recopFooter()
+</div>
+</body>
+</html>

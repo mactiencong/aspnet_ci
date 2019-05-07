@@ -1,0 +1,898 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.detailentry.search.DetailEntrySearchDataAccess">
+
+    <resultMap class="jp.rhp.model.detailentry.DetailEntry" id="detailEntries">
+        <result property="applicantId"                                                                  column="entry_id"/>
+        <result property="candidate.entry.entryDate.entryDate.date"                                     column="entry_date"/>
+        <result property="candidate.id"                                                                 column="candidate_id"/>
+        <result property="candidate.interviewDate.date"                                                 column="interview_datetime"/>
+        <result property="candidate.interviewDateTime.date"                                             column="interview_date"/>
+        <result property="candidate.interviewDateTime.time"                                             column="interview_time"/>
+        <result property="candidate.interviewDateTimeAdjustment.adjust"                                 column="interview_datetime_adjust"/>
+        <result property="candidate.interviewBookingInvitation.sentLastDateTime.timeStamp.timeStamp"    column="sent_last_booking_date"/>
+        <result property="candidate.entry.entryMedia.mediaName"                                         column="media_name"/>
+        <result property="candidate.entry.callcenterEntryInflowRoute.entryInflowRoute.media.name"       column="callcenter_media_name"/>
+        <result property="candidate.profile.gender.genderId"                                            column="gender"/>
+        <result property="candidate.name.fullName"                                                      column="entry_name"/>
+        <result property="candidate.name.fullNameKana"                                                  column="entry_name_kana"/>
+        <result property="candidate.profile.dateOfBirth.dateOfBirth"                                    column="date_of_birth"/>
+        <result property="candidate.profile.entryAge.valueAsInteger"                                    column="entry_age"/>
+        <result property="candidate.entry.currentEmploymentType.id"                                     column="current_employment_type_id"/>
+        <result property="candidate.entry.currentEmploymentType.currentEmploymentType"                  column="current_employment_type_name"/>
+        <result property="candidate.entry.entryMediaInfomation.workplace"                               column="workplace_name"/>
+        <result property="candidate.hiringStatus.jobTypeToHire.id"                                      column="jobtype_to_hire_id"/>
+        <result property="candidate.hiringStatus.jobTypeToHire.name"                                    column="jobtype_to_hire_name"/>
+        <result property="candidate.contact.telephoneNumber.telephoneNumber"                            column="telephone_number"/>
+        <result property="candidate.contact.mobileTelephoneNumber.mobileTelephoneNumber"                column="mobile_telephone_number"/>
+        <result property="candidate.contact.mailAddress.mailAddress"                                    column="mail_address" nullValue=""/>
+        <result property="candidate.contact.mailAddressTwo.mailAddress"                                 column="mail_address_2" nullValue=""/>
+        <result property="candidate.hiringStatus.selectionStatus.id"                                    column="selection_status_id"/>
+        <result property="candidate.hiringStatus.selectionStatus.name"                                  column="selection_status_name"/>
+        <result property="candidate.hiringStatus.selectionStatus.type"                                  column="selection_status_display_type" />
+        <result property="candidate.hiringStatus.sectionToHire.shopNumber.value"                        column="shop_number"/>
+        <result property="candidate.hiringStatus.sectionToHire.id"                                      column="section_to_hire_id"/>
+        <result property="candidate.hiringStatus.sectionToHire.name"                                    column="section_to_hire_name"/>
+        <result property="candidate.hiringStatus.sectionToHire.interviewBookingMethod"                  column="interview_booking_method_type"/>
+        <result property="candidate.hiringStatus.sectionToHire.useVideoInterview"                       column="use_video_interview"/>
+        <result property="candidate.caution"                                                            column="caution"/>
+        <result property="candidate.comment.comment"                                                    column="comment"/>
+        <result property="duplication.isDuplication"                                                    column="is_duplication" nullValue="false" />
+		<result property="candidate.messageBoard.id"                                                    column="message_board_id" nullValue=""/>
+		<result property="candidate.messageBoard.status"                                                column="message_board_status"              />
+		<result property="candidate.messageBoard.notification.type"                                     column="message_board_notification_type"   />
+		<result property="candidate.messageBoard.notification.lineId.value"                             column="message_board_line_id"             />
+		<result property="candidate.messageBoard.notification.telephoneNumber.telephoneNumber"          column="telephone_number"       />
+		<result property="candidate.messageBoard.notification.mobileTelephoneNumber.mobileTelephoneNumber" column="mobile_telephone_number"/>
+		<result property="candidate.messageBoard.notification.useSms"                                   column="message_board_notification_use_sms"            />
+		<result property="candidate.messageBoard.notification.useLineNotify"                            column="message_board_notification_use_line_notify"    />
+		<result property="videoInterviewStatus"                                                         column="video_interview_status_type"    />
+    </resultMap>
+
+
+    <sql id="from">
+        FROM
+            hiring_process.candidates
+            INNER JOIN
+                hiring_process.candidates_active
+                ON
+                    candidates.candidate_id = candidates_active.candidate_id
+            INNER JOIN
+                hiring_process.detail_entries
+                ON
+                    candidates.candidate_id = detail_entries.candidate_id
+        <isEqual property="criteria.condition.messageBoard.unreadOnly.unread" compareValue="true">
+			INNER JOIN
+        </isEqual>
+        <isNotEqual property="criteria.condition.messageBoard.unreadOnly.unread" compareValue="true">
+			LEFT OUTER JOIN
+        </isNotEqual>
+			(
+				SELECT
+				    message_boards.id,
+				    message_boards.candidate_id
+				  , CASE WHEN released_message_boards.message_board_id IS NULL THEN NULL
+					   WHEN candidate_messages.id IS NOT NULL AND read_candidate_messages.id IS NULL THEN true
+					   ELSE false END AS unread
+				  , notification_methods.notification_method_type AS notification_type
+				  , line_ids.id AS line_id
+				, (SELECT use_sms FROM sms.settings LIMIT 1 OFFSET 0) AS use_sms
+				, (SELECT use_line_notify FROM line.settings LIMIT 1 OFFSET 0) AS use_line_notify
+				FROM message_board.message_boards
+				INNER JOIN
+					message_board.notification_methods
+					ON notification_methods.message_board_id = message_boards.id
+				LEFT OUTER JOIN
+					message_board.released_message_boards
+					ON released_message_boards.message_board_id = message_boards.id
+				LEFT OUTER JOIN
+					line.line_ids
+					ON line_ids.candidate_id = message_boards.candidate_id
+					AND EXISTS (SELECT 1 FROM line.valid_line_ids WHERE valid_line_ids.line_id = line_ids.id)
+					AND ( SELECT settings.use_line_notify FROM line.settings LIMIT 1 OFFSET 0 )
+				LEFT OUTER JOIN
+					message_board.latest_candidate_messages
+					ON latest_candidate_messages.message_board_id = message_boards.id
+				LEFT OUTER JOIN
+					message_board.candidate_messages
+				  ON candidate_messages.id = latest_candidate_messages.candidate_message_id
+				  AND candidate_messages.message_board_id = message_boards.id
+				LEFT OUTER JOIN
+				  message_board.read_candidate_messages
+				  ON read_candidate_messages.candidate_message_id = candidate_messages.id
+				WHERE
+					(SELECT use_message_board FROM message_board.settings LIMIT 1 OFFSET 0)
+			) message_boards
+			ON message_boards.candidate_id = candidates.candidate_id
+            LEFT OUTER JOIN (
+					SELECT
+					    selection_history.candidate_id,
+					    selection_history.selection_datetime
+					FROM
+					    selection_history.selection_history
+					INNER JOIN
+					    selection_history.latest_selection_history
+					ON
+					    selection_history.id = latest_selection_history.selection_history_id
+                    ) AS selection_history
+                ON
+                    candidates.candidate_id = selection_history.candidate_id
+            LEFT OUTER JOIN
+                entry.media
+                ON
+                    candidates.entry_media_id = media.media_id
+            LEFT OUTER JOIN
+                hiring_process.entry_media_information
+                ON
+                    candidates.candidate_id = entry_media_information.candidate_id
+            LEFT OUTER JOIN
+                hiring_process.callcenter_entry_inflow_route
+                ON
+                    candidates.candidate_id = callcenter_entry_inflow_route.candidate_id
+            INNER JOIN
+                hiring_process.hiring_status
+                ON
+                    candidates.candidate_id = hiring_status.candidate_id
+            INNER JOIN
+                hiring.jobtype_to_hire
+                ON
+                    hiring_status.jobtype_to_hire_id = jobtype_to_hire.jobtype_to_hire_id
+            INNER JOIN
+                hiring.section_to_hire
+                ON
+                    hiring_status.section_to_hire_id = section_to_hire.section_to_hire_id
+            LEFT OUTER JOIN
+                hiring.shop_number
+                ON
+                    section_to_hire.section_to_hire_id = shop_number.section_to_hire_id
+            INNER JOIN
+                hiring.interview_booking_method
+                ON
+                    section_to_hire.section_to_hire_id = interview_booking_method.section_to_hire_id
+            INNER JOIN
+                hiring_process.selection_statuses
+                ON
+                    hiring_status.selection_status_id = selection_statuses.selection_status_id
+            LEFT OUTER JOIN
+                entry.current_employment_type
+                ON
+                    candidates.current_employment_type_id = current_employment_type.current_employment_type_id
+            LEFT OUTER JOIN
+                hiring_process.interview_datetime
+                ON
+                    candidates.candidate_id = interview_datetime.candidate_id
+            LEFT OUTER JOIN
+                hiring_process.latest_hiring_comment
+                ON
+                    candidates.candidate_id = latest_hiring_comment.candidate_id
+            LEFT OUTER JOIN
+                hiring_process.adjust_interview_schedule_candidate
+                ON
+                    candidates.candidate_id = adjust_interview_schedule_candidate.candidate_id
+            LEFT OUTER JOIN
+                hiring_process.caution
+                ON
+                    candidates.candidate_id = caution.candidate_id
+            LEFT OUTER JOIN
+                hirevue_video_interview.video_interview_status
+                ON
+                    video_interview_status.candidate_id = candidates.candidate_id
+            LEFT OUTER JOIN
+                hirevue_video_interview.available_sectiontohire
+                ON
+                    available_sectiontohire.section_to_hire_id = section_to_hire.section_to_hire_id
+    </sql>
+
+	<sql id="where">
+         <isEqual property="criteria.condition.candidate.personNameMaster.notEmpty" compareValue="true" prepend="AND" open="(" close=")">
+             translate( regexp_replace(candidates.entry_name_kana, ' |　', '', 'g' ), 'ァィゥェォャュョッー・', 'アイウエオヤユヨツ－．' )
+                    LIKE '%' || translate( regexp_replace( regexp_replace(#criteria.condition.candidate.personNameMaster.value#, ' |　', '', 'g' ) , '([%_])', E'\\\\\\1', 'g' ), 'ァィゥェォャュョッー・', 'アイウエオヤユヨツ－．' ) || '%'
+             OR
+             regexp_replace(candidates.entry_name, ' |　', '', 'g' ) LIKE '%' || regexp_replace( regexp_replace(#criteria.condition.candidate.personNameMaster.value#, ' |　', '', 'g' ), '([%_])', E'\\\\\\1', 'g' ) || '%'
+        </isEqual>
+        <isEqual property="criteria.condition.candidate.dateOfBirth.full" compareValue="true" prepend="AND">
+            candidates.date_of_birth = #criteria.condition.candidate.dateOfBirth.partedDate.date#
+        </isEqual>
+        <isEqual property="companySettings.entry.candidateAgeType.currentAge" compareValue="true">
+            <isNotEmpty property="criteria.condition.candidate.currentAge.from" prepend="AND">
+            <![CDATA[
+                candidates.date_of_birth <= #criteria.condition.candidate.currentAge.fromDate#
+            ]]>
+            </isNotEmpty>
+            <isNotEmpty property="criteria.condition.candidate.currentAge.to" prepend="AND">
+            <![CDATA[
+                candidates.date_of_birth > #criteria.condition.candidate.currentAge.toDate#
+            ]]>
+            </isNotEmpty>
+        </isEqual>
+        <isEqual property="companySettings.entry.candidateAgeType.entryAge" compareValue="true">
+            <isNotEmpty property="criteria.condition.candidate.currentAge.from" prepend="AND">
+            <![CDATA[
+                candidates.entry_age >= #criteria.condition.candidate.currentAge.from#::smallint
+            ]]>
+            </isNotEmpty>
+            <isNotEmpty property="criteria.condition.candidate.currentAge.to" prepend="AND">
+            <![CDATA[
+                candidates.entry_age <= #criteria.condition.candidate.currentAge.to#::smallint
+            ]]>
+            </isNotEmpty>
+        </isEqual>
+         <isEqual property="criteria.condition.candidate.telephoneNumber.notEmpty" compareValue="true" prepend="AND" open="(" close=")">            
+            EXISTS(
+            	SELECT
+            		telephone_number_used_for_search.candidate_id
+            	FROM
+            		hiring_process.telephone_number_used_for_search
+            	WHERE
+            		(
+            		(telephone_number_used_for_search.area_code || telephone_number_used_for_search.local_office_number ||hiring_process.telephone_number_used_for_search.number)
+            	LIKE 
+					( '%' || replace( trim(both ' ' from #criteria.condition.candidate.telephoneNumber.value# ), '-', '' ) || '%')
+				OR
+					(telephone_number_used_for_search.mobile_area_code || telephone_number_used_for_search.mobile_local_office_number || hiring_process.telephone_number_used_for_search.mobile_number) 
+				LIKE
+					( '%' || replace( trim(both ' ' from #criteria.condition.candidate.telephoneNumber.value# ), '-', '' ) || '%')
+					)
+				AND
+					candidates.candidate_id = telephone_number_used_for_search.candidate_id
+            )
+        </isEqual>
+        <isEqual property="criteria.condition.candidate.mailAddress.notEmpty" compareValue="true" prepend="AND" open="(" close=")">
+            candidates.mail_address LIKE '%' || regexp_replace( #criteria.condition.candidate.mailAddress.value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+            OR candidates.mail_address_2 LIKE '%' || regexp_replace( #criteria.condition.candidate.mailAddress.value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+        </isEqual>
+        <isEqual property="criteria.condition.hiring.sectionToHireGroup.notEmpty" compareValue="true" prepend="AND">
+            section_to_hire.section_group_id = #criteria.condition.hiring.sectionToHireGroup.valueAsInteger#
+        </isEqual>
+        <isEqual property="criteria.condition.hiring.jobTypeToHire.notEmpty" compareValue="true" prepend="AND">
+            jobtype_to_hire.jobtype_to_hire_id = #criteria.condition.hiring.jobTypeToHire.valueAsInteger#
+        </isEqual>
+        <isEqual property="criteria.condition.hiring.sectionToHire.notEmptyId" compareValue="true" prepend="AND">
+            section_to_hire.section_to_hire_id = #criteria.condition.hiring.sectionToHire.idAsInteger#
+        </isEqual>
+        <isNotEmpty property="criteria.condition.hiring.sectionToHire.nameOrShopNumber" prepend="AND" open="(" close=")">
+            section_to_hire.section_to_hire_name LIKE '%' || regexp_replace( #criteria.condition.hiring.sectionToHire.nameOrShopNumber#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+            OR shop_number.shop_number = #criteria.condition.hiring.sectionToHire.nameOrShopNumber#
+        </isNotEmpty>
+        <isEqual property="criteria.condition.hiring.selectionStatusList.notEmpty" compareValue="true" prepend="AND">
+            selection_statuses.selection_status_id IN
+            <iterate property="criteria.condition.hiring.selectionStatusList.selectedAsInteger" open="(" close=")" conjunction=",">
+                #criteria.condition.hiring.selectionStatusList.selectedAsInteger[]#
+            </iterate>
+        </isEqual>
+        <isEqual property="criteria.condition.candidate.candidateId.notEmpty" compareValue="true" prepend="AND">
+            candidates.candidate_id = #criteria.condition.candidate.candidateId.valueAsInteger#
+        </isEqual>
+        <isEqual property="criteria.condition.entry.media.notEmpty" compareValue="true" prepend="AND">
+            media.media_id = #criteria.condition.entry.media.valueAsInteger#
+        </isEqual>
+        <isEqual property="criteria.condition.entry.mediaFreeword.notEmpty" compareValue="true" prepend="AND">
+            (media.media_name LIKE '%' || #criteria.condition.entry.mediaFreeword.value# || '%'
+                OR callcenter_entry_inflow_route.media_name LIKE '%' || #criteria.condition.entry.mediaFreeword.value# || '%')
+        </isEqual>
+        <isEqual property="criteria.condition.entry.entryDate.range.from.notEmpty" compareValue="true" prepend="AND">
+        <![CDATA[
+            date_trunc( 'day' , detail_entries.entry_date ) >= #criteria.condition.entry.entryDate.fromDate#
+        ]]>
+        </isEqual>
+        <isEqual property="criteria.condition.entry.entryDate.range.to.notEmpty" compareValue="true" prepend="AND">
+        <![CDATA[
+            date_trunc( 'day' , detail_entries.entry_date ) <= #criteria.condition.entry.entryDate.toDate#
+        ]]>
+        </isEqual>
+        <isEqual property="criteria.condition.reception.receptionPerson.notEmpty" compareValue="true" prepend="AND">
+            EXISTS (
+                SELECT
+                    latest_callcenter_reception_status_of_candidate.candidate_id
+                FROM
+                    selection_history.latest_callcenter_reception_status_of_candidate
+                    INNER JOIN
+                        selection_history.callcenter_reception_status
+                        ON
+                            latest_callcenter_reception_status_of_candidate.callcenter_reception_status_id = callcenter_reception_status.id
+                WHERE
+                    callcenter_reception_status.contact_person_type = #criteria.condition.reception.receptionPerson.value#
+                    AND latest_callcenter_reception_status_of_candidate.candidate_id = candidates.candidate_id
+                )
+        </isEqual>
+		<isEqual property="criteria.condition.hiring.sectionToHireOpeningStatusType.notEmpty" compareValue="true" prepend="AND">
+			EXISTS (
+				SELECT
+					section_to_hire_opening_status_type.section_to_hire_id
+				FROM
+					hiring.section_to_hire_opening_status_type
+				JOIN 
+					hiring.opening_status_type
+				ON 
+					section_to_hire_opening_status_type.opening_status_type = opening_status_type.type
+				WHERE 
+					opening_status_type.type = #criteria.condition.hiring.sectionToHireOpeningStatusType.value#
+				AND 
+				section_to_hire_opening_status_type.section_to_hire_id = section_to_hire.section_to_hire_id
+			)
+        </isEqual>
+        <isEqual property="criteria.condition.hiring.interviewDate.range.from.notEmpty" compareValue="true" prepend="AND">
+        <![CDATA[
+            date_trunc( 'day' , interview_datetime.start_datetime ) >= #criteria.condition.hiring.interviewDate.fromDate#
+        ]]>
+        </isEqual>
+        <isEqual property="criteria.condition.hiring.interviewDate.range.to.notEmpty" compareValue="true" prepend="AND">
+        <![CDATA[
+            date_trunc( 'day' , interview_datetime.start_datetime ) <= #criteria.condition.hiring.interviewDate.toDate#
+        ]]>
+        </isEqual>
+        <isEqual property="criteria.condition.hiring.interviewDateTimeAdjust.adjust" compareValue="true" prepend="AND" open="(" close=")">
+            adjust_interview_schedule_candidate.candidate_id IS NOT NULL
+            AND interview_datetime.candidate_id IS NULL
+        </isEqual>
+        <isEqual property="criteria.condition.hiring.interviewSchedule.alternatives" compareValue="true" prepend="AND" open="(" close=")">
+        <![CDATA[
+            adjust_interview_schedule_candidate.candidate_id IS NULL
+            AND interview_datetime.candidate_id IS NULL
+            AND NOT EXISTS 
+            (
+            	SELECT 
+            		alternatives.candidate_id 
+            	FROM 
+            		interview_schedule.alternatives 
+            	WHERE 
+            		alternatives.candidate_id = candidates.candidate_id
+            	AND 
+            		now()::date - alternatives.request_date::date <= (SELECT configurations.interview_booking_invitation_mail_limit_day_count FROM interview_schedule.configurations LIMIT 1)
+            )
+            AND EXISTS 
+            	(SELECT name FROM hiring.interview_booking_method_type WHERE name = '面接枠' and interview_booking_method_type.type = interview_booking_method.interview_booking_method_type)
+        ]]>
+        </isEqual>
+        <isEqual property="criteria.condition.latestSelectionDate.range.from.notEmpty" compareValue="true" prepend="AND">
+        <![CDATA[
+            date_trunc( 'day' , selection_history.selection_datetime ) >= #criteria.condition.latestSelectionDate.fromDate#
+        ]]>
+        </isEqual>
+        <isEqual property="criteria.condition.latestSelectionDate.range.to.notEmpty" compareValue="true" prepend="AND">
+        <![CDATA[
+            date_trunc( 'day' , selection_history.selection_datetime ) <= #criteria.condition.latestSelectionDate.toDate#
+        ]]>
+        </isEqual>
+        <isEqual property="criteria.condition.reception.receptionType.notEmpty" compareValue="true" prepend="AND">
+            <isEqual property="criteria.condition.reception.receptionType.reception" compareValue="true">
+            EXISTS (
+                SELECT
+                    latest_callcenter_reception_status_of_candidate.candidate_id
+                FROM
+                    selection_history.latest_callcenter_reception_status_of_candidate
+                    INNER JOIN
+                        selection_history.callcenter_reception_status
+                        ON
+                            latest_callcenter_reception_status_of_candidate.callcenter_reception_status_id = callcenter_reception_status.id
+                WHERE
+                    callcenter_reception_status.reception_type = #criteria.condition.reception.receptionType.value#
+                    AND latest_callcenter_reception_status_of_candidate.candidate_id = candidates.candidate_id
+                )
+            </isEqual>
+            <isEqual property="criteria.condition.reception.receptionType.noReception" compareValue="true">
+            NOT EXISTS (
+                SELECT
+                    latest_callcenter_reception_status_of_candidate.candidate_id
+                FROM
+                    selection_history.latest_callcenter_reception_status_of_candidate
+                WHERE
+                    latest_callcenter_reception_status_of_candidate.candidate_id = candidates.candidate_id
+                )
+            </isEqual>
+        </isEqual>
+        <isEqual property="criteria.condition.escalation.status.inEscalation" compareValue="true" prepend="AND">
+            EXISTS(
+                SELECT
+                    escalation.id
+                FROM
+                    selection_history.escalation
+                INNER JOIN
+                    selection_history.escalation_x_selection_history
+                ON
+                    escalation_x_selection_history.escalation_id = escalation.id
+                INNER JOIN
+                    selection_history.selection_history
+                ON
+                    selection_history.id = escalation_x_selection_history.selection_history_id
+                WHERE
+                    selection_history.candidate_id = candidates.candidate_id
+                AND NOT EXISTS(
+                    SELECT
+                        deleted_selection_history.selection_history_id
+                    FROM
+                        selection_history.deleted_selection_history
+                    WHERE
+                        deleted_selection_history.selection_history_id = selection_history.id
+                    )
+                AND NOT EXISTS(
+                    SELECT
+                        completed_escalation.escalation_id
+                    FROM
+                        selection_history.completed_escalation
+                    WHERE
+                        completed_escalation.escalation_id = escalation.id
+                    )
+                AND NOT EXISTS(
+                    SELECT
+                        latest_escalation_response.escalation_response_id
+                    FROM
+                        selection_history.latest_escalation_response
+                    WHERE
+                        latest_escalation_response.escalation_id = escalation.id
+                )
+            )
+        </isEqual>
+        <isEqual property="criteria.condition.escalation.status.respond" compareValue="true" prepend="AND">
+            EXISTS(
+                SELECT
+                    escalation.id
+                FROM
+                    selection_history.escalation
+                INNER JOIN
+                    selection_history.escalation_x_selection_history
+                ON
+                    escalation_x_selection_history.escalation_id = escalation.id
+                INNER JOIN
+                    selection_history.selection_history
+                ON
+                    selection_history.id = escalation_x_selection_history.selection_history_id
+                INNER JOIN
+                    selection_history.latest_escalation_response
+                ON
+                    latest_escalation_response.escalation_id = escalation.id
+                WHERE
+                    selection_history.candidate_id = candidates.candidate_id
+                AND NOT EXISTS(
+                    SELECT
+                        deleted_selection_history.selection_history_id
+                    FROM
+                        selection_history.deleted_selection_history
+                    WHERE
+                        deleted_selection_history.selection_history_id = selection_history.id
+                    )
+                AND NOT EXISTS(
+                    SELECT
+                        completed_escalation.escalation_id
+                    FROM
+                        selection_history.completed_escalation
+                    WHERE
+                        completed_escalation.escalation_id = escalation.id
+                    )
+                )
+        </isEqual>
+        <isEqual property="criteria.condition.escalation.status.completed" compareValue="true" prepend="AND">
+            EXISTS(
+                SELECT
+                    escalation.id
+                FROM
+                    selection_history.escalation
+                INNER JOIN
+                    selection_history.escalation_x_selection_history
+                ON
+                    escalation_x_selection_history.escalation_id = escalation.id
+                INNER JOIN
+                    selection_history.selection_history
+                ON
+                    selection_history.id = escalation_x_selection_history.selection_history_id
+                INNER JOIN
+                    selection_history.completed_escalation
+                ON
+                    completed_escalation.escalation_id = escalation.id
+                WHERE
+                    selection_history.candidate_id = candidates.candidate_id
+                AND NOT EXISTS(
+                    SELECT
+                        deleted_selection_history.selection_history_id
+                    FROM
+                        selection_history.deleted_selection_history
+                    WHERE
+                        deleted_selection_history.selection_history_id = selection_history.id
+                    )
+                )
+        </isEqual>
+        <isEqual property="criteria.condition.hiring.comment.notEmpty" compareValue="true" prepend="AND">
+            latest_hiring_comment.comment LIKE '%' || regexp_replace( #criteria.condition.hiring.comment.value#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+        </isEqual>
+        <isEqual property="criteria.condition.messageBoard.unreadOnly.unread" compareValue="true" prepend="AND">
+            message_boards.unread
+        </isEqual>
+        <isEqual property="criteria.condition.videoInterview.useVideoInterviewFilter" compareValue="true" prepend="AND" open="(" close=")">
+            (SELECT use FROM hirevue_settings.video_interview_settings)
+            AND
+            (
+            CASE
+                WHEN (SELECT use FROM hirevue_settings.sectiontohire_restriction) = false THEN true
+                WHEN (SELECT use FROM hirevue_settings.sectiontohire_restriction)
+                    AND EXISTS ( SELECT 1 FROM hirevue_video_interview.available_sectiontohire 
+                    WHERE available_sectiontohire.section_to_hire_id = section_to_hire.section_to_hire_id ) 
+                THEN true
+            ELSE false END
+            )
+            AND
+            ( false
+            <isEqual property="criteria.condition.videoInterview.sent" compareValue="true" prepend="OR">
+                video_interview_status.status_type = 'INVITATION_SENT'
+            </isEqual>
+            <isEqual property="criteria.condition.videoInterview.expired" compareValue="true" prepend="OR">
+                video_interview_status.status_type = 'EXPIRED'
+            </isEqual>
+            <isEqual property="criteria.condition.videoInterview.viewed" compareValue="true" prepend="OR">
+                video_interview_status.status_type = 'VIEWED'
+            </isEqual>
+            <isEqual property="criteria.condition.videoInterview.notviewed" compareValue="true" prepend="OR">
+                video_interview_status.status_type = 'NOT_VIEWED'
+            </isEqual>
+            <isEqual property="criteria.condition.videoInterview.unnecessary" compareValue="true" prepend="OR">
+                video_interview_status.status_type = 'UNNECESSARY'
+            </isEqual>
+            <isEqual property="criteria.condition.videoInterview.unsent" compareValue="true" prepend="OR">
+                video_interview_status.status_type = 'INVITATION_UNSENT'
+                OR
+                        NOT EXISTS ( SELECT 1 FROM hirevue_video_interview.video_interview_status WHERE candidate_id = candidates.candidate_id )
+            </isEqual>
+            )
+        </isEqual>
+    </sql>
+
+    <sql id="orderDetailEntries">
+        <dynamic prepend="ORDER BY">
+            <isEqual property="criteria.sort.type" compareValue="ENTRY_DATETIME">
+                date_trunc( 'minute' , detail_entries.entry_date ) <isEqual property="criteria.sort.desc" compareValue="true">DESC</isEqual>,
+                candidates.candidate_id <isEqual property="criteria.sort.desc" compareValue="true">DESC</isEqual>
+            </isEqual>
+            <isEqual property="criteria.sort.type" compareValue="PERSON_NAME">
+                candidates.entry_name_kana <isEqual property="criteria.sort.desc" compareValue="true">DESC</isEqual>,
+                date_trunc( 'minute' , detail_entries.entry_date ) DESC,
+                candidates.candidate_id DESC
+            </isEqual>
+            <isEqual property="criteria.sort.type" compareValue="SELECTION_STATUS">
+                selection_statuses.priority <isEqual property="criteria.sort.desc" compareValue="true">DESC</isEqual>,
+                date_trunc( 'minute' , detail_entries.entry_date ) DESC,
+                candidates.candidate_id DESC
+            </isEqual>
+            <isEqual property="criteria.sort.type" compareValue="INTERVIEW_DATETIME">
+                interview_datetime.start_datetime is null,
+                date_trunc( 'minute' , interview_datetime.start_datetime ) <isEqual property="criteria.sort.desc" compareValue="true">DESC</isEqual>,
+                date_trunc( 'minute' , detail_entries.entry_date ) DESC,
+                candidates.candidate_id DESC
+            </isEqual>
+        </dynamic>
+    </sql>
+
+    <select id="listOfDetailEntryByCriteria" resultMap="detailEntries">
+	    SELECT
+	        pre_result.entry_id                          ,
+	        pre_result.entry_date                        ,
+	        pre_result.media_name                        ,
+	        pre_result.callcenter_media_name             ,
+	        pre_result.workplace_name                    ,
+	        pre_result.candidate_id                      ,
+	        pre_result.entry_name                        ,
+	        pre_result.entry_name_kana                   ,
+	        pre_result.gender                            ,
+	        pre_result.date_of_birth                     ,
+	        pre_result.entry_age                         ,
+	        pre_result.jobtype_to_hire_id                ,
+	        pre_result.jobtype_to_hire_name              ,
+	        pre_result.current_employment_type_id        ,
+	        pre_result.current_employment_type_name      ,
+	        pre_result.shop_number                       ,
+	        pre_result.section_to_hire_id                ,
+	        pre_result.section_to_hire_name              ,
+	        pre_result.jobtype_to_hire_id                ,
+	        pre_result.section_to_hire_name              ,
+	        pre_result.selection_status_id               ,
+	        pre_result.selection_status_name             ,
+	        pre_result.selection_status_display_type     ,
+	        pre_result.selection_status_priority         ,
+	        pre_result.interview_booking_method_type     ,
+	        pre_result.interview_datetime                ,
+	        pre_result.interview_date                    ,
+	        pre_result.interview_time                    ,
+	        pre_result.interview_datetime_adjust         ,
+	        pre_result.telephone_number                  ,
+	        pre_result.mobile_telephone_number           ,
+	        pre_result.mail_address                      ,
+	        pre_result.mail_address_2                    ,
+	        pre_result.comment                           ,
+	        pre_result.caution                           ,
+	        pre_result.video_interview_status_type,
+	        COALESCE(
+	           (SELECT
+	               to_char(MAX(request_date), 'YYYY/MM/DD HH24:MI:SS') as request_date
+	           FROM
+	               interview_schedule.alternatives
+	           WHERE
+	               alternatives.candidate_id = pre_result.candidate_id
+	           GROUP BY
+	               candidate_id ),''
+	           ) AS sent_last_booking_date                ,
+	         EXISTS
+	         (
+	             SELECT 1
+	             FROM hiring_process.candidates_duplication_marking
+	             WHERE candidates_duplication_marking.candidate_id = pre_result.candidate_id
+	         ) AS is_duplication                          ,
+	        message_board_id                              ,
+	        message_board_status                          ,
+	        message_board_notification_type               ,
+	        message_board_line_id                         ,
+	        message_board_notification_use_sms            ,
+	        message_board_notification_use_line_notify,
+            CASE
+                WHEN use_video_interview_section_to_hire_id IS NULL
+                THEN false
+                ELSE true
+            END AS use_video_interview
+	    FROM
+	        (
+		        SELECT
+		            detail_entries.entry_id                                                 AS entry_id,
+		            detail_entries.entry_date                                               AS entry_date,
+		            coalesce(media.media_name, '')                                          AS media_name,
+		            coalesce(callcenter_entry_inflow_route.media_name, '')                  AS callcenter_media_name,
+		            coalesce(entry_media_information.workplace, '')                         AS workplace_name,
+		            candidates.candidate_id                                                 AS candidate_id,
+		            candidates.entry_name                                                   AS entry_name,
+		            candidates.entry_name_kana                                              AS entry_name_kana,
+		            candidates.gender                                                       AS gender,
+		            candidates.date_of_birth                                                AS date_of_birth,
+		            candidates.entry_age                                                    AS entry_age,
+		            jobtype_to_hire.jobtype_to_hire_id                                      AS jobtype_to_hire_id,
+		            jobtype_to_hire.jobtype_to_hire_name                                    AS jobtype_to_hire_name,
+		            coalesce(current_employment_type.current_employment_type_id, 0)         AS current_employment_type_id,
+		            coalesce(current_employment_type.current_employment_type_name, '')      AS current_employment_type_name,
+		            coalesce(shop_number.shop_number, '')                                   AS shop_number,
+		            section_to_hire.section_to_hire_id                                      AS section_to_hire_id,
+		            section_to_hire.section_to_hire_name                                    AS section_to_hire_name,
+		            selection_statuses.selection_status_id                                  AS selection_status_id,
+		            selection_statuses.selection_status_name                                AS selection_status_name,
+		            selection_statuses.display_type                                         AS selection_status_display_type,
+		            selection_statuses.priority                                             AS selection_status_priority,
+		            interview_booking_method.interview_booking_method_type                  AS interview_booking_method_type,
+                    available_sectiontohire.section_to_hire_id                              AS use_video_interview_section_to_hire_id,
+		            interview_datetime.start_datetime                                       AS interview_datetime,
+		            CASE
+		                WHEN interview_datetime.start_datetime IS NOT NULL THEN
+		                    to_char(interview_datetime.start_datetime,'YYYYMMDD')
+		                ELSE
+		                    ''
+		                END                                                                 AS interview_date,
+		            CASE
+		                WHEN interview_datetime.start_datetime IS NOT NULL THEN
+		                    to_char(interview_datetime.start_datetime,'HH24MI')
+		                ELSE
+		                    ''
+		                END                                                                 AS interview_time,
+		            adjust_interview_schedule_candidate.candidate_id IS NOT NULL            AS interview_datetime_adjust,
+		            candidates.telephone_number                                             AS telephone_number,
+		            candidates.mobile_telephone_number                                      AS mobile_telephone_number,
+		            candidates.mail_address                                                 AS mail_address,
+		            candidates.mail_address_2                                               AS mail_address_2,
+		            coalesce(latest_hiring_comment.comment, '')                             AS comment,
+		            caution.candidate_id IS NOT NULL                                        AS caution,
+		            message_boards.id                                                       AS message_board_id,
+		            CASE WHEN message_boards.unread IS NULL THEN 'CLOSED' WHEN message_boards.unread THEN 'UNREAD' ELSE 'RELEASED' END AS message_board_status,
+		            message_boards.notification_type                                        AS message_board_notification_type,
+		            message_boards.line_id                                                  AS message_board_line_id,
+		            CASE WHEN message_boards.use_sms IS NOT NULL THEN message_boards.use_sms ELSE false END AS message_board_notification_use_sms,
+		            CASE WHEN message_boards.use_line_notify IS NOT NULL THEN message_boards.use_line_notify ELSE false END AS message_board_notification_use_line_notify,
+                    video_interview_status.status_type AS video_interview_status_type
+				<include refid="from"/>
+				<dynamic prepend="WHERE">
+					<include refid="where"/>
+				</dynamic>
+ 				<include refid="orderDetailEntries" />
+        		OFFSET #page.offset# LIMIT #page.limit#
+			) pre_result
+    </select>
+
+    <select id="countOfDetailEntryByCriteria" resultClass="java.lang.Integer">
+        SELECT
+            COUNT(1) AS search_count
+		<include refid="from"/>
+		<dynamic prepend="WHERE">
+			<include refid="where"/>
+		</dynamic>
+    </select>
+
+    <select id="noSectionToHireEntryCount" resultClass="java.lang.Integer">
+        SELECT
+            COUNT(1) AS no_section_to_hire_entry_count
+        FROM
+            hiring_process.candidates
+            INNER JOIN
+                hiring_process.candidates_active
+                ON
+                    candidates.candidate_id = candidates_active.candidate_id
+            INNER JOIN
+                hiring_process.detail_entries
+                ON
+                    candidates.candidate_id = detail_entries.candidate_id
+            INNER JOIN
+                hiring_process.hiring_status
+                ON
+                    candidates.candidate_id = hiring_status.candidate_id
+            INNER JOIN
+                hiring.jobtype_to_hire
+                ON
+                    hiring_status.jobtype_to_hire_id = jobtype_to_hire.jobtype_to_hire_id
+            INNER JOIN
+                hiring.section_to_hire
+                ON
+                    hiring_status.section_to_hire_id = section_to_hire.section_to_hire_id
+            INNER JOIN
+                hiring.interview_booking_method
+                ON
+                    section_to_hire.section_to_hire_id = interview_booking_method.section_to_hire_id
+            INNER JOIN
+                hiring_process.selection_statuses
+                ON
+                    hiring_status.selection_status_id = selection_statuses.selection_status_id
+        WHERE
+            hiring_status.section_to_hire_id = 0
+    </select>
+
+    <select id="interviewDatetimeAdjustmentEntryCount" resultClass="java.lang.Integer">
+        SELECT
+            COUNT(1) AS interviewdatetime_adjustment_entry_count
+        FROM
+            hiring_process.candidates
+            INNER JOIN
+                hiring_process.candidates_active
+                ON
+                    candidates.candidate_id = candidates_active.candidate_id
+            INNER JOIN
+                hiring_process.detail_entries
+                ON
+                    candidates.candidate_id = detail_entries.candidate_id
+            INNER JOIN
+                hiring_process.hiring_status
+                ON
+                    candidates.candidate_id = hiring_status.candidate_id
+            INNER JOIN
+                hiring.jobtype_to_hire
+                ON
+                    hiring_status.jobtype_to_hire_id = jobtype_to_hire.jobtype_to_hire_id
+            INNER JOIN
+                hiring.section_to_hire
+                ON
+                    hiring_status.section_to_hire_id = section_to_hire.section_to_hire_id
+            INNER JOIN
+                hiring.interview_booking_method
+                ON
+                    section_to_hire.section_to_hire_id = interview_booking_method.section_to_hire_id
+            INNER JOIN
+                hiring_process.selection_statuses
+                ON
+                    hiring_status.selection_status_id = selection_statuses.selection_status_id
+        WHERE
+            EXISTS (
+                SELECT
+                    adjust_interview_schedule_candidate.candidate_id
+                FROM
+                    hiring_process.adjust_interview_schedule_candidate
+                WHERE
+                    candidates.candidate_id = adjust_interview_schedule_candidate.candidate_id
+                )
+			AND NOT EXISTS (
+				SELECT
+                	interview_datetime.candidate_id
+                FROM
+                	hiring_process.interview_datetime
+                WHERE
+                    candidates.candidate_id = interview_datetime.candidate_id
+			)
+    </select>
+
+    <select id="escalationResponseEntryCount" resultClass="java.lang.Integer">
+		SELECT
+			count(DISTINCT candidates.candidate_id)
+		FROM
+			hiring_process.candidates
+		INNER JOIN
+			hiring_process.candidates_active
+		ON
+			candidates_active.candidate_id = candidates.candidate_id
+		INNER JOIN
+			selection_history.selection_history
+		ON
+			selection_history.candidate_id = candidates.candidate_id
+		INNER JOIN
+			selection_history.escalation_x_selection_history
+		ON
+			escalation_x_selection_history.selection_history_id = selection_history.id
+		INNER JOIN
+			selection_history.escalation
+		ON
+			escalation.id = escalation_x_selection_history.escalation_id
+		INNER JOIN
+			selection_history.latest_escalation_response
+		ON
+			latest_escalation_response.escalation_id = escalation.id
+		WHERE
+			NOT EXISTS(
+				SELECT
+					deleted_selection_history.selection_history_id
+				FROM
+					selection_history.deleted_selection_history
+				WHERE
+					deleted_selection_history.selection_history_id = selection_history.id
+			)
+			AND NOT EXISTS(
+				SELECT
+					completed_escalation.escalation_id
+				FROM
+					selection_history.completed_escalation
+				WHERE
+					completed_escalation.escalation_id  = escalation.id
+			)
+
+		;
+	</select>
+
+    <sql id="orderDetailEntriesForMap">
+        <dynamic prepend="ORDER BY">
+            <isEqual property="criteria.sort.type" compareValue="ENTRY_DATETIME">
+                date_trunc( 'minute' , entry_date ) <isEqual property="criteria.sort.desc" compareValue="true">DESC</isEqual>,
+                candidate_id <isEqual property="criteria.sort.desc" compareValue="true">DESC</isEqual>
+            </isEqual>
+            <isEqual property="criteria.sort.type" compareValue="PERSON_NAME">
+                entry_name_kana <isEqual property="criteria.sort.desc" compareValue="true">DESC</isEqual>,
+                date_trunc( 'minute' , entry_date ) DESC,
+                candidate_id DESC
+            </isEqual>
+            <isEqual property="criteria.sort.type" compareValue="SELECTION_STATUS">
+                selection_status_priority <isEqual property="criteria.sort.desc" compareValue="true">DESC</isEqual>,
+                date_trunc( 'minute' , entry_date ) DESC,
+                candidate_id DESC
+            </isEqual>
+            <isEqual property="criteria.sort.type" compareValue="INTERVIEW_DATETIME">
+                interview_datetime is null,
+                date_trunc( 'minute' , interview_datetime ) <isEqual property="criteria.sort.desc" compareValue="true">DESC</isEqual>,
+                date_trunc( 'minute' , entry_date ) DESC,
+                candidate_id DESC
+            </isEqual>
+        </dynamic>
+    </sql>
+
+    <select id="detailEntryPaginationByCandidateId" resultClass="java.util.HashMap">
+        SELECT
+            pagination.prev,
+            pagination.next
+        FROM (
+            SELECT
+                LAG( candidates.candidate_id, 1, 0 ) OVER ( <include refid="orderDetailEntriesForMap" /> ) AS prev,
+                candidates.candidate_id AS current,
+                LEAD( candidates.candidate_id, 1, 0 ) OVER ( <include refid="orderDetailEntriesForMap" /> ) AS next
+            FROM
+                (
+                    SELECT
+                        candidates.candidate_id                   AS candidate_id,
+			            detail_entries.entry_date                 AS entry_date,
+			            candidates.entry_name_kana                AS entry_name_kana,
+			            selection_statuses.priority               AS selection_status_priority,
+			            interview_datetime.start_datetime         AS interview_datetime
+                    <include refid="from" />
+                    <dynamic prepend="WHERE">
+                        <include refid="where"/>
+                    </dynamic>
+                ) AS candidates
+            ) AS pagination
+        WHERE
+            pagination.current = #candidateId#
+    </select>
+
+	<select id="selectedSectionToHireById" resultClass="jp.rhp.model.detailentry.search.criteria.condition.hiring.SectionToHire" parameterClass="jp.rhp.model.detailentry.search.criteria.condition.hiring.SectionToHire">
+		SELECT
+			section_to_hire_id::character varying as id,
+			section_to_hire_name as nameOrShopNumber
+		FROM
+			hiring.section_to_hire
+		WHERE
+			section_to_hire_id = #idAsInteger#
+	</select>
+
+</sqlMap>

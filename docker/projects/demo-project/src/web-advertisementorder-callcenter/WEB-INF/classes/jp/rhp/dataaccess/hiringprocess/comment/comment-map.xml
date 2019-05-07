@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.hiringprocess.comment.CommentDataAccess">
+
+	<typeAlias alias="comment" type="jp.rhp.model.hiringprocess.comment.Comment" />
+
+	<resultMap class="comment" id="comment">
+		<result property="candidateId" column="candidate_id"/>
+		<result property="comment" column="comment"/>
+		<result property="commentTimeStamp.date" column="comment_timestamp"/>
+	</resultMap>
+
+	<sql id="select">
+		SELECT
+			hiring_comments.candidate_id,
+			hiring_comments.comment,
+			hiring_comments.comment_timestamp
+		FROM
+			hiring_process.hiring_comments
+	</sql>
+
+	<select id="listByCandidateId" resultMap="comment" parameterClass="java.lang.Integer">
+		<include refid="select"/>
+		WHERE
+			hiring_comments.candidate_id = #value#
+		ORDER BY
+			hiring_comments.comment_timestamp DESC
+	</select>
+
+	<select id="findLatestCommentByCandidateId" resultMap="comment">
+		<include refid="select"/>
+		WHERE
+			hiring_comments.candidate_id = #value#
+		AND hiring_comments.hiring_comment_id =
+			(
+			SELECT
+				MAX(hiring_comment_id)
+			FROM
+				hiring_process.hiring_comments
+			WHERE
+				candidate_id = #value#
+			)
+	</select>
+
+	<insert id="register">
+		INSERT INTO
+			hiring_process.hiring_comments
+		(
+			candidate_id,
+			comment,
+			comment_timestamp
+		)
+		VALUES
+		(
+			#candidateId#,
+			#comment#,
+			#commentTimeStamp.date#
+		)
+	</insert>
+</sqlMap>

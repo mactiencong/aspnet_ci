@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<context:component-scan base-package="jp.rhp.dataaccess"/>
+
+	<!-- companyDB -->
+	<bean id="dataSourceManager"
+		  class="jp.rhp.dataaccess.base.database.DataSourceManager"
+		  destroy-method="closeDataSources" />
+
+	<bean id="sqlMapClientTemplate"
+		  class="jp.rhp.dataaccess.base.database.DynamicSqlMapClientTemplate">
+		<property name="sqlMapClient" ref="publicSqlMapClient"/>
+	</bean>
+
+	<!-- publicDB -->
+	<bean id="publicSqlMapClientTemplate"
+		  class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+		<property name="sqlMapClient" ref="publicSqlMapClient"/>
+	</bean>
+
+	<bean id="publicSqlMapClient"
+		  class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="dataSource" ref="publicDataSource"/>
+		<property name="configLocation" value="classpath:/META-INF/spring/sql-map-config.xml"/>
+		<property name="mappingLocations">
+			<list>
+				<value>classpath*:/jp/rhp/dataaccess/**/*-map.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="publicDataSource"
+		  class="org.apache.commons.dbcp.BasicDataSource"
+		  init-method="createDataSource"
+		  destroy-method="close" >
+		<property name="driverClassName"                value="${jdbc.public.driverClassName}" />
+		<property name="url"                            value="${jdbc.public.url}" />
+		<property name="username"                       value="${jdbc.public.username}" />
+		<property name="password"                       value="${jdbc.public.password}" />
+		<property name="maxActive"                      value="${jdbc.dbcp.maxActive}" />
+		<property name="minIdle"                        value="${jdbc.dbcp.minIdle}" />
+		<property name="maxIdle"                        value="${jdbc.dbcp.maxIdle}" />
+		<property name="initialSize"                    value="${jdbc.dbcp.initialSize}" />
+		<property name="maxWait"                        value="${jdbc.dbcp.maxWait}" />
+		<property name="timeBetweenEvictionRunsMillis"  value="${jdbc.dbcp.timeBetweenEvictionRunsMillis}" />
+		<property name="minEvictableIdleTimeMillis"     value="${jdbc.dbcp.minEvictableIdleTimeMillis}" />
+		<property name="testWhileIdle"                  value="${jdbc.dbcp.testWhileIdle}" />
+		<property name="numTestsPerEvictionRun"         value="${jdbc.dbcp.numTestsPerEvictionRun}" />
+		<property name="validationQuery"                value="${jdbc.dbcp.validationQuery}" />
+	</bean>
+
+	<!-- callcenterDB -->
+	<bean id="callcenterSqlMapClientTemplate"
+		  class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+		<property name="sqlMapClient" ref="callcenterSqlMapClient"/>
+	</bean>
+
+	<bean id="callcenterSqlMapClient"
+		  class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="dataSource" ref="callcenterDataSource"/>
+		<property name="configLocation" value="classpath:/META-INF/spring/sql-map-config.xml"/>
+		<property name="mappingLocations">
+			<list>
+				<value>classpath*:/jp/rhp/dataaccess/**/*-map.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="callcenterDataSource"
+		  class="org.apache.commons.dbcp.BasicDataSource"
+		  init-method="createDataSource"
+		  destroy-method="close" >
+		<property name="driverClassName"                value="${jdbc.callcenter.driverClassName}" />
+		<property name="url"                            value="${jdbc.callcenter.url}" />
+		<property name="username"                       value="${jdbc.callcenter.username}" />
+		<property name="password"                       value="${jdbc.callcenter.password}" />
+		<property name="maxActive"                      value="${jdbc.dbcp.maxActive}" />
+		<property name="minIdle"                        value="${jdbc.dbcp.minIdle}" />
+		<property name="maxIdle"                        value="${jdbc.dbcp.maxIdle}" />
+		<property name="initialSize"                    value="${jdbc.dbcp.initialSize}" />
+		<property name="maxWait"                        value="${jdbc.dbcp.maxWait}" />
+		<property name="timeBetweenEvictionRunsMillis"  value="${jdbc.dbcp.timeBetweenEvictionRunsMillis}" />
+		<property name="minEvictableIdleTimeMillis"     value="${jdbc.dbcp.minEvictableIdleTimeMillis}" />
+		<property name="testWhileIdle"                  value="${jdbc.dbcp.testWhileIdle}" />
+		<property name="numTestsPerEvictionRun"         value="${jdbc.dbcp.numTestsPerEvictionRun}" />
+		<property name="validationQuery"                value="${jdbc.dbcp.validationQuery}" />
+	</bean>
+
+	<context:property-placeholder location="classpath:/jdbc-advertisementorder-callcenter.properties" ignore-unresolvable="true"/>
+</beans>

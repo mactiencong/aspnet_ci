@@ -1,0 +1,18 @@
+<div class="masterPannel">
+	<div class="inner">
+		<form id="searchForm" name="searchForm" action='$link.relativeAndCompany("/sectiontohire/contact/list")' method="POST">
+			<table class="regular" summary="検索">
+				<tr>
+					<th>フリーワード検索 </th>
+					<td>
+						#springFormInput( 'contactOfSectionToHireCriteria.condition.freeWord.value' 'class="regular w190 bg"' )
+						<input type="image" id="search" name="search" src="$link.contextPath/images/btnSearch02.gif" alt="検索" class="rollover" /> 店名、店番、採用責任者名、採用責任者メールアドレスなど
+					</td>
+					<td class="reset">
+						<a href='$link.relativeAndCompany("/sectiontohire/contact/reset")' id="criteriaReset">検索条件をリセット</a>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

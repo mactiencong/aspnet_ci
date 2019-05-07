@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.selectionhistory.receptiontype.CallcenterReceptionTypeDataAccess">
+
+	<resultMap class="jp.rhp.model.selectionhistory.receptiontype.CallcenterReceptionType" id="receptionType">
+		<result property="type" column="type" />
+		<result property="name" column="name" />
+	</resultMap>
+
+	<select id="listOfReceptionType" resultMap="receptionType">
+		SELECT
+			type,
+			name
+		FROM
+			selection_history.reception_type
+		ORDER BY
+			priority
+	</select>
+
+	<select id="listOfReceptionTypeByContactPersonTypeAndDirectionType" resultMap="receptionType">
+		SELECT
+			type,
+			name
+		FROM
+			selection_history.reception_type
+		WHERE
+			EXISTS (
+				SELECT
+					reception_type_mapper.reception_type
+				FROM
+					selection_history.reception_type_mapper
+				WHERE
+					contact_person_type = #contactPersonType#
+					AND direction_type = #directionType#
+					AND reception_type_mapper.reception_type = reception_type.type
+				)
+		ORDER BY
+			priority
+	</select>
+
+</sqlMap>

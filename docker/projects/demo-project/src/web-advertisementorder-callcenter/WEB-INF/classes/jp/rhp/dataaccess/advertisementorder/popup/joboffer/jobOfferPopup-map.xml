@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.advertisementorder.popup.joboffer.JobOfferPopupDataAccess">
+
+	<typeAlias alias="jobOfferPopupSearchCriteria" type="jp.rhp.model.advertisementorder.popup.joboffer.criteria.JobOfferPopupSearchCriteria" />
+
+    <resultMap class="jp.rhp.model.joboffer.JobOffer" id="jobOffer">
+		<result property="id" column="job_offer_id"/>
+		<result property="title" column="title"/>
+		<result property="workplace.id" column="workplace_id"/>
+		<result property="jobTypeName" column="job_type"/>
+		<result property="workplace.workplaceNumber" column="workplace_number"/>
+		<result property="workplace.name" column="workplace"/>
+		<result property="recruitment.income.inputMethod" column="income_input_method_type"/>
+		<result property="posting.postingStatus" column="posting_status_type"/>
+		<result property="jobOfferApproval.status" column="approval_status"/>
+		<result property="jobOfferApproval.approvalTarget" column="is_approval_target"/>
+    </resultMap>
+
+	<select id="count"  parameterClass="jobOfferPopupSearchCriteria" resultClass="java.lang.Integer">
+		SELECT
+			count(*)
+		FROM
+			joboffer.job_offer
+		INNER JOIN joboffer.job_detail
+			ON job_offer.job_offer_id = job_detail.job_offer_id
+		INNER JOIN workplace.workplace
+			ON workplace.workplace_id = job_offer.workplace_id
+		INNER JOIN joboffer.postings
+			ON postings.job_offer_id = job_offer.job_offer_id
+		INNER JOIN joboffer.posting_status
+			ON posting_status.posting_id = postings.posting_id
+		INNER JOIN joboffer.posting_status_types
+			ON posting_status_types.type = posting_status.status_type
+		INNER JOIN joboffer.income_input_method
+			ON job_offer.job_offer_id = income_input_method.job_offer_id
+		WHERE
+			NOT EXISTS
+			(
+				SELECT
+					job_offer_id
+				FROM
+					joboffer.job_offer_hidden
+				WHERE
+					job_offer_id = job_offer.job_offer_id 
+			)
+		AND
+			NOT EXISTS 
+			(
+				SELECT 
+					section_to_hire_id 
+				FROM 
+					hiring.closed_section_to_hire 
+				WHERE 
+					closed_section_to_hire.section_to_hire_id = workplace.section_to_hire_id
+			)
+			<isEqual property="workplaceGroup.empty" compareValue="false" prepend="AND">
+				EXISTS
+				(
+					SELECT
+						workplace_x_group.workplace_id
+					FROM
+						workplace.workplace_x_group
+					WHERE 
+						workplace.workplace_id = workplace_x_group.workplace_id
+					AND workplace_x_group.workplace_group_id = #workplaceGroup.id#
+				)
+			</isEqual>
+			<isEqual property="workplace.idEmpty" compareValue="false" prepend="AND">
+				workplace.workplace_id = #workplace.id#
+			</isEqual>
+			<isEqual property="workplace.nameEmpty" compareValue="false" prepend="AND">
+				workplace.workplace LIKE '%' || regexp_replace( #workplace.name#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+			</isEqual>
+			<isEqual property="jobType.empty" compareValue="false" prepend="AND">
+				job_offer.job_type_code = #jobType.code#
+			</isEqual>
+			<isEqual property="postingStatus.all" compareValue="false" prepend="AND">
+				posting_status_types.type = #postingStatus#
+			</isEqual>
+	</select>
+
+	<select id="joboffers"  parameterClass="jobOfferPopupSearchCriteria" resultMap="jobOffer">
+		SELECT
+			job_offer.job_offer_id,
+			income_input_method.income_input_method_type,
+			job_offer.title,
+			job_offer.workplace_id,
+			job_offer.job_type,
+			workplace.workplace_number,
+			workplace.workplace,
+			posting_status_types.type AS posting_status_type,
+			approval_status.approval_status_type AS approval_status,
+			target_job_type.job_type_code IS NOT NULL AS is_approval_target
+		FROM
+			joboffer.job_offer
+		INNER JOIN joboffer.job_detail
+			ON job_offer.job_offer_id = job_detail.job_offer_id
+		INNER JOIN workplace.workplace
+			ON workplace.workplace_id = job_offer.workplace_id
+		INNER JOIN joboffer.postings
+			ON postings.job_offer_id = job_offer.job_offer_id
+		INNER JOIN joboffer.posting_status
+			ON posting_status.posting_id = postings.posting_id
+		INNER JOIN joboffer.posting_status_types
+			ON posting_status_types.type = posting_status.status_type
+		INNER JOIN joboffer.income_input_method
+			ON job_offer.job_offer_id = income_input_method.job_offer_id
+		INNER JOIN joboffer_approval.approval_status
+			ON approval_status.job_offer_id = job_offer.job_offer_id
+		LEFT OUTER JOIN joboffer_approval.target_job_type
+			ON target_job_type.job_type_code = job_offer.job_type_code
+		WHERE
+			NOT EXISTS
+			(
+				SELECT
+					job_offer_id
+				FROM
+					joboffer.job_offer_hidden
+				WHERE
+					job_offer_id = job_offer.job_offer_id 
+			)
+		AND
+			NOT EXISTS 
+			(
+				SELECT 
+					section_to_hire_id 
+				FROM 
+					hiring.closed_section_to_hire 
+				WHERE 
+					closed_section_to_hire.section_to_hire_id = workplace.section_to_hire_id
+			)
+			<isEqual property="workplaceGroup.empty" compareValue="false" prepend="AND">
+				EXISTS
+				(
+					SELECT
+						workplace_x_group.workplace_id
+					FROM
+						workplace.workplace_x_group
+					WHERE 
+						workplace.workplace_id = workplace_x_group.workplace_id
+					AND workplace_x_group.workplace_group_id = #workplaceGroup.id#
+				)
+			</isEqual>
+			<isEqual property="workplace.idEmpty" compareValue="false" prepend="AND">
+				workplace.workplace_id = #workplace.id#
+			</isEqual>
+			<isEqual property="workplace.nameEmpty" compareValue="false" prepend="AND">
+				workplace.workplace LIKE '%' || regexp_replace( #workplace.name#, '([%_])', E'\\\\\\1', 'g' ) || '%'
+			</isEqual>
+			<isEqual property="jobType.empty" compareValue="false" prepend="AND">
+				job_offer.job_type_code = #jobType.code#
+			</isEqual>
+			<isEqual property="postingStatus.all" compareValue="false" prepend="AND">
+				posting_status_types.type = #postingStatus#
+			</isEqual>
+		ORDER BY
+			workplace.priority,
+			job_offer.updated_at DESC
+		LIMIT #page.limit# OFFSET #page.offset#
+	</select>
+
+</sqlMap>

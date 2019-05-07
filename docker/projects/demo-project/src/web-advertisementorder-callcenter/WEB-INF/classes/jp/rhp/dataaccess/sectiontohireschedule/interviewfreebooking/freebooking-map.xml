@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.sectiontohireschedule.interviewfreebooking.InterviewFreeBookingDataAccess">
+
+	<delete id="delete">
+		DELETE FROM
+			hiring_process.interview_datetime
+		WHERE
+			candidate_id = #candidate.id#
+	</delete>
+
+	<insert id="register">
+		INSERT INTO hiring_process.interview_datetime (
+			candidate_id,
+			start_datetime,
+			end_datetime
+		) VALUES (
+			#candidate.id#,
+			#interviewFreeBooking.fromAsDate#,
+			#interviewFreeBooking.toAsDate#
+		)
+	</insert>
+
+</sqlMap>

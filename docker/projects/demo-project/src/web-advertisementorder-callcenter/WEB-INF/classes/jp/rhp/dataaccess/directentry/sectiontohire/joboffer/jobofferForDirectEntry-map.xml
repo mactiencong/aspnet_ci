@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.directentry.sectiontohire.joboffer.JobofferForDirectEntryDataAccess">
+
+	<resultMap class="jp.rhp.model.directentry.sectiontohire.joboffer.JobofferForDirectEntry" id="jobofferForDirectEntry">
+		<result property="id"																column="joboffer_id"/>
+		<result property="jobTypeDescription.text"											column="job_type_description"/>
+        <result property="qualification.text"												column="qualification" />
+		<result property="income.inputMethod"												column="income_input_method_type"/>
+		<result property="income.incomeForm.incomeFormCode"									column="income_form_code"/>
+		<result property="income.description.text"											column="income_description"/>
+		<result property="income.cassetteIncome.baseWage"									column="base_wage"/>
+		<result property="income.cassetteIncome.weekendWage"								column="weekend_wage"/>
+		<result property="income.cassetteIncome.highSchoolStudentWage.possibility.possible"	column="admit_high_school_student"/>
+		<result property="income.cassetteIncome.highSchoolStudentWage.onlyDecidedOnCareer"	column="only_decided_on_career"/>
+		<result property="income.cassetteIncome.highSchoolStudentWage.diff"					column="difference_student_wage"/>
+		<result property="income.cassetteIncome.training.existence.exist"					column="conduct_training"/>
+		<result property="income.cassetteIncome.training.trainingPeriod.number"				column="training_period"/>
+		<result property="income.cassetteIncome.training.trainingPeriod.unit.type"			column="training_period_unit_type"/>
+		<result property="income.cassetteIncome.training.trainingPeriod.unit.name"			column="training_period_unit_name"/>
+		<result property="income.cassetteIncome.training.trainingPeriod.addition.id"		column="training_period_addition_id"/>
+		<result property="income.cassetteIncome.training.trainingPeriod.addition.value"		column="training_period_addition_value"/>
+		<result property="income.cassetteIncome.training.wage.diff"							column="difference_training_period_wage"/>
+		<result property="income.cassetteIncome.training.wage.studentWage"					column="student_training_period_wage"/>
+		<result property="jobOfferIncome.incomeForm.code"									column="joboffer_income_form_code"/>
+		<result property="jobOfferIncome.text.value"										column="income_detail_text"/>
+	</resultMap>
+	
+	<select id="offeringJobofferListFindByWorkplaceId" resultMap="jobofferForDirectEntry">
+		SELECT
+			  job_offer.job_offer_id                                        AS joboffer_id
+			, job_offer.job_type_description                                AS job_type_description
+			, job_offer.income_description                                  AS income_description
+			, job_offer.income_form_code                                    AS income_form_code
+			, job_offer.qualification                                       AS qualification
+			, joboffer_income.income_form_code                              AS joboffer_income_form_code
+			, income_text.detail_text                                       AS income_detail_text
+			, income.income_form                                            AS income_form
+			, income_input_method.income_input_method_type                  AS income_input_method_type
+			, cassette_income.base_wage                                     AS base_wage
+			, cassette_income.weekend_wage                                  AS weekend_wage
+			, cassette_income.difference_student_wage                       AS difference_student_wage
+			, cassette_income.difference_training_period_wage               AS difference_training_period_wage
+			, cassette_income.training_period                               AS training_period
+			, cassette_income.student_training_period_wage                  AS student_training_period_wage
+			, COALESCE ( cassette_income.admit_high_school_student, FALSE ) AS admit_high_school_student
+			, COALESCE ( cassette_income.only_decided_on_career,    FALSE ) AS only_decided_on_career
+			, COALESCE ( cassette_income.conduct_training,          FALSE ) AS conduct_training
+			, training_period_unit.type                                     AS training_period_unit_type
+			, training_period_unit.name                                     AS training_period_unit_name
+			, training_period_addition.id                                   AS training_period_addition_id
+			, training_period_addition.value                                AS training_period_addition_value
+		FROM 
+			joboffer.job_offer
+		INNER JOIN joboffer.postings
+			ON postings.job_offer_id = job_offer.job_offer_id
+		INNER JOIN joboffer.posting_status
+			ON posting_status.posting_id = postings.posting_id
+		INNER JOIN workplace.workplace
+			ON workplace.workplace_id = job_offer.workplace_id
+		INNER JOIN joboffer.income
+			ON job_offer.income_form_code = income.income_form_code
+		LEFT OUTER JOIN joboffer.income_input_method
+			ON income_input_method.job_offer_id = job_offer.job_offer_id
+		LEFT OUTER JOIN joboffer.cassette_income
+			ON cassette_income.job_offer_id = job_offer.job_offer_id
+		LEFT OUTER JOIN joboffer.training_period_unit
+			ON training_period_unit.type = cassette_income.training_period_unit_type
+		LEFT OUTER JOIN joboffer.training_period_addition
+			ON training_period_addition.id = cassette_income.training_period_addition_id
+		LEFT OUTER JOIN joboffer_income.income joboffer_income
+			ON job_offer.job_offer_id = joboffer_income.job_offer_id
+		LEFT OUTER JOIN joboffer_income.income_text
+			ON joboffer_income.job_offer_id = income_text.job_offer_id
+		WHERE
+			job_offer.workplace_id = #workplaceId#
+		AND
+			posting_status.status_type = 'OFFERING'
+		ORDER BY
+			  job_offer.updated_at DESC
+			, job_offer.job_offer_id DESC
+	</select>
+	
+</sqlMap>

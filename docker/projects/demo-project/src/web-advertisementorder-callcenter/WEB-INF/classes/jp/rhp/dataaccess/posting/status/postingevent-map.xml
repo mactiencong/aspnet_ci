@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.posting.status.PostingEventDataAccess">
+  <typeAlias alias="event" type="jp.rhp.model.posting.status.PostingEvent" />
+
+  <resultMap id="event" class="event">
+    <result property="postingId" column="posting_id" />
+    <result property="eventType" column="event_type" />
+    <result property="occurDate" column="occurred_date"/>
+  </resultMap>
+
+  <insert id="register" parameterClass="event">
+    INSERT INTO joboffer.events( posting_id, event_type, occurred_date )
+    VALUES ( #postingId#, #eventType#, #occurDate.date# );
+  </insert>
+</sqlMap>

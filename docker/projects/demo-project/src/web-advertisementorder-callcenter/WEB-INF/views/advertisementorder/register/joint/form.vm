@@ -1,0 +1,55 @@
+#recopHtml()
+<head>
+<!--[if IE]>
+<meta http-equiv="X-UA-Compatible" content="IE=IE7">
+<![endif]-->
+#recopHead('新規発注登録｜発注管理')
+#css("$link.contextPath/css/advertisementorder/articlepreview.css")
+#css("$link.contextPath/css/advertisementorder/advertisementorder.css")
+#javascript("$link.contextPath/js/commons/error.js")
+#javascript("$link.contextPath/js/advertisementorder/articlepreview.js")
+#javascript("$link.contextPath/js/advertisementorder/register_joint.js")
+<script type="text/javascript">
+	$(document).ready(function(){
+		$.orderForm
+		({
+			itemPopupUrl             : "$link.relativeAndCompany("/advertisementorder/popup/item")",
+			jobOfferPopupUrl         : "$link.relativeAndCompany("/advertisementorder/popup/joboffer")"
+		});
+		recop.settings.urlAddArticle                 = '$link.relativeAndCompany("/advertisementorder/register/joint/addArticle")';
+		recop.settings.urlRemoveArticle              = '$link.relativeAndCompany("/advertisementorder/register/joint/removeArticle")';
+		recop.settings.urlJointOrder                 = '$link.relativeAndCompany("/advertisementorder/register/joint")';
+		recop.settings.urlSingleOrder                = '$link.relativeAndCompany("/advertisementorder/register/single")';
+		recop.settings.urlJobOfferEditMode           = '$link.relativeAndCompany("/advertisementorder/register/joint/jobOfferEditMode")';
+		recop.settings.urlSelectItem                 = '$link.relativeAndCompany("/advertisementorder/register/joint/selectItem")';
+	});
+</script>
+</head>
+<body>
+#recopHeader()
+<hr />
+<div  id="container">
+	<div class="pannel">
+		<div class="inner">
+			<div class="content">
+				<div class="ttlBlock" style="position:relative; width:100%;">
+					<h2 class="employ">新規発注登録</h2>
+					<div style="position:absolute; right:0; top:5px;">
+						<a href="$link.relativeAndCompany("/advertisementorder/history")"><img src="$link.contextPath/images/btnAdvertisementOrderHistory.png" alt="過去の発注をみる" class="rollover" /></a>
+					</div>
+					<div class="clrFix"><!-- --></div>
+				</div><!-- //ttlBlock -->
+				<div>
+					<form action="$link.relativeAndCompany("/advertisementorder/register/joint/confirm")" method="POST" id="orderForm">
+						#parse("/advertisementorder/register/joint/_parts/form/jointorder.vm")
+					</form>
+				</div>
+			</div><!-- //content -->
+		</div><!-- //inner -->
+	</div><!-- //pannel -->
+</div><!-- //container -->
+
+#recopFooter()
+
+</body>
+</html>

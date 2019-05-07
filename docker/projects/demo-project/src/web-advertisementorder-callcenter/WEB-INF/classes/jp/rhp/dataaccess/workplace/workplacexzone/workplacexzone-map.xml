@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.workplace.workplacexzone.WorkplaceXZoneDataAccess">
+
+	<select id="findPrefectureCodeByWorkplaceId" resultClass="String">
+		SELECT
+			zones.code
+		FROM area.zones
+		INNER JOIN workplace.workplace_x_zone
+		ON (
+			zones.zone_id = workplace_x_zone.zone_id
+			)
+		WHERE
+			workplace_x_zone.workplace_id = #value#
+			AND zones.scheme = 'JIS-X401'
+	</select>
+
+</sqlMap>

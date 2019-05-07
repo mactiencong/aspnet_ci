@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.hiringprocess.hiringstatus.jobtypetohire.JobTypeToHireDataAccess">
+
+	<resultMap class="jp.rhp.model.hiringprocess.hiringstatus.jobtypetohire.JobTypeToHire" id="hiringJobTypeToHire">
+		<result property="id" column="jobtype_to_hire_id"/>
+		<result property="name" column="jobtype_to_hire_name"/>
+	</resultMap>
+
+	<select id="getId" resultClass="Integer">
+		SELECT nextval('hiring.jobtype_to_hire_id')
+	</select>
+
+	<select id="findById" resultMap="hiringJobTypeToHire">
+		SELECT
+			jobtype_to_hire_id,
+			jobtype_to_hire_name
+		FROM
+			hiring.jobtype_to_hire
+		WHERE
+			jobtype_to_hire_id = #value#
+	</select>
+
+	<select id="listAll" resultMap="hiringJobTypeToHire">
+		SELECT
+			jobtype_to_hire_id,
+			jobtype_to_hire_name
+		FROM
+			hiring.jobtype_to_hire
+		ORDER BY
+			priority,
+			jobtype_to_hire_id
+	</select>
+
+	<select id="findByJobOfferId" resultMap="hiringJobTypeToHire">
+		SELECT
+			jobtype_to_hire.jobtype_to_hire_id,
+			jobtype_to_hire.jobtype_to_hire_name
+		FROM
+			joboffer.job_offer
+		INNER JOIN
+			jobtype.job_type
+		ON
+			job_offer.job_type_code = job_type.job_type_code
+		INNER JOIN
+			hiring.jobtype_to_hire
+		ON
+			job_type.jobtype_to_hire_id = jobtype_to_hire.jobtype_to_hire_id
+		WHERE
+			job_offer.job_offer_id = #value#
+	</select>
+
+</sqlMap>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.directentry.DirectEntryDataAccess">
+
+	<select id="getId" resultClass="int">
+		SELECT nextval('entry.direct_entry_id')
+	</select>
+
+	<insert id="insertDirectEntry" >
+		INSERT INTO entry.direct_entries(
+			direct_entry_id,
+			entry_id,
+			candidate_id
+		) VALUES (
+			#directEntry.id#,
+			#directEntry.applicant.id#,
+			#candidateId#
+		)
+	</insert>
+
+	<insert id="insertCallcenterAgent" parameterClass="jp.rhp.model.directentry.DirectEntry">
+		INSERT INTO entry.callcenter_agent(
+			direct_entry_id
+		) VALUES (
+			#id#
+		)
+	</insert>
+
+</sqlMap>

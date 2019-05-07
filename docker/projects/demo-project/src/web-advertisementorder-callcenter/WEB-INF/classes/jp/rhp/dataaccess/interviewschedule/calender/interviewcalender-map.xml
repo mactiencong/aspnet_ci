@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.interviewschedule.calender.InterviewCalenderDataAccess">
+
+	<resultMap class="jp.rhp.model.interviewschedule.calender.event.Event" id="interviewEvent">
+		<result property="interviewEvent.id" column="id" />
+		<result property="interviewEvent.type" column="type" />
+		<result property="interviewEvent.text" column="text" />
+		<result property="interviewEvent.posting" column="posting_status" />
+		<result property="frameEvent.eventDateTime.startDate.date" column="from_interview_time" />
+		<result property="frameEvent.eventDateTime.endDate.date" column="to_interview_time" />
+		<result property="frameEvent.capacity.capacity" column="capacity" />
+		<result property="frameEvent.capacity.booking" column="booking" />
+		<result property="frameEvent.capacity.bookingDateTime" column="time_booked" />
+		<result property="remarksEvent.comment" column="memo" />
+		<result property="remarksEvent.color" column="color" />
+		<result property="interviewPlaceEvent.name" column="interview_place_name" />
+		<result property="interviewPlaceEvent.location.address.prefecture.code" column="prefecture_code" />
+		<result property="interviewPlaceEvent.location.address.prefecture.name" column="prefecture_name" />
+		<result property="interviewPlaceEvent.location.address.municipality.name" column="municipality" />
+		<result property="interviewPlaceEvent.location.address.street.name" column="street_name" />
+		<result property="interviewPlaceEvent.location.address.building.name" column="building_name" />
+		<result property="interviewPlaceEvent.phoneNumber.fullNumber" column="phone_number" />
+		<result property="interviewPlaceEvent.location.coordinate.latitude" column="latitude" />
+		<result property="interviewPlaceEvent.location.coordinate.longitude" column="longitude" />
+	</resultMap>
+
+	<resultMap class="jp.rhp.model.interviewschedule.interviewplace.InterviewPlace" id="interviewPlace">
+		<result property="name.value" column="interview_place_name" />
+		<result property="detail.location.address.prefecture.code" column="prefecture_code" />
+		<result property="detail.location.address.prefecture.name.value" column="prefecture_name" />
+		<result property="detail.location.address.city.municipality.name.value" column="municipality" />
+		<result property="detail.location.address.city.street.name.value" column="street_name" />
+		<result property="detail.location.address.city.street.buildingName.value" column="building_name" />
+		<result property="detail.contact.telephoneNumber.telephoneNumber" column="phone_number" />
+		<result property="detail.location.coordinate.latitude.value" column="latitude" />
+		<result property="detail.location.coordinate.longitude.value" column="longitude" />
+	</resultMap>
+
+	<resultMap class="jp.rhp.model.interviewschedule.interviewplace.history.InterviewPlaceHistory" id="interviewPlaceHistory">
+		<result property="id" column="id" />
+		<result property="name.value" column="interview_place_name" />
+	</resultMap>
+
+	<sql id="activeBooking">
+		SELECT
+			bookings.id,
+			bookings.interview_id,
+			bookings.time_booked
+		FROM
+			interview_schedule.bookings
+		WHERE
+		NOT EXISTS ( SELECT candidate_id FROM hiring_process.candidates_delete WHERE bookings.candidate_id = candidates_delete.candidate_id )
+	</sql>
+	
+	<sql id="interviewAndBookingCounts">
+		SELECT 
+			interviews.id,
+			interviews.section_to_hire_id,
+			interviews.interview_date,
+			interviews.interview_date + interviews.from_interview_time as from_interview_time, 
+			CASE
+				WHEN interviews.to_interview_time != '00:00' THEN
+					interviews.interview_date + interviews.to_interview_time
+				ELSE
+					CAST( interviews.interview_date + interviews.to_interview_time as timestamp ) + '1 days'
+			END as to_interview_time,
+			interviews.capacity,
+			interviews.memo,
+			interviews.color,
+			count(active_bookings.id) as booked,
+			COALESCE(to_char(max(active_bookings.time_booked),'yyyy/MM/dd HH24:mi:ss'), '') as time_booked,
+			interview_posting_status.posting_status,
+			COALESCE(interview_place.name,'') as interview_place_name,
+			COALESCE(interview_place.prefecture_code,'') as prefecture_code,
+			COALESCE(prefectures.name,'') as prefecture_name,
+			COALESCE(interview_place.municipality,'') as municipality,
+			COALESCE(interview_place.street_name,'') as street_name,
+			COALESCE(interview_place.building_name,'') as building_name,
+			COALESCE(interview_place.phone_number,'') as phone_number,
+			COALESCE(interview_place.latitude,'') as latitude,
+			COALESCE(interview_place.longitude,'') as longitude
+		FROM
+			interview_schedule.interviews
+		INNER JOIN 
+			interview_schedule.interview_posting_status
+		ON interviews.id = interview_posting_status.interview_id
+		LEFT OUTER JOIN 
+			interview_schedule.interview_place
+		ON interviews.id = interview_place.interview_id
+		LEFT OUTER JOIN
+			address.prefectures
+		ON interview_place.prefecture_code = prefectures.code
+		LEFT OUTER JOIN (
+			<include refid="activeBooking"/>
+		) as active_bookings
+		ON interviews.id = active_bookings.interview_id
+		GROUP BY 
+			interviews.id,
+			interviews.section_to_hire_id,
+			interviews.interview_date,
+			interviews.from_interview_time,
+			interviews.to_interview_time,
+			interviews.capacity,
+			interviews.memo,
+			interviews.color,
+			interview_posting_status.posting_status,
+			interview_place.name,
+			interview_place.prefecture_code,
+			prefectures.name,
+			interview_place.municipality,
+			interview_place.street_name,
+			interview_place.building_name,
+			interview_place.phone_number,
+			interview_place.latitude,
+			interview_place.longitude
+	</sql>
+
+	<select id="find" resultMap="interviewEvent">
+		SELECT
+			interview_and_bookingcounts.id,
+			'frame' as type, 
+			interview_and_bookingcounts.memo as text,
+			interview_and_bookingcounts.section_to_hire_id,
+			interview_and_bookingcounts.interview_date,
+			interview_and_bookingcounts.from_interview_time,
+			interview_and_bookingcounts.to_interview_time,
+			interview_and_bookingcounts.capacity,
+			interview_and_bookingcounts.memo,
+			interview_and_bookingcounts.color,
+			interview_and_bookingcounts.booked as booking,
+			interview_and_bookingcounts.time_booked,
+			interview_and_bookingcounts.posting_status,
+			interview_and_bookingcounts.interview_place_name,
+			interview_and_bookingcounts.prefecture_code,
+			interview_and_bookingcounts.prefecture_name,
+			interview_and_bookingcounts.municipality,
+			interview_and_bookingcounts.street_name,
+			interview_and_bookingcounts.building_name,
+			interview_and_bookingcounts.phone_number,
+			interview_and_bookingcounts.latitude,
+			interview_and_bookingcounts.longitude
+		FROM
+		(
+			<include refid="interviewAndBookingCounts"/>
+		) as interview_and_bookingcounts
+		WHERE
+				interview_and_bookingcounts.section_to_hire_id = #value#
+		ORDER BY
+			interview_and_bookingcounts.interview_date,
+			interview_and_bookingcounts.from_interview_time,
+			interview_and_bookingcounts.to_interview_time
+	</select>
+
+	<select id="findByInterviewID" resultMap="interviewEvent">
+		SELECT
+			interview_and_bookingcounts.id,
+			'frame' as type, 
+			interview_and_bookingcounts.memo as text,
+			interview_and_bookingcounts.section_to_hire_id,
+			interview_and_bookingcounts.interview_date,
+			interview_and_bookingcounts.from_interview_time,
+			interview_and_bookingcounts.to_interview_time,
+			interview_and_bookingcounts.capacity,
+			interview_and_bookingcounts.memo,
+			interview_and_bookingcounts.color,
+			interview_and_bookingcounts.booked as booking,
+			interview_and_bookingcounts.time_booked,
+			interview_and_bookingcounts.posting_status,
+			interview_and_bookingcounts.interview_place_name,
+			interview_and_bookingcounts.prefecture_code,
+			interview_and_bookingcounts.prefecture_name,
+			interview_and_bookingcounts.municipality,
+			interview_and_bookingcounts.street_name,
+			interview_and_bookingcounts.building_name,
+			interview_and_bookingcounts.phone_number,
+			interview_and_bookingcounts.latitude,
+			interview_and_bookingcounts.longitude
+		FROM
+		(
+			<include refid="interviewAndBookingCounts"/>
+		) as interview_and_bookingcounts
+		WHERE
+				interview_and_bookingcounts.id = #value#
+		ORDER BY
+			interview_and_bookingcounts.interview_date,
+			interview_and_bookingcounts.from_interview_time,
+			interview_and_bookingcounts.to_interview_time
+	</select>
+
+	<select id="interviewPlaceOptions" resultMap="interviewPlaceHistory">
+		SELECT 
+			history.id,
+			history.interview_place_name
+		FROM
+		(
+			SELECT 
+				interview_place_history.id,
+				interview_place_history.name as interview_place_name
+			FROM
+				interview_schedule.interview_place_history
+			LEFT OUTER JOIN
+				address.prefectures
+			ON interview_place_history.prefecture_code = prefectures.code
+			WHERE
+				interview_place_history.id IN ( 
+						SELECT MAX(interview_place_history.id)
+						FROM interview_schedule.interview_place_history
+						WHERE interview_place_history.section_to_hire_id = #value#
+						GROUP BY interview_place_history.name
+					)
+			ORDER BY
+				interview_place_history.id DESC
+			OFFSET 0 LIMIT 10
+		) as history
+		ORDER BY
+			history.interview_place_name
+	</select>
+
+	<select id="findInterviewPlaceTemplate" resultMap="interviewPlace">
+		SELECT 
+			interview_place_history.name as interview_place_name,
+			interview_place_history.prefecture_code as prefecture_code,
+			prefectures.name as prefecture_name,
+			interview_place_history.municipality as municipality,
+			interview_place_history.street_name as street_name,
+			interview_place_history.building_name as building_name,
+			interview_place_history.phone_number as phone_number,
+			interview_place_history.latitude as latitude,
+			interview_place_history.longitude as longitude
+		FROM
+			interview_schedule.interview_place_history
+		LEFT OUTER JOIN
+			address.prefectures
+		ON interview_place_history.prefecture_code = prefectures.code
+		WHERE
+			interview_place_history.id = #value#
+	</select>
+
+	<select id="defaultInterviewPlace" resultMap="interviewPlace">
+		SELECT 
+			interview_place_history.name as interview_place_name,
+			interview_place_history.prefecture_code as prefecture_code,
+			prefectures.name as prefecture_name,
+			interview_place_history.municipality as municipality,
+			interview_place_history.street_name as street_name,
+			interview_place_history.building_name as building_name,
+			interview_place_history.phone_number as phone_number,
+			interview_place_history.latitude as latitude,
+			interview_place_history.longitude as longitude
+		FROM
+			interview_schedule.interview_place_history
+		LEFT OUTER JOIN
+			address.prefectures
+		ON interview_place_history.prefecture_code = prefectures.code
+		WHERE
+			interview_place_history.id = (
+				SELECT
+					MAX(interview_place_history.id)
+				FROM
+					interview_schedule.interview_place_history
+				WHERE
+					interview_place_history.section_to_hire_id = #value#
+			)
+	</select>
+
+</sqlMap>

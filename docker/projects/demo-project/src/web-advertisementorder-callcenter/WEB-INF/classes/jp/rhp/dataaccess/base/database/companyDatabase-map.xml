@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.base.database.CompanyDatabaseDataAccess">
+
+	<resultMap id="companyDatabase" class="jp.rhp.model.base.database.CompanyDatabase">
+		<result property="name"      column="db_name"/>
+		<result property="address"   column="db_address"/>
+		<result property="port"      column="db_port"/>
+		<result property="userId"    column="db_user_id"/>
+		<result property="password"  column="db_password"/>
+	</resultMap>
+
+	<select id="selectCompanyDatabase" parameterClass="jp.rhp.model.base.database.RequestCompany" resultMap="companyDatabase">
+		SELECT
+			  company_database.db_name
+			, company_database.db_address
+			, company_database.db_port
+			, company_database.db_user_id
+			, company_database.db_password
+		FROM
+			company.company_database
+		INNER JOIN
+			company.company
+			ON company.company_id = company_database.company_id
+		WHERE
+			    company.company_id             = #id#
+			AND company_database.db_name     IS NOT NULL
+			AND company_database.db_address  IS NOT NULL
+			AND company_database.db_port     IS NOT NULL
+			AND company_database.db_user_id  IS NOT NULL
+			AND company_database.db_password IS NOT NULL
+	</select>
+</sqlMap>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.sectiontohire.sectiongroup.SectionGroupDataAccess">
+
+	<resultMap class="jp.rhp.model.sectiontohire.sectiongroup.SectionGroup" id="hiringSectionGroup">
+		<result property="id" column="section_group_id"/>
+		<result property="name" column="section_group_name"/>
+		<result property="priority" column="priority"/>
+	</resultMap>
+
+	<select id="getId" resultClass="Integer">
+		SELECT nextval('hiring.section_group_id')
+	</select>
+
+	<select id="listAll" resultMap="hiringSectionGroup">
+		SELECT
+			distinct
+			section_groups.section_group_id,
+			section_groups.section_group_name,
+			section_groups.priority
+		FROM
+			hiring.section_groups
+		ORDER BY
+			section_groups.priority
+	</select>
+
+	<select id="findById" resultMap="hiringSectionGroup">
+		SELECT
+			section_groups.section_group_id,
+			section_groups.section_group_name,
+			section_groups.priority
+		FROM
+			hiring.section_groups
+		WHERE
+			section_groups.section_group_id = #value#
+	</select>
+
+
+	<select id="findGroupIdByCusotmerCode" resultClass="Integer">
+		SELECT
+			section_groups.section_group_id
+		FROM
+			hiring.section_groups
+		INNER JOIN
+			v_article.brand
+		ON
+			section_groups.section_group_id = brand.section_group_id
+		INNER JOIN
+			v_article.s_code_x_brand
+		ON
+			s_code_x_brand.brand_code = brand.code
+		WHERE
+			s_code_x_brand.s_code = #value#
+	</select>
+
+</sqlMap>

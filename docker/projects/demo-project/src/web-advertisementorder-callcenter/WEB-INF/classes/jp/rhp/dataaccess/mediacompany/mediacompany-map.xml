@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.mediacompany.MediaCompanyDataAccess">
+
+	<resultMap class="jp.rhp.model.mediacompany.MediaCompany" id="mediaCompany">
+		<result property="code" column="media_code" />
+		<result property="name" column="media_name" />
+	</resultMap>
+
+	<select id="listOfLoginEventUser" resultMap="mediaCompany">
+		SELECT
+			media_company.code AS media_code,
+			media_company.name AS media_name
+		FROM
+			advertisement_order_master.media_company
+		INNER JOIN
+			callcenter.callcenter_x_media_company
+		ON
+			callcenter_x_media_company.media_company_code = media_company.code
+		INNER JOIN
+			callcenter.callcenter
+		ON
+			callcenter.id = callcenter_x_media_company.callcenter_id
+		INNER JOIN
+			account.user_x_callcenter
+		ON
+			user_x_callcenter.callcenter_id = callcenter.id
+		WHERE
+			user_x_callcenter.user_id = #account.id#
+	</select>
+
+</sqlMap>

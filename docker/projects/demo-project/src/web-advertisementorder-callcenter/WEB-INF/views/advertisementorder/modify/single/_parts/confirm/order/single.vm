@@ -1,0 +1,61 @@
+<h3>発注概要</h3>
+<div class="section">
+	<table class="recoptable" >
+		<col width="18%" /><col width="32%" /><col width="18%" /><col width="32%" />
+		<tr>
+			<th>発注番号</th>
+			<td>#escape($!{editSingleOrderSheet.advertisementOrder.id})</td>
+			<th>発注依頼日時</th>
+			<td>
+			$date.format('yyyy/MM/dd(E) HH:mm',$!{editSingleOrderSheet.advertisementOrder.orderDateTime.timeStamp.date})
+			</td>
+		</tr>
+		<tr>
+			<th>発注種別</th>
+			<td>
+				#escape($editSingleOrderSheet.advertisementOrder.type.label())
+			</td>
+			<th>原稿掲載店舗</th>
+			<td>
+				#escape($!{editSingleOrderSheet.article.jobOffer.workplace.name})
+			</td>
+		</tr>
+		<tr>
+			<th #if(!$settings.formCustomize.faxNumber.hide)rowspan="2"#end>申込者名</th>
+			<td #if(!$settings.formCustomize.faxNumber.hide)rowspan="2"#end	>
+				#escape($!{editSingleOrderSheet.advertisementOrder.slips.detail.source.orderer.name.value})
+			</td>
+			<th>緊急連絡先</th>
+			<td>
+				#escape($!{editSingleOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.phoneNumber.telephoneNumber})
+			</td>
+		</tr>
+		#if(!$settings.formCustomize.faxNumber.hide)
+		<tr>
+			<th>FAX番号</th>
+			<td>
+				#escape($!{editSingleOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.faxNumber.faxNumber})
+			</td>
+		</tr>
+		#end
+		<tr>
+			<th>登録者名</th>
+			<td>#escape($!{editSingleOrderSheet.advertisementOrder.slips.detail.source.registrant.name.value})</td>
+			<th>登録者メールアドレス</th>
+			<td>#escape($!{editSingleOrderSheet.advertisementOrder.slips.detail.source.registrant.contact.mailAddress.mailAddress})</td>
+		</tr>
+	</table>
+	#if($settings.function.useArticleConfirmation)
+    	<table class="recoptable" >
+    		<col width="18%" /><col width="*" />
+    		<tr>
+    			<th>原稿確認</th>
+    			<td>
+    				#escape( $!{editSingleOrderSheet.advertisementOrder.slips.remarks.articleConfirmation.label()} )
+    			</td>
+    		</tr>
+    	</table>
+	#end
+	#parse("/advertisementorder/modify/single/_parts/confirm/order/operationalnote.vm")
+	<input type="hidden" name="_advertisementOrderId" value="#escape($!{editSingleOrderSheet.advertisementOrder.id})" />
+</div>

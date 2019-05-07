@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.questionnaire.QuestionDataAccess">
+
+    <typeAlias alias="question" type="jp.rhp.model.questionnaire.Question" />
+    <typeAlias alias="validateType" type="jp.rhp.model.questionnaire.validate.ValidateType" />
+    <typeAlias alias="option" type="jp.rhp.model.questionnaire.Option" />
+
+    <resultMap class="question" id="question" groupBy="id">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="guideMessage" column="guideMessage"/>
+        <result property="multiple" column="multiple"/>
+        <result property="display" column="display"/>
+        <result property="questionType.select" column="questionType"/>
+        <result property="numbering" column="numbering"/>
+        <result property="validateTypes.validateTypes" resultMap="jp.rhp.dataaccess.questionnaire.QuestionDataAccess.validateType"/>
+        <result property="questionnaireId" column="questionnaireId"/>
+    </resultMap>
+
+    <resultMap class="validateType" id="validateType" groupBy="key">
+        <result property="key" column="validateType"/>
+        <result property="value" column="value"/>
+    </resultMap>
+
+    <sql id="selectQuestionListCore">
+    <![CDATA[
+        select
+            questions.id as id,
+            questions.name as name,
+            questions.description as description,
+            questions.guide_message as guideMessage,
+            questions.multiple as multiple,
+            questions.display as display,
+            questions.question_type as questionType,
+            questions.numbering as numbering,
+            question_validates.id as questionValidatesId,
+            question_validates.value as value,
+            question_validates.validate_type as validateType,
+            questionnaires.id as questionnaireId
+        from
+            questionnaire.questions questions
+    ]]>
+    </sql>
+
+    <sql id="leftOuterJoinQuestionValidates">
+    <![CDATA[
+        left outer join questionnaire.question_validates question_validates on
+        (
+            question_validates.question = questions.id
+        )
+    ]]>
+    </sql>
+
+    <sql id="joinQuestionnaires">
+    <![CDATA[
+        inner join questionnaire.questionnaires questionnaires on
+        (
+            questions.questionnaire = questionnaires.id
+        )
+    ]]>
+    </sql>
+
+    <sql id="whereOfQuestionnaires">
+        where questionnaires.id = #id#
+    </sql>
+
+    <sql id="orderByQuestionCore">
+    <![CDATA[
+        order by questions.numbering, question_validates.action_order
+    ]]>
+    </sql>
+
+    <select id="getId" resultClass="long">
+        select nextval('questionnaire.questions_id')
+    </select>
+
+    <select id="listOf" resultMap="question">
+        <include refid="selectQuestionListCore"/>
+        <include refid="leftOuterJoinQuestionValidates"/>
+        <include refid="joinQuestionnaires"/>
+        <include refid="whereOfQuestionnaires"/>
+        <include refid="orderByQuestionCore"/>
+    </select>
+
+    <insert id="register" parameterClass="question">
+        insert into questionnaire.questions
+        ( id, name, description, guide_message, multiple, display, question_type, numbering, questionnaire )
+        values
+        ( #id#, #name#, #description#, #guideMessage#, #multiple#, #display#, #questionType.type#, #numbering#, #questionnaireId# )
+    </insert>
+
+    <insert id="registerOption" parameterClass="map">
+        insert into questionnaire.options
+        ( key, value, priority, question )
+        values
+        ( #option.key#, #option.value#, #option.priority#, #questionId# )
+    </insert>
+
+    <insert id="registerQuestionValidate" parameterClass="map">
+        insert into questionnaire.question_validates
+        ( validate_type, value, action_order, question )
+        values
+        ( #validateType.key#, #validateType.value#, #validateType.actionOrder#, #questionId# )
+    </insert>
+
+</sqlMap>

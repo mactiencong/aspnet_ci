@@ -1,0 +1,6 @@
+<div class="detailTitle">
+	<h2>
+		$!{sectionToHire.name} のスケジュール
+	</h2>
+</div>
+<hr />

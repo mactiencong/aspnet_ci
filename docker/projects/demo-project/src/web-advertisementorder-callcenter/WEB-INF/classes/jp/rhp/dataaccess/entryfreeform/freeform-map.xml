@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.entryfreeform.FreeFormDataAccess">
+
+	<resultMap class="jp.rhp.model.questionnaire.Questionnaire" id="questionnaire" groupBy="id">
+		<result property="id" column="id"/>
+		<result property="name" column="name"/>
+		<result property="questions.questions" resultMap="jp.rhp.dataaccess.entryfreeform.FreeFormDataAccess.question"/>
+	</resultMap>
+
+	<resultMap class="jp.rhp.model.questionnaire.Question" id="question" groupBy="id,questionId">
+		<result property="id" column="questionId"/>
+		<result property="name" column="questionName"/>
+		<result property="description" column="description"/>
+		<result property="guideMessage" column="guideMessage"/>
+		<result property="multiple" column="multiple"/>
+		<result property="display" column="display"/>
+		<result property="questionType.select" column="questionType"/>
+		<result property="numbering" column="numbering"/>
+		<result property="options.options" resultMap="jp.rhp.dataaccess.entryfreeform.FreeFormDataAccess.option"/>
+		<result property="validateTypes.validateTypes" resultMap="jp.rhp.dataaccess.entryfreeform.FreeFormDataAccess.validateType"/>
+		<result property="questionnaireId" column="id"/>
+	</resultMap>
+
+	<resultMap class="jp.rhp.model.questionnaire.Option" id="option" groupBy="key">
+		<result property="key" column="key"/>
+		<result property="value" column="value"/>
+		<result property="priority" column="priority"/>
+	</resultMap>
+
+	<resultMap class="jp.rhp.model.questionnaire.validate.ValidateType" id="validateType" groupBy="key">
+		<result property="key" column="validateType"/>
+		<result property="value" column="questionValidatesValue"/>
+	</resultMap>
+
+	<select id="findCallcenterQuestionnaire" resultMap="questionnaire">
+		SELECT
+			questionnaires.id					AS id,
+			questionnaires.name					AS name,
+			questions.id						AS questionId,
+			questions.name						AS questionName,
+			questions.description				AS description,
+			questions.guide_message				AS guideMessage,
+			questions.multiple					AS multiple,
+			questions.display					AS display,
+			questions.question_type				AS questionType,
+			questions.numbering					AS numbering,
+			options.id							AS optionId,
+			options.key							AS key,
+			options.value						AS value,
+			options.priority					AS priority,
+			question_validates.id				AS questionValidatesId,
+			question_validates.value			AS questionValidatesValue,
+			question_validates.validate_type	AS validateType
+		FROM
+			questionnaire.questionnaires questionnaires
+			LEFT OUTER JOIN
+				questionnaire.questions questions
+				ON
+					questions.questionnaire = questionnaires.id
+			LEFT OUTER JOIN
+				questionnaire.options options
+				ON
+					options.question = questions.id
+			LEFT OUTER JOIN
+				questionnaire.question_validates AS question_validates
+				ON
+					question_validates.question = questions.id
+		WHERE
+			EXISTS (
+				SELECT
+					callcenter_entry_questionnaire.questionnaire_id
+				FROM
+					entry.callcenter_entry_questionnaire
+				WHERE
+					callcenter_entry_questionnaire.questionnaire_id = questionnaires.id
+			)
+		ORDER BY
+			questions.numbering,
+			options.priority,
+			question_validates.action_order
+	</select>
+
+</sqlMap>

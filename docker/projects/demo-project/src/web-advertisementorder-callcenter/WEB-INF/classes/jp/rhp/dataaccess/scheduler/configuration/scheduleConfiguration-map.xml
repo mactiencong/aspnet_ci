@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.scheduler.configuration.ScheduleConfigurationDataAccess">
+
+    <typeAlias alias="scheduleConfiguration" type="jp.rhp.model.scheduler.configuration.ScheduleConfiguration" />
+
+    <resultMap class="scheduleConfiguration" id="scheduleConfiguration">
+        <result property="stepTime" column="step_time"/>
+        <result property="firstHour" column="first_hour"/>
+        <result property="lastHour" column="last_hour"/>
+    </resultMap>
+
+    <select id="find" resultMap="scheduleConfiguration">
+      SELECT
+        schedule_configuration.step_time,
+        schedule_configuration.first_hour,
+        schedule_configuration.last_hour
+      FROM
+        employer.schedule_configuration
+    </select>
+</sqlMap>

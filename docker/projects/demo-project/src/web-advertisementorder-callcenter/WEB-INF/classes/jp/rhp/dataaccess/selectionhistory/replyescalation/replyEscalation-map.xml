@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.selectionhistory.replyescalation.ReplyEscalationDataAccess">
+
+	<select id="escalationIdBySelectionEventId" resultClass="java.lang.Integer">
+		SELECT
+			escalation_id
+		FROM
+			selection_history.escalation_x_selection_history
+		WHERE
+			selection_history_id = #selectionEventId#
+	</select>
+
+	<select id="rootEscalationIdByEscalationId" resultClass="java.lang.Integer">
+		SELECT
+			root_escalation_id
+		FROM
+			selection_history.reply_escalation
+		WHERE
+			escalation_id = #escalationId#
+	</select>
+
+	<insert id="registerReplyEscalation">
+		INSERT INTO selection_history.reply_escalation (
+			escalation_id, 
+			root_escalation_id,
+			source_escalation_id,
+			description
+		) VALUES (
+			#escalationId#,
+			#replyEscalation.rootEscalationId#,
+			#replyEscalation.sourceEscalationId#,
+			#replyEscalation.selectionEvent.escalation.process.description#
+		)
+	</insert>
+
+</sqlMap>

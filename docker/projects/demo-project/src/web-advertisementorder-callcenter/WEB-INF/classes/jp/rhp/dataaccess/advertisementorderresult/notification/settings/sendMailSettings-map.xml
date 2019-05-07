@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.advertisementorderresult.notification.settings.SendMailSettingsDataAccess">
+
+	<resultMap class="jp.rhp.model.advertisementorderresult.notification.settings.SendMailSettings" id="settings">
+		<result property="isHeadQuarter"    column = "is_headquarter" />
+		<result property="isSv"             column = "is_sv" />
+		<result property="isSectionToHire"  column = "is_sectiontohire" />
+		<result property="isCallCenter"     column = "is_callcenter" />
+	</resultMap>
+
+	<select id="find" resultMap="settings">
+		SELECT
+			is_headquarter,
+			is_sv,
+			is_sectiontohire,
+			is_callcenter
+		FROM
+			advertisement_order.send_mail_settings
+		WHERE send_mail_type = #value#
+	</select>
+
+</sqlMap>

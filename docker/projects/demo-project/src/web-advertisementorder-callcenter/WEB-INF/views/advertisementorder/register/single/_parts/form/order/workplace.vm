@@ -1,0 +1,10 @@
+<select name="article.jobOffer.workplace.id" id="article.jobOffer.workplace.id" class="regular workplaceSelect" style="width:250px;">
+    <option value="">▼選択してください</option>
+    #foreach( ${workplace} in ${workplaceSelection.workplaces})
+        #if(${newSingleOrderSheet.article.jobOffer.workplace.id} == ${workplace.workplaceId.id})
+            <option value="${workplace.workplaceId.id}" selected>${workplace.workplaceName.value}</option>
+        #else
+            <option value="${workplace.workplaceId.id}">${workplace.workplaceName.value}</option>
+        #end
+    #end
+</select>

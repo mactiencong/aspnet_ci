@@ -1,0 +1,48 @@
+<h3>発注概要</h3>
+<div class="section">
+	<table class="recoptable" >
+		<col width="18%" /><col width="32%" /><col width="18%" /><col width="32%" />
+		<tr>
+			<th>発注種別</th>
+			<td>
+				#escape($newJointOrderSheet.advertisementOrder.type.label())
+			</td>
+			<th>原稿掲載店舗</th>
+			<td>
+				#foreach( $article in $newJointOrderSheet.articleList.articles )
+				<div>#escape( $article.jobOffer.workplace.name )</div>
+				#end
+			</td>
+		</tr>
+		<tr>
+			<th #if(!$settings.formCustomize.faxNumber.hide)rowspan="2"#end>申込者名</th>
+			<td #if(!$settings.formCustomize.faxNumber.hide)rowspan="2"#end>
+				#escape( $!{newJointOrderSheet.advertisementOrder.slips.detail.source.orderer.name.value} )
+			</td>
+			<th>緊急連絡先</th>
+			<td>
+				#escape( $!{newJointOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.phoneNumber.telephoneNumber} )
+			</td>
+		</tr>
+	#if(!$settings.formCustomize.faxNumber.hide)
+		<tr>
+			<th>FAX番号</th>
+			<td>
+				#escape( $!{newJointOrderSheet.advertisementOrder.slips.detail.source.orderer.contact.faxNumber.faxNumber} )
+			</td>
+		</tr>
+	#end
+	</table>
+	#if($settings.function.useArticleConfirmation)
+    	<table class="recoptable" >
+    		<col width="18%" /><col width="*" />
+    		<tr>
+    			<th>原稿確認</th>
+    			<td>
+    				#escape( $!{newJointOrderSheet.advertisementOrder.slips.remarks.articleConfirmation.label()} )
+    			</td>
+    		</tr>
+    	</table>
+	#end
+	#parse("/advertisementorder/register/joint/_parts/confirm/order/operationalnote.vm")
+</div>

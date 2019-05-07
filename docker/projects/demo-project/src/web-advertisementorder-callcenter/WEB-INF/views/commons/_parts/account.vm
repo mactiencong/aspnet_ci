@@ -1,0 +1,12 @@
+<div id="accountMenu">
+	<div id="accountMenuInner">
+		<table>
+			<tr onClick="location.href='$link.relative('/password/updating')';">
+				<td style="border-bottom: 1px dotted gray;">パスワード変更</td>
+			</tr>
+			<tr onClick="if( window.confirm('ログアウトします。よろしいですか。')) {location.href='$link.relative('/logout')'} else {return}">
+				<td>ログアウト</td>
+			</tr>
+		</table>
+	</div><!-- accountMenuInner -->
+</div><!-- accountMenu -->

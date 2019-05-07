@@ -1,0 +1,16 @@
+#springBind("sectionToHireMemo.text")
+<div class="scheduleMemo #if(${status.error})error#end">
+	<span class="title">スケジュールメモ</span>
+	<div class="btnAreaWrap">
+		<a name="-" class="editBtn noDialog viewMemoParts"><img src="$link.contextPath/images/icnPencil.gif" style="vertical-align:middle;"/><span style="vertical-align:middle;">編集</span></a>
+		<a name="-" class="saveBtn noDialog editMemoParts"><img src="$link.contextPath/images/btnSave.gif" width="49" height="25" alt="保存" class="rollover" style="vertical-align:middle;" /></a>
+	</div>
+	<div class="viewMemo viewMemoParts">
+		#escape($!{sectionToHireMemo.text})
+	</div>
+	<div class="editMemo editMemoParts">
+		#formTextarea("sectionToHireMemo.text" "rows='3' class='regular bg'")
+		#foreach($error in ${status.errorMessages}) <p class="err">$!{error}</p> #end
+		#formHiddenInput("sectionToHireMemo.sectionToHire.id" $sectionToHireMemo.sectionToHire.id)
+	</div>
+</div>

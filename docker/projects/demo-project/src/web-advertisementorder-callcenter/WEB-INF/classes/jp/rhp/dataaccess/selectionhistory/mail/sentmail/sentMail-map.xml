@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.selectionhistory.mail.sentmail.SentMailDataAccess">
+
+	<resultMap class="jp.rhp.model.selectionhistory.mail.sentmail.SentMail" id="sentMail" groupBy="mailMessageId">
+		<result property="mailMessageId" column="mail_message_id" />
+		<result property="header.sentDateTime.timeStamp.timeStamp" column="selection_datetime" />
+		<result property="header.from.name" column="from_name" />
+		<result property="header.to.candidate.id" column="candidate_id" />
+		<result property="header.to.candidate.name.fullName" column="entry_name" />
+		<result property="header.to.candidate.profile.gender.genderId" column="gender" />
+		<result property="contents.subject.text" column="subject" />
+		<result property="contents.message.text" column="contents" />
+		<result property="contents.message.parameters.list" resultMap="jp.rhp.dataaccess.selectionhistory.mail.sentmail.SentMailDataAccess.parameter" />
+	</resultMap>
+	
+	<resultMap class="jp.rhp.model.selectionhistory.mail.contents.Parameter" id="parameter">
+		<result property="key" column="key"/>
+		<result property="value" column="value"/>
+	</resultMap>
+	
+	<select id="findBySelecionEventId" resultMap="sentMail" parameterClass="java.lang.Integer">
+	SELECT
+		mail_message.id as mail_message_id,
+		candidates.candidate_id,
+		candidates.entry_name,
+		candidates.gender,
+		CASE WHEN
+			selection_callcenter_user.callcenter_user_id
+		IS NOT
+			null
+		THEN
+			selection_callcenter_user.callcenter_user_name
+		ELSE
+			selection_user.user_name
+		END as from_name,
+		selection_history.selection_datetime,
+		mail_message.subject,
+		mail_message.contents,
+		message_parameter.key,
+		message_parameter.value
+	FROM
+		selection_history.selection_history
+	INNER JOIN
+		selection_history.outgoing_mail
+	ON
+		outgoing_mail.selection_history_id = selection_history.id
+	INNER JOIN
+		mail.mail_message
+	ON
+		mail_message.id = outgoing_mail.mail_message_id
+	INNER JOIN
+		hiring_process.candidates
+	ON
+		candidates.candidate_id = selection_history.candidate_id
+	LEFT OUTER JOIN
+		selection_history.selection_user
+	ON
+		selection_user.selection_history_id = selection_history.id
+	LEFT OUTER JOIN
+		selection_history.selection_callcenter_user
+	ON
+		selection_callcenter_user.selection_history_id  = selection_history.id
+	LEFT OUTER JOIN
+		mail.message_parameter
+	ON
+		message_parameter.mail_message_id = mail_message.id
+		
+	WHERE
+		selection_history.id = #selectionEventId#
+	AND NOT EXISTS(
+		SELECT
+			deleted_selection_history.selection_history_id
+		FROM
+			selection_history.deleted_selection_history
+		WHERE
+			deleted_selection_history.selection_history_id = selection_history.id
+	);
+	</select>
+	
+</sqlMap>

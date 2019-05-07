@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.workplace.WorkplaceDataAccess">
+
+    <typeAlias alias="workplace" type="jp.rhp.model.workplace.Workplace" />
+    <typeAlias alias="workplaceProduct" type="jp.rhp.model.workplace.WorkplaceProduct" />
+    <typeAlias alias="workplacePrefecture" type="jp.rhp.model.workplace.address.Prefecture" />
+    <typeAlias alias="workplaceCity" type="jp.rhp.model.workplace.address.City" />
+    <typeAlias alias="workplaceCriteria" type="jp.rhp.model.workplace.criteria.Criteria"/>
+
+    <resultMap class="workplace" id="workplaces" groupBy="id">
+      <result property="id" column="workplace_id"/>
+      <result property="workplaceName.text" column="workplace"/>
+      <result property="sectionToHireName" column="section_to_hire_name"/>
+      <result property="address.prefectures.code" column="prefecture_code"/>
+      <result property="address.cities.code" column="city_code"/>
+      <result property="address.street.text" column="address_street"/>
+      <result property="address.buildingName.text" column="address_building_name"/>
+      <result property="address.prefectures.prefectures" resultMap="jp.rhp.dataaccess.workplace.WorkplaceDataAccess.prefecture" />
+      <result property="address.cities.cities" resultMap="jp.rhp.dataaccess.workplace.WorkplaceDataAccess.city" />
+      <result property="priority.priority" column="priority"/>
+    </resultMap>
+    
+	<resultMap class="workplace" id="workplace_base">
+      <result property="id" column="workplace_id"/>
+      <result property="workplaceName.text" column="workplace"/>
+      <result property="address.text" column="address"/>
+      <result property="address.street.text" column="address_street"/>
+      <result property="address.buildingName.text" column="address_building_name"/>
+      <result property="accessDescription" column="access_description"/>
+    </resultMap>
+
+    <resultMap class="workplace" id="workplace">
+      <result property="id" column="workplace_id"/>
+      <result property="workplaceNumber" column="workplace_number"/>
+      <result property="workplaceName.text" column="workplace"/>
+      <result property="sectionToHireName" column="section_to_hire_name"/>
+      <result property="address.prefectures.code" column="prefecture_code"/>
+      <result property="address.cities.code" column="city_code"/>
+      <result property="address.street.text" column="address_street"/>
+      <result property="address.buildingName.text" column="address_building_name"/>
+      <result property="address.coordinate.latitude" column="latitude"/>
+      <result property="address.coordinate.longitude" column="longitude"/>
+      <result property="homepageUrl.text" column="homepage_url"/>
+      <result property="businessDescription.text" column="business_description"/>
+      <result property="mainPhoneNumber.pilotNumberName.text" column="pilot_number_name1"/>
+      <result property="mainPhoneNumber.telephoneNumber.areaCode" column="area_code_number1"/>
+      <result property="mainPhoneNumber.telephoneNumber.localOffeceNumber" column="local_code_number1"/>
+      <result property="mainPhoneNumber.telephoneNumber.number" column="subscriber_number1"/>
+      <result property="accessDescription" column="access_description"/>
+
+      <result property="customerCode" column="customer_code"/>
+      <result property="company" column="company"/>
+      <result property="postalCode.mainCode" column="zip_code1"/>
+      <result property="postalCode.subCode" column="zip_code2"/>
+      <result property="subPhoneNumber.pilotNumberName.text" column="pilot_number_name2"/>
+      <result property="subPhoneNumber.telephoneNumber.areaCode" column="area_code_number2"/>
+      <result property="subPhoneNumber.telephoneNumber.localOffeceNumber" column="local_code_number2"/>
+      <result property="subPhoneNumber.telephoneNumber.number" column="subscriber_number2"/>
+      <result property="inquiryExplanation" column="inquiry_explanation"/>
+      <result property="appllicationId" column="appllication_id"/>
+      <result property="workplaceExpressionCode" column="workplace_expression_code"/>
+      <result property="workplaceDescription" column="workplace_description"/>
+      <result property="workplaceCassetteTitle" column="workplace_cassette_title"/>
+      <result property="workPlaceMapId" column="work_place_map_id"/>
+      <result property="searchPlaceMapId" column="search_place_map_id"/>
+      <result property="previewPhoneNumber.telephoneNumber.areaCode" column="preview_area_code_number"/>
+      <result property="previewPhoneNumber.telephoneNumber.localOffeceNumber" column="preview_local_code_number"/>
+      <result property="previewPhoneNumber.telephoneNumber.number" column="preview_subscriber_number"/>
+      <result property="emailAddress" column="email_address"/>
+      <result property="sectionToHireId" column="section_to_hire_id"/>
+      <result property="fnxContact.candidate.available" column="fnx_candidate_available"/>
+      <result property="fnxContact.candidate.faxNumber.telephoneNumber" column="fnx_candidate_fax_number"/>
+      <result property="priority.priority" column="priority"/>
+    </resultMap>
+
+    <resultMap class="workplacePrefecture" id="prefecture">
+      <result property="code" column="prefecture_code" />
+      <result property="name" column="prefecture_name" />
+    </resultMap>
+
+    <resultMap class="workplaceCity" id="city">
+      <result property="code" column="city_code" />
+      <result property="name" column="city_name" />
+      <result property="prefectureCode" column="prefecture_code" />
+    </resultMap>
+
+
+    <sql id="selectWorkplaceGroupPriority">
+      SELECT
+        workplace_x_group.workplace_id
+        , MIN( workplace_groups.priority ) AS priority
+      FROM
+        workplace.workplace_groups
+        INNER JOIN
+          workplace.workplace_x_group
+          ON
+            workplace_groups.workplace_group_id = workplace_x_group.workplace_group_id
+      GROUP BY
+        workplace_x_group.workplace_id
+    </sql>
+
+    <sql id="selectPrefectureCore">
+      SELECT
+        workplace_x_zone.workplace_id
+        , prefectures.code
+        , prefectures.name
+      FROM
+        workplace.workplace_x_zone
+        INNER JOIN
+          area.zones
+          ON
+            workplace_x_zone.zone_id = zones.zone_id
+        INNER JOIN
+          workplace.prefectures
+          ON
+            zones.code = prefectures.code
+    </sql>
+
+    <sql id="selectCityCore">
+      SELECT
+        workplace_x_zone.workplace_id
+        , cities.code
+        , cities.name
+      FROM
+        workplace.workplace_x_zone
+        INNER JOIN
+          area.zones
+          ON
+            workplace_x_zone.zone_id = zones.zone_id
+        INNER JOIN
+          workplace.cities
+          ON
+            zones.code = cities.code
+    </sql>
+
+    <sql id="selectWorkplacesCore">
+      SELECT
+        workplace.workplace_id
+        , workplace.workplace
+        , section_to_hire.section_to_hire_name
+        , prefecture.code AS prefecture_code
+        , prefecture.name AS prefecture_name
+        , city.code AS city_code
+        , city.name AS city_name
+        , workplace.address_street
+        , workplace.address_building_name
+        , workplace.priority
+      FROM
+        workplace.workplace
+        INNER JOIN
+          (
+            <include refid="selectWorkplaceGroupPriority" />
+          ) AS workplace_groups
+          ON
+            workplace.workplace_id = workplace_groups.workplace_id
+        INNER JOIN
+          (
+            <include refid="selectPrefectureCore" />
+          ) AS prefecture
+          ON
+            workplace.workplace_id = prefecture.workplace_id
+        INNER JOIN
+          (
+            <include refid="selectCityCore" />
+          ) AS city
+          ON
+            workplace.workplace_id = city.workplace_id
+        LEFT OUTER JOIN
+          hiring.section_to_hire
+          ON
+            workplace.section_to_hire_id = section_to_hire.section_to_hire_id
+    </sql>
+
+
+    <sql id="orderWorkplacesCore">
+      ORDER BY
+      	workplace.priority
+    </sql>
+
+    <select id="listAll" resultMap="workplaces">
+      <include refid="selectWorkplacesCore" />
+      <include refid="orderWorkplacesCore" />
+    </select>
+
+	<sql id="selectWorkplace">
+      SELECT
+        workplace.workplace_id
+        , workplace.workplace_number
+        , workplace.workplace
+        , section_to_hire.section_to_hire_name
+        , prefecture.code AS prefecture_code
+        , city.code AS city_code
+        , workplace.address_street
+        , workplace.address_building_name
+        , coordinates.latitude
+        , coordinates.longitude
+        , workplace.homepage_url
+        , workplace.business_description
+        , workplace.pilot_number_name1
+        , workplace.area_code_number1
+        , workplace.local_code_number1
+        , workplace.subscriber_number1
+        , workplace.access_description
+        , workplace.customer_code
+        , workplace.company
+        , workplace.zip_code1
+        , workplace.zip_code2
+        , workplace.pilot_number_name2
+        , workplace.area_code_number2
+        , workplace.local_code_number2
+        , workplace.subscriber_number2
+        , workplace.inquiry_explanation
+        , workplace.appllication_id
+        , workplace.workplace_expression_code
+        , workplace.workplace_description
+        , workplace.workplace_cassette_title
+        , workplace.work_place_map_id
+        , workplace.search_place_map_id
+        , workplace.preview_area_code_number
+        , workplace.preview_local_code_number
+        , workplace.preview_subscriber_number
+        , workplace.email_address
+        , workplace.section_to_hire_id
+        , workplace.priority
+        , settings.available AS fnx_candidate_available
+        , coalesce( section_to_hire_fnx_fax_number.fax_number, '' ) AS fnx_candidate_fax_number
+      FROM
+        workplace.workplace
+        INNER JOIN
+          (
+            <include refid="selectPrefectureCore" />
+          ) AS prefecture
+          ON
+            workplace.workplace_id = prefecture.workplace_id
+        INNER JOIN
+          (
+            <include refid="selectCityCore" />
+          ) AS city
+          ON
+            workplace.workplace_id = city.workplace_id
+        INNER JOIN
+            cooperation_fnx_candidate.settings
+        ON
+            true
+        LEFT OUTER JOIN
+          hiring.section_to_hire
+          ON
+            workplace.section_to_hire_id = section_to_hire.section_to_hire_id
+        LEFT OUTER JOIN
+          workplace.coordinates
+          ON
+            workplace.workplace_id = coordinates.workplace_id
+        LEFT OUTER JOIN
+            cooperation_fnx_candidate.section_to_hire_fnx_fax_number
+        ON
+            section_to_hire.section_to_hire_id = section_to_hire_fnx_fax_number.section_to_hire_id
+	</sql>
+
+    <select id="findById" resultMap="workplace">
+      <include refid="selectWorkplace" />
+      WHERE
+        workplace.workplace_id = #id#
+    </select>
+
+	<resultMap class="workplace" id="workplaceForMap">
+		<result property="id" column="workplace_id"/>
+		<result property="workplaceName.text" column="workplace"/>
+	</resultMap>
+
+	<select id="listByFreewordForMap" resultMap="workplaceForMap">
+		SELECT
+			workplace.workplace_id,
+			workplace.workplace
+		FROM
+			workplace.workplace
+		<dynamic>
+			<isNotNull prepend="WHERE" removeFirstPrepend="true">
+				<isNotEmpty prepend="AND" >
+			workplace.workplace LIKE '%'|| #freeword# || '%'
+				</isNotEmpty>
+			</isNotNull>
+		</dynamic>
+		ORDER BY
+			workplace.priority,
+			workplace.workplace_id
+	</select>
+
+    <select id="listBySectionToHireId" resultMap="workplace_base">
+        SELECT
+            workplace.workplace_id,
+            workplace.workplace,
+            workplace.address,
+            workplace.address_street,
+            workplace.address_building_name,
+            workplace.access_description
+        FROM
+            workplace.workplace
+        WHERE
+            workplace.section_to_hire_id = #sectionToHireId#
+    </select>
+
+</sqlMap>

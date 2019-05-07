@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.selectionhistory.mail.receivedmail.ReceivedMailDataAccess">
+		
+	<resultMap class="jp.rhp.model.selectionhistory.mail.receivedmail.ReceivedMail" id="receivedMail" groupBy="selectionEventId">
+		<result property="selectionEventId" column="id" />
+		<result property="header.receivedDateTime.timeStamp.timeStamp" column="selection_datetime" />
+		<result property="header.to.name" column="to_name" />
+		<result property="header.from.candidate.id" column="candidate_id" />
+		<result property="header.from.candidate.name.fullName" column="entry_name" />
+		<result property="header.from.candidate.profile.gender.genderId" column="gender" />
+		<result property="contents.subject.text" column="subject" />
+		<result property="contents.message.text" column="message_body" />
+		<result property="unread" column="unread" />
+	</resultMap>
+	
+	<select id="findBySelectionEventIdForHeadquarterMail" resultMap="receivedMail" parameterClass="java.lang.Integer">
+	SELECT
+		selection_history.id,
+		candidates.candidate_id,
+		candidates.entry_name,
+		candidates.gender,
+		selection_user.user_name as to_name,
+		selection_history.selection_datetime,
+		received_mail.subject,
+		received_mail.message_body,
+		CASE 
+			read_status.read_status_type
+		WHEN
+			'UNREAD'
+		THEN
+			true
+		ELSE
+			false
+		END as unread
+	FROM
+		selection_history.selection_history
+	INNER JOIN
+		selection_history.incoming_mail_for_headquarter
+	ON
+		incoming_mail_for_headquarter.selection_history_id = selection_history.id
+	INNER JOIN
+		hiring_process.candidates
+	ON
+		candidates.candidate_id = selection_history.candidate_id
+	INNER JOIN
+		selection_history.selection_user
+	ON
+		selection_user.selection_history_id = selection_history.id
+	INNER JOIN
+		headquarter_mail.received_mail
+	ON
+		received_mail.received_mail_id = incoming_mail_for_headquarter.received_mail_id
+	INNER JOIN
+		headquarter_mail.read_status
+	ON
+		read_status.received_mail_id = received_mail.received_mail_id
+	WHERE
+		selection_history.id = #selectionEventId#
+	AND NOT EXISTS(
+		SELECT
+			deleted_selection_history.selection_history_id
+		FROM
+			selection_history.deleted_selection_history
+		WHERE
+			deleted_selection_history.selection_history_id = selection_history.id
+	);
+	</select>
+	
+	<select id="findBySelectionEventIdForSectionToHireMail" resultMap="receivedMail" parameterClass="java.lang.Integer">
+	SELECT
+		selection_history.id,
+		candidates.candidate_id,
+		candidates.entry_name,
+		candidates.gender,
+		'店舗採用責任者' as to_name,
+		selection_history.selection_datetime,
+		received_mail.subject,
+		received_mail.message_body,
+		CASE 
+			received_mail.open_status_type
+		WHEN
+			'UNOPENED'
+		THEN
+			true
+		ELSE
+			false
+		END as unread
+	FROM
+		selection_history.selection_history
+	INNER JOIN
+		selection_history.incoming_mail_for_section_to_hire
+	ON
+		incoming_mail_for_section_to_hire.selection_history_id = selection_history.id
+	INNER JOIN
+		hiring_process.candidates
+	ON
+		candidates.candidate_id = selection_history.candidate_id
+	INNER JOIN
+		section_to_hire_mail.received_mail
+	ON
+		received_mail.received_mail_id = incoming_mail_for_section_to_hire.received_mail_id
+	WHERE
+		selection_history.id = #selectionEventId#
+	AND NOT EXISTS(
+		SELECT
+			deleted_selection_history.selection_history_id
+		FROM
+			selection_history.deleted_selection_history
+		WHERE
+			deleted_selection_history.selection_history_id = selection_history.id
+	);
+	</select>
+	
+</sqlMap>

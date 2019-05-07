@@ -1,0 +1,8 @@
+<div class="detailTitle">
+	<h2>#escape( $sectionToHire.name )の予約状況一覧</h2>
+	<p class="return">
+		<a href='$link.relativeAndCompany("/sectiontohire/schedule/bookingstatus/back")'>
+			<img src="$link.contextPath/images/btnReturn01.gif" alt="戻る" class="rollover" />
+		</a>
+	</p>
+</div>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.selectionhistory.notification.CandidateEscalationNotificationDataAccess">
+
+	<resultMap class="jp.rhp.model.primitive.MailAddress" id="mailAddress">
+		<result property="mailAddress"    column = "mail_address" />
+	</resultMap>
+
+	<select id="ListAll" resultMap="mailAddress">
+		SELECT
+			escalation_notification_mail_address.mail_address
+		FROM
+			selection_history.escalation_notification_mail_address
+	</select>
+
+</sqlMap>

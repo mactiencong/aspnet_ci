@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.directentry.sectiontohire.joboffer.JobofferUrlFormatDataAccess">
+
+	<resultMap id="JobofferUrlFormat" class="jp.rhp.model.directentry.sectiontohire.joboffer.JobofferUrlFormat">
+		<result property="jobofferUrlFormat"     column="joboffer_url"/>
+	</resultMap>
+
+	<select id="getUrl" resultMap="JobofferUrlFormat">
+		SELECT
+			joboffer_url_for_callcenter.joboffer_url
+		FROM
+			joboffer.joboffer_url_for_callcenter
+		WHERE
+			id = 1
+	</select>
+</sqlMap>

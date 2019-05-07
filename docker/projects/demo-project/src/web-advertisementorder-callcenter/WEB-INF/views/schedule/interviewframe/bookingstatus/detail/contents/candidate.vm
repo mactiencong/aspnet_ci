@@ -1,0 +1,22 @@
+<tr>
+	<td class="candidate">
+	#set( $candidate = $each.candidate )
+		<img src="$link.contextPath/images/icnPersonS.gif" alt="" class="small">
+		<a class="inline" href="$link.relativeAndCompany("/entry/preview/$!{each.candidate.id}")">#escape(${each.candidate.name.fullName})</a>
+	#if($each.candidate.profile.dateOfBirth.isNotEmpty())
+		($!{each.candidate.profile.dateOfBirth.age})
+	#end
+	</td>
+	<td class="date">
+		$!{each.candidate.entry.entryDate.entryDate.format("yyyy/MM/dd(E) HH:mm")}
+	</td>
+	<td class="date">
+		$!{each.timeBookedWithDayOfWeek()}
+	</td>
+	<td>
+		#escape(${each.candidate.entry.entryMedia.mediaName})
+	</td>
+	<td>
+		#escape(${each.candidate.hiringStatus.jobTypeToHire.name})
+	</td>
+</tr>

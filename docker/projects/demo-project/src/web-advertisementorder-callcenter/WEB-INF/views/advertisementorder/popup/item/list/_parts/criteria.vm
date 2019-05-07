@@ -1,0 +1,44 @@
+<form action="$link.relativeAndCompany("/advertisementorder/popup/item/listing")" method="POST">
+	<table class="recoptable">
+		<tr>
+			<th>原稿掲載店舗</th>
+			<td>#foreach( $workplace in $workplaceList.workplaces )
+				<div>#escape($workplace.workplaceName.text)</div>
+				#end
+			</td>
+		</tr>
+		<tr>
+			<th>媒体</th>
+			<td>#formSingleSelect( "itemPopupSearchCriteria.media.id" $mediaOptions 'class="regular" style="width:200px;"')</td>
+		</tr>
+		<tr>
+			<th>版（エリア）</th>
+			<td>#formInput( "itemPopupSearchCriteria.area.name" 'class="regular bg" style="width:350px;"')</td>
+		</tr>
+		<tr>
+			<th>プラン</th>
+			<td>#formInput( "itemPopupSearchCriteria.item.size" 'class="regular bg" style="width:350px;"')</td>
+		</tr>
+		<tr>
+			<th>媒体種別</th>
+			<td>
+				#formSingleSelect( "itemPopupSearchCriteria.mediaTypeName.value" $mediaTypeOptions 'class="regular" style="width:300px; margin-right:40px;"' )
+			</td>
+		</tr>
+		<tr>
+			<th>媒体の種類</th>
+			<td>
+				#formCheckBoxes( "itemPopupSearchCriteria.mediaCategoryList.selected", $mediaCategoryOptions, $itemPopupSearchCriteria.mediaCategoryList.selected, 'mediaCategoryCheckBox', 4)
+			</td>
+		</tr>
+	</table>
+	<div class="actionArea">
+		<div class="searchBtn">
+			<input type="image" src="$link.contextPath/images/btnItemSearch_S.png" class="rollover" />
+		</div>
+		<div class="resetBtn">
+			<a href="$link.relativeAndCompany("/advertisementorder/popup/item/$itemPopupSearchCriteria.workplace.idText")">条件をリセット</a>
+		</div>
+	</div>
+	#formHiddenInput( "itemPopupSearchCriteria.workplace.idText" $itemPopupSearchCriteria.workplace.idText )
+</form>

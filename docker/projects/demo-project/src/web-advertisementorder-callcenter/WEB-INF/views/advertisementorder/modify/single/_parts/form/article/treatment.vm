@@ -1,0 +1,32 @@
+#if($!{editSingleOrderSheet.jobOfferSettings.useCassetteTreatment.use})
+<tr>
+	<th>待遇</th>
+	<td>
+		<table summary="layout" class="innerTable regular" style="width:100%">
+			<col width="30%" /><col width="*" />
+			#foreach($treatment in $treatmentList.treatments )
+			<tr>
+				<th><label>$treatment.name</label></th>
+				<td>
+					#if( $treatment.existence.exist )有り #else 無し #end&nbsp;
+				</td>
+			</tr>
+			#end
+			<tr>
+				<th><label>交通費支給</label></th>
+				<td>
+					#escape( $!{editSingleOrderSheet.article.jobOffer.recruitment.cassetteTreatment.trafficExpenses.name} )
+				</td>
+			</tr>
+			#if( $!{editSingleOrderSheet.article.jobOffer.recruitment.cassetteTreatment.trafficExpenses.limitRequired} )
+			<tr>
+				<th class="teObj"><label>交通費上限</label></th>
+				<td #springBind('editSingleOrderSheet.article.jobOffer.recruitment.cassetteTreatment.trafficExpenses') #foreach( $error in ${status.errorMessages} ) class="input err" #end>
+					#escape( $text.priceFormat( $!{editSingleOrderSheet.article.jobOffer.recruitment.cassetteTreatment.trafficExpenses.limit} ) )&nbsp;円
+				</td>
+			</tr>
+			#end
+		</table>
+	</td>
+</tr>
+#end

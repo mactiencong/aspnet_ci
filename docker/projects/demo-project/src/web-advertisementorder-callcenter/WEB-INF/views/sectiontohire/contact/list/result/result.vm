@@ -1,0 +1,33 @@
+<div id="_result">
+	<div class="listHeader">
+		<p><em class="count">$contactOfSectionToHireCriteria.count()</em>店舗見つかりました。</p>
+		#page( $contactOfSectionToHireCriteria.page "/sectiontohire/contact/paging" )
+		#formSingleSelect( 'contactOfSectionToHireCriteria.page.limit' ${contactOfSectionToHireCriteria.page.perPages} 'tabindex="25" class="regular w070 perPage"' )
+	</div>
+	<table summary="応対リスト" class="recoplist">
+		<colgroup>
+			<col width="7%" /><col width="*" /><col width="12%" /><col width="10%" /><col width="10%" /><col width="10%" /><col width="20%" /><col width=20%" />
+		</colgroup>
+		<thead>
+			<tr class="header">
+				<th>店番</th>
+				<th>店舗名</th>
+				<th>電話番号</th>
+				<th>店舗分類</th>
+				<th>事業形態</th>
+				<th>店舗の種類</th>
+				<th>名前</th>
+				<th>メールアドレス</th>
+			</tr>
+		</thead>
+		<tbody>
+			#foreach( $contactOfSectionToHire in $contactOfSectionToHireList.list)
+				#parse("/sectiontohire/contact/list/result/line.vm")
+			#end
+		</tbody>
+	</table>
+	<div class="listHeader bottom">
+		#page( $contactOfSectionToHireCriteria.page "/sectiontohire/contact/paging" )
+		#formSingleSelect( 'contactOfSectionToHireCriteria.page.limit' ${contactOfSectionToHireCriteria.page.perPages} 'tabindex="25" class="regular w070 perPage"' )
+	</div>
+</div>

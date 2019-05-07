@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.sectiontohire.fnxcontact.FnxContactDataAccess">
+
+	<resultMap id="fnxContact" class="jp.rhp.model.sectiontohire.fnxcontact.FnxContact">
+		<result property="candidate.available" column="available"/>
+		<result property="candidate.faxNumber.telephoneNumber" column="fax_number"/>
+	</resultMap>
+
+	<resultMap id="prototype" class="jp.rhp.model.sectiontohire.fnxcontact.FnxContact">
+		<result property="candidate.available" column="available"/>
+	</resultMap>
+
+	<select id="prototype" resultMap="prototype">
+		SELECT
+			settings.available
+		FROM
+			cooperation_fnx_candidate.settings
+	</select>
+
+	<select id="prototypeBySectionToHireId" resultMap="fnxContact">
+		SELECT
+			settings.available,
+			coalesce( section_to_hire_fnx_fax_number.fax_number, '' ) AS fax_number
+		FROM
+			hiring.section_to_hire
+			INNER JOIN
+				cooperation_fnx_candidate.settings
+			ON
+				true
+			LEFT OUTER JOIN
+				cooperation_fnx_candidate.section_to_hire_fnx_fax_number
+			ON
+				section_to_hire.section_to_hire_id = section_to_hire_fnx_fax_number.section_to_hire_id
+		WHERE
+			section_to_hire_fnx_fax_number.section_to_hire_id = #sectionToHireId#
+	</select>
+
+	<insert id="registerSectionToHireContact">
+		INSERT INTO cooperation_fnx_candidate.section_to_hire_fnx_fax_number (
+			section_to_hire_id,
+			fax_number
+		) VALUES (
+			#sectionToHireId#,
+			#faxNumber#
+		)
+	</insert>
+
+	<delete id="removeSectionToHireContact">
+		DELETE FROM
+			cooperation_fnx_candidate.section_to_hire_fnx_fax_number
+		WHERE
+			section_to_hire_id = #sectionToHireId#
+	</delete>
+
+</sqlMap>

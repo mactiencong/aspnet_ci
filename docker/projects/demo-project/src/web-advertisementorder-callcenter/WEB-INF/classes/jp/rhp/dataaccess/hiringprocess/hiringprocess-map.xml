@@ -1,0 +1,606 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.hiringprocess.CandidateDataAccess">
+
+	<typeAlias alias="candidate" type="jp.rhp.model.hiringprocess.Candidate" />
+
+	<resultMap class="candidate" id="candidate">
+		<result property="entry.entryDate.entryDate.date" column="entry_date"/>
+		<result property="condition.availableForWorkPeriod" column="available_for_work_period" />
+		<result property="condition.availableDateOfWorking" column="available_date_of_working" />
+		<result property="profile.jobHistory" column="job_history" />
+		<result property="profile.competency" column="competency" />
+		<result property="condition.desiredCondition" column="desired_condition" />
+		<result property="profile.reason" column="reason" />
+		<result property="id" column="candidate_id"/>
+		<result property="interviewDate.date" column="start_datetime"/>
+		<result property="interviewDateTime.date" column="interview_date"/>
+		<result property="interviewDateTime.time" column="interview_time"/>
+        <result property="interviewDateTimeAdjustment.adjust" column="interview_datetime_adjust"/>
+		<result property="name.fullName" column="entry_name"/>
+		<result property="name.fullNameKana" column="entry_name_kana"/>
+		<result property="profile.nickName" column="nick_name" />
+		<result property="profile.gender.genderId" column="gender"/>
+		<result property="profile.marital.id" column="marital_status"/>
+		<result property="entry.currentEmploymentType.id" column="current_employment_type_id"/>
+		<result property="entry.currentEmploymentType.currentEmploymentType" column="current_employment_type_name"/>
+		<result property="contact.address.zipCode.zipCode" column="zip_code" />
+		<result property="contact.address.prefecture.id" column="prefecture_id" />
+		<result property="contact.address.prefecture.prefecture" column="prefecture_name" />
+		<result property="contact.address.municipality" column="municipality"/>
+		<result property="contact.address.streetName" column="address_street_name" />
+		<result property="contact.address.buildingNumber" column="address_building_name" />
+		<result property="contact.telephoneNumber.telephoneNumber" column="telephone_number"/>
+		<result property="contact.mobileTelephoneNumber.mobileTelephoneNumber" column="mobile_telephone_number"/>
+		<result property="contact.mailAddress.mailAddress" nullValue="" column="mail_address"/>
+		<result property="contact.mailAddressTwo.mailAddress" nullValue="" column="mail_address_2" />
+		<result property="contact.desiredDateOfContact" column="desired_date_of_contact"/>
+		<result property="profile.dateOfBirth.dateOfBirth" column="date_of_birth"/>
+		<result property="profile.entryAge.valueAsInteger" column="entry_age"/>
+		<result property="entry.entryRoute.id" column="entry_route_id"/>
+		<result property="entry.entryRoute.entryRoute" column="entry_route_name"/>
+		<result property="entry.entryDevice.id" column="entry_device_id"/>
+		<result property="entry.entryDevice.entryDeviceName" column="device_name"/>
+		<result property="entry.entryMedia.mediaId" column="entry_media_id" />
+		<result property="entry.entryMedia.mediaName" column="media_name"/>
+		<result property="entry.callcenterEntryInflowRoute.entryInflowRoute.media.name" column="callcenter_media_name"/>
+		<result property="entry.callcenterEntryInflowRoute.entryInflowRoute.area.name" column="callcenter_area_name"/>
+		<result property="entry.callcenterEntryInflowRoute.entryInflowRoute.publicationDate.date" column="callcenter_published_date"/>
+		<result property="entry.callcenterEntryInflowRoute.entryInflowRoute.irregularInflowRouteId" column="callcenter_irregular_inflow_route_id"/>
+		<result property="hiringStatus.sectionToHire.id" column="section_to_hire_id"/>
+		<result property="hiringStatus.sectionToHire.name" column="section_to_hire_name" />
+		<result property="hiringStatus.jobTypeToHire.id" column="jobtype_to_hire_id"/>
+		<result property="hiringStatus.jobTypeToHire.name" column="jobtype_to_hire_name" />
+		<result property="hiringStatus.selectionStatus.id" column="selection_status_id"/>
+		<result property="hiringStatus.selectionStatus.name" column="selection_status_name" />
+		<result property="hiringStatus.selectionStatus.type" column="selection_status_display_type" />
+		<result property="hiringStatus.sectionToHire.interviewBookingMethod" column="interview_booking_method_type"/>
+		<result property="entry.entryMediaInfomation.draftManagementNo" column="draft_management_no"/>
+		<result property="entry.entryMediaInfomation.publishedName" column="published_name"/>
+		<result property="entry.entryMediaInfomation.publishedNumber" column="published_number"/>
+		<result property="entry.entryMediaInfomation.publishedCompanyName" column="published_company_name"/>
+		<result property="entry.entryMediaInfomation.workplace" column="workplace"/>
+		<result property="entry.entryMediaInfomation.jobType" column="job_type"/>
+		<result property="profile.educationHistory.schoolName" column="school_name"/>
+		<result property="profile.educationHistory.department" column="department" />
+		<result property="profile.educationHistory.graduationType" column="graduation_type" />
+		<result property="comment.comment" column="comment"/>
+	</resultMap>
+
+	<select id="getId" resultClass="java.lang.Integer">
+		SELECT nextval('hiring_process.candidate_id')
+	</select>
+
+	<select id="findById" resultMap="candidate">
+		SELECT
+			entries.entry_date																	AS entry_date,
+			candidates.available_for_work_period												AS available_for_work_period,
+			candidates.available_date_of_working												AS available_date_of_working,
+			candidates.job_history																AS job_history,
+			candidates.competency																AS competency,
+			candidates.desired_condition														AS desired_condition,
+			candidates.reason																	AS reason,
+			candidates.candidate_id																AS candidate_id,
+			interview_datetime.start_datetime													AS start_datetime,
+			to_char(interview_datetime.start_datetime,'YYYYMMDD')								AS interview_date,
+			to_char(interview_datetime.start_datetime,'HH24MI')									AS interview_time,
+			adjust_interview_schedule_candidate.candidate_id IS NOT NULL						AS interview_datetime_adjust,
+			candidates.entry_name																AS entry_name,
+			candidates.entry_name_kana															AS entry_name_kana,
+			candidates.nick_name																AS nick_name,
+			candidates.gender																	AS gender,
+			candidates.marital_status															AS marital_status,
+			COALESCE(candidates.current_employment_type_id, 0)									AS current_employment_type_id,
+			current_employment_type.current_employment_type_name								AS current_employment_type_name,
+			candidates.zip_code																	AS zip_code,
+			candidates.prefecture_id															AS prefecture_id,
+			prefectures.prefecture_name															AS prefecture_name,
+			candidates.municipality																AS municipality,
+			candidates.address_street_name														AS address_street_name,
+			candidates.address_building_name													AS address_building_name,
+			candidates.telephone_number															AS telephone_number,
+			candidates.mobile_telephone_number													AS mobile_telephone_number,
+			candidates.mail_address																AS mail_address,
+			candidates.mail_address_2															AS mail_address_2,
+			candidates.desired_date_of_contact													AS desired_date_of_contact,
+			candidates.date_of_birth															AS date_of_birth,
+			candidates.entry_age																AS entry_age,
+			COALESCE(candidates.entry_device_id, 0)												AS entry_device_id,
+			entry_device.device_name															AS device_name,
+			COALESCE(candidates.entry_route_id, 0)												AS entry_route_id,
+			entry_route.entry_route_name														AS entry_route_name,
+			candidates.entry_media_id															AS entry_media_id,
+			media.media_name																	AS media_name,
+			COALESCE(callcenter_entry_inflow_route.media_name, '')								AS callcenter_media_name,
+			COALESCE(callcenter_entry_inflow_route.area_name, '')								AS callcenter_area_name,
+			callcenter_entry_inflow_route.published_date										AS callcenter_published_date,
+			COALESCE(callcenter_entry_irregular_inflow_route.irregular_inflow_route_id, -1)		AS callcenter_irregular_inflow_route_id,
+			jobtype_to_hire.jobtype_to_hire_id													AS jobtype_to_hire_id,
+			jobtype_to_hire.jobtype_to_hire_name												AS jobtype_to_hire_name,
+			section_to_hire.section_to_hire_id													AS section_to_hire_id,
+			section_to_hire.section_to_hire_name												AS section_to_hire_name,
+			interview_booking_method.interview_booking_method_type								AS interview_booking_method_type,
+			selection_statuses.selection_status_id												AS selection_status_id,
+			selection_statuses.selection_status_name											AS selection_status_name,
+			selection_statuses.priority															AS priority,
+			selection_statuses.display_type														AS selection_status_display_type,
+			entry_media_information.draft_management_no											AS draft_management_no,
+			entry_media_information.published_name												AS published_name,
+			entry_media_information.published_number											AS published_number,
+			entry_media_information.published_company_name										AS published_company_name,
+			entry_media_information.workplace													AS workplace,
+			entry_media_information.job_type													AS job_type,
+			education_history.school_name														AS school_name,
+			education_history.department														AS department,
+			education_history.graduation_type													AS graduation_type,
+			latest_hiring_comment.comment														AS comment
+		FROM
+			entry.detail_entries
+			INNER JOIN
+				entry.entries
+				ON
+					detail_entries.entry_id = entries.entry_id
+			INNER JOIN
+				hiring_process.candidates
+				ON
+					detail_entries.candidate_id = candidates.candidate_id
+			INNER JOIN
+				hiring_process.hiring_status
+				ON
+					candidates.candidate_id = hiring_status.candidate_id
+			INNER JOIN
+				hiring_process.selection_statuses
+				ON
+					hiring_status.selection_status_id = selection_statuses.selection_status_id
+			INNER JOIN
+				hiring.jobtype_to_hire
+				ON
+					hiring_status.jobtype_to_hire_id = jobtype_to_hire.jobtype_to_hire_id
+			INNER JOIN
+				hiring.section_to_hire
+				ON
+					hiring_status.section_to_hire_id = section_to_hire.section_to_hire_id
+			INNER JOIN
+				hiring.interview_booking_method
+				ON
+					section_to_hire.section_to_hire_id = interview_booking_method.section_to_hire_id
+			INNER JOIN
+				hiring_process.candidates_active
+				ON
+					candidates.candidate_id = candidates_active.candidate_id
+			LEFT OUTER JOIN
+				hiring_process.interview_datetime
+				ON
+					candidates.candidate_id = interview_datetime.candidate_id
+			LEFT OUTER JOIN
+				entry.current_employment_type
+				ON
+					candidates.current_employment_type_id = current_employment_type.current_employment_type_id
+			LEFT OUTER JOIN
+				entry.entry_route
+				ON
+					candidates.entry_route_id = entry_route.entry_route_id
+			LEFT OUTER JOIN
+				entry.entry_device
+				ON
+					candidates.entry_device_id = entry_device.device_id
+			LEFT OUTER JOIN
+				entry.media
+				ON
+					candidates.entry_media_id = media.media_id
+			LEFT OUTER JOIN
+				hiring_process.entry_media_information
+				ON
+					candidates.candidate_id = entry_media_information.candidate_id
+			LEFT OUTER JOIN
+				hiring_process.callcenter_entry_inflow_route
+				ON
+					candidates.candidate_id = callcenter_entry_inflow_route.candidate_id
+			LEFT OUTER JOIN
+				hiring_process.callcenter_entry_irregular_inflow_route
+				ON
+					callcenter_entry_inflow_route.candidate_id = callcenter_entry_irregular_inflow_route.candidate_id
+			LEFT OUTER JOIN
+				hiring_process.education_history
+				ON
+					candidates.candidate_id = education_history.candidate_id
+			LEFT OUTER JOIN
+				entry.prefectures
+				ON
+					candidates.prefecture_id = entry.prefectures.prefecture_id
+			LEFT OUTER JOIN
+				hiring_process.latest_hiring_comment
+				ON
+					candidates.candidate_id = latest_hiring_comment.candidate_id
+			LEFT OUTER JOIN
+				hiring_process.adjust_interview_schedule_candidate
+				ON
+					candidates.candidate_id = adjust_interview_schedule_candidate.candidate_id
+		WHERE
+			candidates.candidate_id = #candidateId#
+	</select>
+
+	<select id="isActiveCandidate" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(1)
+		FROM
+			hiring_process.candidates
+			INNER JOIN
+				hiring_process.candidates_active
+			ON
+				candidates.candidate_id = candidates_active.candidate_id
+		WHERE
+			candidates.candidate_id = #candidateId#
+	</select>
+
+	<insert id="insert" parameterClass="candidate">
+		INSERT INTO
+			hiring_process.candidates
+		(
+			candidate_id,
+			entry_name,
+			entry_name_kana,
+			gender,
+			marital_status,
+			current_employment_type_id,
+			entry_route_id,
+			entry_device_id,
+			entry_media_id,
+			zip_code,
+			prefecture_id,
+			municipality,
+			address_street_name,
+			address_building_name,
+			telephone_number,
+			mobile_telephone_number,
+			mail_address,
+			mail_address_2,
+			date_of_birth,
+			entry_age,
+			nick_name,
+			desired_date_of_contact,
+			available_for_work_period,
+			available_date_of_working,
+			job_history,
+			competency,
+			desired_condition,
+			reason,
+			entry_sheet_type
+		)
+		VALUES
+		(
+			#id#,
+			#name.margedName#,
+			#name.fullNameKana#,
+			#profile.gender.genderId#,
+			#profile.marital.id#,
+			CASE WHEN #entry.currentEmploymentType.id# = 0 THEN NULL ELSE #entry.currentEmploymentType.id# END,
+			CASE WHEN #entry.entryRoute.id# = 0 THEN NULL ELSE #entry.entryRoute.id# END,
+			CASE WHEN #entry.entryDevice.id# = 0 THEN NULL ELSE #entry.entryDevice.id# END,
+			#entry.entryMedia.mediaId#,
+			#contact.address.zipCode.zipCode#,
+			#contact.address.prefecture.id#,
+			#contact.address.municipality#,
+			#contact.address.streetName#,
+			#contact.address.buildingNumber#,
+			#contact.telephoneNumber.telephoneNumber#,
+			#contact.mobileTelephoneNumber.mobileTelephoneNumber#,
+			#contact.mailAddress.mailAddress#,
+			#contact.mailAddressTwo.mailAddress#,
+			#profile.dateOfBirth.dateOfBirth#,
+			#profile.entryAge.valueAsInteger#,
+			#profile.nickName#,
+			#contact.desiredDateOfContact#,
+			#condition.availableForWorkPeriod#,
+			#condition.availableDateOfWorking#,
+			#profile.jobHistory#,
+			#profile.competency#,
+			#condition.desiredCondition#,
+			#profile.reason#,
+			#entry.entrySheetType.entrySheetType#
+		)
+	</insert>
+
+	<update id="deleteInterviewDate">
+		DELETE FROM
+			hiring_process.interview_datetime
+		WHERE
+			candidate_id = #value#
+	</update>
+
+	<update id="registerInterviewDate">
+		INSERT INTO
+			hiring_process.interview_datetime
+		(
+			candidate_id,
+			start_datetime,
+			end_datetime
+		)
+		VALUES
+		(
+			#candidateId#,
+			#interviewDate.startDateTime#,
+			#interviewDate.endDateTime#
+		)
+	</update>
+
+	<update id="modify" parameterClass="candidate">
+		UPDATE
+			hiring_process.candidates
+		SET
+			entry_name = #name.fullName#,
+			entry_name_kana = #name.fullNameKana#,
+			gender = #profile.gender.genderId#,
+			marital_status = #profile.marital.id#,
+			current_employment_type_id = CASE WHEN #entry.currentEmploymentType.id# = 0 THEN NULL ELSE #entry.currentEmploymentType.id# END,
+			entry_route_id = CASE WHEN #entry.entryRoute.id# = 0 THEN NULL ELSE #entry.entryRoute.id# END,
+			entry_device_id = CASE WHEN #entry.entryDevice.id# = 0 THEN NULL ELSE #entry.entryDevice.id# END,
+			entry_media_id = #entry.entryMedia.mediaId#,
+			zip_code = #contact.address.zipCode.zipCode#,
+			prefecture_id = #contact.address.prefecture.id#,
+			municipality = #contact.address.municipality#,
+			address_street_name = #contact.address.streetName#,
+			address_building_name = #contact.address.buildingNumber#,
+			telephone_number = #contact.telephoneNumber.telephoneNumber#,
+			mobile_telephone_number = #contact.mobileTelephoneNumber.mobileTelephoneNumber#,
+			mail_address = #contact.mailAddress.mailAddress#,
+			mail_address_2 = #contact.mailAddressTwo.mailAddress#,
+			date_of_birth = #profile.dateOfBirth.dateOfBirth#,
+			entry_age = #profile.entryAge.valueAsInteger#,
+			nick_name = #profile.nickName#,
+			desired_date_of_contact = #contact.desiredDateOfContact#,
+			available_for_work_period = #condition.availableForWorkPeriod#,
+			available_date_of_working = #condition.availableDateOfWorking#,
+			job_history = #profile.jobHistory#,
+			competency = #profile.competency#,
+			desired_condition = #condition.desiredCondition#,
+			reason = #profile.reason#,
+			entry_sheet_type = #entry.entrySheetType.entrySheetType#,
+			updated_at = CURRENT_TIMESTAMP
+		WHERE
+			candidate_id = #id#
+	</update>
+
+	<insert id="delete">
+		INSERT INTO
+			hiring_process.candidates_delete
+		(
+			candidate_id,
+			entry_name,
+			delete_timestamp
+		)
+		VALUES
+		(
+			#id#,
+			#name.fullName#,
+			CURRENT_TIMESTAMP
+		);
+	</insert>
+
+	<insert id="deleteCandidateById">
+		INSERT INTO
+			hiring_process.candidates_delete
+		(
+			candidate_id,
+			entry_name,
+			delete_timestamp
+		)
+		VALUES
+		(
+			#candidateId#,
+			(SELECT entry_name FROM hiring_process.candidates WHERE candidate_id = #candidateId#),
+			now()
+		);
+	</insert>
+
+	<select  id="hasEntryMediaInfomation" parameterClass="Int" resultClass="Boolean" >
+		SELECT
+			CASE COUNT(candidate_id) WHEN 0 THEN false ELSE true END
+		FROM
+			hiring_process.entry_media_information
+		WHERE
+			candidate_id = #value#
+	</select>
+
+	<insert id="insertEntryMediaInfomation" parameterClass="candidate">
+		INSERT INTO
+			hiring_process.entry_media_information
+		(
+			candidate_id,
+			draft_management_no,
+			published_name,
+			published_number,
+			published_company_name,
+			workplace,
+			job_type
+		)
+		VALUES
+		(
+			#id#,
+			#entry.entryMediaInfomation.draftManagementNo#,
+			#entry.entryMediaInfomation.publishedName#,
+			#entry.entryMediaInfomation.publishedNumber#,
+			#entry.entryMediaInfomation.publishedCompanyName#,
+			#entry.entryMediaInfomation.workplace#,
+			#entry.entryMediaInfomation.jobType#
+		)
+	</insert>
+
+	<insert id="insertCallcenterEntryInflowRoute" parameterClass="candidate">
+		INSERT INTO hiring_process.callcenter_entry_inflow_route (
+			candidate_id,
+			media_name,
+			area_name,
+			published_date
+		) VALUES (
+			#id#,
+			#entry.callcenterEntryInflowRoute.entryInflowRoute.media.name#,
+			#entry.callcenterEntryInflowRoute.entryInflowRoute.area.name#,
+			#entry.callcenterEntryInflowRoute.entryInflowRoute.publicationDateAsDate#
+		)
+	</insert>
+
+	<insert id="insertCallcenterEntryIrregularInflowRoute" parameterClass="candidate">
+		INSERT INTO hiring_process.callcenter_entry_irregular_inflow_route (
+			candidate_id,
+			irregular_inflow_route_id
+		) VALUES (
+			#id#,
+			#entry.callcenterEntryInflowRoute.entryInflowRoute.irregularInflowRouteId#
+		)
+	</insert>
+
+	<update id="modifyEntryMediaInfomation" parameterClass="candidate">
+		UPDATE
+			hiring_process.entry_media_information
+		SET
+			published_name = #entry.entryMediaInfomation.publishedName#,
+			published_number = #entry.entryMediaInfomation.publishedNumber#,
+			published_company_name = #entry.entryMediaInfomation.publishedCompanyName#,
+			updated_at = CURRENT_TIMESTAMP
+		WHERE
+			candidate_id = #id#
+	</update>
+
+	<select id="hasCallcenterEntryInflowRoute" parameterClass="Int" resultClass="Boolean" >
+		SELECT
+			CASE COUNT(candidate_id) WHEN 0 THEN false ELSE true END
+		FROM
+			hiring_process.callcenter_entry_inflow_route
+		WHERE
+			candidate_id = #value#
+	</select>
+
+	<update id="modifyCallcenterEntryInflowRoute" parameterClass="candidate">
+		UPDATE
+			hiring_process.callcenter_entry_inflow_route
+		SET
+			media_name = #entry.callcenterEntryInflowRoute.entryInflowRoute.media.name#,
+			area_name = #entry.callcenterEntryInflowRoute.entryInflowRoute.area.name#,
+			published_date = #entry.callcenterEntryInflowRoute.entryInflowRoute.publicationDateAsDate#,
+			updated_at = now()
+		WHERE
+			candidate_id = #id#
+	</update>
+
+	<delete id="deleteCallcenterEntryIrregularInflowRoute" parameterClass="candidate">
+		DELETE FROM
+			hiring_process.callcenter_entry_irregular_inflow_route
+		WHERE
+			candidate_id = #id#
+	</delete>
+
+	<select id="hasEducationHisotry" parameterClass="Int" resultClass="Boolean" >
+		SELECT
+			CASE COUNT(candidate_id) WHEN 0 THEN false ELSE true END
+		FROM
+			hiring_process.education_history
+		WHERE
+			candidate_id = #value#
+	</select>
+
+	<insert id="insertEducationHistory" parameterClass="candidate">
+		INSERT INTO
+			hiring_process.education_history
+		(
+			candidate_id,
+			school_name,
+			department,
+			graduation_type
+		)
+		VALUES
+		(
+			#id#,
+			#profile.educationHistory.schoolName#,
+			#profile.educationHistory.department#,
+			#profile.educationHistory.graduationType#
+		)
+	</insert>
+
+	<update id="modifyEducationHistory" parameterClass="candidate">
+		UPDATE
+			hiring_process.education_history
+		SET
+			school_name = #profile.educationHistory.schoolName#,
+			department = #profile.educationHistory.department#,
+			graduation_type = #profile.educationHistory.graduationType#,
+			updated_at = CURRENT_TIMESTAMP
+		WHERE
+			candidate_id = #id#
+	</update>
+
+	<typeAlias alias="hiringStatus" type="jp.rhp.model.hiringprocess.hiringstatus.HiringStatus"/>
+	<resultMap class="hiringStatus" id="hiringStatus">
+		<result property="selectionStatus.id" column="selection_status_id"/>
+		<result property="sectionToHire.id" column="section_to_hire_id"/>
+		<result property="jobTypeToHire.id" column="jobtype_to_hire_id"/>
+	</resultMap>
+
+	<select id="findHiringStatus" resultMap="hiringStatus">
+		SELECT
+			selection_status_id,
+			section_to_hire_id,
+			jobtype_to_hire_id
+		FROM
+			hiring_process.hiring_status
+		WHERE
+			candidate_id = #value#
+	</select>
+
+	<insert id="insertJobTypeChanged" parameterClass="candidate">
+		INSERT INTO
+			hiring_process.hiring_jobtype_changed
+		(
+			candidate_id,
+			jobtype_to_hire_id
+		)
+		VALUES
+		(
+			#id#,
+			#hiringStatus.jobTypeToHire.id#
+		)
+	</insert>
+
+	<insert id="addCallbackStatuses" parameterClass="candidate">
+		INSERT INTO
+			hiring_process.callback_statuses
+		(
+			candidate_id
+		)
+		VALUES
+		(
+			#id#
+		)
+	</insert>
+
+	<select id="findCautionEntryCandidateId" resultClass="java.lang.Integer">
+		SELECT
+			candidate_id
+		FROM
+			hiring_process.caution
+		WHERE
+			candidate_id = #id#
+	</select>
+
+	<update id="updateEntryNotificationTarget" parameterClass="integer">
+		UPDATE
+			hiring_process.candidate_entry_notification_mail_target
+		SET
+			entry_count = entry_count + 1,
+			updated_at = now()
+		WHERE
+			candidate_entry_notification_mail_target.section_to_hire_id = #value#
+	</update>
+
+    <update id="modifyAlreadyRead" parameterClass="candidate">
+        UPDATE
+            hiring_process.callback_statuses
+        SET
+            is_already_read = true,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE
+            candidate_id = #id#
+    </update>
+
+</sqlMap>

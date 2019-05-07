@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.mail.parameter.MailParameterDataAccess">
+
+	<select id="recipientNameBySectionToHireId" resultClass="java.lang.String">
+		SELECT
+			section_to_hire_name AS recipient_name
+		FROM
+			hiring.section_to_hire
+		WHERE
+			section_to_hire_id = #sectionToHireId#
+	</select>
+
+</sqlMap>

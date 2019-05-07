@@ -1,0 +1,43 @@
+#recopHtml()
+<head>
+	#recopHead('')
+</head>
+<body id="bidAppl">
+  #css("$link.contextPath/css/commons/header.css")
+  #javascript("$link.contextPath/js/commons/header.js")
+  #recopHeaderWithoutMenu()
+<hr />
+<div  id="container">
+<div class="pannel">
+<div class="inner login">
+<div class="content">
+	<div class="ttlBlock">
+		<h2 class="company">企業選択</h2>
+	</div><!--ttlBlock-->
+	<div style="margin-bottom:20px;margin-left:10px;margin-top:10px;font-size:14px;">
+		<p>企業名をクリックして操作する企業を選択して下さい。</p>
+	</div>
+	<table class="recoplist" style="font-size:16px;">
+		<col width="20%" /><col width="*" />
+		<thead>
+			<tr class="header">
+				<th>企業ID</th>
+				<th>企業名</th>
+			</tr>
+		</thead>
+		<tbody>
+		#foreach( $company in $companyList.companis)
+		<tr>
+			<td>$company.id</td>
+			<td class="last"><a href="$link.relative("/$!{company.id}/top")">#escape($company.name)</a></td>
+		</tr>
+		#end
+		</tbody>
+	</table>
+</div>
+</div>
+</div>
+</div>
+#recopFooter()
+</body>
+</html>

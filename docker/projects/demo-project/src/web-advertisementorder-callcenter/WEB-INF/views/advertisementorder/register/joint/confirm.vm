@@ -1,0 +1,39 @@
+#recopHtml()
+<head>
+#recopHead('新規発注登録確認｜発注管理')
+#css("$link.contextPath/css/advertisementorder/articlepreview.css")
+#css("$link.contextPath/css/advertisementorder/advertisementorder.css")
+#javascript("$link.contextPath/js/advertisementorder/articlepreview.js")
+#javascript("$link.contextPath/js/advertisementorder/register_confirm.js")
+
+<script type="text/javascript">
+	recop.settings.executeUrl= '$link.relativeAndCompany("/advertisementorder/register/joint/execute")';
+	recop.settings.redirectUrl= '$link.relativeAndCompany("/advertisementorder/history")';
+</script>
+
+</head>
+<body>
+#recopHeader()
+<hr />
+<div  id="container">
+	<div class="pannel">
+		<div class="inner">
+			<div class="content">
+				<div class="ttlBlock" style="position:relative; width:100%;">
+					<h2 class="employ">新規発注登録確認</h2>
+				</div><!-- //ttlBlock -->
+				<div class="clrFix"></div>
+				<div>
+					<form action='$link.relativeAndCompany("/advertisementorder/register/joint/execute")' method="POST">
+						#parse("/advertisementorder/register/joint/_parts/confirm/jointorder.vm")
+					</form>
+				</div>
+			</div><!-- //content -->
+		</div><!-- //inner -->
+	</div><!-- //pannel -->
+</div><!-- //container -->
+
+#recopFooter()
+
+</body>
+</html>

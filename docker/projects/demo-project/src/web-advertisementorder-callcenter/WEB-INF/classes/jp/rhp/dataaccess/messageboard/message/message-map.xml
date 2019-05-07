@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.messageboard.message.MessageDataAccess">
+
+	<resultMap id="messageTemplate" class="jp.rhp.model.messageboard.message.MessageTemplate" >
+		<result property="value" column="message_body"/>
+	</resultMap>
+	
+	<select id="findBy" parameterClass="jp.rhp.model.messageboard.message.MessageTemplateType" resultMap="messageTemplate">
+		SELECT
+			message_body
+		FROM
+			interview_schedule.mail_templates
+		WHERE
+			mail_template_type = #value#
+	</select>
+
+    <select id="findVideoInvitationMessageTemplate" resultMap="messageTemplate">
+        SELECT
+            mail_templates.message_body
+        FROM
+            hirevue_settings.mail_templates
+        WHERE
+            mail_template_type = 'VIDEO_INTERVIEW_INVITATION'
+    </select>
+
+</sqlMap>

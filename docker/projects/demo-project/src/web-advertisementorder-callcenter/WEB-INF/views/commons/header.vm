@@ -1,0 +1,18 @@
+#css("$link.contextPath/css/commons/header.css")
+#javascript("$link.contextPath/js/commons/header.js")
+
+#css("$link.contextPath/css/commons/current_company_header.css")
+#javascript("$link.contextPath/js/jquery.sticky.js")
+#javascript("$link.contextPath/js/commons/current_company_header.js")
+
+#parse("/commons/current_company_header.vm")
+<div id="header">
+	<div class="inner">
+		#parse("/commons/_parts/application_logo.vm")
+		#parse("/commons/_parts/menu.vm")
+		#parse("/commons/_parts/password_effectivity.vm")
+		#parse("/commons/_parts/contact_of_sectiontohire.vm")
+		#parse("/commons/_parts/account.vm")
+	</div><!-- inner -->
+	<a href="$link.relative('/logout')" id="ajaxLogout"></a>
+</div><!-- //header -->

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.advertisementordersearch.media.SelectMediaSearchDataAccess">
+
+	<resultMap class="jp.rhp.model.advertisementordersearch.media.Media" id="media">
+		<result property="code"			column="code"/>
+		<result property="name.value"	column="name" />
+	</resultMap>
+
+	<select id="listOfMedia" parameterClass="jp.rhp.model.mediacompany.MediaCompanyList" resultMap="media">
+		SELECT
+			media.code,
+			media.name
+		FROM
+			advertisement_order_master.media
+			INNER JOIN
+				advertisement_order_master.latest_media
+			ON
+				media.id = latest_media.media_id
+			INNER JOIN
+				advertisement_order_master.media_company
+			ON
+				media_company.code = media.media_company_code
+		WHERE
+			(
+			EXISTS (
+				SELECT
+					latest_media.media_code
+				FROM
+					advertisement_order_master.latest_media
+					INNER JOIN
+						advertisement_order_master.active_media
+					ON
+						latest_media.media_code = active_media.media_code
+					INNER JOIN
+						advertisement_order_master.use_media
+					ON
+						latest_media.media_code = use_media.media_code
+				WHERE
+					latest_media.media_id = media.id
+					AND EXISTS (
+						SELECT
+							area.media_id
+						FROM
+							advertisement_order_master.area
+							INNER JOIN
+								advertisement_order_master.latest_area
+							ON
+								area.id = latest_area.area_id
+							INNER JOIN
+								advertisement_order_master.active_area
+							ON
+								latest_area.area_code = active_area.area_code
+							INNER JOIN
+								advertisement_order_master.use_area
+							ON
+								latest_area.area_code = use_area.area_code
+							INNER JOIN
+								advertisement_order_master.item
+							ON
+								area.id = item.area_id
+							INNER JOIN
+								advertisement_order_master.latest_item
+							ON
+								item.id = latest_item.item_id
+							INNER JOIN
+								advertisement_order_master.active_item
+							ON
+								latest_item.item_code = active_item.item_code
+							INNER JOIN
+								advertisement_order_master.use_item
+							ON
+								latest_item.item_code = use_item.item_code
+						WHERE
+							latest_media.media_id = area.media_id
+					)
+				)
+			OR EXISTS (
+				SELECT
+					ordered_media.code AS media_code
+				FROM
+					advertisement_order.ordered_item
+					INNER JOIN
+						advertisement_order.latest_advertisement_order_detail
+					ON
+						ordered_item.advertisement_order_detail_id = latest_advertisement_order_detail.advertisement_order_detail_id
+					INNER JOIN
+						advertisement_order_master.item
+					ON
+						ordered_item.item_id = item.id
+					INNER JOIN
+						advertisement_order_master.area AS ordered_area
+					ON
+						item.area_id = ordered_area.id
+					INNER JOIN
+						advertisement_order_master.media AS ordered_media
+					ON
+						ordered_area.media_id = ordered_media.id
+				WHERE
+					ordered_media.code = latest_media.media_code
+				)
+			)
+			<isEqual property="mediaCompanies.empty" compareValue="false" prepend="AND">
+				media_company.code IN
+				<iterate property="mediaCompanies" open="(" close=")" conjunction=",">
+					#mediaCompanies[].code#
+				</iterate>
+			</isEqual>
+		ORDER BY
+			media.priority
+	</select>
+
+</sqlMap>

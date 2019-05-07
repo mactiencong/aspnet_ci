@@ -1,0 +1,30 @@
+
+<div id='repeat' class='recopDialog' style="width:450px;">
+	<div class='title' id="handle" style="line-height:16px;">
+		<img src="$link.contextPath/images/repeat.png" style='vertical-align:middle;'/><span style='vertical-align:middle;'><strong> 繰り返し設定</strong></span>
+	</div>
+	<div class='body'>
+		<div style="margin:20px;text-align:left;">
+			<label><input type='radio' name='propagationType' value="no" style='margin-right:5px; margin-bottom:5px;' checked >繰り返さない</label><br />
+			<label><input type='radio' name='propagationType' value="daily"  style='margin-right:5px; margin-bottom:5px;'>毎日同時刻で設定</label><br />
+			<label><input type='radio' name='propagationType' value="weekly" style='margin-right:5px; margin-bottom:5px;'>指定した曜日に同時刻で設定</label><br />
+			<div class="daysOfWeek" style='margin-left:20px; margin-top:10px;'>
+				<label><input type='checkbox' name='daysOfWeek' value="2" style='margin-right:5px;'>月</label>&nbsp;
+				<label><input type='checkbox' name='daysOfWeek' value="3" style='margin-right:5px;'>火</label>&nbsp;
+				<label><input type='checkbox' name='daysOfWeek' value="4" style='margin-right:5px;'>水</label>&nbsp;
+				<label><input type='checkbox' name='daysOfWeek' value="5" style='margin-right:5px;'>木</label>&nbsp;
+				<label><input type='checkbox' name='daysOfWeek' value="6" style='margin-right:5px;'>金</label>&nbsp;
+				<label><input type='checkbox' name='daysOfWeek' value="7" style='margin-right:5px;'>土</label>&nbsp;
+				<label><input type='checkbox' name='daysOfWeek' value="1" style='margin-right:5px;'>日</label>&nbsp;
+			</div>
+			<div class="propagationDate" style='text-align:center;margin-top:10px;'>
+				<label>開始日<input type='text' name='propagationDateFrom' class='regular w100 bg' id="repeatDateFrom"></label><span style="margin:0 10px;">～</span>
+				<label>終了日<input type='text' name='propagationDateTo' class='regular w100 bg' id="repeatDateTo"></label>
+			</div>
+		</div>
+	</div>
+	<div class='buttons'>
+		<div class="errorMsg" style="color:#e53500;"></div>
+		<input type='button' value='キャンセル' class='button' onclick='$.interviewFrameRepeat.cancel();' /><input type='button' value='設定する' class='button' onclick=' $.interviewFrameRepeat.setting();'/>
+	</div>
+</div>

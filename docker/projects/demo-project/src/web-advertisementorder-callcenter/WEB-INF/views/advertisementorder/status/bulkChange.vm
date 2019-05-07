@@ -1,0 +1,70 @@
+#recopHtml()
+<head>
+#recopHead('一括発注状態変更')
+
+#javascript("$link.contextPath/js/jquery.unloadcheck.js")
+<script type="text/javascript">
+<!--
+$(document).ready(function() {
+    $("a.execute").confirmDialog( {
+        processUrl          : "$link.relativeAndCompany("/advertisementorder/status/bulkChange/execute")",
+        data                : $("#changeStatus"),
+        afterAjaxRequest    : function( data, options ){ return true; },
+        successUrl          : "$link.relativeAndCompany("/advertisementorder/history/list")",
+        successMessage      :"正常に一括発注状態変更しました。"
+    } );
+});
+//-->
+</script>
+</head>
+<body id="bidAppl">
+#recopHeader()
+<hr />
+<div  id="container">
+<div class="pannel">
+<div class="inner">
+<div class="content">
+	<div class="ttlBlock" style="position:relative; width:100%;">
+		<h2 class="batchStatus">一括発注状態変更</h2>
+	</div><!-- //ttlBlock -->
+	<form name="changeStatus" id="changeStatus">
+		<div class="batchStatus">
+			<table class="regular status">
+				<tr>
+					<th style="width:150px;">変更する発注の発注番号：</th>
+					
+					<td>#foreach($advertisementOrderId in $advertisementOrderIds)
+							#escape($advertisementOrderId)#if($foreach.index != ${advertisementOrderIds.size()} - 1 )、#end
+						#end
+					</td>
+				</tr>
+				<tr>
+					<th style="width:150px;">変更後の発注状況： </th>
+					<td class="status">
+						#formSingleSelect( 'orderStatus.type' $orderStatusOptions 'class="regular"' )
+					</td>
+				</tr>
+			</table>
+			<div class="btns">
+				<p class="return">
+					<a href="$link.relativeAndCompany('/advertisementorder/history/list')" class="returnList">
+						<img src="$link.contextPath/images/btnAbortRevise.gif" width="161" height="33" alt="変更せずに一覧に戻る" class="rollover" />
+					</a>
+				</p>
+				<p class="revise">
+					<a href="#modalLoading" class="execute noDialog" rel="group1">
+						<img src="$link.contextPath/images/btnRevise.gif" width="268" height="39" alt="変更する" class="rollover" />
+					</a>
+				</p>
+			</div>
+		</div>
+		#token()
+	</form>
+</div><!-- //content -->
+</div><!-- //inner -->
+</div><!-- //pannel -->
+</div><!-- //container -->
+<a href="#modalSuccess" class="execute noDialog" rel="group1"></a>
+#recopFooter()
+</body>
+</html>

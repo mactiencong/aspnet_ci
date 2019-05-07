@@ -1,0 +1,75 @@
+<h3>発注概要</h3>
+<div class="section">
+	#if($!{advertisementOrderDetail.status.canceled})<div><span class="warn">※この発注はキャンセルされました。</span></div>#end
+	<div id="_orderStatus">
+		#parse("/advertisementorder/history/detail/_parts/order/status.vm")
+	</div>
+
+	<div style="float:right;" class="print_display_none">
+		<a href="#" id="printButton"><img src="$link.contextPath/images/btnPrint.png" class="rollover "/></a>
+		#if( $advertisementOrderResult.notEmpty )
+		<div class="resultLink">
+			<a href="#result">▼掲載情報を確認する</a>
+		</div>
+		#end
+	</div>
+
+	<div style="clear:both"></div>
+	<table class="recoptable" >
+		<col width="18%" /><col width="32%" /><col width="18%" /><col width="32%" />
+		<tr>
+			<th>発注番号</th>
+			<td>
+				#escape($!{advertisementOrderDetail.id})
+				<input type="hidden" name="_advertisementOrderId" value="#escape(${advertisementOrderDetail.id})" class="noCheck" />
+			</td>
+			<th>発注依頼日時</th>
+			<td>
+			$date.format('yyyy/MM/dd(E) HH:mm',$!{advertisementOrderDetail.orderDateTime.timeStamp.date})
+			</td>
+		</tr>
+		<tr>
+			<th>発注種別</th>
+			<td>#escape($!{advertisementOrderDetail.type.label()})</td>
+			<th>原稿掲載店舗</th>
+			<td>
+				<ul>
+				#foreach( $article in  $!{articleList.articles} )
+					<li>#escape( $!article.jobOffer.workplace.name )</li>
+				#end
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<th #if(!$settings.formCustomize.faxNumber.hide)rowspan="2"#end>申込者名</th>
+			<td #if(!$settings.formCustomize.faxNumber.hide)rowspan="2"#end>#escape($!{advertisementOrderDetail.slips.detail.source.orderer.name.value})</td>
+			<th>緊急連絡先</th>
+			<td>#escape($!{advertisementOrderDetail.slips.detail.source.orderer.contact.phoneNumber.telephoneNumber})</td>
+		</tr>
+	#if(!$settings.formCustomize.faxNumber.hide)
+		<tr>
+			<th>FAX番号</th>
+			<td>#escape($!{advertisementOrderDetail.slips.detail.source.orderer.contact.faxNumber.faxNumber})</td>
+		</tr>
+	#end
+		<tr>
+			<th>登録者名</th>
+			<td>#escape($!{advertisementOrderDetail.slips.detail.source.registrant.name.value})</td>
+			<th>登録者メールアドレス</th>
+			<td>#escape($!{advertisementOrderDetail.slips.detail.source.registrant.contact.mailAddress.mailAddress})</td>
+		</tr>
+	</table>
+	<div id="_operationalNote">
+		#parse("/advertisementorder/history/detail/_parts/order/operationalnote.vm")
+	</div>
+
+	<div class="actionArea print_display_none">
+	#if($!{advertisementOrderDetail.status.notCanceled} && $!{advertisementOrderResult.empty})
+		<span class="editLink"><a href="$link.relativeAndCompany("/advertisementorder/modify/$!{advertisementOrderDetail.id}")">この発注を変更する</a></span>
+	#end
+	#if( $!{advertisementOrderDetail.status.notCanceled} )
+		<span class="cancelBtn"><a href="$link.relativeAndCompany("/advertisementorder/cancel/$!{advertisementOrderDetail.id}").query('csrfToken=')$!{csrfToken}" onclick="return confirm('発注番号:$!{advertisementOrderDetail.id}\n\nこの発注をキャンセルします。\nよろしいですか？')"><img src="$link.contextPath/images/btnCancel_small.gif" class="rollover" /></a></span>
+	#end
+		</div>
+	<div class="clrFix"></div>
+</div><!-- //section -->

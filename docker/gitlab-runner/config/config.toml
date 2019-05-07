@@ -13,14 +13,24 @@ check_interval = 0
   [runners.docker]
     tls_verify = false
     image = "alpine"
+    privileged = true
     disable_entrypoint_overwrite = false
     oom_kill_disable = false
     disable_cache = false
     volumes = ["/cache"]
-    shm_size = 0
+    network_mode = "docker_ci"
     pull_policy = "if-not-present"
-    privileged=true
-    network_mode="docker_aspnet"
+    shm_size = 0
+  [runners.cache]
+    [runners.cache.s3]
+    [runners.cache.gcs]
+
+[[runners]]
+  name = "deploy"
+  url = "http://gitlab:80/"
+  token = "yfXa6rz4JyFyPspDqQsc"
+  executor = "shell"
+  [runners.custom_build_dir]
   [runners.cache]
     [runners.cache.s3]
     [runners.cache.gcs]

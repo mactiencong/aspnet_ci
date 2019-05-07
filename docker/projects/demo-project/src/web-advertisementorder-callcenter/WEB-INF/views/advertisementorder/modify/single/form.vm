@@ -1,0 +1,59 @@
+#recopHtml()
+<head>
+<!--[if IE]>
+<meta http-equiv="X-UA-Compatible" content="IE=IE7">
+<![endif]-->
+#recopHead('発注依頼変更｜発注管理')
+#css("$link.contextPath/css/advertisementorder/advertisementorder.css")
+#javascript("$link.contextPath/js/commons/lengthchecker.js")
+#javascript("$link.contextPath/js/commons/error.js")
+#javascript("$link.contextPath/js/advertisementorder/cassette.js")
+#javascript("$link.contextPath/js/advertisementorder/modify_single.js")
+<script type="text/javascript">
+	$(document).ready(function(){
+		$.orderForm
+		({
+			itemPopupUrl             : "$link.relativeAndCompany("/advertisementorder/popup/item")",
+			jobOfferPopupUrl         : "$link.relativeAndCompany("/advertisementorder/popup/joboffer")"
+		});
+		recop.settings.urlFindWorkplace              = '$link.relativeAndCompany("/advertisementorder/modify/single/findWorkplace")';
+		recop.settings.urlSelectArticle              = '$link.relativeAndCompany("/advertisementorder/modify/single/selectArticle")';
+		recop.settings.urlAddJobAddition             = '$link.relativeAndCompany("/advertisementorder/modify/single/addJobAddition")'
+		recop.settings.urlRemoveJobAddition          = '$link.relativeAndCompany("/advertisementorder/modify/single/removeJobAddition")';
+		recop.settings.urlAddAdvertiseAddition       = '$link.relativeAndCompany("/advertisementorder/modify/single/addAdvertiseAddition")';
+		recop.settings.urlRemoveAdvertiseAddition    = '$link.relativeAndCompany("/advertisementorder/modify/single/removeAdvertiseAddition")';
+		recop.settings.urlJointOrder                 = '$link.relativeAndCompany("/advertisementorder/modify/joint")';
+		recop.settings.urlSingleOrder                = '$link.relativeAndCompany("/advertisementorder/modify/single")';
+		recop.settings.urlWorkplaceEditMode          = '$link.relativeAndCompany("/advertisementorder/modify/single/workplaceEditMode")';
+	});
+</script>
+</head>
+<body>
+#recopHeader()
+<hr />
+<div  id="container">
+	<div class="pannel">
+		<div class="inner">
+			<div class="content">
+				<div class="ttlBlock" style="position:relative; width:100%;">
+					<h2 class="employ">発注依頼変更</h2>
+					<div style="position:absolute; right:0; top:5px;">
+						<a href="$link.relativeAndCompany("/advertisementorder/history")"><img src="$link.contextPath/images/btnAdvertisementOrderHistory.png" alt="過去の発注をみる" class="rollover" /></a>
+					</div>
+					<div class="clrFix"><!-- --></div>
+					<!-- //ttlBlock -->
+				</div>
+				<div>
+					<form action="$link.relativeAndCompany("/advertisementorder/modify/single/confirm")" method="POST" id="orderForm">
+						 #parse("/advertisementorder/modify/single/_parts/form/singleorder.vm")
+					</form>
+				</div>
+			</div><!-- //content -->
+		</div><!-- //inner -->
+	</div><!-- //pannel -->
+</div><!-- //container -->
+
+#recopFooter()
+
+</body>
+</html>

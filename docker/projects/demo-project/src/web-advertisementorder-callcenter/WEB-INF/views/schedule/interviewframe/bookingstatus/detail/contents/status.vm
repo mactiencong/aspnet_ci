@@ -1,0 +1,20 @@
+<table class="regular booking" summary="予約情報">
+	<col width="25%" /><col width="*" />
+	#set( $when =  $interview.frame.dateAndTime )
+	<tr>
+		<th>面接日時</th>
+		<td>$!when.dateAsText() $!when.timeRange.asText()</td>
+	</tr>
+	<tr>
+		<th>予約／定員</th>
+		<td>$!{interview.frame.capacity.booked}名 ／ $!{interview.frame.capacity.value}名</td>
+	</tr>
+	<tr>
+		<th>面接会場</th>
+		<td>#escape(${interview.detail.interviewPlace.name.value})</td>
+	</tr>
+	<tr>
+		<th>メモ</th>
+		<td>#escape($!{interview.detail.remarks.memo})</td>
+	</tr>
+</table>

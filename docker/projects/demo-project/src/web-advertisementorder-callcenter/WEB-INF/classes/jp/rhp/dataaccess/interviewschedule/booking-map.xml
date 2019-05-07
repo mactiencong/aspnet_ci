@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.interviewschedule.BookingDataAccess">
+
+	<typeAlias alias="booking" type="jp.rhp.model.interviewschedule.booking.Booking" />
+
+	<resultMap class="booking" id="booking">
+		<result property="id" column="id" />
+		<result property="timeBooked.date" column="time_booked" />
+		<result property="interviewID" column="interview_id" />
+		<result property="candidate.id" column="candidate_id" />
+		<result property="candidate.name.fullName" column="entry_name"/>
+		<result property="candidate.profile.gender.genderId" column="gender"/>
+		<result property="candidate.profile.dateOfBirth.dateOfBirth" column="date_of_birth"/>
+		<result property="candidate.entry.entryDate.entryDate.date" column="entry_date"/>
+		<result property="candidate.entry.entryMedia.mediaId" column="media_id" />
+		<result property="candidate.entry.entryMedia.mediaName" column="media_name"/>
+		<result property="candidate.hiringStatus.jobTypeToHire.id" column="jobtype_to_hire_id"/>
+		<result property="candidate.hiringStatus.jobTypeToHire.name" column="jobtype_to_hire_name" />
+		<result property="candidate.hiringStatus.sectionToHire.id" column="section_to_hire_id"/>
+		<result property="candidate.hiringStatus.sectionToHire.name" column="section_to_hire_name" />
+	</resultMap>
+
+	<sql id="selectBookings">
+		SELECT
+			bookings.id,
+			bookings.interview_id,
+			bookings.time_booked,
+			bookings.candidate_id,
+			candidates.entry_name,
+			candidates.gender,
+			candidates.date_of_birth,
+			entries.entry_date,
+			media.media_id,
+			media.media_name,
+			jobtype_to_hire.jobtype_to_hire_id,
+			jobtype_to_hire.jobtype_to_hire_name,
+			section_to_hire.section_to_hire_id,
+			section_to_hire.section_to_hire_name
+		FROM
+			interview_schedule.bookings
+			INNER JOIN
+				hiring_process.candidates
+			ON
+				bookings.candidate_id = candidates.candidate_id
+			INNER JOIN
+				entry.detail_entries
+			ON
+				candidates.candidate_id = detail_entries.candidate_id
+			INNER JOIN
+				entry.entries
+			ON
+				detail_entries.entry_id = entries.entry_id
+			INNER JOIN
+				hiring_process.hiring_status
+			ON
+				candidates.candidate_id = hiring_status.candidate_id
+			INNER JOIN
+				hiring.jobtype_to_hire
+			ON
+				hiring_status.jobtype_to_hire_id = jobtype_to_hire.jobtype_to_hire_id
+			INNER JOIN
+				hiring.section_to_hire
+			ON
+				hiring_status.section_to_hire_id = section_to_hire.section_to_hire_id
+			INNER JOIN
+				hiring_process.candidates_active
+			ON
+				candidates.candidate_id = candidates_active.candidate_id
+			LEFT OUTER JOIN
+				entry.media
+			ON
+				candidates.entry_media_id = media.media_id
+	</sql>
+
+	<select id="getID" resultClass="java.lang.Long">
+		SELECT nextval( 'interview_schedule.booking_id' )
+	</select>
+
+	<insert id="save" parameterClass="booking">
+		INSERT INTO interview_schedule.bookings(
+			id,
+			candidate_id,
+			interview_id,
+			time_booked
+		)
+		VALUES (
+			#id#,
+			#candidate.id#,
+			#interviewID#,
+			#timeBooked.date#
+		)
+	</insert>
+
+	<insert id="saveInterviewDateTime">
+		INSERT INTO hiring_process.interview_datetime(
+			candidate_id,
+			start_datetime,
+			end_datetime
+		)
+		VALUES (
+			#candidate.id#,
+			to_timestamp(#interview.frame.dateAndTime.fromDateTime#, 'yyyy-MM-dd hh24:mi'),
+			to_timestamp(#interview.frame.dateAndTime.toDateTime#, 'yyyy-MM-dd hh24:mi')
+		)
+	</insert>
+
+	<select id="findByID" resultMap="booking">
+		<include refid="selectBookings"/>
+		WHERE bookings.id = #bookingID#
+	</select>
+
+	<select id="findByCandidateId" resultMap="booking">
+		<include refid="selectBookings"/>
+		WHERE bookings.candidate_id = #candidateId#
+	</select>
+
+	<delete id="cancel" parameterClass="booking">
+		DELETE FROM interview_schedule.bookings WHERE id = #id#;
+	</delete>
+
+	<delete id="cancelInterviewDateTime" parameterClass="booking">
+		DELETE FROM hiring_process.interview_datetime WHERE candidate_id = #candidate.id#;
+	</delete>
+
+	<select id="listByInterviewID" resultMap="booking">
+		<include refid="selectBookings"/>
+		WHERE bookings.interview_id = #interviewID#
+		ORDER BY bookings.time_booked
+	</select>
+
+	<select id="countByCandidateId" resultClass="java.lang.Integer">
+		SELECT count(*)
+		FROM interview_schedule.bookings
+		WHERE candidate_id = #candidateId#
+	</select>
+
+</sqlMap>

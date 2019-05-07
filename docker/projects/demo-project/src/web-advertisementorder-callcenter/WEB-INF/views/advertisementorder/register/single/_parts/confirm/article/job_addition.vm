@@ -1,0 +1,19 @@
+#foreach($jobAddition in $newSingleOrderSheet.article.jobOffer.job.jobAdditionList.jobAdditions)
+#set($number = $foreach.index+1)
+<tr>
+	<th>仕事情報補足$number</th>
+	<td>
+		<table summary="layout" class="innerTable regular">
+			<col width="10%" /><col width="*" />
+			<tr>
+				<td class="nowrap">見出し</td>
+				<td>#escape($!{jobAddition.jobTitle.text})</td>
+			</tr>
+			<tr>
+				<td class="nowrap">本文</td>
+				<td>#escape($!{jobAddition.jobDescription.text})</td>
+			</tr>
+		</table>
+	</td>
+</tr>
+#end

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.workplace.workplacegroup.WorkplaceGroupDataAccess">
+
+	<typeAlias alias="workplaceGroup" type="jp.rhp.model.workplace.workplacegroup.WorkplaceGroup" />
+
+	<resultMap class="workplaceGroup" id="workplaceGroup">
+		<result property="id" column="workplace_group_id"/>
+		<result property="name" column="name"/>
+	</resultMap>
+
+	<select id="listAll" resultMap="workplaceGroup">
+		SELECT
+			workplace_group_id,
+			name
+		FROM
+			workplace.workplace_groups
+		ORDER BY
+			priority
+	</select>
+</sqlMap>

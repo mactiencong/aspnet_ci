@@ -1,0 +1,37 @@
+#recopHtml()
+<head>
+#recopHead('商品選択｜発注管理')
+#css("$link.contextPath/css/popup/popup.css")
+<script>
+	function select( index )
+	{
+		if ( !window.opener || window.opener.closed )
+			return false;
+		var values = new Object();
+		values['id'] = $("[name='itemId']").eq(index).val();
+		values['media_name'] = $("[name='mediaName']").eq(index).val();
+		values['area_name'] = $("[name='areaName']").eq(index).val();
+		values['size'] = $("[name='size']").eq(index).val();
+		values['price'] = $("[name='price']").eq(index).val();
+
+		try {
+			window.opener.selectItemPopup( values );
+		} catch(e) {}
+
+		window.close()
+		return false;
+	}
+</script>
+</head>
+<body id="popup">
+	<h1>商品選択</h1>
+	<div class="wrapper">
+		<div class="searchCriteriaArea">
+			#parse("/advertisementorder/popup/item/list/_parts/criteria.vm")
+		</div>
+		<div class="resultArea">
+			#parse("/advertisementorder/popup/item/list/_parts/result.vm")
+		</div>
+	</div>
+</body>
+</html>

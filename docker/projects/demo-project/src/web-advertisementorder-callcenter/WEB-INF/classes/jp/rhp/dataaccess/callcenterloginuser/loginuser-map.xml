@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.callcenterloginuser.LoginCallcenterUserDataAccess">
+
+	<resultMap id="password" class="jp.rhp.model.callcenteraccount.credential.password.Password">
+		<result property="value" column="user_password" />
+		<result property="status" column="user_password_status_type" />
+		<result property="modifiedDatetime.timeStamp" column="user_password_update_datetime" />
+	</resultMap>
+
+	<select id="reloadPasswordByUserId" resultMap="password">
+		SELECT
+			convert_from(decrypt(active_users.user_password, decode('PA-rec-log', 'escape'), 'bf'),'UTF8') as user_password,
+			active_users.user_password_status_type,
+			active_users.user_password_update_datetime
+		FROM
+			account.active_users
+		WHERE
+			active_users.user_id = #userId#
+	</select>
+
+	<resultMap id="userMailAddress" class="jp.rhp.model.callcenteraccount.person.mailaddress.UserMailAddress">
+		<result property="mailAddress.mailAddress" column="user_mail_address" />
+		<result property="status" column="user_mail_address_status_type" />
+	</resultMap>
+
+	<select id="reloadMailAddressByUserId" resultMap="userMailAddress">
+		SELECT
+			active_users.user_mail_address user_mail_address,
+			active_users.user_mail_address_status_type AS user_mail_address_status_type
+		FROM
+			account.active_users
+		WHERE
+			active_users.user_id = #userId#
+	</select>
+
+	<resultMap id="lastLoginDatetime" class="jp.rhp.model.primitive.date.TimeStamp">
+		<result property="timeStamp" column="latest_login_datetime" />
+	</resultMap>
+
+	<select id="reloadLastLoginDatetimeByUserId" resultMap="lastLoginDatetime">
+		SELECT
+			MAX(login_datetime) as latest_login_datetime
+		FROM
+			account.login_history
+		WHERE
+			user_id = #userId#
+	</select>
+
+</sqlMap>

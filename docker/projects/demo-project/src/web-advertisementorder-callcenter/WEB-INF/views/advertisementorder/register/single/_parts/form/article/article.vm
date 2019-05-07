@@ -1,0 +1,23 @@
+<h3>原稿内容</h3>
+<div class="section">
+	<div id="jobOffer">
+		#parse("/advertisementorder/register/single/_parts/form/article/joboffer.vm")
+	</div>
+	#if(!$settings.formCustomize.messageOfSingleOrder.hide)
+		<div id="messageOfSingleOrderBox">
+			<table class="recoptable" >
+				<col width="18%" /><col width="*" />
+				<tr>
+					<th><span class="labelWithImg">申送り事項</span>#requiredCustom( $settings.formCustomize.messageOfSingleOrder.required, 'class="needIcon"')</th>
+					<td class="input">
+						#formTextarea("newSingleOrderSheet.advertisementOrder.slips.remarks.message.text", 'class="regular bg remarksMessageBox" rows="7" cols="100"')
+						#errorMessages("newSingleOrderSheet.advertisementOrder.slips.remarks.message.text")
+						<div>#escape( $settings.formCustomize.messageOfSingleOrder.description )</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	#end
+</div>
+
+

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.joboffer.merit.MeritDataAccess">
+
+	<typeAlias alias="jobofferMerit" type="jp.rhp.model.joboffer.job.merit.Merit" />
+
+	<resultMap class="jobofferMerit" id="jobofferMerit">
+		<result property="code" column="merit_code"/>
+		<result property="name" column="merit_flag_name"/>
+		<result property="available" column="is_available"/>
+	</resultMap>
+
+	<sql id="selectCore">
+		SELECT
+			merit.merit_code,
+			merit.merit_flag_name,
+			merit.is_available
+		FROM
+			joboffer.merit
+	</sql>
+
+	<select id="listAll" resultMap="jobofferMerit">
+		<include refid="selectCore"/>
+        ORDER BY
+            merit_code
+	</select>
+
+
+</sqlMap>

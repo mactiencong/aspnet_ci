@@ -1,0 +1,51 @@
+<div class="section">
+	<h4>仕事情報</h4>
+	#if($!{advertisementOrderDetail.status.canceled})<div><span class="warn">※この発注はキャンセルされました。</span></div>#end
+	<table class="recoptable" summary="仕事情報">
+		<col width="18%" /><col width="*" />
+		<tr>
+			<th class="a-lt">仕事内容</th>
+			<td>
+				#escape( $!singleArticle.jobOffer.job.jobDescription.text )
+			</td>
+		</tr>
+		<tr>
+			<th>キャッチ</th>
+			<td>
+				#escape( $!singleArticle.jobOffer.job.catchPhrase.text )
+			</td>
+		</tr>
+		<tr>
+			<th>リード</th>
+			<td>
+				#escape( $!singleArticle.jobOffer.job.readPhrase.text )
+			</td>
+		</tr>
+		<tr>
+			<th>メリット</th>
+			<td>
+				#foreach( $meritCode in $!singleArticle.jobOffer.job.meritIndexList.selected )
+					$!{meritList.getName($meritCode)}&nbsp;
+				#end
+			</td>
+		</tr>
+		#foreach( $jobAddition in $!singleArticle.jobOffer.job.jobAdditionList.jobAdditions)
+		<tr>
+			<th class="a-lt">仕事情報補足$velocityCount</th>
+			<td>
+				<table summary="layout" class="innerTable regular">
+					<col width="6%" /><col width="*" />
+					<tr>
+						<td class="nowrap">見出し</td>
+						<td>#escape($!{jobAddition.jobTitle.text})</td>
+					</tr>
+					<tr>
+						<td class="nowrap">本文&nbsp;&nbsp;</td>
+						<td>#escape($!{jobAddition.jobDescription.text}) </td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		#end
+	</table>
+</div>

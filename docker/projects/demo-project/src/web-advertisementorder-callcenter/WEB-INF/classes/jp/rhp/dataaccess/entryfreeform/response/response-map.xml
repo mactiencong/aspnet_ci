@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.entryfreeform.response.FreeFormResponseDataAccess">
+
+    <resultMap class="jp.rhp.model.questionnaire.response.Response" id="response" groupBy="id">
+        <result property="id" column="id"/>
+        <result property="questionnaireId" column="questionnaireId"/>
+        <result property="answers" resultMap="jp.rhp.dataaccess.entryfreeform.response.FreeFormResponseDataAccess.answer"/>
+    </resultMap>
+
+    <resultMap class="jp.rhp.model.questionnaire.response.Answer" id="answer" groupBy="id,answerId">
+        <result property="id" column="answerId"/>
+        <result property="values" resultMap="jp.rhp.dataaccess.entryfreeform.response.FreeFormResponseDataAccess.valueList"/>
+        <result property="questionNumbering" column="question_numbering"/>
+        <result property="responseId" column="id"/>
+    </resultMap>
+
+    <resultMap class="java.lang.String" id="valueList">
+        <result property="" column="value"/>
+    </resultMap>
+
+    <select id="getResponseId" resultClass="long">
+        select nextval('questionnaire.questionee_responses_id')
+    </select>
+
+    <select id="getAnswerId" resultClass="long">
+        select nextval('questionnaire.questionee_answers_id')
+    </select>
+
+    <select id="getResponseAtEntryId" resultClass="long">
+        select nextval('questionnaire.responses_at_entry_id')
+    </select>
+
+    <select id="getAnswerAtEntryId" resultClass="long">
+        select nextval('questionnaire.answers_at_entry_id')
+    </select>
+
+    <select id="findByEntryId" parameterClass="java.lang.Integer" resultMap="response">
+    <![CDATA[
+       SELECT
+           questionee_responses.id as id,
+           questionee_responses.questionnaire as questionnaireId,
+           questionee_answers.id as answerId,
+           questionee_answer_values.value as value,
+           questionee_answers.question_numbering as question_numbering
+       FROM questionnaire.questionee_answers
+       LEFT OUTER JOIN
+            questionnaire.questionee_responses
+       ON ( questionee_answers.questionee_response = questionee_responses.id )
+       LEFT OUTER JOIN
+           questionnaire.questionee_answer_values
+       ON ( questionee_answers.id = questionee_answer_values.questionee_answer )
+       INNER JOIN
+           hiring_process.response_candidate
+       ON ( questionee_responses.id = response_candidate.response_id )
+       INNER JOIN
+            entry.detail_entries
+       ON ( detail_entries.candidate_id = response_candidate.candidate_id )
+       WHERE
+           detail_entries.entry_id = #value#
+       ORDER BY
+           questionee_answers.question_numbering,
+           questionee_answer_values.id
+    ]]>
+    </select>
+
+    <select id="prototypeByQuestionnaireIdForWebEntry" parameterClass="java.lang.Long" resultMap="response">
+    <![CDATA[
+       SELECT
+           responses.id as id,
+           responses.questionnaire as questionnaireId,
+           answers.id as answerId,
+           CASE
+               WHEN answer_values.value = ''
+                       AND questions.question_type IN ( 'items', 'choice' ) THEN
+                   'UNKNOWN'
+               ELSE
+                   answer_values.value
+           END AS value,
+           answers.question_numbering as question_numbering
+       FROM
+           questionnaire.responses
+       LEFT OUTER JOIN questionnaire.answers answers
+       ON ( answers.response = responses.id )
+       LEFT OUTER JOIN questionnaire.answer_values answer_values
+       ON ( answer_values.answer = answers.id )
+       LEFT OUTER JOIN questionnaire.questions
+       ON ( responses.questionnaire = questions.questionnaire
+           AND answers.question_numbering = questions.numbering )
+       WHERE responses.questionnaire = #value#
+       ORDER BY
+          answers.question_numbering,
+          answer_values.id
+    ]]>
+    </select>
+
+    <select id="prototypeByQuestionnaireIdForDirectEntry" parameterClass="java.lang.Long" resultMap="response">
+    <![CDATA[
+       SELECT
+           responses.id as id,
+           responses.questionnaire as questionnaireId,
+           answers.id as answerId,
+           answer_values.value as value,
+           answers.question_numbering as question_numbering
+       FROM
+           questionnaire.responses
+       LEFT OUTER JOIN questionnaire.answers answers
+       ON ( answers.response = responses.id )
+       LEFT OUTER JOIN questionnaire.answer_values answer_values
+       ON ( answer_values.answer = answers.id )
+       WHERE responses.questionnaire = #value#
+       ORDER BY
+          answers.question_numbering,
+          answer_values.id
+    ]]>
+    </select>
+
+    <select id="findEntryIdByCandidateId" parameterClass="java.lang.Integer" resultClass="java.lang.Integer">
+        SELECT entry_id
+        FROM entry.detail_entries
+        WHERE candidate_id = #value#
+    </select>
+
+    <insert id="register" parameterClass="jp.rhp.model.questionnaire.response.Response">
+        insert into questionnaire.questionee_responses
+        ( id, questionnaire )
+        values
+        ( #id#, #questionnaireId# )
+    </insert>
+
+    <insert id="registerAnswer" parameterClass="jp.rhp.model.questionnaire.response.Answer">
+        insert into questionnaire.questionee_answers
+        ( id, question_numbering, questionee_response )
+        values
+        ( #id#, #questionNumbering#, #responseId# )
+    </insert>
+
+    <insert id="registerAnswerValue" parameterClass="map">
+        insert into questionnaire.questionee_answer_values
+        ( value, questionee_answer )
+        values
+        ( #value#, #answerId# )
+    </insert>
+
+    <insert id="registerAtEntry" parameterClass="jp.rhp.model.questionnaire.response.Response">
+        insert into questionnaire.responses_at_entry
+        ( id, questionnaire )
+        values
+        ( #id#, #questionnaireId# )
+    </insert>
+
+    <insert id="registerAnswerAtEntry" parameterClass="jp.rhp.model.questionnaire.response.Answer">
+        insert into questionnaire.answers_at_entry
+        ( id, question_numbering, response_at_entry )
+        values
+        ( #id#, #questionNumbering#, #responseId# )
+    </insert>
+
+    <insert id="registerAnswerValueAtEntry" parameterClass="map">
+        insert into questionnaire.answer_values_at_entry
+        ( value, answer_at_entry )
+        values
+        ( #value#, #answerId# )
+    </insert>
+
+    <insert id="registerResponseEntry" parameterClass="map">
+        insert into entry.response_entry
+        ( entry_id, response_id )
+        values
+        ( #entryId#, #responseId# );
+    </insert>
+
+    <delete id="deleteResponseEntry" parameterClass="java.lang.Integer">
+    	DELETE FROM entry.response_entry
+    	WHERE entry_id = #entryId#
+    </delete>
+
+    <insert id="registerResponseCandidate" parameterClass="map">
+        insert into hiring_process.response_candidate
+        ( candidate_id, response_id )
+        values
+        ( #candidateId#, #responseId# );
+    </insert>
+
+    <delete id="deleteResponseCandidate" parameterClass="java.lang.Integer">
+        DELETE FROM hiring_process.response_candidate
+        WHERE candidate_id = #candidateId#
+    </delete>
+
+    <delete id="delete" parameterClass="java.lang.Long">
+        DELETE FROM questionnaire.questionee_responses
+        WHERE id = #value#
+    </delete>
+
+    <delete id="deleteAnswer" parameterClass="java.lang.Long">
+        DELETE FROM questionnaire.questionee_answers
+        WHERE questionee_response = #value#
+    </delete>
+
+    <delete id="deleteAnswerValue" parameterClass="java.lang.Long">
+        DELETE FROM questionnaire.questionee_answer_values
+        WHERE questionee_answer = #value#
+    </delete>
+
+</sqlMap>

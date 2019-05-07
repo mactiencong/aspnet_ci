@@ -1,0 +1,51 @@
+<form method="post" action='$link.relativeAndCompany("/advertisementorder/export/request")'>
+	<div class="section usrInf">
+		<h3>ファイル出力</h3>
+		<table class="regular export" summary="発注データ出力検索条件">
+			<tr>
+				<th>発注依頼日</th>
+				<td>
+					#formInput("requestCriteria.contents.orderedDate.from.date" 'class="regular bg" maxlength="10" style="width:80px;"' 'orderedDateFrom')　
+					#formInput("requestCriteria.contents.orderedDate.from.hour" 'class="regular bg hour" style="width:20px;" maxlength="2" autocomplete="off"' '')：&nbsp;
+					#formInput("requestCriteria.contents.orderedDate.from.minute" 'class="regular bg minute" style="width:20px;" maxlength="2" autocomplete="off"' '')
+					～
+					#formInput("requestCriteria.contents.orderedDate.to.date" 'class="regular bg" maxlength="10" style="width:80px;"' 'orderedDateTo')　
+					#formInput("requestCriteria.contents.orderedDate.to.hour" 'class="regular bg hour" style="width:20px;" maxlength="2" autocomplete="off"' '')：&nbsp;
+					#formInput("requestCriteria.contents.orderedDate.to.minute" 'class="regular bg minute" style="width:20px;" maxlength="2" autocomplete="off"' '')
+					#errorMessages("requestCriteria.contents.orderedDate")
+				</td>
+			</tr>
+			<tr>
+				<th>発行日</th>
+				<td>
+					#formInput("requestCriteria.contents.publicationDate.range.from.dateStamp" 'class="regular bg" style="width:80px;" maxlength="10"' 'publicationDateFrom' )
+					～
+					#formInput("requestCriteria.contents.publicationDate.range.to.dateStamp" 'class="regular bg" style="width:80px;" maxlength="10"' 'publicationDateTo' )
+					#errorMessages("requestCriteria.contents.publicationDate.range")
+				</td>
+			</tr>
+			<tr>
+				<th>媒体種別</th>
+				<td>
+					#formSingleSelect( "requestCriteria.contents.mediaTypeName.value" $mediaTypeOptions 'class="regular" style="width:250px; margin-right:40px;"' )
+				</td>
+			</tr>
+			<tr>
+				<th>媒体の種類</th>
+				<td>
+					#formCheckBoxes( "requestCriteria.contents.mediaCategoryList.selected", $mediaCategoryOptions, $requestCriteria.contents.mediaCategoryList.selected, 'mediaCategoryCheckBox', 5)
+				</td>
+			</tr>
+			<tr>
+				<th>請求元</th>
+				<td>
+					#formSingleSelect( "requestCriteria.contents.biller.value" $billerOptions 'class="regular" style="width:250px; margin-right:40px;"' )
+				</td>
+			</tr>
+		</table>
+
+		<p class="exec"><input type="image" src="$link.contextPath/images/btnExecute01.png" id="executeBtn"  width="268" height="39" alt="実行する" class="rollover" /></p>
+		<p><strong>※検索条件を指定しない場合、すべての発注データが出力されます。</strong></p>
+		#csrfToken()
+    </div>
+</form>

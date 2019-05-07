@@ -1,0 +1,4 @@
+<ul>
+	#parse("/commons/_parts/menu/hnMainMenu.vm")
+	#parse("/commons/_parts/menu/hnLogout.vm")
+</ul>

@@ -1,0 +1,68 @@
+<h3 class="light">掲載情報</h3>
+
+#if( ${advertisementOrderDetail.status.notCanceled} && $advertisementOrderResult.empty )
+<p style="float:right;">
+	<a href="$link.relativeAndCompany("/advertisementorder/detail/$!{advertisementOrderDetail.id}/result/register")"><img src="$link.contextPath/images/btnMediaOrderResultRegistration.png" alt="受注掲載情報を入力する" class="rollover" /></a>
+</p>
+#end
+
+<div class="section">
+	<a id="result"></a>
+	#if( $advertisementOrderResult.notEmpty )
+		<table class="recoptable" >
+			<col width="18%" /><col width="32%" /><col width="18%" /><col width="32%" />
+			<tr>
+				<th>発行日</th>
+				<td>
+					$date.format('yyyy年MM月dd日 (E)',$!{advertisementOrderResult.issue.publicationDate.dateStamp.date})
+				</td>
+				<th>
+					台割
+				</th>
+				<td>
+					#escape($!{advertisementOrderResult.issue.article.flatPlan.value})
+				</td>
+			</tr>
+			<tr>
+				<th>
+					原稿ファイル
+				</th>
+				<td colspan="3">
+					<ul>
+					#foreach($articleFile in $!{advertisementOrderResult.issue.article.articleFileList.files})
+						<li>
+							<a href="$!{advertisementOrderDetail.id}/articlefile/download/$!{articleFile.serialNumber}?csrfToken=$!{csrfToken}">#escape($!{articleFile.name.value})</a>
+						</li>
+					#end
+					#if(${settings.function.useArticleConfirmation} && ${advertisementOrderDetail.slips.remarks.articleConfirmation.isNecessary()} && !${advertisementOrderDetail.status.canceled})
+					<div class="resultConfirmationArea">
+						#if($!{advertisementOrderResult.issue.article.articleFileList.confirmation.confirmed})
+							<span class="confirmMark">確認済</span><span class="dateTime">$date.format('yyyy/MM/dd HH:mm',$!{advertisementOrderResult.issue.article.articleFileList.confirmation.confirmedDateTime.timeStamp.date})</span>
+						#else
+							<span class="confirmMark">確認中</span>
+						#end
+					</div>
+					#end
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					備考
+				</th>
+				<td colspan="3">
+					#escape($!{advertisementOrderResult.memo.text})
+				</td>
+			</tr>
+		</table>
+
+		#if( $!{advertisementOrderDetail.status.notCanceled} )
+			<p class="subLink">
+				<a href="$link.relativeAndCompany("/advertisementorder/detail/$!{advertisementOrderDetail.id}/result/modify")">情報を変更する</a>
+			</p>
+		#end
+
+	#else
+		掲載情報はありません。
+	#end
+</div>

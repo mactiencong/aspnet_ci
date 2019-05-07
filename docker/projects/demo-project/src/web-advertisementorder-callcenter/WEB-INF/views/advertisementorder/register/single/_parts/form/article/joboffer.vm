@@ -1,0 +1,16 @@
+#if($newSingleOrderSheet.article.jobOfferSelected)
+	#parse("/advertisementorder/register/single/_parts/form/article/summary.vm")
+	#parse("/advertisementorder/register/single/_parts/form/article/job.vm")
+	#parse("/advertisementorder/register/single/_parts/form/article/recruitment.vm")
+	#parse("/advertisementorder/register/single/_parts/form/article/entrymethod.vm")
+#else
+#springBind("newSingleOrderSheet.article.jobOffer.id")
+<div class="jobOfferBox #if(${status.error}) error #end ">
+	#errorMessages("newSingleOrderSheet.article.jobOffer.id")
+	<div style="text-align:right;">
+		<a href="" id="jobOfferSelectBtn"><img src="$link.contextPath/images/btnSelectArticle.png" class="rollover" alt="原稿を選択する" /></a>
+	</div>
+	原稿が選択されていません。
+	<div class="clrFix"></div>
+</div>
+#end

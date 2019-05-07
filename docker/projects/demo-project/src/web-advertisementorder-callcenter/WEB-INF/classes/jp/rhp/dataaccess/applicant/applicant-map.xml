@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.applicant.ApplicantDataAccess">
+
+	<select id="nextEntryId" resultClass="java.lang.Integer">
+		SELECT nextval('entry.entry_id')
+	</select>
+
+	<insert id="insert" parameterClass="jp.rhp.model.applicant.Applicant">
+		INSERT INTO
+			entry.entries
+		(
+			entry_id,
+			entry_name,
+			entry_name_kana,
+			date_of_birth,
+			entry_age,
+			gender,
+			marital_status,
+			current_employment_type_id,
+			entry_route_id,
+			entry_device_id,
+			entry_media_id,
+			zip_code,
+			prefecture_id,
+			municipality,
+			address_street_name,
+			address_building_name,
+			telephone_number,
+			mobile_telephone_number,
+			mail_address,
+			mail_address_2,
+			entry_date,
+			nick_name,
+			desired_date_of_contact,
+			available_for_work_period,
+			available_date_of_working,
+			job_history,
+			competency,
+			desired_condition,
+			reason,
+			entry_sheet_type
+		)
+		VALUES
+		(
+			#id#,
+			#name.margedName#,
+			#name.fullNameKana#,
+			#profile.dateOfBirth.dateOfBirth#,
+			#profile.entryAge.valueAsInteger#,
+			#profile.gender.genderId#,
+			#profile.marital.id#,
+			CASE WHEN #entry.currentEmploymentType.id# = 0 THEN NULL ELSE #entry.currentEmploymentType.id# END,
+			CASE WHEN #entry.entryRoute.id# = 0 THEN NULL ELSE #entry.entryRoute.id# END,
+			CASE WHEN #entry.entryDevice.id# = 0 THEN NULL ELSE #entry.entryDevice.id# END,
+			#entry.entryMedia.mediaId#,
+			#contact.address.zipCode.zipCode#,
+			#contact.address.prefecture.id#,
+			#contact.address.municipality#,
+			#contact.address.streetName#,
+			#contact.address.buildingNumber#,
+			#contact.telephoneNumber.telephoneNumber#,
+			#contact.mobileTelephoneNumber.mobileTelephoneNumber#,
+			#contact.mailAddress.mailAddress#,
+			#contact.mailAddressTwo.mailAddress#,
+			#entry.entryDate.date#,
+			#profile.nickName#,
+			#contact.desiredDateOfContact#,
+			#condition.availableForWorkPeriod#,
+			#condition.availableDateOfWorking#,
+			#profile.jobHistory#,
+			#profile.competency#,
+			#condition.desiredCondition#,
+			#profile.reason#,
+			#entry.entrySheetType.entrySheetType#
+		)
+	</insert>
+
+	<insert id="insertEntryMediaInfomation" parameterClass="jp.rhp.model.applicant.Applicant">
+		INSERT INTO
+			entry.entry_media_information
+		(
+			entry_id,
+			draft_management_no,
+			published_name,
+			published_number,
+			published_company_name,
+			workplace,
+			job_type
+		)
+		VALUES
+		(
+			#id#,
+			#entry.entryMediaInfomation.draftManagementNo#,
+			#entry.entryMediaInfomation.publishedName#,
+			#entry.entryMediaInfomation.publishedNumber#,
+			#entry.entryMediaInfomation.publishedCompanyName#,
+			#entry.entryMediaInfomation.workplace#,
+			#entry.entryMediaInfomation.jobType#
+		)
+	</insert>
+
+    <insert id="insertEducationHistory" parameterClass="jp.rhp.model.applicant.Applicant">
+		INSERT INTO
+			entry.education_history
+		(
+			entry_id,
+			school_name,
+			department,
+			graduation_type
+		)
+		VALUES
+		(
+			#id#,
+			#profile.educationHistory.schoolName#,
+			#profile.educationHistory.department#,
+			#profile.educationHistory.graduationType#
+		)
+	</insert>
+
+	<insert id="insertCallcenterEntryInflowRoute" parameterClass="jp.rhp.model.applicant.Applicant">
+		INSERT INTO entry.callcenter_entry_inflow_route (
+			entry_id,
+			media_name,
+			area_name,
+			published_date
+		) VALUES (
+			#id#,
+			#entry.callcenterEntryInflowRoute.entryInflowRoute.media.name#,
+			#entry.callcenterEntryInflowRoute.entryInflowRoute.area.name#,
+			#entry.callcenterEntryInflowRoute.entryInflowRoute.publicationDateAsDate#
+		)
+	</insert>
+
+	<insert id="insertCallcenterEntryIrregularInflowRoute" parameterClass="jp.rhp.model.applicant.Applicant">
+		INSERT INTO entry.callcenter_entry_irregular_inflow_route (
+			entry_id,
+			irregular_inflow_route_id
+		) VALUES (
+			#id#,
+			#entry.callcenterEntryInflowRoute.entryInflowRoute.irregularInflowRouteId#
+		)
+	</insert>
+
+	<resultMap class="jp.rhp.model.primitive.Prefecture" id="prefecture">
+		<result property="id" column="prefecture_id"/>
+		<result property="prefecture" column="prefecture_name"/>
+	</resultMap>
+
+	<select resultMap="prefecture" id="selectPrefectures">
+		SELECT
+			prefecture_id,
+			prefecture_name
+		FROM
+			entry.prefectures
+		ORDER BY
+			prefecture_id
+	</select>
+
+	<select resultMap="prefecture" id="findPrefectureById">
+		SELECT
+			prefecture_id,
+			prefecture_name
+		FROM
+			entry.prefectures
+		WHERE
+			prefecture_id = #value#
+	</select>
+
+
+	<resultMap class="jp.rhp.model.applicant.entry.EntryRoute" id="entryRoot">
+		<result property="id" column="entry_route_id"/>
+		<result property="entryRoute" column="entry_route_name"/>
+	</resultMap>
+
+	<select resultMap="entryRoot" id="selectEntryRoot">
+		SELECT
+			entry_route_id,
+			entry_route_name
+		FROM
+			entry.entry_route
+		ORDER BY
+			display_order
+	</select>
+
+	<select resultMap="entryRoot" id="findEntryRouteById">
+		SELECT
+			entry_route_id,
+			entry_route_name
+		FROM
+			entry.entry_route
+		WHERE
+			entry_route_id = #value#
+	</select>
+
+
+
+	<resultMap class="jp.rhp.model.applicant.entry.EntryDevice" id="entryDevice">
+		<result property="id" column="device_id"/>
+		<result property="entryDeviceName" column="device_name"/>
+	</resultMap>
+
+	<select resultMap="entryDevice" id="selectEntryDevice">
+		SELECT
+			device_id,
+			device_name
+		FROM
+			entry.entry_device
+	</select>
+
+
+	<resultMap class="jp.rhp.model.applicant.entry.EntryMedia" id="entryMedia">
+		<result property="mediaId" column="media_id"/>
+		<result property="mediaName" column="media_name"/>
+	</resultMap>
+
+	<select resultMap="entryMedia" id="selectEntryMedia">
+		SELECT
+			media_id,
+			media_name
+		FROM
+			entry.media
+		WHERE
+			enable = 'ENABLE'
+		ORDER BY
+			display_order
+	</select>
+
+	<select id="findCallcenterEntryMedia" resultClass="jp.rhp.model.applicant.entry.EntryMedia">
+		SELECT
+			media_id	AS mediaId,
+			media_name	AS mediaName
+		FROM
+			entry.media
+		WHERE
+			 EXISTS (
+				SELECT
+					media_of_callcenter_entry.media_id
+				FROM
+					entry.media_of_callcenter_entry
+				WHERE
+					media.media_id = media_of_callcenter_entry.media_id
+			)
+	</select>
+
+	<select id="findDefaultCallcenterEntryDevice" resultClass="jp.rhp.model.applicant.entry.EntryDevice">
+		SELECT
+			device_id	AS id,
+			device_name	AS entryDeviceName
+		FROM
+			entry.entry_device
+		WHERE
+			EXISTS (
+				SELECT
+					entry_device_id
+				FROM
+					entry.default_callcenter_entry_device
+				WHERE
+					entry_device_id = entry_device.device_id
+				)
+	</select>
+
+</sqlMap>

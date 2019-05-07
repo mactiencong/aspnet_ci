@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="jp.rhp.dataaccess.selectionstatus.autotransition.SelectionStatusAutoTransitionDataAccess">
+	<resultMap class="jp.rhp.model.selectionstatus.SelectionStatus" id="selectionStatus">
+		<result property="id" 				column="to_selection_status_id"/>
+		<result property="name" 			column="selection_status_name"/>
+		<result property="type" 			column="display_type"/>
+		<result property="closedSelection" 	column="is_closed_selection"/>
+		<result property="show" 			column="show"/>
+		<result property="priority" 		column="priority"/>
+	</resultMap>
+	
+	<select id="availableAfterInterviewBooking" resultClass="java.lang.Boolean">
+		SELECT
+			available_taransition
+		FROM
+			hiring_process.selection_status_transition_interview_booking_settings
+	</select>
+	
+	<select id="checkRequireTransition" resultClass="java.lang.Boolean">
+		SELECT
+			COUNT( selection_status_transition_interview_booking.to_selection_status_id ) = 1
+		FROM
+			hiring_process.selection_status_transition_interview_booking
+		WHERE
+			selection_status_transition_interview_booking.from_selection_status_id = #fromSelectionStatusId#
+	</select>
+	
+	<select id="findToSelectionStatus" resultMap="selectionStatus">
+		SELECT
+			selection_status_transition_interview_booking.to_selection_status_id,
+			selection_statuses.selection_status_name,
+			selection_statuses.display_type,
+			selection_statuses.is_closed_selection,
+			selection_statuses.show,
+			selection_statuses.priority
+		FROM
+			hiring_process.selection_status_transition_interview_booking
+		INNER JOIN
+			hiring_process.selection_statuses
+		ON
+			selection_status_transition_interview_booking.to_selection_status_id = selection_statuses.selection_status_id
+		WHERE
+			selection_status_transition_interview_booking.from_selection_status_id = #fromSelectionStatusId#
+	</select>
+</sqlMap>

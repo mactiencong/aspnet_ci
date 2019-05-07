@@ -1,0 +1,33 @@
+#recopHtml()
+<head>
+#recopHead('原稿選択｜発注管理')
+#css("$link.contextPath/css/popup/popup.css")
+<script>
+	function select( index )
+	{
+		if ( !window.opener || window.opener.closed )
+			return false;
+		var values = new Object();
+		values['id'] = $("[name='jobOfferId']").eq(index).val();
+
+		try {
+			window.opener.selectJobOfferPopup( values );
+		} catch(e) {}
+
+		window.close()
+		return false;
+	}
+</script>
+</head>
+<body id="popup">
+	<h1>原稿選択</h1>
+	<div class="wrapper">
+		<div class="searchCriteriaArea">
+			#parse("/advertisementorder/popup/joboffer/list/_parts/criteria.vm")
+		</div>
+		<div class="resultArea">
+			#parse("/advertisementorder/popup/joboffer/list/_parts/result.vm")
+		</div>
+	</div>
+</body>
+</html>
