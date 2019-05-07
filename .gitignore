@@ -1,2 +1,4 @@
 docker/gitlab/
 docker/gitlab-runner/
+docker/projects/demo-project/src/
+docker/projects/demo-project/artifacts/
